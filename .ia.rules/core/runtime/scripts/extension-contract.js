@@ -1,0 +1,10 @@
+// Autor: JeanCarloEM.com
+// Site do Autor: https://jeancarloem.com
+// Repositorio: https://github.com/jcempro/agents.md
+// Licenca: Mozilla Public License 2.0
+// Site da Licenca: https://www.mozilla.org/MPL/2.0/
+// Resumo da Licenca: uso, copia, modificacao e distribuicao permitidos conforme os termos da MPL-2.0.
+// Disclaimer: fornecido AS IS, sem garantias de qualquer tipo.
+// Gerado de: src/.ia.rules/core/runtime/scripts/extension-contract.ts; TypeScript 7.0.2 + esbuild 0.28.1; Node 24+.
+
+const _=["id","kind","version","requires","provides","events","validate","execute"];class r extends Error{}function I(e){if(!e||typeof e!="object")throw new r("CAPACIDADE_INVALIDA");for(const o of _)if(!(o in e))throw new r(`CAMPO_CONTRATO_AUSENTE:${o}`);for(const o of["id","kind","version"])if(typeof e[o]!="string"||!e[o])throw new r(`CAMPO_CONTRATO_INVALIDO:${o}`);for(const o of["requires","provides","events"])if(!Array.isArray(e[o])||e[o].some(s=>typeof s!="string"||!s))throw new r(`CAMPO_CONTRATO_INVALIDO:${o}`);if(typeof e.validate!="function"||typeof e.execute!="function")throw new r("METODO_CONTRATO_INVALIDO");if("dispose"in e&&typeof e.dispose!="function")throw new r("METODO_CONTRATO_INVALIDO:dispose");return O(e)}function d(e,o={}){if(typeof e!="string"||!e)throw new r("EVENTO_CONTRATO_INVALIDO");return O({event:e,payload:o})}function u(e,o,s){const A=d(e,o),f=[],i=[];for(const n of s){if(!n||typeof n.id!="string"||!n.id||typeof n.handler!="function")throw new r("CAMADA_HOOK_INVALIDA");try{const t=n.handler(A);if(t&&typeof t.then=="function")throw new r(`HOOK_ASSINCRONO_NAO_SUPORTADO:${n.id}`);f.push({id:n.id,result:t||null})}catch(t){i.push({id:n.id,message:t.message})}}if(i.length){const n=new r(`FALHA_CADEIA_HOOK:${i.map(t=>`${t.id}:${t.message}`).join(";")}`);throw n.observations=f,n}return O({context:A,observations:f})}function O(e){const o=JSON.parse(JSON.stringify(e));return c(o)}function c(e){if(e&&typeof e=="object"&&!Object.isFrozen(e)){Object.freeze(e);for(const o of Object.values(e))c(o)}return e}module.exports={ContractError:r,createHookContext:d,runHookChain:u,validateCapability:I};

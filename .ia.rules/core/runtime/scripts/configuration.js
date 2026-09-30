@@ -1,0 +1,10 @@
+// Autor: JeanCarloEM.com
+// Site do Autor: https://jeancarloem.com
+// Repositorio: https://github.com/jcempro/agents.md
+// Licenca: Mozilla Public License 2.0
+// Site da Licenca: https://www.mozilla.org/MPL/2.0/
+// Resumo da Licenca: uso, copia, modificacao e distribuicao permitidos conforme os termos da MPL-2.0.
+// Disclaimer: fornecido AS IS, sem garantias de qualquer tipo.
+// Gerado de: src/.ia.rules/core/runtime/scripts/configuration.ts; TypeScript 7.0.2 + esbuild 0.28.1; Node 24+.
+
+const a=require("fs"),s=require("path");function p(r){const e=s.join(r,".ia.rules","config"),o=a.existsSync(e)?e:s.join(r,"config"),t=f(s.join(o,"schema.json"),!0),n=f(s.join(o,"core.json"),!0),N=f(s.join(o,"repository.json"),!0),j=f(s.join(o,"agents.local.json"),!1),y=process.env.AGENTS_CONFIG_JSON?O(process.env.AGENTS_CONFIG_JSON,"AGENTS_CONFIG_JSON"):{},i=c(c(c(n,N),j),y);if(t.id!=="agents-config/v1"||t.version!==1||i.schema!==t.version)throw new Error("CONFIG_SCHEMA_NAO_SUPORTADO");for(const u of t.required||[])if(!(u in i))throw new Error(`PARAMETRO_NORMATIVO_AUSENTE:${u}`);return A(i.metadata,t.requiredMetadata,"metadata"),A(i.paths,t.requiredPaths,"paths"),E(i)}function A(r,e,o){if(!r||Array.isArray(r)||typeof r!="object")throw new Error(`PARAMETRO_NORMATIVO_AUSENTE:${o}`);for(const t of e||[])if(!(t in r)||typeof r[t]=="string"&&!r[t].trim())throw new Error(`PARAMETRO_NORMATIVO_AUSENTE:${o}.${t}`)}function f(r,e){if(!a.existsSync(r)){if(e)throw new Error(`CONFIGURACAO_AUSENTE:${s.basename(r)}`);return{}}return O(a.readFileSync(r,"utf8"),r)}function O(r,e){try{const o=JSON.parse(r);if(!o||Array.isArray(o)||typeof o!="object")throw new Error("objeto esperado");return o}catch(o){throw new Error(`CONFIGURACAO_INVALIDA:${e}:${o.message}`)}}function c(r,e){const o={...r};for(const[t,n]of Object.entries(e||{}))o[t]=n&&typeof n=="object"&&!Array.isArray(n)?c(r&&typeof r[t]=="object"?r[t]:{},n):n;return o}function E(r){for(const e of Object.values(r))e&&typeof e=="object"&&!Object.isFrozen(e)&&E(e);return Object.freeze(r)}module.exports={deepMerge:c,loadConfiguration:p,parseConfig:O,validateRequiredObject:A};

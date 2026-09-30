@@ -1,0 +1,2830 @@
+{
+  "schema": "agents-normative-index/v1",
+  "id": "agents.normative-index",
+  "version": 1,
+  "generated": true,
+  "authority": "AGENTS.md",
+  "root": "core.agents",
+  "nodes": [
+    {
+      "id": "core.agents",
+      "path": "AGENTS.md",
+      "class": "core",
+      "type": "hybrid",
+      "roles": [
+        "common"
+      ],
+      "triggers": [
+        "always"
+      ],
+      "inputs": [
+        "request",
+        "repository-state"
+      ],
+      "outputs": [
+        "governed-operation",
+        "route"
+      ],
+      "bytes": 1733,
+      "sha256": "d8e94f943d916af502a5e7f20810420dce6d5efb3b3bc233dfd8187fa71b18e5",
+      "tokens": 399,
+      "guard": {
+        "exceptions": 1,
+        "modalities": 1,
+        "prohibitions": 0,
+        "references": 8
+      }
+    },
+    {
+      "id": "core.agents-full",
+      "path": ".ia.rules/agents.inc.md",
+      "class": "core",
+      "type": "leaf",
+      "roles": [
+        "common"
+      ],
+      "triggers": [
+        "route-change",
+        "context-loss",
+        "normative-conflict",
+        "rule-not-found",
+        "index-cache-invalid",
+        "preservation-audit",
+        "low-confidence"
+      ],
+      "inputs": [
+        "route",
+        "context"
+      ],
+      "outputs": [],
+      "bytes": 37215,
+      "sha256": "f155bc87d6d65b27a89048cabf8af37ea8676cb5e1ccae2963de874bfd91ee00",
+      "tokens": 8194,
+      "guard": {
+        "exceptions": 9,
+        "modalities": 137,
+        "prohibitions": 26,
+        "references": 282
+      }
+    },
+    {
+      "id": "core.authority",
+      "path": ".ia.rules/core/authority.md",
+      "class": "core",
+      "type": "leaf",
+      "roles": [
+        "common"
+      ],
+      "triggers": [
+        "always"
+      ],
+      "inputs": [
+        "governed-operation"
+      ],
+      "outputs": [],
+      "bytes": 5059,
+      "sha256": "1e376c1931c48cade6da4612264df5501e1199bce1724da793baefca9c5138b6",
+      "tokens": 1130,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 11,
+        "prohibitions": 3,
+        "references": 13
+      }
+    },
+    {
+      "id": "core.microconcepts",
+      "path": ".ia.rules/core/concepts/microconceitos.md",
+      "class": "core",
+      "type": "leaf",
+      "roles": [
+        "common"
+      ],
+      "triggers": [
+        "MN-* reference",
+        "semantic ambiguity"
+      ],
+      "inputs": [
+        "concept-id"
+      ],
+      "outputs": [],
+      "bytes": 14696,
+      "sha256": "192ec9a6950337b882c00dd6ecaf71fc8a3ef7580b66853f9fc6ace8efc5c139",
+      "tokens": 3433,
+      "guard": {
+        "exceptions": 6,
+        "modalities": 51,
+        "prohibitions": 11,
+        "references": 74
+      }
+    },
+    {
+      "id": "core.contracts",
+      "path": ".ia.rules/core/contracts.md",
+      "class": "core",
+      "type": "leaf",
+      "roles": [
+        "common"
+      ],
+      "triggers": [
+        "scenario",
+        "resource",
+        "hook",
+        "integration",
+        "manifest"
+      ],
+      "inputs": [
+        "composition"
+      ],
+      "outputs": [],
+      "bytes": 9358,
+      "sha256": "994fbcd9e211e1c9fcb4df21a4f3728131ac5d840823fbc3dda6934ec2739831",
+      "tokens": 2069,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 32,
+        "prohibitions": 10,
+        "references": 108
+      }
+    },
+    {
+      "id": "core.routing",
+      "path": ".ia.rules/core/routing.md",
+      "class": "core",
+      "type": "leaf",
+      "roles": [
+        "common"
+      ],
+      "triggers": [
+        "partial-context",
+        "routing",
+        "index",
+        "graph",
+        "token-cost",
+        "cache"
+      ],
+      "inputs": [
+        "request-context",
+        "active-roles"
+      ],
+      "outputs": [],
+      "bytes": 8432,
+      "sha256": "2e0f389865505c95c477b28b4abb6817f5b6ce6322e9f5a126984449df1130b7",
+      "tokens": 1844,
+      "guard": {
+        "exceptions": 2,
+        "modalities": 7,
+        "prohibitions": 4,
+        "references": 30
+      }
+    },
+    {
+      "id": "core.update",
+      "path": ".ia.rules/core/update/scenario.md",
+      "class": "scenario",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "update:agents",
+        "governance-install",
+        "governance-repair",
+        "governance-migration"
+      ],
+      "inputs": [
+        "release-manifest",
+        "target-state"
+      ],
+      "outputs": [],
+      "bytes": 9425,
+      "sha256": "3b0f93e936e64b31b1e4bb337449fb15f74fa4cca71bd5d1559490ab2f1f4f82",
+      "tokens": 2172,
+      "guard": {
+        "exceptions": 3,
+        "modalities": 48,
+        "prohibitions": 6,
+        "references": 66
+      }
+    },
+    {
+      "id": "role.final",
+      "path": ".ia.rules/roles/final.md",
+      "class": "role",
+      "type": "leaf",
+      "roles": [
+        "final"
+      ],
+      "triggers": [
+        "always"
+      ],
+      "inputs": [
+        "managed-governance"
+      ],
+      "outputs": [],
+      "bytes": 3064,
+      "sha256": "17778910a4db8581ba150e51d62b5f48ba56393ef1e6373e2d26dfd227d2b7b2",
+      "tokens": 663,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 5,
+        "prohibitions": 2,
+        "references": 10
+      }
+    },
+    {
+      "id": "role.constructor",
+      "path": ".ia.rules/roles/constructor.md",
+      "class": "role",
+      "type": "derivation",
+      "roles": [
+        "constructor"
+      ],
+      "triggers": [
+        "src",
+        "build",
+        "verify",
+        "package",
+        "update",
+        "distribution",
+        "release"
+      ],
+      "inputs": [
+        "product-source",
+        "RCF"
+      ],
+      "outputs": [
+        "constructor-operation-route"
+      ],
+      "bytes": 4365,
+      "sha256": "3d9a0f39701ce343d82e04ce7ccd3c131140fb81735f2b39de8b3e95ce375faa",
+      "tokens": 930,
+      "guard": {
+        "exceptions": 2,
+        "modalities": 5,
+        "prohibitions": 1,
+        "references": 15
+      }
+    },
+    {
+      "id": "scenario.constructor-operation",
+      "path": ".ia.rules/scenarios/governance/constructor-operation.md",
+      "class": "scenario",
+      "type": "leaf",
+      "roles": [
+        "constructor"
+      ],
+      "triggers": [
+        "source-classification",
+        "build",
+        "dist",
+        "package",
+        "archive",
+        "update",
+        "distribution",
+        "release",
+        "publish"
+      ],
+      "inputs": [
+        "constructor-operation-route",
+        "RCF",
+        "source-manifest"
+      ],
+      "outputs": [],
+      "bytes": 4419,
+      "sha256": "21c026cc3a46241dd933e9d6be5ffb59cadc3a3b833ac8a4380ebc90d0c01b58",
+      "tokens": 902,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 8,
+        "prohibitions": 2,
+        "references": 26
+      }
+    },
+    {
+      "id": "resource.scripts",
+      "path": ".ia.rules/resources/scripts.md",
+      "class": "resource",
+      "type": "hybrid",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "script",
+        "command",
+        "runtime",
+        "hook",
+        "callback",
+        "fallback",
+        "adapter"
+      ],
+      "inputs": [
+        "resource-contract"
+      ],
+      "outputs": [],
+      "bytes": 6535,
+      "sha256": "0258ef0bfccf1ebad65bc29cbd24fd1171d6a8a7f579cc71ae5a1c9167ad93c8",
+      "tokens": 1467,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 5,
+        "prohibitions": 1,
+        "references": 33
+      }
+    },
+    {
+      "id": "resource.skills",
+      "path": ".ia.rules/resources/skills.md",
+      "class": "resource",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "skill",
+        "SKILL.md",
+        "skill-discovery",
+        "skill-validation",
+        "skill-installation"
+      ],
+      "inputs": [
+        "request-context",
+        "skill-candidate"
+      ],
+      "outputs": [
+        "skill-route",
+        "skill-contract"
+      ],
+      "bytes": 2485,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 5,
+        "prohibitions": 1,
+        "references": 15
+      },
+      "sha256": "74bf13cd3425ce15ba268eeeff70cd598b4630cfd3442b28603a1fe63b973172",
+      "tokens": 561
+    },
+    {
+      "id": "resource.subagents",
+      "path": ".ia.rules/resources/subagents.md",
+      "class": "resource",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "subagent",
+        "delegation",
+        "parallel-agent",
+        "isolated-objective"
+      ],
+      "inputs": [
+        "request-context",
+        "delegation-candidate"
+      ],
+      "outputs": [
+        "subagent-route",
+        "subagent-contract"
+      ],
+      "bytes": 2294,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 3,
+        "prohibitions": 1,
+        "references": 9
+      },
+      "sha256": "08622e36414fa2618d4faf1ba6af6f7b9a5b6565f398ff7648925258b763b528",
+      "tokens": 516
+    },
+    {
+      "id": "resource.long-running",
+      "path": ".ia.rules/resources/long-running.md",
+      "class": "resource",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "long-running",
+        "timeout",
+        "wait",
+        "polling",
+        "cancellation",
+        "resume",
+        "orphan-process"
+      ],
+      "inputs": [
+        "command-context",
+        "execution-history"
+      ],
+      "outputs": [
+        "wait-policy",
+        "execution-evidence"
+      ],
+      "bytes": 2356,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 4,
+        "prohibitions": 3,
+        "references": 6
+      },
+      "sha256": "b2b40ad7f2a4418ed01519d02b84440e5a12daf5e4595fca2fd2fa3473393d95",
+      "tokens": 511
+    },
+    {
+      "id": "resource.external-tools",
+      "path": ".ia.rules/resources/external-tools.md",
+      "class": "resource",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "third-party",
+        "MCP",
+        "plugin",
+        "external-tool",
+        "external-service"
+      ],
+      "inputs": [
+        "external-capability-candidate",
+        "authorization"
+      ],
+      "outputs": [
+        "admission-decision",
+        "security-requirements"
+      ],
+      "bytes": 1863,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 4,
+        "prohibitions": 1,
+        "references": 6
+      },
+      "sha256": "96c302a631c7ef1937bfdf6c0b7c39855864c068e7c3313bec1a64e327dcb910",
+      "tokens": 425
+    },
+    {
+      "id": "resource.editorial-authoring",
+      "path": ".ia.rules/resources/editorial-authoring.md",
+      "class": "resource",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "editorial-authoring",
+        "authorial-revision",
+        "accessible-writing",
+        "text-simplification"
+      ],
+      "inputs": [
+        "authorial-source",
+        "editorial-request"
+      ],
+      "outputs": [
+        "preserved-editorial-result",
+        "review-diagnostics"
+      ],
+      "bytes": 3249,
+      "guard": {
+        "exceptions": 1,
+        "modalities": 6,
+        "prohibitions": 2,
+        "references": 5
+      },
+      "sha256": "62c6882ede36db429565aa1ec6592018b110a486cb4bf883f520f08fba7d77a1",
+      "tokens": 684
+    },
+    {
+      "id": "resource.spoken-normalization",
+      "path": ".ia.rules/resources/spoken-normalization.md",
+      "class": "resource",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "spoken-representation",
+        "TTS",
+        "pronunciation",
+        "editorial-delimiters",
+        "biblical-reference"
+      ],
+      "inputs": [
+        "editorial-source",
+        "spoken-mode",
+        "language-context"
+      ],
+      "outputs": [
+        "spoken-representation",
+        "normalization-diagnostics"
+      ],
+      "bytes": 3546,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 12,
+        "prohibitions": 2,
+        "references": 19
+      },
+      "sha256": "199b705ddfbf503a4c9e8103babb54445446c58afd14ee89f419e23b0e483368",
+      "tokens": 808
+    },
+    {
+      "id": "resource.context-cost-audit",
+      "path": ".ia.rules/resources/context-cost-audit.md",
+      "class": "resource",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "context-cost-audit",
+        "token-route-optimization",
+        "memory-status-cost",
+        "recovery-resume-cost"
+      ],
+      "inputs": [
+        "repository-routes",
+        "tokenizer-contract",
+        "experiment-authorization"
+      ],
+      "outputs": [
+        "reproducible-baseline",
+        "ranked-recommendation",
+        "implementation-ft"
+      ],
+      "bytes": 3905,
+      "guard": {
+        "exceptions": 2,
+        "modalities": 10,
+        "prohibitions": 0,
+        "references": 6
+      },
+      "sha256": "72c9a73e24d1d86394f2e205f5b7f21ca7a065ef6b20e86abe2972e900304dc3",
+      "tokens": 828
+    },
+    {
+      "id": "resource.workflows",
+      "path": ".ia.rules/resources/workflows.md",
+      "class": "resource",
+      "type": "leaf",
+      "roles": [
+        "constructor"
+      ],
+      "triggers": [
+        "workflow",
+        "github-actions",
+        "workflow-install",
+        "workflow-update"
+      ],
+      "inputs": [
+        "workflow-contract",
+        "workflow-manifest"
+      ],
+      "outputs": [],
+      "bytes": 3915,
+      "sha256": "d6ec3ff72b2782eb3ee52657e9498c4c0b2d60651a87776f063ea1396f98cbdd",
+      "tokens": 873,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 3,
+        "prohibitions": 2,
+        "references": 36
+      }
+    },
+    {
+      "id": "resource.traceability",
+      "path": ".ia.rules/resources/traceability.md",
+      "class": "resource",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "code-unit",
+        "RCF-material-sentence",
+        "material-commit",
+        "traceability-sync"
+      ],
+      "inputs": [
+        "RCF",
+        "commit",
+        "artifact"
+      ],
+      "outputs": [],
+      "bytes": 4601,
+      "sha256": "c05dd9158a75bd7e9d4471b2a402f6e3ba74bbf17b26f3980b9514356988e3a1",
+      "tokens": 965,
+      "guard": {
+        "exceptions": 3,
+        "modalities": 1,
+        "prohibitions": 1,
+        "references": 9
+      }
+    },
+    {
+      "id": "scenario.request-lifecycle",
+      "path": ".ia.rules/scenarios/governance/request-lifecycle.md",
+      "class": "scenario",
+      "type": "hybrid",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "prompt",
+        "issue",
+        "TODO",
+        "request",
+        "scope-change",
+        "resume"
+      ],
+      "inputs": [
+        "request-source"
+      ],
+      "outputs": [],
+      "bytes": 4006,
+      "sha256": "5d54eb70d82167ee26d08ac9fd7965b5d7ccbdead40225beff65f68c045ebc11",
+      "tokens": 888,
+      "guard": {
+        "exceptions": 2,
+        "modalities": 2,
+        "prohibitions": 0,
+        "references": 11
+      }
+    },
+    {
+      "id": "scenario.state-and-todo",
+      "path": ".ia.rules/scenarios/governance/state-and-todo.md",
+      "class": "scenario",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "state",
+        "memory",
+        "fix",
+        "TODO",
+        "migration",
+        "resume"
+      ],
+      "inputs": [
+        "canonical-state",
+        "request-context"
+      ],
+      "outputs": [
+        "state-route",
+        "todo-transition"
+      ],
+      "bytes": 4211,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 5,
+        "prohibitions": 0,
+        "references": 21
+      },
+      "sha256": "215a0006c44b00dbc1eea52ca526b78c64d1830e4b05be03544deebff2041807",
+      "tokens": 946
+    },
+    {
+      "id": "scenario.refused-decisions",
+      "path": ".ia.rules/scenarios/governance/refused-decisions.md",
+      "class": "scenario",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "every-new-request",
+        "semantic-repeat",
+        "express-refusal",
+        "reanalysis"
+      ],
+      "inputs": [
+        "request-source",
+        "repository-local-refusal-index"
+      ],
+      "outputs": [],
+      "bytes": 5115,
+      "sha256": "af6497c9a014e6eed6979b90aaf234f9d1bed46bdc79ff43b42a59006a4c37c6",
+      "tokens": 1201,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 1,
+        "prohibitions": 1,
+        "references": 50
+      }
+    },
+    {
+      "id": "scenario.official-gap",
+      "path": ".ia.rules/scenarios/governance/official-gap.md",
+      "class": "scenario",
+      "type": "leaf",
+      "roles": [
+        "final"
+      ],
+      "triggers": [
+        "official-gap",
+        "missing-mechanism",
+        "incompatible-mechanism",
+        "temporary-exception"
+      ],
+      "inputs": [
+        "official-state",
+        "evidence"
+      ],
+      "outputs": [],
+      "bytes": 2644,
+      "sha256": "36ad687269216409b27433f65e96de030b6024b54296a724237dfb4fa7087e13",
+      "tokens": 555,
+      "guard": {
+        "exceptions": 4,
+        "modalities": 4,
+        "prohibitions": 0,
+        "references": 5
+      }
+    },
+    {
+      "id": "scenario.upstream-sharing",
+      "path": ".ia.rules/scenarios/governance/upstream-sharing/scenario.md",
+      "class": "scenario",
+      "type": "hybrid",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "upstream-sharing",
+        "upstream-proposal",
+        "constructor-inbox"
+      ],
+      "inputs": [
+        "sanitized-evidence",
+        "role"
+      ],
+      "outputs": [
+        "proposal",
+        "inbox"
+      ],
+      "bytes": 5398,
+      "sha256": "3b864be69682d2266ba723f20a540cdb583722e9f3cafbb2d1e024d5d6f381ec",
+      "tokens": 1198,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 5,
+        "prohibitions": 2,
+        "references": 25
+      }
+    },
+    {
+      "id": "scenario.issue-lifecycle",
+      "path": ".ia.rules/scenarios/governance/issue-lifecycle.md",
+      "class": "scenario",
+      "type": "leaf",
+      "roles": [
+        "constructor"
+      ],
+      "triggers": [
+        "approved-issue",
+        "issue-sync",
+        "issue-release-closeout"
+      ],
+      "inputs": [
+        "approved-issue",
+        "explicit-authorization"
+      ],
+      "outputs": [],
+      "bytes": 2029,
+      "sha256": "09f85f690e60f936bb4c8c561e4af782211f8c877cd3451955c4f4fbfd97113d",
+      "tokens": 441,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 1,
+        "prohibitions": 0,
+        "references": 5
+      }
+    },
+    {
+      "id": "scenario.release",
+      "path": ".ia.rules/scenarios/release/scenario.md",
+      "class": "scenario",
+      "type": "hybrid",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "release",
+        "version",
+        "tag",
+        "release-asset"
+      ],
+      "inputs": [
+        "release-request",
+        "RCF"
+      ],
+      "outputs": [
+        "release-contract"
+      ],
+      "bytes": 5536,
+      "sha256": "5a3a70329bf0e257142f767cedbc46f8b56de49435faca7033acb63ffbc4ad7d",
+      "tokens": 1268,
+      "guard": {
+        "exceptions": 1,
+        "modalities": 34,
+        "prohibitions": 6,
+        "references": 42
+      }
+    },
+    {
+      "id": "capability.package-registry",
+      "path": ".ia.rules/scenarios/release/capabilities/package-registry.md",
+      "class": "capability",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "package-registry",
+        "package-publication"
+      ],
+      "inputs": [
+        "release-contract",
+        "RCF-opt-in"
+      ],
+      "outputs": [],
+      "bytes": 2090,
+      "sha256": "cc7020b77199c492258124d0a501cf570692f49c655cf571e31e047fe75d9563",
+      "tokens": 457,
+      "guard": {
+        "exceptions": 1,
+        "modalities": 2,
+        "prohibitions": 0,
+        "references": 19
+      }
+    },
+    {
+      "id": "scenario.application-update",
+      "path": ".ia.rules/scenarios/application-update/scenario.md",
+      "class": "scenario",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "application-update",
+        "version-detection",
+        "update-notice"
+      ],
+      "inputs": [
+        "RCF-opt-in",
+        "version-state"
+      ],
+      "outputs": [],
+      "bytes": 1851,
+      "sha256": "762ca6ac1fefae81dfb34d8da6552d110e86c36343c0bffd25662c98674a94e5",
+      "tokens": 398,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 1,
+        "prohibitions": 0,
+        "references": 17
+      }
+    },
+    {
+      "id": "scenario.content-publication",
+      "path": ".ia.rules/scenarios/content-publication/scenario.md",
+      "class": "scenario",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "content-publication",
+        "business-artifact-publish"
+      ],
+      "inputs": [
+        "business-artifact",
+        "technical-scenario"
+      ],
+      "outputs": [],
+      "bytes": 1800,
+      "sha256": "0eea80e30a9917ce32eb2517ac1f83465e6a0a3452dba01aae9c1efc14e9be97",
+      "tokens": 422,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 10,
+        "prohibitions": 4,
+        "references": 16
+      }
+    },
+    {
+      "id": "scenario.web-page-like",
+      "path": ".ia.rules/scenarios/web/page-like/scenario.md",
+      "class": "scenario",
+      "type": "hybrid",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "web-page-like",
+        "browser-product"
+      ],
+      "inputs": [
+        "web-product",
+        "RCF"
+      ],
+      "outputs": [
+        "web-capability-route"
+      ],
+      "bytes": 1559,
+      "sha256": "7730caa74caa671aa9823425d70f1454bfbe967a4789635452b4539b17447113",
+      "tokens": 388,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 2,
+        "prohibitions": 0,
+        "references": 16
+      }
+    },
+    {
+      "id": "capability.web-browser",
+      "path": ".ia.rules/scenarios/web/page-like/capabilities/browser.md",
+      "class": "capability",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "browser",
+        "DOM",
+        "web-runtime"
+      ],
+      "inputs": [
+        "web-capability-route"
+      ],
+      "outputs": [],
+      "bytes": 5980,
+      "sha256": "972c496beb3fb21f241a1f7bb3eaea403a098585d2dff1e46f36b16d9ddb9f66",
+      "tokens": 1401,
+      "guard": {
+        "exceptions": 2,
+        "modalities": 30,
+        "prohibitions": 8,
+        "references": 35
+      }
+    },
+    {
+      "id": "capability.web-static",
+      "path": ".ia.rules/scenarios/web/page-like/capabilities/static-hosting.md",
+      "class": "capability",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "static-hosting",
+        "static-generator",
+        "pages"
+      ],
+      "inputs": [
+        "web-browser-capability"
+      ],
+      "outputs": [],
+      "bytes": 1273,
+      "sha256": "a5865cebac9c341485a3778e61729bfd6a0d6230c8a831a79480c49631879526",
+      "tokens": 282,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 7,
+        "prohibitions": 0,
+        "references": 3
+      }
+    },
+    {
+      "id": "capability.web-editorial",
+      "path": ".ia.rules/scenarios/web/page-like/capabilities/editorial.md",
+      "class": "capability",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "editorial",
+        "article",
+        "post",
+        "sermon",
+        "essay",
+        "news"
+      ],
+      "inputs": [
+        "web-browser-capability"
+      ],
+      "outputs": [],
+      "bytes": 4828,
+      "sha256": "1098ae965511cb35deb61d7e37e48151423c908a3702d82b8d93ab2a016d513d",
+      "tokens": 1067,
+      "guard": {
+        "exceptions": 1,
+        "modalities": 21,
+        "prohibitions": 7,
+        "references": 7
+      }
+    },
+    {
+      "id": "scenario.visual-precision",
+      "path": ".ia.rules/scenarios/visual/precision.md",
+      "class": "scenario",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "visual",
+        "image",
+        "PDF",
+        "screenshot",
+        "render",
+        "responsive-UI"
+      ],
+      "inputs": [
+        "visual-source",
+        "request-context"
+      ],
+      "outputs": [
+        "visual-ledger",
+        "post-change-evidence"
+      ],
+      "bytes": 2027,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 6,
+        "prohibitions": 2,
+        "references": 15
+      },
+      "sha256": "4fa316d5b3becf41ce4cd60c08fdb6f31d7e23bf74852856a6ece472e9a1dbdd",
+      "tokens": 453
+    },
+    {
+      "id": "meta.cli",
+      "path": ".ia.rules/meta/cli.md",
+      "class": "meta",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "script",
+        "command",
+        "CLI"
+      ],
+      "inputs": [
+        "command-context"
+      ],
+      "outputs": [],
+      "bytes": 535,
+      "sha256": "5d20bb860c3f9fd58e4d087f2c05747963eaba21b5291c521d8722e742a78a2a",
+      "tokens": 139,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 0,
+        "prohibitions": 0,
+        "references": 12
+      }
+    },
+    {
+      "id": "meta.build",
+      "path": ".ia.rules/meta/build.md",
+      "class": "meta",
+      "type": "leaf",
+      "roles": [
+        "constructor"
+      ],
+      "triggers": [
+        "build",
+        "dist",
+        "package",
+        "archive"
+      ],
+      "inputs": [
+        "build-context"
+      ],
+      "outputs": [],
+      "bytes": 1058,
+      "sha256": "6c694c1b5a97065f00414e6038dfe3972d2d36692226991a585c5049d7f797d6",
+      "tokens": 237,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 3,
+        "prohibitions": 0,
+        "references": 6
+      }
+    },
+    {
+      "id": "meta.ia",
+      "path": ".ia.rules/meta/ia.md",
+      "class": "meta",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "agent-command",
+        "AI-output"
+      ],
+      "inputs": [
+        "AI-context"
+      ],
+      "outputs": [],
+      "bytes": 416,
+      "sha256": "bb9f35c232c94d3c0fd7909ef5a8e5a0b679cbe5915cc1f3bea23db919959c5d",
+      "tokens": 107,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 3,
+        "prohibitions": 0,
+        "references": 5
+      }
+    },
+    {
+      "id": "meta.maintenance",
+      "path": ".ia.rules/meta/maintenance.md",
+      "class": "meta",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "maintenance",
+        "status",
+        "doctor",
+        "repair"
+      ],
+      "inputs": [
+        "maintenance-context"
+      ],
+      "outputs": [],
+      "bytes": 438,
+      "sha256": "6b9c4dd4b092605d24ee12fd015ce475b43415ecaf2a9e6ea8fdc570ac0c7e36",
+      "tokens": 100,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 2,
+        "prohibitions": 0,
+        "references": 3
+      }
+    },
+    {
+      "id": "meta.publish",
+      "path": ".ia.rules/meta/publish.md",
+      "class": "meta",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "publish",
+        "deploy"
+      ],
+      "inputs": [
+        "publish-context"
+      ],
+      "outputs": [],
+      "bytes": 548,
+      "sha256": "a03ddd0e288115ce3789b5e68de795e95ce803b05bfbe00543587ce7dd8cb607",
+      "tokens": 135,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 0,
+        "prohibitions": 0,
+        "references": 10
+      }
+    },
+    {
+      "id": "meta.release",
+      "path": ".ia.rules/meta/release.md",
+      "class": "meta",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "release",
+        "release-publish"
+      ],
+      "inputs": [
+        "release-context"
+      ],
+      "outputs": [],
+      "bytes": 640,
+      "sha256": "1423fe4bf363d654de155fea5114a4e1710aa15d789cae1be349cc9641a0c85a",
+      "tokens": 161,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 1,
+        "prohibitions": 0,
+        "references": 9
+      }
+    },
+    {
+      "id": "meta.update",
+      "path": ".ia.rules/meta/update.md",
+      "class": "meta",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "update:agents"
+      ],
+      "inputs": [
+        "update-context"
+      ],
+      "outputs": [],
+      "bytes": 873,
+      "sha256": "65ea50a016e5d8e060603c73db6939e0720335734da6dede056c9347470922cd",
+      "tokens": 201,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 0,
+        "prohibitions": 0,
+        "references": 9
+      }
+    },
+    {
+      "id": "meta.upstream",
+      "path": ".ia.rules/meta/upstream.md",
+      "class": "meta",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "upstream",
+        "issue-inbox"
+      ],
+      "inputs": [
+        "upstream-context"
+      ],
+      "outputs": [],
+      "bytes": 523,
+      "sha256": "5d6f73d6fa84d5ddc9b8d120605a7d1275ab69c59b078517603353f5742fae54",
+      "tokens": 129,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 0,
+        "prohibitions": 0,
+        "references": 7
+      }
+    },
+    {
+      "id": "meta.validation",
+      "path": ".ia.rules/meta/validation.md",
+      "class": "meta",
+      "type": "leaf",
+      "roles": [
+        "final",
+        "constructor"
+      ],
+      "triggers": [
+        "test",
+        "lint",
+        "verify",
+        "validation"
+      ],
+      "inputs": [
+        "validation-context"
+      ],
+      "outputs": [],
+      "bytes": 411,
+      "sha256": "c900f2003cd7291ec6254dceadc173bf6aa8a0eec1f4779f6babcbebb238b802",
+      "tokens": 99,
+      "guard": {
+        "exceptions": 0,
+        "modalities": 3,
+        "prohibitions": 0,
+        "references": 2
+      }
+    },
+    {
+      "id": "bootstrap.init-repo",
+      "path": "INIT-REPO.md",
+      "class": "bootstrap",
+      "type": "leaf",
+      "roles": [
+        "final"
+      ],
+      "triggers": [
+        "repository-initialization",
+        "normative-bootstrap"
+      ],
+      "inputs": [
+        "new-repository"
+      ],
+      "outputs": [],
+      "bytes": 12906,
+      "sha256": "117c06a61f0e438e8a29351e4e9984c48a325b9ef6e80aec76c33df8b491d961",
+      "tokens": 2977,
+      "guard": {
+        "exceptions": 2,
+        "modalities": 69,
+        "prohibitions": 12,
+        "references": 25
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "core.agents",
+      "to": "core.authority",
+      "mode": "passive",
+      "condition": "always",
+      "order": 1
+    },
+    {
+      "from": "core.agents",
+      "to": "core.routing",
+      "mode": "passive",
+      "condition": "partial-context or discovery",
+      "order": 2
+    },
+    {
+      "from": "core.agents",
+      "to": "core.microconcepts",
+      "mode": "passive",
+      "condition": "MN-* reference or ambiguity",
+      "order": 3
+    },
+    {
+      "from": "core.agents",
+      "to": "core.contracts",
+      "mode": "passive",
+      "condition": "scenario, resource, hook, integration or manifest",
+      "order": 4
+    },
+    {
+      "from": "core.agents",
+      "to": "role.final",
+      "mode": "passive",
+      "condition": "always in a consuming repository",
+      "order": 5
+    },
+    {
+      "from": "core.agents",
+      "to": "role.constructor",
+      "mode": "passive",
+      "condition": "constructor operation",
+      "order": 6
+    },
+    {
+      "from": "role.constructor",
+      "to": "scenario.constructor-operation",
+      "mode": "passive",
+      "condition": "source, classification, build, dist, package, archive, update, distribution, release or publish",
+      "order": 1
+    },
+    {
+      "from": "core.agents",
+      "to": "scenario.request-lifecycle",
+      "mode": "passive",
+      "condition": "request intake or resume",
+      "order": 7
+    },
+    {
+      "from": "scenario.request-lifecycle",
+      "to": "scenario.refused-decisions",
+      "mode": "passive",
+      "condition": "every new request after source capture and before substantive analysis",
+      "order": 1
+    },
+    {
+      "from": "core.agents",
+      "to": "scenario.official-gap",
+      "mode": "passive",
+      "condition": "apparent official gap",
+      "order": 8
+    },
+    {
+      "from": "core.agents",
+      "to": "scenario.upstream-sharing",
+      "mode": "passive",
+      "condition": "upstream proposal or inbox",
+      "order": 9
+    },
+    {
+      "from": "scenario.upstream-sharing",
+      "to": "scenario.issue-lifecycle",
+      "mode": "passive",
+      "condition": "constructor receives human-approved issue",
+      "order": 1
+    },
+    {
+      "from": "core.agents",
+      "to": "core.update",
+      "mode": "passive",
+      "condition": "governance install, update, repair or migration",
+      "order": 10
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.scripts",
+      "mode": "passive",
+      "condition": "script, command, runtime, hook, callback, fallback or adapter",
+      "order": 11
+    },
+    {
+      "from": "resource.scripts",
+      "to": "meta.cli",
+      "mode": "passive",
+      "condition": "reusable CLI",
+      "order": 1
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.workflows",
+      "mode": "passive",
+      "condition": "distributable workflow",
+      "order": 12
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.traceability",
+      "mode": "passive",
+      "condition": "technical unit or material traceability",
+      "order": 13
+    },
+    {
+      "from": "core.agents",
+      "to": "scenario.release",
+      "mode": "passive",
+      "condition": "release",
+      "order": 14
+    },
+    {
+      "from": "scenario.release",
+      "to": "capability.package-registry",
+      "mode": "passive",
+      "condition": "RCF opts into package registry",
+      "order": 1
+    },
+    {
+      "from": "core.agents",
+      "to": "scenario.application-update",
+      "mode": "passive",
+      "condition": "RCF opts into application update",
+      "order": 15
+    },
+    {
+      "from": "core.agents",
+      "to": "scenario.content-publication",
+      "mode": "passive",
+      "condition": "business content publication",
+      "order": 16
+    },
+    {
+      "from": "core.agents",
+      "to": "scenario.web-page-like",
+      "mode": "passive",
+      "condition": "web page like product",
+      "order": 17
+    },
+    {
+      "from": "scenario.web-page-like",
+      "to": "capability.web-browser",
+      "mode": "passive",
+      "condition": "browser capability",
+      "order": 1
+    },
+    {
+      "from": "scenario.web-page-like",
+      "to": "capability.web-static",
+      "mode": "passive",
+      "condition": "static hosting capability",
+      "order": 2
+    },
+    {
+      "from": "scenario.web-page-like",
+      "to": "capability.web-editorial",
+      "mode": "passive",
+      "condition": "editorial capability",
+      "order": 3
+    },
+    {
+      "from": "core.agents",
+      "to": "meta.build",
+      "mode": "passive",
+      "condition": "build, dist, package or archive",
+      "order": 18
+    },
+    {
+      "from": "core.agents",
+      "to": "meta.ia",
+      "mode": "passive",
+      "condition": "agent command or AI output",
+      "order": 19
+    },
+    {
+      "from": "core.agents",
+      "to": "meta.maintenance",
+      "mode": "passive",
+      "condition": "maintenance",
+      "order": 20
+    },
+    {
+      "from": "core.agents",
+      "to": "meta.publish",
+      "mode": "passive",
+      "condition": "publish or deploy",
+      "order": 21
+    },
+    {
+      "from": "core.agents",
+      "to": "meta.release",
+      "mode": "passive",
+      "condition": "release execution",
+      "order": 22
+    },
+    {
+      "from": "core.agents",
+      "to": "meta.update",
+      "mode": "passive",
+      "condition": "update:agents execution",
+      "order": 23
+    },
+    {
+      "from": "core.agents",
+      "to": "meta.upstream",
+      "mode": "passive",
+      "condition": "upstream operation",
+      "order": 24
+    },
+    {
+      "from": "core.agents",
+      "to": "meta.validation",
+      "mode": "passive",
+      "condition": "validation",
+      "order": 25
+    },
+    {
+      "from": "core.agents",
+      "to": "bootstrap.init-repo",
+      "mode": "passive",
+      "condition": "repository normative bootstrap",
+      "order": 26
+    },
+    {
+      "from": "core.agents",
+      "to": "core.agents-full",
+      "mode": "passive",
+      "condition": "route change, context loss, normative conflict, rule not found, invalid index/cache, preservation audit or low confidence",
+      "order": 33
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.skills",
+      "mode": "passive",
+      "condition": "skill evaluation, discovery, lifecycle or validation",
+      "order": 27
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.subagents",
+      "mode": "passive",
+      "condition": "subagent evaluation, delegation, lifecycle or validation",
+      "order": 28
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.long-running",
+      "mode": "passive",
+      "condition": "long-running operation, timeout, wait, cancellation, resume or orphan",
+      "order": 29
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.external-tools",
+      "mode": "passive",
+      "condition": "third-party, MCP, plugin, external tool or external service",
+      "order": 30
+    },
+    {
+      "from": "core.agents",
+      "to": "scenario.state-and-todo",
+      "mode": "passive",
+      "condition": "state, memory, fix, TODO, migration or resume",
+      "order": 31
+    },
+    {
+      "from": "core.agents",
+      "to": "scenario.visual-precision",
+      "mode": "passive",
+      "condition": "visual image, PDF, screenshot, render or responsive UI work",
+      "order": 32
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.editorial-authoring",
+      "mode": "passive",
+      "condition": "editorial authoring, authorial revision or accessible text transformation",
+      "order": 34
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.spoken-normalization",
+      "mode": "passive",
+      "condition": "spoken representation, TTS normalization, pronunciation, editorial delimiter or biblical reference",
+      "order": 35
+    },
+    {
+      "from": "core.agents",
+      "to": "resource.context-cost-audit",
+      "mode": "passive",
+      "condition": "context token, route, memory, status, recovery or resume cost audit",
+      "order": 36
+    }
+  ],
+  "fallback": {
+    "on": [
+      "missing-route",
+      "conflict",
+      "low-confidence",
+      "fragmentation",
+      "invalid-cache",
+      "ambiguous-scope"
+    ],
+    "action": "read-all-normative-nodes-by-precedence"
+  },
+  "generation": {
+    "commit": "5ab018b",
+    "commitDate": "2026-09-15T12:36:43-03:00",
+    "encoding": "o200k_base",
+    "model": "gpt-4o",
+    "script": ".ia.rules/scenarios/governance/scripts/normative-graph.py",
+    "serialization": "UTF-8; CRLF normalizado para LF; arquivo integral por nó",
+    "sourceDigest": "41f6fa8b1df14b8b06ed6926512bfb1b3d832e0ffa3dda0a2e4abed5efaf7aea",
+    "tokenizer": "tiktoken",
+    "tokenizerVersion": "0.13.0"
+  },
+  "metrics": {
+    "leaf": {
+      "count": 38,
+      "min": 498,
+      "average": 1593.76,
+      "median": 1145.0,
+      "populationStandardDeviation": 1412.77,
+      "max": 8593
+    },
+    "hybrid": {
+      "count": 6,
+      "min": 399,
+      "average": 1267.17,
+      "median": 1442.0,
+      "populationStandardDeviation": 518.32,
+      "max": 1866
+    }
+  },
+  "paths": [
+    {
+      "id": "path-001",
+      "nodes": [
+        "core.agents"
+      ],
+      "segments": [
+        {
+          "id": "core.agents",
+          "mode": "terminal",
+          "tokens": 399
+        }
+      ],
+      "terminal": "core.agents",
+      "terminalType": "hybrid",
+      "tokens": 399
+    },
+    {
+      "id": "path-002",
+      "nodes": [
+        "core.agents",
+        "core.authority"
+      ],
+      "segments": [
+        {
+          "condition": "always",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "core.authority",
+          "tokens": 399
+        },
+        {
+          "id": "core.authority",
+          "mode": "terminal",
+          "tokens": 1130
+        }
+      ],
+      "terminal": "core.authority",
+      "terminalType": "leaf",
+      "tokens": 1529
+    },
+    {
+      "id": "path-003",
+      "nodes": [
+        "core.agents",
+        "core.routing"
+      ],
+      "segments": [
+        {
+          "condition": "partial-context or discovery",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "core.routing",
+          "tokens": 399
+        },
+        {
+          "id": "core.routing",
+          "mode": "terminal",
+          "tokens": 1844
+        }
+      ],
+      "terminal": "core.routing",
+      "terminalType": "leaf",
+      "tokens": 2243
+    },
+    {
+      "id": "path-004",
+      "nodes": [
+        "core.agents",
+        "core.microconcepts"
+      ],
+      "segments": [
+        {
+          "condition": "MN-* reference or ambiguity",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "core.microconcepts",
+          "tokens": 399
+        },
+        {
+          "id": "core.microconcepts",
+          "mode": "terminal",
+          "tokens": 3433
+        }
+      ],
+      "terminal": "core.microconcepts",
+      "terminalType": "leaf",
+      "tokens": 3832
+    },
+    {
+      "id": "path-005",
+      "nodes": [
+        "core.agents",
+        "core.contracts"
+      ],
+      "segments": [
+        {
+          "condition": "scenario, resource, hook, integration or manifest",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "core.contracts",
+          "tokens": 399
+        },
+        {
+          "id": "core.contracts",
+          "mode": "terminal",
+          "tokens": 2069
+        }
+      ],
+      "terminal": "core.contracts",
+      "terminalType": "leaf",
+      "tokens": 2468
+    },
+    {
+      "id": "path-006",
+      "nodes": [
+        "core.agents",
+        "role.final"
+      ],
+      "segments": [
+        {
+          "condition": "always in a consuming repository",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "role.final",
+          "tokens": 399
+        },
+        {
+          "id": "role.final",
+          "mode": "terminal",
+          "tokens": 663
+        }
+      ],
+      "terminal": "role.final",
+      "terminalType": "leaf",
+      "tokens": 1062
+    },
+    {
+      "id": "path-007",
+      "nodes": [
+        "core.agents",
+        "role.constructor",
+        "scenario.constructor-operation"
+      ],
+      "segments": [
+        {
+          "condition": "constructor operation",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "role.constructor",
+          "tokens": 399
+        },
+        {
+          "condition": "source, classification, build, dist, package, archive, update, distribution, release or publish",
+          "from": "role.constructor",
+          "mode": "passive",
+          "to": "scenario.constructor-operation",
+          "tokens": 930
+        },
+        {
+          "id": "scenario.constructor-operation",
+          "mode": "terminal",
+          "tokens": 902
+        }
+      ],
+      "terminal": "scenario.constructor-operation",
+      "terminalType": "leaf",
+      "tokens": 2231
+    },
+    {
+      "id": "path-008",
+      "nodes": [
+        "core.agents",
+        "scenario.request-lifecycle"
+      ],
+      "segments": [
+        {
+          "condition": "request intake or resume",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.request-lifecycle",
+          "tokens": 399
+        },
+        {
+          "id": "scenario.request-lifecycle",
+          "mode": "terminal",
+          "tokens": 888
+        }
+      ],
+      "terminal": "scenario.request-lifecycle",
+      "terminalType": "hybrid",
+      "tokens": 1287
+    },
+    {
+      "id": "path-009",
+      "nodes": [
+        "core.agents",
+        "scenario.request-lifecycle",
+        "scenario.refused-decisions"
+      ],
+      "segments": [
+        {
+          "condition": "request intake or resume",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.request-lifecycle",
+          "tokens": 399
+        },
+        {
+          "condition": "every new request after source capture and before substantive analysis",
+          "from": "scenario.request-lifecycle",
+          "mode": "passive",
+          "to": "scenario.refused-decisions",
+          "tokens": 888
+        },
+        {
+          "id": "scenario.refused-decisions",
+          "mode": "terminal",
+          "tokens": 1201
+        }
+      ],
+      "terminal": "scenario.refused-decisions",
+      "terminalType": "leaf",
+      "tokens": 2488
+    },
+    {
+      "id": "path-010",
+      "nodes": [
+        "core.agents",
+        "scenario.official-gap"
+      ],
+      "segments": [
+        {
+          "condition": "apparent official gap",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.official-gap",
+          "tokens": 399
+        },
+        {
+          "id": "scenario.official-gap",
+          "mode": "terminal",
+          "tokens": 555
+        }
+      ],
+      "terminal": "scenario.official-gap",
+      "terminalType": "leaf",
+      "tokens": 954
+    },
+    {
+      "id": "path-011",
+      "nodes": [
+        "core.agents",
+        "scenario.upstream-sharing"
+      ],
+      "segments": [
+        {
+          "condition": "upstream proposal or inbox",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.upstream-sharing",
+          "tokens": 399
+        },
+        {
+          "id": "scenario.upstream-sharing",
+          "mode": "terminal",
+          "tokens": 1198
+        }
+      ],
+      "terminal": "scenario.upstream-sharing",
+      "terminalType": "hybrid",
+      "tokens": 1597
+    },
+    {
+      "id": "path-012",
+      "nodes": [
+        "core.agents",
+        "scenario.upstream-sharing",
+        "scenario.issue-lifecycle"
+      ],
+      "segments": [
+        {
+          "condition": "upstream proposal or inbox",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.upstream-sharing",
+          "tokens": 399
+        },
+        {
+          "condition": "constructor receives human-approved issue",
+          "from": "scenario.upstream-sharing",
+          "mode": "passive",
+          "to": "scenario.issue-lifecycle",
+          "tokens": 1198
+        },
+        {
+          "id": "scenario.issue-lifecycle",
+          "mode": "terminal",
+          "tokens": 441
+        }
+      ],
+      "terminal": "scenario.issue-lifecycle",
+      "terminalType": "leaf",
+      "tokens": 2038
+    },
+    {
+      "id": "path-013",
+      "nodes": [
+        "core.agents",
+        "core.update"
+      ],
+      "segments": [
+        {
+          "condition": "governance install, update, repair or migration",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "core.update",
+          "tokens": 399
+        },
+        {
+          "id": "core.update",
+          "mode": "terminal",
+          "tokens": 2172
+        }
+      ],
+      "terminal": "core.update",
+      "terminalType": "leaf",
+      "tokens": 2571
+    },
+    {
+      "id": "path-014",
+      "nodes": [
+        "core.agents",
+        "resource.scripts"
+      ],
+      "segments": [
+        {
+          "condition": "script, command, runtime, hook, callback, fallback or adapter",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.scripts",
+          "tokens": 399
+        },
+        {
+          "id": "resource.scripts",
+          "mode": "terminal",
+          "tokens": 1467
+        }
+      ],
+      "terminal": "resource.scripts",
+      "terminalType": "hybrid",
+      "tokens": 1866
+    },
+    {
+      "id": "path-015",
+      "nodes": [
+        "core.agents",
+        "resource.scripts",
+        "meta.cli"
+      ],
+      "segments": [
+        {
+          "condition": "script, command, runtime, hook, callback, fallback or adapter",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.scripts",
+          "tokens": 399
+        },
+        {
+          "condition": "reusable CLI",
+          "from": "resource.scripts",
+          "mode": "passive",
+          "to": "meta.cli",
+          "tokens": 1467
+        },
+        {
+          "id": "meta.cli",
+          "mode": "terminal",
+          "tokens": 139
+        }
+      ],
+      "terminal": "meta.cli",
+      "terminalType": "leaf",
+      "tokens": 2005
+    },
+    {
+      "id": "path-016",
+      "nodes": [
+        "core.agents",
+        "resource.workflows"
+      ],
+      "segments": [
+        {
+          "condition": "distributable workflow",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.workflows",
+          "tokens": 399
+        },
+        {
+          "id": "resource.workflows",
+          "mode": "terminal",
+          "tokens": 873
+        }
+      ],
+      "terminal": "resource.workflows",
+      "terminalType": "leaf",
+      "tokens": 1272
+    },
+    {
+      "id": "path-017",
+      "nodes": [
+        "core.agents",
+        "resource.traceability"
+      ],
+      "segments": [
+        {
+          "condition": "technical unit or material traceability",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.traceability",
+          "tokens": 399
+        },
+        {
+          "id": "resource.traceability",
+          "mode": "terminal",
+          "tokens": 965
+        }
+      ],
+      "terminal": "resource.traceability",
+      "terminalType": "leaf",
+      "tokens": 1364
+    },
+    {
+      "id": "path-018",
+      "nodes": [
+        "core.agents",
+        "scenario.release"
+      ],
+      "segments": [
+        {
+          "condition": "release",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.release",
+          "tokens": 399
+        },
+        {
+          "id": "scenario.release",
+          "mode": "terminal",
+          "tokens": 1268
+        }
+      ],
+      "terminal": "scenario.release",
+      "terminalType": "hybrid",
+      "tokens": 1667
+    },
+    {
+      "id": "path-019",
+      "nodes": [
+        "core.agents",
+        "scenario.release",
+        "capability.package-registry"
+      ],
+      "segments": [
+        {
+          "condition": "release",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.release",
+          "tokens": 399
+        },
+        {
+          "condition": "RCF opts into package registry",
+          "from": "scenario.release",
+          "mode": "passive",
+          "to": "capability.package-registry",
+          "tokens": 1268
+        },
+        {
+          "id": "capability.package-registry",
+          "mode": "terminal",
+          "tokens": 457
+        }
+      ],
+      "terminal": "capability.package-registry",
+      "terminalType": "leaf",
+      "tokens": 2124
+    },
+    {
+      "id": "path-020",
+      "nodes": [
+        "core.agents",
+        "scenario.application-update"
+      ],
+      "segments": [
+        {
+          "condition": "RCF opts into application update",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.application-update",
+          "tokens": 399
+        },
+        {
+          "id": "scenario.application-update",
+          "mode": "terminal",
+          "tokens": 398
+        }
+      ],
+      "terminal": "scenario.application-update",
+      "terminalType": "leaf",
+      "tokens": 797
+    },
+    {
+      "id": "path-021",
+      "nodes": [
+        "core.agents",
+        "scenario.content-publication"
+      ],
+      "segments": [
+        {
+          "condition": "business content publication",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.content-publication",
+          "tokens": 399
+        },
+        {
+          "id": "scenario.content-publication",
+          "mode": "terminal",
+          "tokens": 422
+        }
+      ],
+      "terminal": "scenario.content-publication",
+      "terminalType": "leaf",
+      "tokens": 821
+    },
+    {
+      "id": "path-022",
+      "nodes": [
+        "core.agents",
+        "scenario.web-page-like"
+      ],
+      "segments": [
+        {
+          "condition": "web page like product",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.web-page-like",
+          "tokens": 399
+        },
+        {
+          "id": "scenario.web-page-like",
+          "mode": "terminal",
+          "tokens": 388
+        }
+      ],
+      "terminal": "scenario.web-page-like",
+      "terminalType": "hybrid",
+      "tokens": 787
+    },
+    {
+      "id": "path-023",
+      "nodes": [
+        "core.agents",
+        "scenario.web-page-like",
+        "capability.web-browser"
+      ],
+      "segments": [
+        {
+          "condition": "web page like product",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.web-page-like",
+          "tokens": 399
+        },
+        {
+          "condition": "browser capability",
+          "from": "scenario.web-page-like",
+          "mode": "passive",
+          "to": "capability.web-browser",
+          "tokens": 388
+        },
+        {
+          "id": "capability.web-browser",
+          "mode": "terminal",
+          "tokens": 1401
+        }
+      ],
+      "terminal": "capability.web-browser",
+      "terminalType": "leaf",
+      "tokens": 2188
+    },
+    {
+      "id": "path-024",
+      "nodes": [
+        "core.agents",
+        "scenario.web-page-like",
+        "capability.web-static"
+      ],
+      "segments": [
+        {
+          "condition": "web page like product",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.web-page-like",
+          "tokens": 399
+        },
+        {
+          "condition": "static hosting capability",
+          "from": "scenario.web-page-like",
+          "mode": "passive",
+          "to": "capability.web-static",
+          "tokens": 388
+        },
+        {
+          "id": "capability.web-static",
+          "mode": "terminal",
+          "tokens": 282
+        }
+      ],
+      "terminal": "capability.web-static",
+      "terminalType": "leaf",
+      "tokens": 1069
+    },
+    {
+      "id": "path-025",
+      "nodes": [
+        "core.agents",
+        "scenario.web-page-like",
+        "capability.web-editorial"
+      ],
+      "segments": [
+        {
+          "condition": "web page like product",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.web-page-like",
+          "tokens": 399
+        },
+        {
+          "condition": "editorial capability",
+          "from": "scenario.web-page-like",
+          "mode": "passive",
+          "to": "capability.web-editorial",
+          "tokens": 388
+        },
+        {
+          "id": "capability.web-editorial",
+          "mode": "terminal",
+          "tokens": 1067
+        }
+      ],
+      "terminal": "capability.web-editorial",
+      "terminalType": "leaf",
+      "tokens": 1854
+    },
+    {
+      "id": "path-026",
+      "nodes": [
+        "core.agents",
+        "meta.build"
+      ],
+      "segments": [
+        {
+          "condition": "build, dist, package or archive",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "meta.build",
+          "tokens": 399
+        },
+        {
+          "id": "meta.build",
+          "mode": "terminal",
+          "tokens": 237
+        }
+      ],
+      "terminal": "meta.build",
+      "terminalType": "leaf",
+      "tokens": 636
+    },
+    {
+      "id": "path-027",
+      "nodes": [
+        "core.agents",
+        "meta.ia"
+      ],
+      "segments": [
+        {
+          "condition": "agent command or AI output",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "meta.ia",
+          "tokens": 399
+        },
+        {
+          "id": "meta.ia",
+          "mode": "terminal",
+          "tokens": 107
+        }
+      ],
+      "terminal": "meta.ia",
+      "terminalType": "leaf",
+      "tokens": 506
+    },
+    {
+      "id": "path-028",
+      "nodes": [
+        "core.agents",
+        "meta.maintenance"
+      ],
+      "segments": [
+        {
+          "condition": "maintenance",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "meta.maintenance",
+          "tokens": 399
+        },
+        {
+          "id": "meta.maintenance",
+          "mode": "terminal",
+          "tokens": 100
+        }
+      ],
+      "terminal": "meta.maintenance",
+      "terminalType": "leaf",
+      "tokens": 499
+    },
+    {
+      "id": "path-029",
+      "nodes": [
+        "core.agents",
+        "meta.publish"
+      ],
+      "segments": [
+        {
+          "condition": "publish or deploy",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "meta.publish",
+          "tokens": 399
+        },
+        {
+          "id": "meta.publish",
+          "mode": "terminal",
+          "tokens": 135
+        }
+      ],
+      "terminal": "meta.publish",
+      "terminalType": "leaf",
+      "tokens": 534
+    },
+    {
+      "id": "path-030",
+      "nodes": [
+        "core.agents",
+        "meta.release"
+      ],
+      "segments": [
+        {
+          "condition": "release execution",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "meta.release",
+          "tokens": 399
+        },
+        {
+          "id": "meta.release",
+          "mode": "terminal",
+          "tokens": 161
+        }
+      ],
+      "terminal": "meta.release",
+      "terminalType": "leaf",
+      "tokens": 560
+    },
+    {
+      "id": "path-031",
+      "nodes": [
+        "core.agents",
+        "meta.update"
+      ],
+      "segments": [
+        {
+          "condition": "update:agents execution",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "meta.update",
+          "tokens": 399
+        },
+        {
+          "id": "meta.update",
+          "mode": "terminal",
+          "tokens": 201
+        }
+      ],
+      "terminal": "meta.update",
+      "terminalType": "leaf",
+      "tokens": 600
+    },
+    {
+      "id": "path-032",
+      "nodes": [
+        "core.agents",
+        "meta.upstream"
+      ],
+      "segments": [
+        {
+          "condition": "upstream operation",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "meta.upstream",
+          "tokens": 399
+        },
+        {
+          "id": "meta.upstream",
+          "mode": "terminal",
+          "tokens": 129
+        }
+      ],
+      "terminal": "meta.upstream",
+      "terminalType": "leaf",
+      "tokens": 528
+    },
+    {
+      "id": "path-033",
+      "nodes": [
+        "core.agents",
+        "meta.validation"
+      ],
+      "segments": [
+        {
+          "condition": "validation",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "meta.validation",
+          "tokens": 399
+        },
+        {
+          "id": "meta.validation",
+          "mode": "terminal",
+          "tokens": 99
+        }
+      ],
+      "terminal": "meta.validation",
+      "terminalType": "leaf",
+      "tokens": 498
+    },
+    {
+      "id": "path-034",
+      "nodes": [
+        "core.agents",
+        "bootstrap.init-repo"
+      ],
+      "segments": [
+        {
+          "condition": "repository normative bootstrap",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "bootstrap.init-repo",
+          "tokens": 399
+        },
+        {
+          "id": "bootstrap.init-repo",
+          "mode": "terminal",
+          "tokens": 2977
+        }
+      ],
+      "terminal": "bootstrap.init-repo",
+      "terminalType": "leaf",
+      "tokens": 3376
+    },
+    {
+      "id": "path-035",
+      "nodes": [
+        "core.agents",
+        "resource.skills"
+      ],
+      "segments": [
+        {
+          "condition": "skill evaluation, discovery, lifecycle or validation",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.skills",
+          "tokens": 399
+        },
+        {
+          "id": "resource.skills",
+          "mode": "terminal",
+          "tokens": 561
+        }
+      ],
+      "terminal": "resource.skills",
+      "terminalType": "leaf",
+      "tokens": 960
+    },
+    {
+      "id": "path-036",
+      "nodes": [
+        "core.agents",
+        "resource.subagents"
+      ],
+      "segments": [
+        {
+          "condition": "subagent evaluation, delegation, lifecycle or validation",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.subagents",
+          "tokens": 399
+        },
+        {
+          "id": "resource.subagents",
+          "mode": "terminal",
+          "tokens": 516
+        }
+      ],
+      "terminal": "resource.subagents",
+      "terminalType": "leaf",
+      "tokens": 915
+    },
+    {
+      "id": "path-037",
+      "nodes": [
+        "core.agents",
+        "resource.long-running"
+      ],
+      "segments": [
+        {
+          "condition": "long-running operation, timeout, wait, cancellation, resume or orphan",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.long-running",
+          "tokens": 399
+        },
+        {
+          "id": "resource.long-running",
+          "mode": "terminal",
+          "tokens": 511
+        }
+      ],
+      "terminal": "resource.long-running",
+      "terminalType": "leaf",
+      "tokens": 910
+    },
+    {
+      "id": "path-038",
+      "nodes": [
+        "core.agents",
+        "resource.external-tools"
+      ],
+      "segments": [
+        {
+          "condition": "third-party, MCP, plugin, external tool or external service",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.external-tools",
+          "tokens": 399
+        },
+        {
+          "id": "resource.external-tools",
+          "mode": "terminal",
+          "tokens": 425
+        }
+      ],
+      "terminal": "resource.external-tools",
+      "terminalType": "leaf",
+      "tokens": 824
+    },
+    {
+      "id": "path-039",
+      "nodes": [
+        "core.agents",
+        "scenario.state-and-todo"
+      ],
+      "segments": [
+        {
+          "condition": "state, memory, fix, TODO, migration or resume",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.state-and-todo",
+          "tokens": 399
+        },
+        {
+          "id": "scenario.state-and-todo",
+          "mode": "terminal",
+          "tokens": 946
+        }
+      ],
+      "terminal": "scenario.state-and-todo",
+      "terminalType": "leaf",
+      "tokens": 1345
+    },
+    {
+      "id": "path-040",
+      "nodes": [
+        "core.agents",
+        "scenario.visual-precision"
+      ],
+      "segments": [
+        {
+          "condition": "visual image, PDF, screenshot, render or responsive UI work",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "scenario.visual-precision",
+          "tokens": 399
+        },
+        {
+          "id": "scenario.visual-precision",
+          "mode": "terminal",
+          "tokens": 453
+        }
+      ],
+      "terminal": "scenario.visual-precision",
+      "terminalType": "leaf",
+      "tokens": 852
+    },
+    {
+      "id": "path-041",
+      "nodes": [
+        "core.agents",
+        "core.agents-full"
+      ],
+      "segments": [
+        {
+          "condition": "route change, context loss, normative conflict, rule not found, invalid index/cache, preservation audit or low confidence",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "core.agents-full",
+          "tokens": 399
+        },
+        {
+          "id": "core.agents-full",
+          "mode": "terminal",
+          "tokens": 8194
+        }
+      ],
+      "terminal": "core.agents-full",
+      "terminalType": "leaf",
+      "tokens": 8593
+    },
+    {
+      "id": "path-042",
+      "nodes": [
+        "core.agents",
+        "resource.editorial-authoring"
+      ],
+      "segments": [
+        {
+          "condition": "editorial authoring, authorial revision or accessible text transformation",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.editorial-authoring",
+          "tokens": 399
+        },
+        {
+          "id": "resource.editorial-authoring",
+          "mode": "terminal",
+          "tokens": 684
+        }
+      ],
+      "terminal": "resource.editorial-authoring",
+      "terminalType": "leaf",
+      "tokens": 1083
+    },
+    {
+      "id": "path-043",
+      "nodes": [
+        "core.agents",
+        "resource.spoken-normalization"
+      ],
+      "segments": [
+        {
+          "condition": "spoken representation, TTS normalization, pronunciation, editorial delimiter or biblical reference",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.spoken-normalization",
+          "tokens": 399
+        },
+        {
+          "id": "resource.spoken-normalization",
+          "mode": "terminal",
+          "tokens": 808
+        }
+      ],
+      "terminal": "resource.spoken-normalization",
+      "terminalType": "leaf",
+      "tokens": 1207
+    },
+    {
+      "id": "path-044",
+      "nodes": [
+        "core.agents",
+        "resource.context-cost-audit"
+      ],
+      "segments": [
+        {
+          "condition": "context token, route, memory, status, recovery or resume cost audit",
+          "from": "core.agents",
+          "mode": "passive",
+          "to": "resource.context-cost-audit",
+          "tokens": 399
+        },
+        {
+          "id": "resource.context-cost-audit",
+          "mode": "terminal",
+          "tokens": 828
+        }
+      ],
+      "terminal": "resource.context-cost-audit",
+      "terminalType": "leaf",
+      "tokens": 1227
+    }
+  ]
+}
