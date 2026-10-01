@@ -6,3 +6,10 @@ Esta regra aplica-se exclusivamente ao repositório que contém este arquivo, qu
 - Todo trabalho para corrigir, modificar, implementar, configurar ou integrar o localWorker deve ser executado externamente a ele.
 - O localWorker pode ser usado somente como instrumento de teste de uma solução já alterada definitivamente neste projeto ou em sua integração, na extensão necessária para validar essa alteração. O teste não pode pedir ao Worker que corrija, implemente ou modifique a si próprio.
 - A preferência global por delegação ao Worker não derroga esta proibição específica deste repositório.
+
+## Governança local de fonte, instalação e entrega
+
+- Preserve integralmente os contratos e recursos existentes ao alterar o localWorker. Uma alteração só está concluída depois de validar o comportamento afetado e a equivalência da representação generalista em `src/`.
+- Artefatos destinados à máquina destino têm representação em `src/`; valores privados e exclusivos deste ambiente de desenvolvimento ficam fora de `src/` e de `howto.md`. Prefira parâmetros, variáveis de ambiente e descoberta dinâmica. Centralize valores configuráveis por arquivo, com nomes inequívocos e, quando útil, sufixo alfanumérico curto.
+- Após alterar implementação ou instruções instaláveis, execute `node scripts/sync-src.mjs --write`. O hook versionado de pré-commit valida e atualiza espelhos e documentação; configure-o com `git config core.hooksPath .githooks`. Não contorne a validação para declarar uma unidade concluída.
+- Cada unidade mínima coerente concluída exige commit próprio e tentativa imediata de push ao remote configurado. Não misture trabalho alheio, parcial ou não validado no commit. Ausência ou falha do remote deve ser registrada explicitamente; não invente destino nem use outro repositório.

@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+if ! git diff --quiet -- localworker src/install.ps1 src/agents.supervisor.md; then
+  echo "Arquivos fonte não staged: faça git add da unidade antes do commit." >&2
+  exit 1
+fi
+node scripts/sync-src.mjs --write
+git add -- src/localworker src/agents.worker.md RCF.md howto.md src/README.md
+node scripts/sync-src.mjs --check
+git diff --cached --check

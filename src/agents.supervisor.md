@@ -157,6 +157,7 @@ NÃO delegue tarefa trivial, sem repositório local ou dependente de capacidade 
 Obtenha o `thread_id` pelos recursos do Codex Desktop, confirmando identidade e diretório; **nunca reutilize ID apenas por ter sido citado em prompt**.
 
 Passe `repoPath` absoluto e use `read-only` por padrão; `write` exige autorização para editar.
+Para implementação ou edição obrigatória delegada, use `expect_changes: true` em `local_analyze`; `COMPLETED` só encerra a inferência, e o resultado deve demonstrar a execução do pedido.
 
 Se a conversa atual não puder ser identificada com segurança, NÃO inicie o job e explique a limitação.
 

@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+branch=$(git symbolic-ref --quiet --short HEAD) || exit 0
+git push -u origin "HEAD:$branch" || {
+  echo "Push automático falhou; commit local preservado. Corrija o remote/rede e execute git push origin HEAD:$branch." >&2
+  exit 1
+}
