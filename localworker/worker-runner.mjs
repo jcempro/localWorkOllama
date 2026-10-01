@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { runLocalAnalysis } from "./worker-core.mjs";
+import { runLocalAnalysis, WorkerIncompleteError } from "./worker-core.mjs";
 import { getState, setState, jobDir, readJson, atomicText, recordLatency } from "./job-store.mjs";
 import { deliver } from "./delivery.mjs";
 
@@ -31,7 +31,7 @@ async function main() {
   try {
     const result = await runLocalAnalysis(request.repoPath, request.task, request.mode, async event => {
       await fs.appendFile(path.join(dir, "worker.log"), `${new Date().toISOString()} ${JSON.stringify(event)}\n`);
-    }, request.authorized_commands ?? []);
+    }, request.authorized_commands ?? [], request.expect_changes ?? (request.mode === "write"));
     let gitEvidence;
     try {
       const { stdout } = await execFileAsync("git", ["-C", request.repoPath, "status", "--short", "--branch"], { windowsHide: true, maxBuffer: 2 * 1024 * 1024 });
@@ -48,9 +48,10 @@ async function main() {
   } catch (error) {
     clearInterval(heartbeat);
     await pendingHeartbeat;
-    const message = `WORKER_INFRA_ERROR: ${String(error?.stack ?? error)}`;
+    const kind = error instanceof WorkerIncompleteError ? "WORKER_INCOMPLETE" : "WORKER_INFRA_ERROR";
+    const message = `${kind}: ${String(error?.stack ?? error)}`;
     await atomicText(path.join(dir, "error.txt"), message + "\n");
-    await setState(id, { ...state, status: "FAILED", error_kind: "WORKER_INFRA_ERROR", completed_at: new Date().toISOString() });
+    await setState(id, { ...state, status: "FAILED", error_kind: kind, completed_at: new Date().toISOString() });
   }
   await recordLatency((Date.now() - started) / 1000);
   await deliver(id);

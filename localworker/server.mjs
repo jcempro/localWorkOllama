@@ -26,11 +26,12 @@ async function gitCommonDir(repo) {
 function createServer() {
 const server = new McpServer({ name: "local-codex-worker", version: "3.0.0" });
 server.registerTool("local_analyze", {
-  description: "Inicia um job Qwen/Ollama persistente e retorna job_id e RUNNING. Consulte o ID da conversa Codex que faz ESTA chamada (não reutilize ID citado no prompt ou de outro chat) e informe-o em thread_id: a conclusão retomará esse chat na UI. O ID é validado contra o estado local do Codex antes de iniciar. read-only é o padrão; modo write exige autorização na tarefa.",
+  description: "Inicia um job Qwen/Ollama persistente e retorna job_id e RUNNING. Consulte o ID da conversa Codex que faz ESTA chamada (não reutilize ID citado no prompt ou de outro chat) e informe-o em thread_id: a conclusão retomará esse chat na UI. O ID é validado contra o estado local do Codex antes de iniciar. read-only é o padrão; modo write exige autorização na tarefa. Em implementação solicitada, use expect_changes=true para impedir conclusão sem edição.",
   inputSchema: z.object({
     repoPath: z.string().min(1).describe("Workspace absoluto"),
     task: z.string().min(1),
     mode: z.enum(["read-only", "write"]).default("read-only"),
+    expect_changes: z.boolean().optional().describe("Em implementação/edição obrigatória, exige ao menos uma mutação bem-sucedida antes de COMPLETED; padrão true em mode=write"),
     thread_id: z.string().regex(/^[0-9a-f]{8}-[0-9a-f-]{27}$/i).describe("ID da conversa Codex atual, não de outro chat nem do projeto"),
     authorized_commands: z.array(z.object({
       id: z.string().regex(/^[a-z0-9][a-z0-9_-]{0,63}$/i),
@@ -40,8 +41,9 @@ server.registerTool("local_analyze", {
       timeout_ms: z.number().int().min(1000).max(300000).optional(),
     })).max(32).default([]).describe("Comandos exatos pré-aprovados pelo supervisor, só em mode=write; sem shell livre"),
   }),
-}, async ({ repoPath, task, mode, thread_id, authorized_commands }) => {
+}, async ({ repoPath, task, mode, expect_changes, thread_id, authorized_commands }) => {
   try {
+    if (expect_changes && mode !== "write") throw new RequestRejected("expect_changes exige mode=write");
     if (mode !== "write" && authorized_commands.length) throw new RequestRejected("authorized_commands exige mode=write");
     if (new Set(authorized_commands.map(command => command.id)).size !== authorized_commands.length) throw new RequestRejected("IDs de comandos autorizados duplicados");
     if (!path.isAbsolute(repoPath)) throw new RequestRejected("repoPath deve ser absoluto");
@@ -61,7 +63,7 @@ server.registerTool("local_analyze", {
       if (/^thread_id /.test(String(error?.message ?? ""))) throw new RequestRejected(error.message);
       throw error;
     }
-    const created = await createJob({ repoPath: repo, task, mode, thread_id, authorized_commands });
+    const created = await createJob({ repoPath: repo, task, mode, expect_changes: expect_changes ?? (mode === "write"), thread_id, authorized_commands });
     if (created.busy) return reply({ status: "WORKER_BUSY", job_id: created.job_id });
     const child = spawn(process.execPath, [path.join(root, "worker-runner.mjs"), created.job_id], {
       detached: true, stdio: "ignore", windowsHide: true, cwd: root,

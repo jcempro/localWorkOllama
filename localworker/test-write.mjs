@@ -23,13 +23,25 @@ async function gitStatus() {
 const baseline = await gitStatus();
 assert.equal(baseline, "", "Checkout de teste deve iniciar limpo");
 let calls = 0;
+let refuseWrites = false;
 const ollama = createServer(async (req, res) => {
   let body = "";
   for await (const chunk of req) body += chunk;
   const parsed = JSON.parse(body);
   calls++;
   let message;
-  if (calls === 1) {
+  if (refuseWrites) {
+    message = calls === 5
+      ? { role: "assistant", content: "", tool_calls: [{ function: { name: "git_status", arguments: {} } }] }
+      : { role: "assistant", content: "RESULTADO: farei a implementação depois." };
+  } else if (calls === 1) {
+    message = { role: "assistant", content: "", tool_calls: [
+      { function: { name: "git_status", arguments: {} } },
+    ] };
+  } else if (calls === 2) {
+    message = { role: "assistant", content: "RESULTADO: vou implementar o arquivo." };
+  } else if (calls === 3) {
+    assert.match(JSON.stringify(parsed.messages), /nenhuma ferramenta de escrita foi concluída/);
     message = { role: "assistant", content: "", tool_calls: [
       { function: { name: "write_file", arguments: { path: relative, content: "export const value = 1;\n" } } },
       { function: { name: "edit_file", arguments: { path: relative, before: "value = 1", after: "value = 2" } } },
@@ -38,9 +50,9 @@ const ollama = createServer(async (req, res) => {
     ] };
   } else {
     const tools = parsed.messages.filter(x => x.role === "tool").map(x => x.content);
-    assert.equal(tools.length, 4);
+    assert.equal(tools.length, 5);
     assert.ok(tools.every(x => !x.includes("WORKER_INFRA_ERROR")), tools.join("\n"));
-    assert.match(tools[3], new RegExp(relative.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(tools[4], new RegExp(relative.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
     message = { role: "assistant", content: "RESULTADO: arquivo temporário validado." };
   }
   res.setHeader("Content-Type", "application/json");
@@ -51,9 +63,15 @@ process.env.OLLAMA_URL = `http://127.0.0.1:${ollama.address().port}`;
 process.env.LOCAL_MODEL = "fake-test-model";
 try {
   const { runLocalAnalysis } = await import("./worker-core.mjs");
-  const result = await runLocalAnalysis(repo, "Teste controlado de criar, editar, verificar sintaxe e consultar Git em arquivo único temporário.", "write");
+  const result = await runLocalAnalysis(repo, "Teste controlado de criar, editar, verificar sintaxe e consultar Git em arquivo único temporário.", "write", async () => {}, [], true);
   assert.match(result, /arquivo temporário validado/);
   assert.equal(await fs.readFile(target, "utf8"), "export const value = 2;\n");
+  refuseWrites = true;
+  await assert.rejects(
+    runLocalAnalysis(repo, "Nova implementação obrigatória de teste, sem escrita simulada.", "write", async () => {}, [], true),
+    /WORKER_INCOMPLETE/,
+  );
+  assert.equal(calls, 7);
   console.log(JSON.stringify({ status: "write-verified", calls, file: relative }));
 } finally {
   const current = await fs.readFile(target, "utf8").catch(error => error?.code === "ENOENT" ? null : Promise.reject(error));

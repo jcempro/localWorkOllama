@@ -953,7 +953,9 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
   }
 }
 
-export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = []) {
+export class WorkerIncompleteError extends Error {}
+
+export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false) {
   if (!Array.isArray(authorizedCommands) || (mode !== "write" && authorizedCommands.length)) {
     throw new Error("Comandos autorizados exigem modo write e lista válida");
   }
@@ -1020,6 +1022,7 @@ REGRAS OPERACIONAIS ADICIONAIS:
 
 - Responda integralmente em português do Brasil.
 - Modo da tarefa: ${mode}. Em read-only, nenhuma ferramenta de escrita ou comando é disponibilizada.
+- Alterações obrigatórias neste job: ${expectChanges ? "sim; implemente antes da resposta final" : "não especificado"}.
 - Comandos exatos autorizados para este job: ${authorizedCommands.length ? JSON.stringify(authorizedCommands.map(({ id, description }) => ({ id, description }))) : "nenhum"}. Use somente run_authorized_command com um ID listado; não invente argumentos.
 - Alterações só são permitidas quando a tarefa recebida as autorizar; preserve arquivos pessoais e dados existentes.
 - Use obrigatoriamente as ferramentas fornecidas para estabelecer fatos sobre o repositório.
@@ -1078,6 +1081,8 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   const startedAt = Date.now();
   let toolExecutions = 0;
   let forcedInspection = false;
+  let successfulMutations = 0;
+  let forcedImplementation = false;
 
   for (let step = 0; step < MAX_STEPS; step++) {
     await onProgress({ phase: "step", step: step + 1 });
@@ -1126,6 +1131,16 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         );
       }
 
+      if (expectChanges && successfulMutations === 0) {
+        if (forcedImplementation) {
+          throw new WorkerIncompleteError(`WORKER_INCOMPLETE: tarefa de escrita terminou sem alteração bem-sucedida. Última resposta: ${compact(finalText, 3000)}`);
+        }
+        forcedImplementation = true;
+        messages.push(message);
+        messages.push({ role: "user", content: "A tarefa exige implementação, mas nenhuma ferramenta de escrita foi concluída. Continue e aplique as alterações autorizadas. Se houver impedimento real, descreva-o precisamente em NEEDS_SUPERVISOR; uma resposta preparatória não conclui o job." });
+        continue;
+      }
+
       return compact(finalText, MAX_FINAL_CHARS);
     }
 
@@ -1139,6 +1154,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands);
 
         toolExecutions++;
+        if (new Set(["write_file", "edit_file", "move_file", "delete_file", "run_authorized_command"]).has(call?.function?.name)) successfulMutations++;
       } catch (error) {
         result =
           `${error instanceof ToolRejected ? "TOOL_REJECTED" : "WORKER_INFRA_ERROR"} na ferramenta ` +
