@@ -27,6 +27,7 @@
 | Recursos opcionais do instalador | `-SkipPrerequisites`, `-SkipModel`, `-SkipWatchdog`, `-SkipGlobalRules`; apenas para instalação parcial/controlada. |
 | Download de modelos Ollama | `OLLAMA_MODELS` conforme configuração oficial do Ollama. |
 | Remoção de notificações | `LOCAL_DISABLE_NOTIFY=1` para testes sem balão. |
+| Monitor local | `monitor_url` é gerado em cada delegação; host `127.0.0.1`, porta dinâmica, chave aleatória em `monitor.json` no destino. Não publique o link. Os limites de heartbeat/espera estão no topo de `monitor.mjs`. |
 | Descoberta de aplicativos | `PATH` e `LOCALAPPDATA`, fornecidos pelo Windows; redescobertos no momento da entrega. |
 | Origem do App Installer | URL oficial `https://aka.ms/getwinget`, família Windows `Microsoft.DesktopAppInstaller_8wekyb3d8bbwe` e produto Microsoft Store `9NBLGGH4NNS1`; definidos uma vez no topo do instalador. |
 | Pacotes WinGet | `Git.Git`, `OpenJS.NodeJS.LTS`, `Ollama.Ollama` e produto Desktop `9PLM9XGG6VKS`; definidos uma vez no topo do instalador. |
@@ -45,17 +46,18 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `6128724ed765dcb78cbc457bac81ee7257ffb11dc196ec3730b5e1a605ddd3c7` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `8eacac5c2c0e22700c1dfbe687ad4ed6dc95b1a0f23473fc334d5b2dbd831715` |
+| `src/localworker/server.mjs` | `92e74f98548af2424666118413dcc0055ca8ebda63c49a34dadd0c15e8ced68b` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `80d4ea1f83c2c65e4a15b5cd7c340d02f83542cba4d050d66a9d5c210adbc016` |
-| `src/localworker/worker-core.mjs` | `8146fe02f7cdf52c65baa0cf6ba7c79748fe9416e6da021d8c4afd4faf4bc34f` |
-| `src/localworker/worker-runner.mjs` | `5d70f0796068874101b8fe605921fa3b3375dc8d7a83fd7613dd2414dbc9cd6c` |
+| `src/localworker/job-store.mjs` | `d30240c99c6c4f3832c577a3ccc55c49c84807617dc8b1c2d657b62797dfa497` |
+| `src/localworker/worker-core.mjs` | `36bfebbdc96fbc09860f100dcebbc2af0f8e0ff22de80d2ef6c323e302484ef9` |
+| `src/localworker/worker-runner.mjs` | `8200deda2117eab2ad19dc048ba128ab00d6a93c9c575aca5c73904fa9645cf9` |
 | `src/localworker/delivery.mjs` | `d02c74839dcf59292c88f1124113b2fa08b4ad8f1413c888f562b0cb0d631674` |
-| `src/localworker/watchdog.mjs` | `1d610eff68f50dba0ab46fac644a7dded8f9b7f7e3b8c65acf721ecbb687aa1e` |
+| `src/localworker/watchdog.mjs` | `2fe0b9e1a852cf5c787f6a8311b780348714f705f14d42925a6ee8c325de7024` |
+| `src/localworker/monitor.mjs` | `b24b452a274fcf41cae4e98bea79c07bf3cae58e837b6985f7d7773ff8e009ba` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `b691d97921574d3a1b08382974375354f2a18c145f6b432bafc6b0d3377a7715` |
-| `src/localworker/update-installed.ps1` | `acb3078c4f0c255bbe7d21bd3e260f2ee90a8160f625e6efab1a2ff1ea943f02` |
+| `src/localworker/install.ps1` | `4d4beeb08f5d9faa50f9d2a720d6a89b023d6cab7412eb2a0b3a3aca644685dd` |
+| `src/localworker/update-installed.ps1` | `8777979eedf9d8c6e0bbc3665da9d008fa58392da27e3c9b24e04ca78df58546` |
 | `src/localworker/register-watchdog.ps1` | `d78fa380059112826d061097c4138bcbcabc369a6888d6a875cda649bcad3efb` |
-| `src/install.ps1` | `00a0ca21605b84b255206693bb783b6492301556442c84207b182e0bae585e58` |
-| `src/agents.supervisor.md` | `38165e3d940407cb8177a478166aba22b6507de51177d959226c05cf958f0fa2` |
+| `src/install.ps1` | `34dbaab7cb7fdfdb1caae911691d44a13d95cab421f9336761d5e1ce74367b80` |
+| `src/agents.supervisor.md` | `645816c550ae50adb49fb79093d407fa0acf394c6f2f66d03937db468c23d694` |
 <!-- LOCALWORKER_GENERATED_END -->

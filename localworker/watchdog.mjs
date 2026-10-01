@@ -2,15 +2,23 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { listJobs, jobDir, getState, setState, alive, readJson, atomicText, atomicJson } from "./job-store.mjs";
 import { deliver, notify } from "./delivery.mjs";
+import { ensureMonitor } from "./monitor.mjs";
 
 const now = Date.now();
+try { await ensureMonitor(); } catch (error) { console.error(`monitor: ${error?.message ?? error}`); }
 for (const id of await listJobs()) {
   try {
     const dir = jobDir(id);
     const state = await getState(id);
     if (["QUEUED", "RUNNING"].includes(state.status)) {
       const last = Date.parse(state.heartbeat_at ?? state.created_at);
-      if (now - last > 120_000 && !alive(state.pid)) {
+      if (state.status === "RUNNING" && !alive(state.pid) && await fs.stat(path.join(dir, "result.md")).then(() => true).catch(() => false)) {
+        await setState(id, { ...state, status: "COMPLETED", completed_at: new Date().toISOString(), recovered_from: "result.md" });
+      } else if (state.status === "RUNNING" && !alive(state.pid) && await fs.stat(path.join(dir, "error.txt")).then(() => true).catch(() => false)) {
+        const error = await fs.readFile(path.join(dir, "error.txt"), "utf8");
+        const kind = error.startsWith("WORKER_INCOMPLETE") ? "WORKER_INCOMPLETE" : "WORKER_INFRA_ERROR";
+        await setState(id, { ...state, status: "FAILED", error_kind: kind, completed_at: new Date().toISOString(), recovered_from: "error.txt" });
+      } else if (now - last > 120_000 && !alive(state.pid)) {
         await atomicText(path.join(dir, "error.txt"), "WORKER_INFRA_ERROR: runner ausente após heartbeat vencido.\n");
         await setState(id, { ...state, status: "FAILED", error_kind: "WORKER_INFRA_ERROR", completed_at: new Date().toISOString() });
       } else continue;

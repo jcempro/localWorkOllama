@@ -29,7 +29,7 @@ if (-not $CodexCommand) {
     $CodexCommand = $native.FullName
   }
 }
-$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','notify.ps1')
+$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','notify.ps1')
 foreach ($exe in @($NodePath,$NpmCommand,$CodexCommand)) {
   if (-not (Test-Path -LiteralPath $exe -PathType Leaf)) { throw "Executável ausente: $exe" }
 }
@@ -85,5 +85,6 @@ if (Test-Path -LiteralPath $CodexConfig -PathType Leaf) {
 }
 $temporary = "$CodexConfig.$PID.tmp"
 [IO.File]::WriteAllText($temporary, $content, [Text.UTF8Encoding]::new($false))
-[IO.File]::Move($temporary, $CodexConfig, $true)
+if (Test-Path -LiteralPath $CodexConfig -PathType Leaf) { [IO.File]::Replace($temporary, $CodexConfig, $backup) }
+else { [IO.File]::Move($temporary, $CodexConfig) }
 [pscustomobject]@{ installed = $files.Count; backup = $backup; target = $Target; config_updated = $true; model = $WorkerModel } | ConvertTo-Json

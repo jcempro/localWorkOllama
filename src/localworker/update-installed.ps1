@@ -20,11 +20,16 @@ if (Test-Path -LiteralPath $activeFile) {
   if ($state.status -notin @('COMPLETED','FAILED','CANCELLED')) { throw 'Job ativo: instalação adiada.' }
 }
 $stamp = Get-Date -Format yyyyMMddHHmmss
-$files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','notify.ps1','package.json','package-lock.json')
+$files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','notify.ps1','package.json','package-lock.json')
+$existingFiles = @()
+$newFiles = @()
 foreach ($name in $files) {
   $from = Join-Path $source $name
   $to = Join-Path $target $name
-  if (-not (Test-Path -LiteralPath $from -PathType Leaf) -or -not (Test-Path -LiteralPath $to -PathType Leaf)) { throw "Arquivo ausente: $name" }
+  if (-not (Test-Path -LiteralPath $from -PathType Leaf)) { throw "Fonte ausente: $name" }
+  if (Test-Path -LiteralPath $to -PathType Leaf) { $existingFiles += $name }
+  elseif (Test-Path -LiteralPath $to) { throw "Destino não é arquivo regular: $name" }
+  else { $newFiles += $name }
   if ($name.EndsWith('.mjs')) {
     & $node --check $from
     if ($LASTEXITCODE -ne 0) { throw "Sintaxe inválida: $name" }
@@ -40,7 +45,7 @@ $config | Add-Member -NotePropertyName codex_command -NotePropertyValue $CodexCo
 if (-not $config.PSObject.Properties['ollama_attempts']) { $config | Add-Member -NotePropertyName ollama_attempts -NotePropertyValue 4 }
 if ($WorkerModel) { $config.model = $WorkerModel }
 Copy-Item -LiteralPath $configFile -Destination "$configFile.backup-$stamp"
-foreach ($name in $files) { Copy-Item -LiteralPath (Join-Path $target $name) -Destination "$(Join-Path $target $name).backup-$stamp" }
+foreach ($name in $existingFiles) { Copy-Item -LiteralPath (Join-Path $target $name) -Destination "$(Join-Path $target $name).backup-$stamp" }
 try {
   foreach ($name in $files) {
     $from = Join-Path $source $name
@@ -53,9 +58,10 @@ try {
   }
   $temp = "$configFile.$PID.tmp"
   [IO.File]::WriteAllText($temp, ($config | ConvertTo-Json -Depth 10) + "`n", [Text.UTF8Encoding]::new($false))
-  [IO.File]::Move($temp,$configFile,$true)
+  [IO.File]::Replace($temp,$configFile,"$configFile.backup-$stamp")
 } catch {
-  foreach ($name in $files) { Copy-Item -LiteralPath "$(Join-Path $target $name).backup-$stamp" -Destination (Join-Path $target $name) -Force }
+  foreach ($name in $existingFiles) { Copy-Item -LiteralPath "$(Join-Path $target $name).backup-$stamp" -Destination (Join-Path $target $name) -Force }
+  foreach ($name in $newFiles) { Remove-Item -LiteralPath (Join-Path $target $name) -Force -ErrorAction SilentlyContinue }
   Copy-Item -LiteralPath "$configFile.backup-$stamp" -Destination $configFile -Force
   throw
 }

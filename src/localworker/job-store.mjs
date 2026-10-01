@@ -16,12 +16,22 @@ export async function readJson(file) {
   return JSON.parse(await fs.readFile(file, "utf8"));
 }
 
+async function replaceFile(temp, file) {
+  for (let attempt = 0; ; attempt++) {
+    try { await fs.rename(temp, file); return; }
+    catch (error) {
+      if (process.platform !== "win32" || !["EPERM", "EACCES", "EBUSY"].includes(error?.code) || attempt >= 19) throw error;
+      await new Promise(resolve => setTimeout(resolve, 50 + attempt * 25));
+    }
+  }
+}
+
 export async function atomicJson(file, value) {
   await fs.mkdir(path.dirname(file), { recursive: true });
   const tmp = `${file}.${process.pid}.${randomUUID()}.tmp`;
   try {
     await fs.writeFile(tmp, JSON.stringify(value, null, 2) + "\n", { flag: "wx" });
-    await fs.rename(tmp, file);
+    await replaceFile(tmp, file);
   } finally {
     await fs.rm(tmp, { force: true });
   }
@@ -32,7 +42,7 @@ export async function atomicText(file, value) {
   const tmp = `${file}.${process.pid}.${randomUUID()}.tmp`;
   try {
     await fs.writeFile(tmp, String(value), { flag: "wx" });
-    await fs.rename(tmp, file);
+    await replaceFile(tmp, file);
   } finally {
     await fs.rm(tmp, { force: true });
   }

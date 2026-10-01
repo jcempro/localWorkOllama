@@ -25,6 +25,8 @@ const WORKER_RULES =
 const TOTAL_TIMEOUT_MS = Number(process.env.LOCAL_WORKER_TIMEOUT_MS ?? config.timeout_ms ?? 7_200_000);
 
 const MAX_STEPS = Number(process.env.LOCAL_WORKER_MAX_STEPS ?? config.max_steps ?? 40);
+const WRITE_NUDGE_STEP = Math.max(4, Math.floor(MAX_STEPS / 4));
+const WRITE_FOCUS_STEP = Math.max(WRITE_NUDGE_STEP + 1, Math.floor(MAX_STEPS / 2));
 
 const MAX_FINAL_CHARS = 16_000;
 const MAX_TOOL_CHARS = 24_000;
@@ -937,7 +939,10 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
         throw error;
       }
       const result = await response.json();
-      await onProgress({ phase: "ollama_response", attempt });
+      await onProgress({ phase: "ollama_response", attempt,
+        prompt_tokens: result.prompt_eval_count ?? null,
+        output_tokens: result.eval_count ?? null,
+        eval_duration_ms: result.eval_duration == null ? null : Math.round(result.eval_duration / 1e6) });
       return result;
     } catch (error) {
       const retryable = error instanceof TypeError || error?.name === "AbortError" || Number(error?.status) >= 500;
@@ -1083,9 +1088,18 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   let forcedInspection = false;
   let successfulMutations = 0;
   let forcedImplementation = false;
+  const seenReads = new Map();
 
   for (let step = 0; step < MAX_STEPS; step++) {
     await onProgress({ phase: "step", step: step + 1 });
+    if (expectChanges && successfulMutations === 0 && step + 1 === WRITE_NUDGE_STEP) {
+      messages.push({ role: "user", content: "Orçamento de exploração em 25%. Identifique agora o menor arquivo a modificar e faça a primeira edição autorizada; leituras adicionais somente se indispensáveis para essa edição." });
+      await onProgress({ phase: "write_budget_warning", step: step + 1, reason: "nenhuma alteração bem-sucedida" });
+    }
+    if (expectChanges && successfulMutations === 0 && step + 1 === WRITE_FOCUS_STEP) {
+      messages.push({ role: "user", content: "Metade dos ciclos foi consumida sem edição. Pare listagens e reexploração; implemente a unidade pedida com a evidência já obtida. Se houver bloqueio material, explique-o em resposta final verificável." });
+      await onProgress({ phase: "write_budget_warning", step: step + 1, reason: "metade dos ciclos sem alteração" });
+    }
     const elapsed = Date.now() - startedAt;
     const remaining = TOTAL_TIMEOUT_MS - elapsed;
 
@@ -1093,9 +1107,12 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
       throw new Error("WORKER_INFRA_ERROR: timeout total do worker local.");
     }
 
-    const availableTools = mode === "read-only"
+    let availableTools = mode === "read-only"
       ? TOOL_DEFINITIONS.filter(tool => READ_ONLY_TOOLS.has(tool.function.name))
       : TOOL_DEFINITIONS.filter(tool => tool.function.name !== "run_authorized_command" || authorizedCommands.length);
+    if (expectChanges && successfulMutations === 0 && step + 1 >= WRITE_FOCUS_STEP) {
+      availableTools = availableTools.filter(tool => !new Set(["repo_tree", "list_dir"]).has(tool.function.name));
+    }
     const response = await ollamaChat(messages, availableTools, remaining, onProgress);
 
     const message = response?.message;
@@ -1147,20 +1164,35 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
     messages.push(message);
 
     for (const call of calls) {
-      await onProgress({ phase: "tool", step: step + 1, tool: call?.function?.name ?? "unknown" });
+      const toolName = call?.function?.name ?? "unknown";
+      let args = {};
+      try { args = parseArguments(call?.function?.arguments); } catch {}
+      const resource = typeof args.path === "string" ? args.path :
+        typeof args.from === "string" ? args.from : null;
+      const startedTool = Date.now();
+      await onProgress({ phase: "tool", step: step + 1, tool: toolName, resource });
       let result;
+      let outcome = "ok";
 
       try {
+        if (new Set(["read_file", "list_dir", "repo_tree", "file_info", "search_text"]).has(toolName)) {
+          const signature = JSON.stringify([toolName, args]);
+          const count = (seenReads.get(signature) ?? 0) + 1;
+          seenReads.set(signature, count);
+          if (count > 2) throw new ToolRejected(`Consulta idêntica repetida ${count} vezes; use a evidência já obtida e avance para a implementação.`);
+        }
         result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands);
 
         toolExecutions++;
         if (new Set(["write_file", "edit_file", "move_file", "delete_file", "run_authorized_command"]).has(call?.function?.name)) successfulMutations++;
       } catch (error) {
+        outcome = error instanceof ToolRejected ? "rejected" : "error";
         result =
           `${error instanceof ToolRejected ? "TOOL_REJECTED" : "WORKER_INFRA_ERROR"} na ferramenta ` +
           `${call?.function?.name ?? "desconhecida"}: ` +
           `${String(error?.message ?? error)}`;
       }
+      await onProgress({ phase: "tool_result", step: step + 1, tool: toolName, resource, outcome, duration_ms: Date.now() - startedTool });
 
       messages.push({
         role: "tool",
@@ -1170,5 +1202,5 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
     }
   }
 
-  throw new Error(`WORKER_INFRA_ERROR: limite de ${MAX_STEPS} ciclos agentivos atingido.`);
+  throw new WorkerIncompleteError(`WORKER_INCOMPLETE: limite de ${MAX_STEPS} ciclos agentivos atingido; ${successfulMutations} alteração(ões) bem-sucedida(s), ${toolExecutions} ferramenta(s) executada(s). A tarefa requer segmentação ou correção da estratégia de exploração.`);
 }

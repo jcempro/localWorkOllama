@@ -17,6 +17,7 @@ Pessoa ─► chat Codex Desktop ─► MCP localWorker ─► Ollama local
 | Preparar o modelo | `qwen3-coder-next-32k` aparece no Ollama. |
 | Instalar o MCP e instruções | `local_analyze` aparece no Desktop; tarefas adequadas usam o Worker sem pedido repetido. |
 | Validar | O job conclui e o chat de origem retoma para `local_result` e revisão. |
+| Acompanhar | O link `monitor_url` mostra atividade e eventos; fechar a página não altera o job. |
 
 Os caminhos neste artigo são calculados a partir da máquina. Um caminho como `C:\Exemplo\projeto` é **fictício**, nunca um local presumido. Execute os comandos em PowerShell como o usuário do Codex; aceite elevação somente quando o Windows a pedir para instalar aplicativos ou registrar uma tarefa. Tenha internet, autorização de instalação e espaço para um modelo Ollama de dezenas de GB. Não coloque tokens, senhas nem dados privados nos exemplos.
 
@@ -108,6 +109,14 @@ O `config.json` instalado recebe os caminhos reais em `maintenance_repo` e `code
 
 No Desktop, confira o servidor em **Settings → MCP servers** e reinicie o aplicativo para recarregar `config.toml`.
 
+### Acompanhamento e diagnóstico
+
+Cada `local_analyze` devolve `job_id`, estado e `monitor_url`. Abra esse link no navegador da mesma máquina quando quiser observar o job; a página é somente leitura e pode ser fechada a qualquer momento. Guarde o link como informação privada: ele contém uma chave temporária de acesso local. O serviço escuta apenas em `127.0.0.1` e o watchdog o recupera após reinício. O link mostra ciclos, etapas, ferramentas, caminhos acessados, erros, retries, horários, entrega ao chat e sinais de CPU/memória/GPU quando disponíveis. Não mostra conteúdo dos arquivos nem raciocínio privado do modelo.
+
+`ACTIVE` indica evento ou uso de recursos recente; `WAITING_MODEL` indica resposta do Ollama pendente; `STALLED_SUSPECTED` indica longa espera sem atividade observável; `STALLED` indica heartbeat/eventos atrasados; `ORPHANED` indica runner ausente; `TERMINAL_NOT_PROPAGATED` indica artefato final persistido antes de atualizar o estado. GPU não mensurável impede certeza sobre uma espera longa; o diagnóstico explicita esse limite. `local_status` fornece o mesmo diagnóstico sem abrir o navegador. O watchdog restaura estados terminais quando encontra artefatos finais de runner encerrado.
+
+Em tarefas de escrita, o Worker recebe avisos de orçamento de ciclos e deixa de fazer listagens amplas após metade deles sem alteração. Se ainda não concluir, a falha é `WORKER_INCOMPLETE`, acompanhada de contagens; o supervisor deve corrigir segmentação ou instrução antes de tentar novamente. Um limite de uso do Codex Desktop pode impedir que uma mensagem já enfileirada produza turno naquele momento: confira o estado da entrega e retome após a liberação da conta.
+
 ## 4. Registrar o watchdog
 
 O watchdog recupera jobs persistidos após logon e verifica entregas terminais a cada 15 minutos. Use os mesmos caminhos da instalação:
@@ -126,6 +135,7 @@ O script aceita uma tarefa já existente quando ela aponta ao mesmo destino. Par
 ## 5. Instruções globais do supervisor
 
 O instalador grava as regras em `$CodexHome\AGENTS.md` com marcadores próprios e backup, preservando instruções preexistentes. Na execução manual, crie o arquivo em UTF-8 com o conteúdo abaixo ou mescle-o sem apagar regras existentes. O bloco é espelhado automaticamente de `src/agents.supervisor.md`:
+Uma cópia global legada idêntica à versão anterior, sem marcadores, é removida somente quando seu SHA-256 exato é reconhecido; outras instruções são preservadas.
 
 <details>
 <summary>Conteúdo completo de AGENTS.md global</summary>
@@ -294,7 +304,7 @@ Para implementação ou edição obrigatória delegada, use `expect_changes: tru
 
 Se a conversa atual não puder ser identificada com segurança, NÃO inicie o job e explique a limitação.
 
-Ao receber `RUNNING`, encerre o turno sem polling. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
+Ao receber `RUNNING`, informe o `job_id` e o `monitor_url` para acompanhamento opcional e encerre o turno sem polling. Abrir ou fechar a interface não altera o job. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
 
 O Worker é independente da escolha de modelo/esforço do supervisor. Preserve seleções da UI; esta instrução **NÃO troca modelo, esforço, provider, catálogo ou preferências do usuário**.
 ```
@@ -393,19 +403,20 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `6128724ed765dcb78cbc457bac81ee7257ffb11dc196ec3730b5e1a605ddd3c7` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `8eacac5c2c0e22700c1dfbe687ad4ed6dc95b1a0f23473fc334d5b2dbd831715` |
+| `src/localworker/server.mjs` | `92e74f98548af2424666118413dcc0055ca8ebda63c49a34dadd0c15e8ced68b` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `80d4ea1f83c2c65e4a15b5cd7c340d02f83542cba4d050d66a9d5c210adbc016` |
-| `src/localworker/worker-core.mjs` | `8146fe02f7cdf52c65baa0cf6ba7c79748fe9416e6da021d8c4afd4faf4bc34f` |
-| `src/localworker/worker-runner.mjs` | `5d70f0796068874101b8fe605921fa3b3375dc8d7a83fd7613dd2414dbc9cd6c` |
+| `src/localworker/job-store.mjs` | `d30240c99c6c4f3832c577a3ccc55c49c84807617dc8b1c2d657b62797dfa497` |
+| `src/localworker/worker-core.mjs` | `36bfebbdc96fbc09860f100dcebbc2af0f8e0ff22de80d2ef6c323e302484ef9` |
+| `src/localworker/worker-runner.mjs` | `8200deda2117eab2ad19dc048ba128ab00d6a93c9c575aca5c73904fa9645cf9` |
 | `src/localworker/delivery.mjs` | `d02c74839dcf59292c88f1124113b2fa08b4ad8f1413c888f562b0cb0d631674` |
-| `src/localworker/watchdog.mjs` | `1d610eff68f50dba0ab46fac644a7dded8f9b7f7e3b8c65acf721ecbb687aa1e` |
+| `src/localworker/watchdog.mjs` | `2fe0b9e1a852cf5c787f6a8311b780348714f705f14d42925a6ee8c325de7024` |
+| `src/localworker/monitor.mjs` | `b24b452a274fcf41cae4e98bea79c07bf3cae58e837b6985f7d7773ff8e009ba` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `b691d97921574d3a1b08382974375354f2a18c145f6b432bafc6b0d3377a7715` |
-| `src/localworker/update-installed.ps1` | `acb3078c4f0c255bbe7d21bd3e260f2ee90a8160f625e6efab1a2ff1ea943f02` |
+| `src/localworker/install.ps1` | `4d4beeb08f5d9faa50f9d2a720d6a89b023d6cab7412eb2a0b3a3aca644685dd` |
+| `src/localworker/update-installed.ps1` | `8777979eedf9d8c6e0bbc3665da9d008fa58392da27e3c9b24e04ca78df58546` |
 | `src/localworker/register-watchdog.ps1` | `d78fa380059112826d061097c4138bcbcabc369a6888d6a875cda649bcad3efb` |
-| `src/install.ps1` | `00a0ca21605b84b255206693bb783b6492301556442c84207b182e0bae585e58` |
-| `src/agents.supervisor.md` | `38165e3d940407cb8177a478166aba22b6507de51177d959226c05cf958f0fa2` |
+| `src/install.ps1` | `34dbaab7cb7fdfdb1caae911691d44a13d95cab421f9336761d5e1ce74367b80` |
+| `src/agents.supervisor.md` | `645816c550ae50adb49fb79093d407fa0acf394c6f2f66d03937db468c23d694` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

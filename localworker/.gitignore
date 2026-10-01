@@ -3,4 +3,5 @@ jobs/
 active.json
 latency.json
 create.lock
+monitor.json
 *.tmp

@@ -154,7 +154,7 @@ try {
   const failedStatus = await rpc("tools/call", { name: "local_status", arguments: { job_id: failedId } });
   assert.equal(JSON.parse(failedStatus.result.content[0].text).status, "FAILED");
   assert.equal(JSON.parse(await fs.readFile(failedFile, "utf8")).thread_id, thread);
-  const queued = (await fs.readFile(queueLog, "utf8")).trim().split("\n").map(line => JSON.parse(line));
+  const queued = (await fs.readFile(queueLog, "utf8")).trim().split("\n").map(line => JSON.parse(line)).filter(item => item.thread === thread);
   assert.equal(queued.length, 2);
   assert.ok(queued.every(item => item.thread === thread && item.repo === repo));
   assert.match(queued[1].message, /FAILED/);

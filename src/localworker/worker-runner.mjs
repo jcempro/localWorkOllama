@@ -17,11 +17,15 @@ async function main() {
   const request = await readJson(path.join(dir, "request.json"));
   const initial = await getState(id);
   if (initial.status !== "QUEUED") return;
-  const state = { ...initial, status: "RUNNING", pid: process.pid, started_at: new Date().toISOString(), heartbeat_at: new Date().toISOString() };
+  let state = { ...initial, status: "RUNNING", pid: process.pid, started_at: new Date().toISOString(), heartbeat_at: new Date().toISOString(), last_event_at: null, phase: "starting", step: 0, event_count: 0, completed_tools: 0, failed_tools: 0, output_tokens_observed: 0 };
   await setState(id, state);
   heartbeat = setInterval(() => {
     pendingHeartbeat = pendingHeartbeat.then(async () => {
-      try { await setState(id, { ...state, heartbeat_at: new Date().toISOString() }); }
+      try {
+        const cpu = process.cpuUsage();
+        state = { ...state, heartbeat_at: new Date().toISOString(), cpu_user_ms: Math.round(cpu.user / 1000), cpu_system_ms: Math.round(cpu.system / 1000), rss_bytes: process.memoryUsage().rss };
+        await setState(id, state);
+      }
       catch (error) {
         try { await fs.appendFile(path.join(dir, "worker.log"), `${new Date().toISOString()} heartbeat: ${error}\n`); }
         catch {}
@@ -30,7 +34,18 @@ async function main() {
   }, 30_000);
   try {
     const result = await runLocalAnalysis(request.repoPath, request.task, request.mode, async event => {
-      await fs.appendFile(path.join(dir, "worker.log"), `${new Date().toISOString()} ${JSON.stringify(event)}\n`);
+      const at = new Date().toISOString();
+      await fs.appendFile(path.join(dir, "worker.log"), `${at} ${JSON.stringify(event)}\n`);
+      pendingHeartbeat = pendingHeartbeat.then(async () => {
+        state = { ...state, last_event_at: at, phase: event.phase, step: event.step ?? state.step,
+          tool: event.tool ?? state.tool, resource: event.resource ?? state.resource,
+          event_count: state.event_count + 1,
+          completed_tools: state.completed_tools + Number(event.phase === "tool_result" && event.outcome === "ok"),
+          failed_tools: state.failed_tools + Number(event.phase === "tool_result" && event.outcome !== "ok"),
+          output_tokens_observed: state.output_tokens_observed + (event.phase === "ollama_response" ? Number(event.output_tokens) || 0 : 0) };
+        await setState(id, state);
+      });
+      await pendingHeartbeat;
     }, request.authorized_commands ?? [], request.expect_changes ?? (request.mode === "write"));
     let gitEvidence;
     try {
@@ -44,14 +59,14 @@ async function main() {
     clearInterval(heartbeat);
     await pendingHeartbeat;
     await atomicText(path.join(dir, "result.md"), `${result}\n\nESTADO GIT DETERMINÍSTICO (${checkedAt}; prevalece se houver divergência):\n${gitEvidence}\n`);
-    await setState(id, { ...state, status: "COMPLETED", completed_at: new Date().toISOString(), heartbeat_at: new Date().toISOString() });
+    await setState(id, { ...state, status: "COMPLETED", phase: "completed", completed_at: new Date().toISOString(), heartbeat_at: new Date().toISOString() });
   } catch (error) {
     clearInterval(heartbeat);
-    await pendingHeartbeat;
+    await pendingHeartbeat.catch(() => {});
     const kind = error instanceof WorkerIncompleteError ? "WORKER_INCOMPLETE" : "WORKER_INFRA_ERROR";
     const message = `${kind}: ${String(error?.stack ?? error)}`;
     await atomicText(path.join(dir, "error.txt"), message + "\n");
-    await setState(id, { ...state, status: "FAILED", error_kind: kind, completed_at: new Date().toISOString() });
+    await setState(id, { ...state, status: "FAILED", phase: "failed", error_kind: kind, completed_at: new Date().toISOString() });
   }
   await recordLatency((Date.now() - started) / 1000);
   await deliver(id);

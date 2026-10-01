@@ -8,6 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createJob, getState, jobDir, readJson, setState } from "./job-store.mjs";
 import { assertTargetThread } from "./thread-check.mjs";
+import { ensureMonitor, monitorUrl, monitorSnapshot } from "./monitor.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await fs.readFile(path.join(root, "config.json"), "utf8"));
@@ -63,8 +64,9 @@ server.registerTool("local_analyze", {
       if (/^thread_id /.test(String(error?.message ?? ""))) throw new RequestRejected(error.message);
       throw error;
     }
+    const monitor = await ensureMonitor();
     const created = await createJob({ repoPath: repo, task, mode, expect_changes: expect_changes ?? (mode === "write"), thread_id, authorized_commands });
-    if (created.busy) return reply({ status: "WORKER_BUSY", job_id: created.job_id });
+    if (created.busy) return reply({ status: "WORKER_BUSY", job_id: created.job_id, monitor_url: monitorUrl(monitor, created.job_id) });
     const child = spawn(process.execPath, [path.join(root, "worker-runner.mjs"), created.job_id], {
       detached: true, stdio: "ignore", windowsHide: true, cwd: root,
       env: { ...process.env, LOCAL_WORKER_ROOT: root },
@@ -77,7 +79,7 @@ server.registerTool("local_analyze", {
       } catch {}
     });
     child.unref();
-    return reply({ job_id: created.job_id, status: "RUNNING" });
+    return reply({ job_id: created.job_id, status: "RUNNING", monitor_url: monitorUrl(monitor, created.job_id) });
   } catch (error) { return errorReply(error); }
 });
 
@@ -86,9 +88,9 @@ server.registerTool("local_status", {
   inputSchema: z.object({ job_id: z.string() }),
 }, async ({ job_id }) => {
   try {
-    const state = await getState(job_id);
-    const delivery = await readJson(path.join(jobDir(job_id), "delivery.json"));
-    return reply({ ...state, delivery: delivery.status });
+    const snapshot = await monitorSnapshot(job_id);
+    const monitor = await ensureMonitor();
+    return reply({ ...snapshot.state, delivery: snapshot.delivery.status, activity: snapshot.activity, progress: snapshot.progress, monitor_url: monitorUrl(monitor, job_id) });
   } catch (error) { return errorReply(error); }
 });
 
