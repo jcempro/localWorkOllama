@@ -62,7 +62,7 @@ $Source = (Resolve-Path -LiteralPath '<PASTA_ESCOLHIDA>').Path
 & (Join-Path $Source 'src/install.ps1')
 ```
 
-Na primeira execução, aceite os prompts de instalação e autentique o Codex Desktop na sua conta. Repita o mesmo comando após atualização da fonte: o instalador identifica instalação existente, atualiza com backups e preserva jobs em execução. Se não houver `winget`, instale App Installer ou os programas pelos links oficiais da etapa 1 e execute novamente. A execução com `-SkipPrerequisites` pressupõe que os programas já estejam disponíveis e serve para ambientes de teste; `-SkipModel`, `-SkipWatchdog` e `-SkipGlobalRules` isolam verificações específicas. Todos os valores substituíveis constam em [src/README.md](src/README.md).
+Na primeira execução, aceite os prompts de instalação e autentique o Codex Desktop na sua conta. Repita o mesmo comando após atualização da fonte: o instalador identifica instalação existente, atualiza com backups e preserva jobs em execução. Se `winget` faltar, o instalador tenta registrar o App Installer, instalar o pacote oficial assinado e abrir a Microsoft Store para concluir a instalação. A execução com `-SkipPrerequisites` pressupõe que os programas já estejam disponíveis e serve para ambientes de teste; `-SkipModel`, `-SkipWatchdog` e `-SkipGlobalRules` isolam verificações específicas. Todos os valores substituíveis constam em [src/README.md](src/README.md).
 
 ### Equivalente manual e configuração gerada
 
@@ -404,7 +404,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/install.ps1` | `b691d97921574d3a1b08382974375354f2a18c145f6b432bafc6b0d3377a7715` |
 | `src/localworker/update-installed.ps1` | `acb3078c4f0c255bbe7d21bd3e260f2ee90a8160f625e6efab1a2ff1ea943f02` |
 | `src/localworker/register-watchdog.ps1` | `d78fa380059112826d061097c4138bcbcabc369a6888d6a875cda649bcad3efb` |
-| `src/install.ps1` | `aed4314cdd04229cb5bc4e0f97654c2e9c14a80be96ab684502aca9de6744904` |
+| `src/install.ps1` | `00a0ca21605b84b255206693bb783b6492301556442c84207b182e0bae585e58` |
 | `src/agents.supervisor.md` | `38165e3d940407cb8177a478166aba22b6507de51177d959226c05cf958f0fa2` |
 <!-- LOCALWORKER_GENERATED_END -->
 

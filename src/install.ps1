@@ -8,6 +8,7 @@ param(
   [string]$CodexExe,
   [string]$WorkerModel = 'qwen3-coder-next-32k',
   [string]$BaseModel = 'qwen3-coder-next:q4_K_M',
+  [ValidateRange(4096,262144)][int]$ModelContextTokens = 32768,
   [string]$WatchdogTaskName = 'CodexLocalWorkerWatchdog',
   [ValidateRange(1,1440)][int]$WatchdogIntervalMinutes = 15,
   [switch]$SkipPrerequisites,
@@ -16,6 +17,10 @@ param(
   [switch]$SkipGlobalRules
 )
 $ErrorActionPreference = 'Stop'
+$MODEL_EXPLICIT_A3C = $PSBoundParameters.ContainsKey('WorkerModel') -or -not [string]::IsNullOrWhiteSpace($env:LOCAL_MODEL)
+$MODEL_BUILD_EXPLICIT_A3C = $PSBoundParameters.ContainsKey('BaseModel') -or $PSBoundParameters.ContainsKey('ModelContextTokens') -or -not [string]::IsNullOrWhiteSpace($env:LOCAL_BASE_MODEL)
+if (-not $PSBoundParameters.ContainsKey('WorkerModel') -and $env:LOCAL_MODEL) { $WorkerModel = $env:LOCAL_MODEL }
+if (-not $PSBoundParameters.ContainsKey('BaseModel') -and $env:LOCAL_BASE_MODEL) { $BaseModel = $env:LOCAL_BASE_MODEL }
 $SOURCE_ROOT_A3C = $PSScriptRoot
 $WORKER_SOURCE_A3C = Join-Path $SOURCE_ROOT_A3C 'localworker'
 $WORKER_HOME_A3C = if ($WorkerHome) { $WorkerHome } elseif ($env:LOCAL_WORKER_HOME) { $env:LOCAL_WORKER_HOME } else { Join-Path $env:USERPROFILE '.codex-local-worker' }
@@ -25,6 +30,18 @@ $GLOBAL_RULES_A3C = Join-Path $CODEX_HOME_A3C 'AGENTS.md'
 $RULES_START_A3C = '<!-- LOCALWORKER_GLOBAL_START -->'
 $RULES_END_A3C = '<!-- LOCALWORKER_GLOBAL_END -->'
 $MAINTENANCE_REPO_A3C = $SOURCE_ROOT_A3C
+$APP_INSTALLER_FAMILY_A3C = 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe'
+$WINGET_BOOTSTRAP_URL_A3C = 'https://aka.ms/getwinget'
+$APP_INSTALLER_STORE_URI_A3C = 'ms-windows-store://pdp/?ProductId=9NBLGGH4NNS1'
+$DESKTOP_PACKAGE_ID_A3C = '9PLM9XGG6VKS'
+$GIT_PACKAGE_ID_A3C = 'Git.Git'
+$NODE_PACKAGE_ID_A3C = 'OpenJS.NodeJS.LTS'
+$OLLAMA_PACKAGE_ID_A3C = 'Ollama.Ollama'
+$OLLAMA_API_A3C = if ($env:OLLAMA_URL) { $env:OLLAMA_URL.TrimEnd('/') } else { 'http://127.0.0.1:11434' }
+$WINGET_WAIT_ATTEMPTS_A3C = 60
+$WINGET_WAIT_SECONDS_A3C = 5
+$OLLAMA_WAIT_ATTEMPTS_A3C = 12
+$OLLAMA_WAIT_SECONDS_A3C = 2
 
 function Find-Executable-A3C([string]$Given, [string[]]$Names) {
   if ($Given) {
@@ -38,10 +55,38 @@ function Find-Executable-A3C([string]$Given, [string[]]$Names) {
   return $null
 }
 
+function Ensure-Winget-A3C {
+  $windowsApps = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps'
+  if (Test-Path -LiteralPath $windowsApps -PathType Container) { $env:PATH = "$windowsApps;$env:PATH" }
+  $found = Find-Executable-A3C '' @('winget.exe')
+  if ($found) { return $found }
+  try {
+    Add-AppxPackage -RegisterByFamilyName -MainPackage $APP_INSTALLER_FAMILY_A3C -ErrorAction Stop
+  } catch { Write-Verbose "Registro do App Installer: $_" }
+  $found = Find-Executable-A3C '' @('winget.exe')
+  if ($found) { return $found }
+  $bundle = Join-Path $env:TEMP "localworker-appinstaller-$PID.msixbundle"
+  try {
+    Invoke-WebRequest -Uri $WINGET_BOOTSTRAP_URL_A3C -OutFile $bundle -MaximumRedirection 8 -ErrorAction Stop
+    $signature = Get-AuthenticodeSignature -FilePath $bundle
+    if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'Microsoft') { throw 'Assinatura do App Installer não validada.' }
+    Add-AppxPackage -Path $bundle -ErrorAction Stop
+  } catch { Write-Verbose "Instalação assinada do App Installer: $_" }
+  finally { Remove-Item -LiteralPath $bundle -Force -ErrorAction SilentlyContinue }
+  $found = Find-Executable-A3C '' @('winget.exe')
+  if ($found) { return $found }
+  Start-Process $APP_INSTALLER_STORE_URI_A3C
+  for ($attempt = 0; $attempt -lt $WINGET_WAIT_ATTEMPTS_A3C; $attempt++) {
+    Start-Sleep -Seconds $WINGET_WAIT_SECONDS_A3C
+    $found = Find-Executable-A3C '' @('winget.exe')
+    if ($found) { return $found }
+  }
+  throw 'App Installer/winget indisponível após registro, pacote assinado e Microsoft Store; instale-o pelo canal oficial e execute novamente.'
+}
+
 function Ensure-Package-A3C([string]$Name, [string]$PackageId) {
   if (Find-Executable-A3C '' @($Name)) { return }
-  $winget = Find-Executable-A3C '' @('winget.exe')
-  if (-not $winget) { throw "Ausente: $Name. Instale App Installer/winget ou o pacote oficial e execute novamente." }
+  $winget = Ensure-Winget-A3C
   & $winget install --id $PackageId --exact --accept-package-agreements --accept-source-agreements
   if ($LASTEXITCODE -ne 0) {
     $installed = & $winget list --id $PackageId --exact 2>$null
@@ -52,14 +97,13 @@ function Ensure-Package-A3C([string]$Name, [string]$PackageId) {
 
 if (-not (Test-Path -LiteralPath $WORKER_SOURCE_A3C -PathType Container)) { throw 'Distribuição localworker ausente.' }
 if (-not $SkipPrerequisites) {
-  Ensure-Package-A3C 'git.exe' 'Git.Git'
-  Ensure-Package-A3C 'node.exe' 'OpenJS.NodeJS.LTS'
-  Ensure-Package-A3C 'ollama.exe' 'Ollama.Ollama'
-  $winget = Find-Executable-A3C '' @('winget.exe')
-  if (-not $winget) { throw 'winget ausente para instalar Codex Desktop.' }
+  $winget = Ensure-Winget-A3C
+  Ensure-Package-A3C 'git.exe' $GIT_PACKAGE_ID_A3C
+  Ensure-Package-A3C 'node.exe' $NODE_PACKAGE_ID_A3C
+  Ensure-Package-A3C 'ollama.exe' $OLLAMA_PACKAGE_ID_A3C
   $desktop = Get-AppxPackage -Name 'OpenAI.Codex' -ErrorAction SilentlyContinue
   if (-not $desktop) {
-    & $winget install --id '9PLM9XGG6VKS' -s msstore --accept-package-agreements --accept-source-agreements
+    & $winget install --id $DESKTOP_PACKAGE_ID_A3C -s msstore --accept-package-agreements --accept-source-agreements
     if ($LASTEXITCODE -ne 0 -and -not (Get-AppxPackage -Name 'OpenAI.Codex' -ErrorAction SilentlyContinue)) { throw 'Instalação do Codex Desktop falhou.' }
   }
 }
@@ -96,24 +140,25 @@ if ($LASTEXITCODE -ne 0 -or -not (($queueHelp -join "`n") -match '--thread\s+<')
 
 if (-not $SkipModel) {
   if (-not $OLLAMA_EXE_A3C) { throw 'Ollama ausente.' }
-  try { Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/version' -TimeoutSec 8 | Out-Null }
+  try { Invoke-RestMethod -Uri "$OLLAMA_API_A3C/api/version" -TimeoutSec 8 | Out-Null }
   catch {
     Start-Process -FilePath $OLLAMA_EXE_A3C -ArgumentList 'serve' -WindowStyle Hidden
     $ready = $false
-    for ($attempt = 0; $attempt -lt 12; $attempt++) {
-      Start-Sleep -Seconds 2
-      try { Invoke-RestMethod -Uri 'http://127.0.0.1:11434/api/version' -TimeoutSec 3 | Out-Null; $ready = $true; break } catch {}
+    for ($attempt = 0; $attempt -lt $OLLAMA_WAIT_ATTEMPTS_A3C; $attempt++) {
+      Start-Sleep -Seconds $OLLAMA_WAIT_SECONDS_A3C
+      try { Invoke-RestMethod -Uri "$OLLAMA_API_A3C/api/version" -TimeoutSec 3 | Out-Null; $ready = $true; break } catch {}
     }
     if (-not $ready) { throw 'Ollama não respondeu após inicialização.' }
   }
   $models = & $OLLAMA_EXE_A3C list
   if ($LASTEXITCODE -ne 0) { throw 'ollama list falhou.' }
-  if (($models -join "`n") -notmatch [regex]::Escape($WorkerModel)) {
+  $modelPresent = ($models -join "`n") -match "(?m)^$([regex]::Escape($WorkerModel))\s"
+  if (-not $modelPresent -or $MODEL_BUILD_EXPLICIT_A3C) {
     & $OLLAMA_EXE_A3C pull $BaseModel
     if ($LASTEXITCODE -ne 0) { throw 'Download do modelo Ollama falhou.' }
     $modelfile = Join-Path $env:TEMP ("localworker-model-$PID.Modelfile")
     try {
-      [IO.File]::WriteAllText($modelfile, "FROM $BaseModel`nPARAMETER num_ctx 32768`n", [Text.UTF8Encoding]::new($false))
+      [IO.File]::WriteAllText($modelfile, "FROM $BaseModel`nPARAMETER num_ctx $ModelContextTokens`n", [Text.UTF8Encoding]::new($false))
       & $OLLAMA_EXE_A3C create $WorkerModel -f $modelfile
       if ($LASTEXITCODE -ne 0) { throw 'Criação do modelo Ollama falhou.' }
     } finally { Remove-Item -LiteralPath $modelfile -Force -ErrorAction SilentlyContinue }
@@ -124,7 +169,7 @@ $WORKER_HOME_A3C = [IO.Path]::GetFullPath($WORKER_HOME_A3C)
 $CODEX_HOME_A3C = [IO.Path]::GetFullPath($CODEX_HOME_A3C)
 if (Test-Path -LiteralPath $WORKER_HOME_A3C) {
   $updateArgs = @{ Target = $WORKER_HOME_A3C; NodePath = $NODE_EXE_A3C; CodexCommand = $CODEX_EXE_A3C; MaintenanceRepo = $MAINTENANCE_REPO_A3C }
-  if ($PSBoundParameters.ContainsKey('WorkerModel')) { $updateArgs.WorkerModel = $WorkerModel }
+  if ($MODEL_EXPLICIT_A3C) { $updateArgs.WorkerModel = $WorkerModel }
   & (Join-Path $WORKER_SOURCE_A3C 'update-installed.ps1') @updateArgs
 } else {
   & (Join-Path $WORKER_SOURCE_A3C 'install.ps1') -Target $WORKER_HOME_A3C -CodexConfig $CODEX_CONFIG_A3C -NodePath $NODE_EXE_A3C -NpmCommand $NPM_EXE_A3C -CodexCommand $CODEX_EXE_A3C -WorkerModel $WorkerModel -MaintenanceRepo $MAINTENANCE_REPO_A3C

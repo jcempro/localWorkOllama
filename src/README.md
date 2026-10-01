@@ -12,6 +12,7 @@
 | Sobrescrita da base Codex para entrega/consulta | `LOCAL_CODEX_HOME`; padrão `CODEX_HOME` ou perfil atual. |
 | Executáveis Git, Node, npm, Ollama e Codex | `-GitExe`, `-NodeExe`, `-NpmExe`, `-OllamaExe`, `-CodexExe` ou descoberta no PATH/instalação. |
 | Modelo Ollama e base | `-WorkerModel`/`LOCAL_MODEL`; `-BaseModel`/`LOCAL_BASE_MODEL`; padrões em `config.json` e no instalador. |
+| Janela do modelo | `-ModelContextTokens` no instalador; padrão 32768 tokens. |
 | URL Ollama | `OLLAMA_URL` ou `config.json:ollama_url`. |
 | Timeout, passos e tentativas | `LOCAL_WORKER_TIMEOUT_MS`, `LOCAL_WORKER_MAX_STEPS`, `LOCAL_OLLAMA_ATTEMPTS` ou `config.json`. |
 | Regras do Worker | `LOCAL_WORKER_RULES`; padrão `AGENTS.md` instalado. |
@@ -27,6 +28,8 @@
 | Download de modelos Ollama | `OLLAMA_MODELS` conforme configuração oficial do Ollama. |
 | Remoção de notificações | `LOCAL_DISABLE_NOTIFY=1` para testes sem balão. |
 | Descoberta de aplicativos | `PATH` e `LOCALAPPDATA`, fornecidos pelo Windows; redescobertos no momento da entrega. |
+| Origem do App Installer | URL oficial `https://aka.ms/getwinget`, família Windows `Microsoft.DesktopAppInstaller_8wekyb3d8bbwe` e produto Microsoft Store `9NBLGGH4NNS1`; definidos uma vez no topo do instalador. |
+| Pacotes WinGet | `Git.Git`, `OpenJS.NodeJS.LTS`, `Ollama.Ollama` e produto Desktop `9PLM9XGG6VKS`; definidos uma vez no topo do instalador. |
 | Notificação Windows | `-Title`, `-Body`, `-Kind` são recebidos do Worker; `-Kind` aceita `info` ou `error`. |
 
 O instalador não recebe tokens nem os grava. Valores da máquina são calculados em execução e ficam fora desta árvore.
@@ -53,6 +56,6 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/install.ps1` | `b691d97921574d3a1b08382974375354f2a18c145f6b432bafc6b0d3377a7715` |
 | `src/localworker/update-installed.ps1` | `acb3078c4f0c255bbe7d21bd3e260f2ee90a8160f625e6efab1a2ff1ea943f02` |
 | `src/localworker/register-watchdog.ps1` | `d78fa380059112826d061097c4138bcbcabc369a6888d6a875cda649bcad3efb` |
-| `src/install.ps1` | `aed4314cdd04229cb5bc4e0f97654c2e9c14a80be96ab684502aca9de6744904` |
+| `src/install.ps1` | `00a0ca21605b84b255206693bb783b6492301556442c84207b182e0bae585e58` |
 | `src/agents.supervisor.md` | `38165e3d940407cb8177a478166aba22b6507de51177d959226c05cf958f0fa2` |
 <!-- LOCALWORKER_GENERATED_END -->
