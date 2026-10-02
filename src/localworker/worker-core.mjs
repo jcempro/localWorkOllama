@@ -24,7 +24,11 @@ const WORKER_RULES =
   config.worker_rules ??
   path.join(installRoot, "AGENTS.md");
 
-const TOTAL_TIMEOUT_MS = Number(process.env.LOCAL_WORKER_TIMEOUT_MS ?? config.timeout_ms ?? 7_200_000);
+// 0 desativa o teto do job; limites pontuais protegem recursos, comandos e respostas.
+const TOTAL_TIMEOUT_MS = Number(process.env.LOCAL_WORKER_TIMEOUT_MS ?? config.timeout_ms ?? 0);
+if (!Number.isSafeInteger(TOTAL_TIMEOUT_MS) || TOTAL_TIMEOUT_MS < 0) {
+  throw new Error("LOCAL_WORKER_TIMEOUT_MS deve ser 0 (sem teto) ou inteiro positivo em milissegundos.");
+}
 
 const MAX_STEPS = Number(process.env.LOCAL_WORKER_MAX_STEPS ?? config.max_steps ?? 40);
 const WRITE_NUDGE_STEP = Math.max(4, Math.floor(MAX_STEPS / 4));
@@ -1157,7 +1161,7 @@ export async function unloadWorkerModelR8N() {
 }
 
 async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {}, gpuPolicy = { layers: null }) {
-  const deadline = Date.now() + timeoutMs;
+  const deadline = Number.isFinite(timeoutMs) ? Date.now() + timeoutMs : Infinity;
   for (let attempt = 1; attempt <= OLLAMA_ATTEMPTS; attempt++) {
     const budget = await awaitResourceBudgetR8N(deadline, onProgress);
     await onProgress({ phase: "resource_budget", cpu_threads: budget.threads, cpu_cores_reserved: budget.reservedCores,
@@ -1173,7 +1177,7 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
     const remaining = deadline - Date.now();
     if (remaining <= 0) throw new Error("Ollama: timeout total esgotado.");
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), remaining);
+    const timer = Number.isFinite(remaining) ? setTimeout(() => controller.abort(), remaining) : null;
     try {
       await onProgress({ phase: "ollama_request", attempt });
       const result = await ollamaPostJson(body, controller.signal);
@@ -1207,7 +1211,7 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
       const delay = Math.min([0, 5_000, 15_000, 45_000][attempt] ?? 45_000, Math.max(0, deadline - Date.now()));
       await new Promise(resolve => setTimeout(resolve, delay));
     } finally {
-      clearTimeout(timer);
+      if (timer !== null) clearTimeout(timer);
     }
   }
 }
@@ -1373,7 +1377,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
       await onProgress({ phase: "write_budget_warning", step: step + 1, reason: "metade dos ciclos sem alteração" });
     }
     const elapsed = Date.now() - startedAt;
-    const remaining = TOTAL_TIMEOUT_MS - elapsed;
+    const remaining = TOTAL_TIMEOUT_MS === 0 ? Infinity : TOTAL_TIMEOUT_MS - elapsed;
 
     if (remaining <= 0) {
       throw new Error("WORKER_INFRA_ERROR: timeout total do worker local.");

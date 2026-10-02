@@ -43,6 +43,7 @@ $maintenance = if ($MaintenanceRepo) { (Resolve-Path -LiteralPath $MaintenanceRe
 $config | Add-Member -NotePropertyName maintenance_repo -NotePropertyValue $maintenance -Force
 $config | Add-Member -NotePropertyName codex_command -NotePropertyValue $CodexCommand -Force
 if (-not $config.PSObject.Properties['ollama_attempts']) { $config | Add-Member -NotePropertyName ollama_attempts -NotePropertyValue 4 }
+if ($config.timeout_ms -eq 7200000) { $config.timeout_ms = 0 } # Migração do antigo padrão; demais escolhas explícitas permanecem.
 if ($WorkerModel) { $config.model = $WorkerModel }
 Copy-Item -LiteralPath $configFile -Destination "$configFile.backup-$stamp"
 foreach ($name in $existingFiles) { Copy-Item -LiteralPath (Join-Path $target $name) -Destination "$(Join-Path $target $name).backup-$stamp" }
