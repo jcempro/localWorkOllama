@@ -6,8 +6,9 @@ import { randomBytes, createHash } from "node:crypto";
 import path from "node:path";
 import os from "node:os";
 import { fileURLToPath } from "node:url";
-import { jobDir, getState, listJobs, readJson, atomicJson, alive } from "./job-store.mjs";
+import { JOBS, jobDir, getState, listJobs, readJson, atomicJson, alive } from "./job-store.mjs";
 import { PAGE_M7Q } from "./monitor-page.mjs";
+import { cancelJob, deleteJob } from "./job-control.mjs";
 
 const ROOT_M7Q = path.dirname(fileURLToPath(import.meta.url));
 const DESCRIPTOR_M7Q = path.join(ROOT_M7Q, "monitor.json");
@@ -23,8 +24,8 @@ const WATCHDOG_INTERVAL_MS_M7Q = 60_000;
 const execFileAsync = promisify(execFile);
 
 async function sourceHashM7Q() {
-  const sources = await Promise.all(["monitor.mjs", "monitor-page.mjs"].map(name => fs.readFile(path.join(ROOT_M7Q, name))));
-  return createHash("sha256").update(sources[0]).update(sources[1]).digest("hex");
+  const sources = await Promise.all(["monitor.mjs", "monitor-page.mjs", "job-control.mjs"].map(name => fs.readFile(path.join(ROOT_M7Q, name))));
+  return createHash("sha256").update(sources[0]).update(sources[1]).update(sources[2]).digest("hex");
 }
 
 async function health(descriptor) {
@@ -174,6 +175,19 @@ export function classifyActivity(state, events, resource, files) {
 
 export async function monitorSnapshot(id) {
   const dir = jobDir(id);
+  const exists = await fs.stat(dir).then(() => true).catch(() => false);
+  if (!exists) {
+    const pending = path.join(JOBS, `.deleting-${id}`);
+    if (await fs.stat(pending).then(() => true).catch(() => false)) {
+      const at = (await fs.stat(pending)).birthtime.toISOString();
+      return { state: { job_id: id, status: "DELETE_PENDING", created_at: at }, request: {}, delivery: { status: "SUPPRESSED" },
+        events: [], resource: await resources(), progress: { step: 0, max_steps: 0, completed_tools: 0, failed_tools: 0 },
+        metrics: { prompt_tokens_observed: null, output_tokens_observed: null, generation_ms_observed: 0,
+          context_tokens_configured: null, api_cost: "Limpeza parcial; nenhum processamento do Worker." },
+        duration_ms: null, activity: { kind: "DELETE_PENDING", reason: "Exclusão incompleta; use a lixeira novamente para concluir ou veja o erro exibido." },
+        observed_at: new Date().toISOString() };
+    }
+  }
   const [state, request, delivery, events, resource, result, error] = await Promise.all([
     getState(id).then(value => value?.job_id === id ? value : Promise.reject(new Error("state.json pertence a outro job ou é inválido")))
       .catch(async failure => ({ job_id: id, status: "CORRUPT", created_at: (await fs.stat(dir)).birthtime.toISOString(),
@@ -250,6 +264,14 @@ export async function inventorySnapshot({ repo = "", status = "", sort = "time",
         task: `Artefato ilegível: ${String(error?.message ?? error).slice(0, 160)}`, mode: null, delivery: "UNKNOWN" });
     }
   }
+  for (const entry of await fs.readdir(JOBS).catch(error => error?.code === "ENOENT" ? [] : Promise.reject(error))) {
+    const pending = /^\.deleting-([0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12})$/i.exec(entry)?.[1];
+    if (!pending) continue;
+    const info = await fs.stat(path.join(JOBS, entry)).catch(() => null);
+    if (info) rows.push({ job_id: pending, status: "DELETE_PENDING", activity: "cleanup", created_at: info.birthtime.toISOString(),
+      completed_at: null, duration_ms: null, repo: "(limpeza pendente)", project_id: null,
+      task: "Exclusão incompleta; tente novamente.", mode: null, delivery: "SUPPRESSED" });
+  }
   const repositories = [...new Set(rows.map(row => row.repo))].sort((a, b) => a.localeCompare(b));
   const statuses = [...new Set(rows.map(row => row.status))].sort();
   const filtered = rows.filter(row => (!repo || row.repo === repo) && (!status || row.status === status));
@@ -282,6 +304,17 @@ async function serve() {
         res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" }).end(body);
         return;
       }
+      const action = /^\/api\/job\/([0-9a-f-]{36})(\/cancel)?$/i.exec(url.pathname);
+      if (action && ((action[2] && req.method === "POST") || (!action[2] && req.method === "DELETE"))) {
+        try {
+          const result = action[2] ? await cancelJob(action[1]) : await deleteJob(action[1]);
+          res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" }).end(JSON.stringify(result));
+        } catch (error) {
+          const code = error?.code === "ENOENT" ? 404 : 409;
+          res.writeHead(code, { "Content-Type": "application/json; charset=utf-8" }).end(JSON.stringify({ error: String(error?.message ?? error) }));
+        }
+        return;
+      }
       if (url.pathname === "/" && req.method === "GET") {
         res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(PAGE_M7Q);
         return;
@@ -292,7 +325,10 @@ async function serve() {
         const body = JSON.stringify(await monitorSnapshot(match[2]));
         res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" }).end(body);
       } else {
-        await fs.stat(jobDir(match[2]));
+        await fs.stat(jobDir(match[2])).catch(async error => {
+          if (error?.code !== "ENOENT") throw error;
+          await fs.stat(path.join(JOBS, `.deleting-${match[2]}`));
+        });
         res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(PAGE_M7Q);
       }
     } catch (error) { res.writeHead(500).end(String(error?.message ?? error)); }

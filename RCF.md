@@ -25,6 +25,7 @@ O teto padrão de 40 ciclos por job é configurável e não limita o tempo total
 - O monitor é serviço local idempotente e independente do runner. Sua disponibilidade, navegação, abertura, fechamento e atualização não governam a vida do job. O inventário abrange jobs ativos e terminais retidos, permite filtro por projeto Codex Desktop se essa identidade estiver comprovadamente disponível, senão por raiz Git, e ordena por estado ou criação, ascendente/descendente; o padrão é mais recente primeiro. O detalhe oferece link de volta ao inventário, status, duração, atividade derivada, entrega, timeline cronológica de eventos, erros e bloqueios, tokens de entrada/saída, contexto e custo quando fornecidos pelo runtime. Campo não medido é identificado como indisponível, jamais estimado como fato.
 - A telemetria registra apenas eventos operacionais e resumos de raciocínio oficialmente expostos, se houver; nunca depende nem expõe chain-of-thought privado. UI e API atualizam dados sem recarregar a página, limitam volume de resposta, exigem token local e escapam texto não confiável. Preferência por padrões ou componentes open-source maduros é condicional a benefício líquido comprovado frente à solução nativa, sem dependência externa em tempo de execução, vazamento ou consumo material de recursos.
 - Cada job possui diretório exclusivo `jobs/<job_id>` validado. Pedido, estado, log, Git, resultado, erro e entrega pertencem somente a essa identidade. Metadados globais separados não podem substituir nem sobrescrever esses artefatos. Retenção configurável remove somente histórico terminal com entrega resolvida, nunca ativo, pendente ou ambíguo; mantém janela temporal, limites de contagem e bytes, com limpeza idempotente, observável e resistente a links/erros isolados. O log operacional por job é limitado por compactação auditável; um teto total de jobs impede crescimento ilimitado caso entregas não resolvidas se acumulem, com diagnóstico e sem apagar essas entregas.
+- Inventário e detalhe apresentam STOP no mesmo lugar lógico da lixeira para `QUEUED`/`RUNNING`; a ação desabilita imediatamente o controle com animação. O backend identifica o runner por PID, executável e início, tenta encerrar sua árvore e só registra `CANCELLED` após confirmar a morte; se a árvore não for confirmável, mantém estado real e informa erro. Cancelamento confirmado suprime definitivamente a entrega deste job ao chat, inclusive contra eventos tardios. A lixeira de job terminal apaga exclusivamente seu diretório e referências específicas, com lock por ID e rename para limpeza retomável; resíduos parciais aparecem como `DELETE_PENDING` e não são declarados sucesso. Backup recuperável ligado ao job ou legado de autoria ambígua bloqueia a exclusão para respeitar a proibição de perda de dados pessoais.
 - A entrega direta ao chat na conclusão é o caminho primário, sem polling do supervisor. O watchdog gratuito e o monitor reconciliam anomalias e jobs órfãos sem repetir inferência nem duplicar entrega ambígua. Quinze minutos só é intervalo admissível para verificação que consuma processamento pago do supervisor; a referência gratuita de até três minutos somente vale quando não existir disparo de conclusão. Com o evento direto vigente, não há espera periódica de três minutos na conclusão normal.
 - O watchdog agendado usa um lançador sem console pelo Windows Script Host, que executa Node em janela oculta e aguarda o término; a tarefa migra a ação antiga de `node.exe` direto sem alterar sua finalidade. Processos auxiliares do runner e monitor usam lançamento oculto. Nenhuma tarefa de background pode tomar foco.
 
@@ -54,20 +55,21 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `263606fe58785410d0c4402e89dfcd291a7556a1ce39515b3401048e94aa1828` |
+| `src/localworker/server.mjs` | `80e9d2fd7fa3b4e8c5294842ca1c03001516c9682dba9d5bb3957177cb69f9bf` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
-| `src/localworker/worker-core.mjs` | `d4603ffc9619395cc07d0ab2d140559ff487a9563bdb6afe5965f746baa84e91` |
-| `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
-| `src/localworker/delivery.mjs` | `54bc2838896065e604df8c3992f665909b1f9f9209be3e94d372c64c706ec881` |
-| `src/localworker/watchdog.mjs` | `2269620e4e43a847c1eacd894399f632fc1b66086b257b65118926049862caaf` |
-| `src/localworker/monitor.mjs` | `e60e511d5d75ec19e85a7564a546e8f9c516454f0996f860bca725c9b8af7cdf` |
-| `src/localworker/monitor-page.mjs` | `5088b3c3399057ede65196afabf633b43c7eb83f9dc76f2d6fb2842355193de8` |
+| `src/localworker/job-control.mjs` | `895e84f6cb3043b287bde1d6814aa7fe1ca2662ecc538915b8556a498caad5eb` |
+| `src/localworker/worker-core.mjs` | `f28a1dcdbf431c5d3b19aca6d7e520b91e23bdd728c3aee97d37a1bc8e1d2775` |
+| `src/localworker/worker-runner.mjs` | `ae744e9dbbe4aa1d00c26f008076b89c5f07477b5d833a5817f16873ab31b44d` |
+| `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
+| `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
+| `src/localworker/monitor.mjs` | `c0708bfb84fea0a0bdc5110d3467549e642fd1833aa27c20a89c636b7b56e6be` |
+| `src/localworker/monitor-page.mjs` | `30fad505978bb67e49845d07c7cc3aeefefe237f2d52f636d3c09d9894b0933f` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `c5ea8dd419ccac7c0c438a56c13d386d4715e1325c7f7b273150ea82b47fb797` |
-| `src/localworker/update-installed.ps1` | `0567ac888f37fbfca393a579f16b0256c1ca5e81b65b07c525ccc33b741259d2` |
+| `src/localworker/install.ps1` | `6791f67b0c26ba2e50b96b0d176363d748b708e804bf84378cf99e724e83e97d` |
+| `src/localworker/update-installed.ps1` | `e2d7521b4c4e6b67a88731566da82c416cf22cb61941c8ad4428ba875aa9b4e4` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |

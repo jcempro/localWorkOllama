@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import path from "node:path";
 import vm from "node:vm";
 import { createServer } from "node:http";
-import { jobDir } from "./job-store.mjs";
+import { JOBS, jobDir, atomicJson } from "./job-store.mjs";
 import { ensureMonitor, monitorUrl, monitorIndexUrl, monitorSnapshot, inventorySnapshot, classifyActivity, listenPreferredM7Q } from "./monitor.mjs";
 
 const repo = process.env.TEST_REPO_PATH;
@@ -32,8 +32,9 @@ const html = await fetch(url);
 assert.equal(html.status, 200);
 const page = await html.text();
 assert.match(page, /Fechar esta página não interrompe/);
-const scriptStart = page.indexOf("<script>") + 8;
-new vm.Script(page.slice(scriptStart, page.indexOf("</script>", scriptStart)));
+assert.match(page, /Interromper este job/);
+assert.match(page, /Excluir definitivamente este job/);
+for (const script of page.split("<script>").slice(1)) new vm.Script(script.split("</script>")[0]);
 const indexUrl = monitorIndexUrl(monitor);
 const index = await fetch(indexUrl);
 assert.equal(index.status, 200);
@@ -55,6 +56,40 @@ const filtered = await fetch(indexUrl.replace("/?", `/api/jobs?repo=${encodeURIC
 assert.equal(filtered.status, 200);
 assert.ok((await filtered.json()).jobs.every(job => job.repo === path.resolve(repo)));
 assert.equal((await fetch(url.replace(/token=[^&]+/, "token=invalido"))).status, 403);
+const actionId = randomUUID();
+const actionDir = jobDir(actionId);
+await fs.mkdir(actionDir);
+try {
+  const at = new Date().toISOString();
+  await atomicJson(path.join(actionDir, "state.json"), { job_id: actionId, status: "QUEUED", created_at: at, heartbeat_at: at });
+  await atomicJson(path.join(actionDir, "delivery.json"), { status: "PENDING" });
+  await atomicJson(path.join(actionDir, "request.json"), { repoPath: repo, task: "Teste de controle" });
+  const actionUrl = url.replace(`/job/${id}`, `/api/job/${actionId}`);
+  assert.equal((await fetch(actionUrl, { method: "DELETE" })).status, 409);
+  const stopUrl = actionUrl.replace("?token=", "/cancel?token=");
+  assert.equal((await fetch(stopUrl.replace(/token=[^&]+/, "token=invalido"), { method: "POST" })).status, 403);
+  const stopped = await fetch(stopUrl, { method: "POST" });
+  assert.equal(stopped.status, 200);
+  assert.equal((await stopped.json()).status, "CANCELLED");
+  assert.equal((await fetch(actionUrl, { method: "DELETE" })).status, 200);
+  assert.equal((await fetch(actionUrl, { method: "DELETE" })).status, 200);
+  assert.equal(await fs.stat(actionDir).then(() => true).catch(() => false), false);
+  assert.equal(await fs.stat(jobDir(id)).then(() => true).catch(() => false), true);
+} finally {
+  if (await fs.stat(actionDir).then(() => true).catch(() => false)) await fs.rm(actionDir, { recursive: true, force: true });
+}
+const pendingId = randomUUID(), pendingDir = path.join(JOBS, `.deleting-${pendingId}`);
+await fs.mkdir(pendingDir);
+try {
+  await fs.writeFile(path.join(pendingDir, "residual.log"), "partial");
+  assert.equal((await monitorSnapshot(pendingId)).state.status, "DELETE_PENDING");
+  assert.ok((await inventorySnapshot({ limit: 100 })).jobs.some(job => job.job_id === pendingId && job.status === "DELETE_PENDING"));
+  const partialUrl = url.replace(`/job/${id}`, `/api/job/${pendingId}`);
+  assert.equal((await fetch(partialUrl, { method: "DELETE" })).status, 200);
+  assert.equal(await fs.stat(pendingDir).then(() => true).catch(() => false), false);
+} finally {
+  if (await fs.stat(pendingDir).then(() => true).catch(() => false)) await fs.rm(pendingDir, { recursive: true, force: true });
+}
 const corruptId = randomUUID();
 const corruptDir = jobDir(corruptId);
 await fs.mkdir(corruptDir);

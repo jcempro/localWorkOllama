@@ -5,6 +5,7 @@ import { promisify } from "node:util";
 import { runLocalAnalysis, WorkerIncompleteError } from "./worker-core.mjs";
 import { getState, setState, jobDir, readJson, atomicText, recordLatency } from "./job-store.mjs";
 import { deliver } from "./delivery.mjs";
+import { withJobControl } from "./job-control.mjs";
 
 const id = process.argv[2];
 const dir = jobDir(id);
@@ -33,10 +34,16 @@ async function appendAuditK9P(event, at) {
 
 async function main() {
   const request = await readJson(path.join(dir, "request.json"));
-  const initial = await getState(id);
-  if (initial.status !== "QUEUED") return;
-  let state = { ...initial, status: "RUNNING", pid: process.pid, started_at: new Date().toISOString(), heartbeat_at: new Date().toISOString(), last_event_at: null, phase: "starting", step: 0, event_count: 0, completed_tools: 0, failed_tools: 0, prompt_tokens_observed: 0, output_tokens_observed: 0, generation_ms_observed: 0 };
-  await setState(id, state);
+  const initial = await withJobControl(id, async () => {
+    const current = await getState(id);
+    if (current.status !== "QUEUED") return null;
+    const next = { ...current, status: "RUNNING", pid: process.pid, started_at: new Date().toISOString(), heartbeat_at: new Date().toISOString(), last_event_at: null, phase: "starting", step: 0, event_count: 0, completed_tools: 0, failed_tools: 0, prompt_tokens_observed: 0, output_tokens_observed: 0, generation_ms_observed: 0 };
+    await setState(id, next);
+    return next;
+  });
+  if (!initial) return;
+  process.env.LOCAL_WORKER_JOB_ID = id;
+  let state = initial;
   heartbeat = setInterval(() => {
     pendingHeartbeat = pendingHeartbeat.then(async () => {
       try {
@@ -79,14 +86,14 @@ async function main() {
     clearInterval(heartbeat);
     await pendingHeartbeat;
     await atomicText(path.join(dir, "result.md"), `${result}\n\nESTADO GIT DETERMINÍSTICO (${checkedAt}; prevalece se houver divergência):\n${gitEvidence}\n`);
-    await setState(id, { ...state, status: "COMPLETED", phase: "completed", completed_at: new Date().toISOString(), heartbeat_at: new Date().toISOString() });
+    if ((await getState(id)).status !== "CANCELLED") await setState(id, { ...state, status: "COMPLETED", phase: "completed", completed_at: new Date().toISOString(), heartbeat_at: new Date().toISOString() });
   } catch (error) {
     clearInterval(heartbeat);
     await pendingHeartbeat.catch(() => {});
     const kind = error instanceof WorkerIncompleteError ? "WORKER_INCOMPLETE" : "WORKER_INFRA_ERROR";
     const message = `${kind}: ${String(error?.stack ?? error)}`;
     await atomicText(path.join(dir, "error.txt"), message + "\n");
-    await setState(id, { ...state, status: "FAILED", phase: "failed", error_kind: kind, completed_at: new Date().toISOString() });
+    if ((await getState(id)).status !== "CANCELLED") await setState(id, { ...state, status: "FAILED", phase: "failed", error_kind: kind, completed_at: new Date().toISOString() });
   }
   await recordLatency((Date.now() - started) / 1000);
   await deliver(id);

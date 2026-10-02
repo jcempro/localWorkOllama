@@ -43,6 +43,8 @@ export async function reconcileJob(id) {
     const now = Date.now();
     const dir = jobDir(id);
     const state = await getState(id);
+    if (state.status === "CANCELLED") return { status: "SUPPRESSED_CANCELLED", reconciled: false };
+    if (await fs.stat(path.join(dir, "cancel-request.json")).then(() => true).catch(() => false)) return { status: "CANCEL_REQUESTED", reconciled: false };
     if (["QUEUED", "RUNNING"].includes(state.status)) {
       const last = Date.parse(state.heartbeat_at ?? state.created_at);
       if (state.status === "RUNNING" && !alive(state.pid) && await fs.stat(path.join(dir, "result.md")).then(() => true).catch(() => false)) {

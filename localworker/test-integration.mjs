@@ -102,6 +102,7 @@ try {
   const tools = await rpc("tools/list", {});
   assert.ok(tools.result.tools.some(x => x.name === "local_status"));
   assert.ok(tools.result.tools.some(x => x.name === "local_monitor"));
+  assert.ok(tools.result.tools.some(x => x.name === "local_delete"));
   const monitorTool = await rpc("tools/call", { name: "local_monitor", arguments: {} });
   const monitorIndexUrl = JSON.parse(monitorTool.result.content[0].text).monitor_index_url;
   assert.match(monitorIndexUrl, /\/\?token=/);

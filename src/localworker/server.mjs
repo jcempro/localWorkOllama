@@ -10,6 +10,7 @@ import { createJob, getState, jobDir, readJson, setState } from "./job-store.mjs
 import { assertTargetThread } from "./thread-check.mjs";
 import { ensureMonitor, monitorUrl, monitorIndexUrl, monitorSnapshot, inventorySnapshot } from "./monitor.mjs";
 import { reconcileJob } from "./watchdog.mjs";
+import { cancelJob, deleteJob } from "./job-control.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await fs.readFile(path.join(root, "config.json"), "utf8"));
@@ -145,18 +146,20 @@ server.registerTool("local_result", {
 });
 
 server.registerTool("local_cancel", {
-  description: "Cancela execução local e registra estado terminal.",
+  description: "Interrompe apenas o runner deste job, confirma seu encerramento e suprime a retomada deste job.",
   inputSchema: z.object({ job_id: z.string() }),
 }, async ({ job_id }) => {
   try {
-    const state = await getState(job_id);
-    if (["COMPLETED", "FAILED", "CANCELLED"].includes(state.status)) return reply({ job_id, status: state.status });
-    if (state.pid && Date.now() - Date.parse(state.heartbeat_at ?? state.created_at) < 120_000) {
-      try { process.kill(state.pid); } catch {}
-    }
-    await setState(job_id, { ...state, status: "CANCELLED", completed_at: new Date().toISOString() });
-    return reply({ job_id, status: "CANCELLED" });
+    return reply(await cancelJob(job_id));
   } catch (error) { return errorReply(error); }
+});
+
+server.registerTool("local_delete", {
+  description: "Exclui integralmente os artefatos exclusivos de um job terminal; recusa job ativo e limpeza parcial insegura.",
+  inputSchema: z.object({ job_id: z.string() }),
+}, async ({ job_id }) => {
+  try { return reply(await deleteJob(job_id)); }
+  catch (error) { return errorReply(error); }
 });
 
 return server;

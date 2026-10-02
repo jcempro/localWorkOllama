@@ -91,6 +91,7 @@ try {
     const recovered = await fs.readFile(backup, "utf8");
     assert.equal(recovered, content);
     await fs.rm(backup);
+    await fs.rm(`${backup}.json`, { force: true });
   }
   ollama.close();
   assert.equal(await status(), baseline);

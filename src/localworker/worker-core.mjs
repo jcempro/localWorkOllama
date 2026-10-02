@@ -313,7 +313,7 @@ async function deleteFile(repo, relativePath, expectedSha256) {
   await fs.copyFile(target, backup, fs.constants.COPYFILE_EXCL);
   const backupHash = await sha256File(backup);
   if (backupHash !== originalHash) throw new Error(`Backup divergente; original preservado; backup: ${backup}`);
-  await fs.writeFile(`${backup}.json`, JSON.stringify({ repo, path: relativePath, sha256: originalHash, backup }, null, 2) + "\n", { flag: "wx" });
+  await fs.writeFile(`${backup}.json`, JSON.stringify({ job_id: process.env.LOCAL_WORKER_JOB_ID ?? null, repo, path: relativePath, sha256: originalHash, backup }, null, 2) + "\n", { flag: "wx" });
   if (await sha256File(target) !== originalHash) throw new ToolRejected(`Arquivo mudou durante o backup; original preservado; backup: ${backup}`);
   await fs.unlink(target);
   return `Arquivo removido com backup recuperável: ${relativePath}; backup=${backup}; sha256=${originalHash}`;

@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { jobDir, getState, readJson, atomicJson, atomicText } from "./job-store.mjs";
+import { withJobControl } from "./job-control.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 export async function codexCommand() {
@@ -67,9 +68,17 @@ async function queueInChat(request, id, state) {
 }
 
 export async function deliver(id) {
+  return withJobControl(id, () => deliverLocked(id));
+}
+
+async function deliverLocked(id) {
   const dir = jobDir(id);
   const state = await getState(id);
-  if (!new Set(["COMPLETED", "FAILED", "CANCELLED"]).has(state.status)) return { status: "NOT_TERMINAL" };
+  if (state.status === "CANCELLED" || await fs.stat(path.join(dir, "cancel-request.json")).then(() => true).catch(() => false)) {
+    await atomicJson(path.join(dir, "delivery.json"), { status: "SUPPRESSED_CANCELLED", reason: "Job cancelado; retomada proibida." });
+    return { status: "SUPPRESSED_CANCELLED" };
+  }
+  if (!new Set(["COMPLETED", "FAILED"]).has(state.status)) return { status: "NOT_TERMINAL" };
   const deliveryFile = path.join(dir, "delivery.json");
   const lockFile = path.join(dir, "delivery.lock");
   let lock;
@@ -116,7 +125,7 @@ export async function recoverMissingCliDelivery(id) {
   const delivery = await readJson(deliveryFile);
   const request = await readJson(path.join(dir, "request.json"));
   const failure = await fs.readFile(path.join(dir, "delivery-error.txt"), "utf8");
-  if (!new Set(["COMPLETED", "FAILED", "CANCELLED"]).has(state.status) ||
+  if (!new Set(["COMPLETED", "FAILED"]).has(state.status) ||
       delivery.status !== "AMBIGUOUS" || delivery.thread_id !== request.thread_id ||
       !/^Error: spawn .*codex\.exe ENOENT\r?\n/.test(failure)) {
     throw new Error("Recuperação recusada: entrega anterior não é comprovadamente ENOENT antes do envio");
