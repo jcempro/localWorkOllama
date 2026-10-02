@@ -140,7 +140,7 @@ Cada pedido, estado, log e resultado fica em `jobs/<job_id>` exclusivo. A limpez
 
 Para conferir afirmações sobre commits, use os campos `ahead` e `behind` da seção `ESTADO GIT DETERMINÍSTICO` retornada por `git_status`. Uma linha de arquivo modificado significa alteração no working tree; não demonstra commit não enviado.
 
-Em tarefas de escrita, o Worker recebe avisos de orçamento de ciclos e deixa de fazer listagens amplas após metade deles sem alteração. Se ainda não concluir, a falha é `WORKER_INCOMPLETE`, acompanhada de contagens; o supervisor deve corrigir segmentação ou instrução antes de tentar novamente. Um limite de uso do Codex Desktop pode impedir que uma mensagem já enfileirada produza turno naquele momento: confira o estado da entrega e retome após a liberação da conta.
+Em tarefas de escrita, o Worker recebe avisos de orçamento de ciclos e deixa de fazer listagens amplas após metade deles sem alteração. O padrão de 40 ciclos é teto técnico configurável por `LOCAL_WORKER_MAX_STEPS`, não limite de tempo; ele protege contra loops e esgotamento do contexto. Chamadas recusadas repetidamente param antes desse teto. Se uma tarefa produtiva não couber na janela, o supervisor deve segmentá-la preservando evidências, em vez de elevar o teto sem medir recursos e qualidade. A falha é `WORKER_INCOMPLETE`, acompanhada de contagens. Um limite de uso do Codex Desktop pode impedir que uma mensagem já enfileirada produza turno naquele momento: confira o estado da entrega e retome após a liberação da conta.
 
 Quando a unidade de implementação tem arquivos-alvo definidos, passe caminhos relativos em `required_change_paths` junto de `expect_changes: true`. Inclua o artefato funcional, não somente um arquivo de estado. Exemplo fictício: `required_change_paths: ["scripts/verificar.py", "scripts/testar_verificar.py"]`. O Worker só pode concluir após alterar efetivamente cada alvo; executar testes ou editar outro arquivo não substitui essa prova. Testes falhos devolvem `stdout` e `stderr` limitados ao Worker e bloqueiam `COMPLETED` até nova execução bem-sucedida do mesmo comando. O transporte do Ollama respeita o prazo configurado do job, inclusive quando a geração de resposta demora mais de cinco minutos.
 
@@ -432,7 +432,7 @@ Cada job persiste em `$WorkerHome\jobs\<job_id>`: `state.json`, `request.json`, 
 <!-- LOCALWORKER_GENERATED_START -->
 Gerado por `node scripts/sync-src.mjs --write` a partir dos artefatos testados. Os SHA-256 permitem conferir a distribuição sem caminhos locais.
 
-Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:11434`; `timeout_ms=0` (sem teto temporal total); 40 passos por segmento de contexto; 4 tentativas transitórias.
+Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:11434`; `timeout_ms=0` (sem teto temporal total); teto de 40 ciclos por job (configurável); 4 tentativas transitórias.
 
 | Artefato portável | SHA-256 |
 | --- | --- |
@@ -443,7 +443,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/server.mjs` | `263606fe58785410d0c4402e89dfcd291a7556a1ce39515b3401048e94aa1828` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
-| `src/localworker/worker-core.mjs` | `61de61d9034e0517524d8831a9b4d2d4594f9e5fb300448ff4c7249dc130ce6d` |
+| `src/localworker/worker-core.mjs` | `d4603ffc9619395cc07d0ab2d140559ff487a9563bdb6afe5965f746baa84e91` |
 | `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
 | `src/localworker/delivery.mjs` | `54bc2838896065e604df8c3992f665909b1f9f9209be3e94d372c64c706ec881` |
 | `src/localworker/watchdog.mjs` | `2269620e4e43a847c1eacd894399f632fc1b66086b257b65118926049862caaf` |

@@ -31,6 +31,9 @@ if (!Number.isSafeInteger(TOTAL_TIMEOUT_MS) || TOTAL_TIMEOUT_MS < 0) {
 }
 
 const MAX_STEPS = Number(process.env.LOCAL_WORKER_MAX_STEPS ?? config.max_steps ?? 40);
+if (!Number.isSafeInteger(MAX_STEPS) || MAX_STEPS < 1) {
+  throw new Error("LOCAL_WORKER_MAX_STEPS deve ser inteiro positivo; é um teto técnico de ciclos por job, não de duração.");
+}
 const WRITE_NUDGE_STEP = Math.max(4, Math.floor(MAX_STEPS / 4));
 const WRITE_FOCUS_STEP = Math.max(WRITE_NUDGE_STEP + 1, Math.floor(MAX_STEPS / 2));
 
@@ -1402,6 +1405,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   const failedValidations = new Set();
   const seenReads = new Map();
   const rejectedCalls = new Map();
+  const rejectedCategories = new Map();
   const blockedCalls = new Set();
   const requiredHashes = new Map();
   for (const requiredPath of requiredChangePaths) requiredHashes.set(requiredPath, await fileFingerprint(repo, requiredPath));
@@ -1535,6 +1539,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         if (validationId) failedValidations.delete(validationId);
 
         toolExecutions++;
+        rejectedCategories.clear();
         const afterCommand = beforeCommand ? await gitChangeFingerprint(repo) : null;
         if (new Set(["write_file", "edit_file", "move_file", "delete_file"]).has(toolName) ||
             (beforeCommand && afterCommand && afterCommand !== beforeCommand)) successfulMutations++;
@@ -1559,6 +1564,14 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
               reason: "mesma chamada recusada duas vezes; assinatura bloqueada neste job" });
             result += " Esta chamada foi bloqueada após rejeição repetida. Adapte os argumentos, use alternativa permitida ou descreva em NEEDS_SUPERVISOR o acesso adicional estritamente necessário.";
           }
+          const category = JSON.stringify([toolName, diagnostic]);
+          const categoryCount = (rejectedCategories.get(category) ?? 0) + 1;
+          rejectedCategories.set(category, categoryCount);
+          if (categoryCount === 3) result += " Três variantes da mesma falha foram recusadas. Mude de ferramenta/estratégia agora; se precisar de mais acesso, explique em NEEDS_SUPERVISOR.";
+          if (categoryCount >= 4) {
+            await onProgress({ phase: "strategy_blocked", step: step + 1, tool: toolName,
+              reason: "quatro recusas da mesma classe, apesar de variantes de argumentos" });
+          }
         }
       }
       await onProgress({ phase: "tool_result", step: step + 1, tool: toolName, resource, outcome, duration_ms: Date.now() - startedTool,
@@ -1569,6 +1582,9 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         tool_name: call.function.name,
         content: compact(result),
       });
+      if (outcome === "rejected" && (rejectedCategories.get(JSON.stringify([toolName, diagnostic])) ?? 0) >= 4) {
+        throw new WorkerIncompleteError(`WORKER_INCOMPLETE: estratégia ${toolName} repetiu quatro recusas determinísticas da mesma classe (${diagnostic}). Requer alternativa legítima ou autorização específica do supervisor.`);
+      }
     }
   }
 

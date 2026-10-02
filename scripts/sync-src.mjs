@@ -101,7 +101,7 @@ const rows = inventory.map(({ target, sha256 }) => `| \`${target}\` | \`${sha256
 const generated = [
   'Gerado por `node scripts/sync-src.mjs --write` a partir dos artefatos testados. Os SHA-256 permitem conferir a distribuição sem caminhos locais.',
   '',
-  `Configuração padrão: modelo \`${config.model}\`; Ollama \`${config.ollama_url}\`; \`timeout_ms=${config.timeout_ms}\` (${config.timeout_ms === 0 ? 'sem teto temporal total' : 'ms de teto total explícito'}); ${config.max_steps} passos por segmento de contexto; ${config.ollama_attempts} tentativas transitórias.`,
+  `Configuração padrão: modelo \`${config.model}\`; Ollama \`${config.ollama_url}\`; \`timeout_ms=${config.timeout_ms}\` (${config.timeout_ms === 0 ? 'sem teto temporal total' : 'ms de teto total explícito'}); teto de ${config.max_steps} ciclos por job (configurável); ${config.ollama_attempts} tentativas transitórias.`,
   '',
   '| Artefato portável | SHA-256 |', '| --- | --- |', rows,
 ].join('\n');

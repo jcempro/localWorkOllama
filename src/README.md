@@ -18,7 +18,7 @@
 | Modelo Ollama e base | `-WorkerModel`/`LOCAL_MODEL`; `-BaseModel`/`LOCAL_BASE_MODEL`; padrões em `config.json` e no instalador. |
 | Janela do modelo | `-ModelContextTokens` no instalador; padrão 32768 tokens. |
 | URL Ollama | `OLLAMA_URL` ou `config.json:ollama_url`; prefixo de caminho de proxy é preservado. |
-| Timeout, passos e tentativas | `LOCAL_WORKER_TIMEOUT_MS`, `LOCAL_WORKER_MAX_STEPS`, `LOCAL_OLLAMA_ATTEMPTS` ou `config.json`. |
+| Timeout, passos e tentativas | `LOCAL_WORKER_TIMEOUT_MS`, `LOCAL_WORKER_MAX_STEPS` (inteiro positivo; padrão 40 ciclos por job), `LOCAL_OLLAMA_ATTEMPTS` ou `config.json`. O teto de ciclos protege a janela de contexto e não é prazo total. |
 | Orçamento de CPU | `LOCAL_WORKER_CPU_THREADS` ou `config.json:cpu_threads` (`auto`); mesmo valor explícito é limitado a preservar ao menos 25% dos processadores lógicos. |
 | Reserva de RAM | 10% da RAM física ou 4 GiB, o maior. Sob pressão, o runtime espera até 120 s (`RESOURCE_WAIT_LIMIT_MS_R8N`), tenta descarregar seu modelo carregado após 30 s (`RESOURCE_RELEASE_DELAY_MS_R8N`) ou imediatamente se houver menos de 4 GiB livres, e concede nova janela de até 120 s após liberação comprovada; preserva a reserva e diagnostica o esgotamento. Limites ficam no topo de `worker-core.mjs`. |
 | Reserva de VRAM | `LOCAL_WORKER_GPU_RESERVE_BYTES` no instalador e runtime. O runtime exige pelo menos 512 MiB ou 10% da GPU NVIDIA livres antes de inferir; após pressão, descarrega o modelo e ajusta `num_gpu` para a próxima chamada. A calibração fica em `jobs/gpu-policy.json`, expira após sete dias e é ignorada se a memória disponível mudar materialmente. O instalador contabiliza pelo menos 512 MiB ou 20% da menor GPU NVIDIA em `OLLAMA_GPU_OVERHEAD` como estimativa de carga, preservando valor preexistente maior. Se Ollama já estiver em execução, reinicie-o após `ollama_restart_required_for_gpu_reserve=true`. |
@@ -53,7 +53,7 @@ O instalador não recebe tokens nem os grava. Valores da máquina são calculado
 <!-- LOCALWORKER_GENERATED_START -->
 Gerado por `node scripts/sync-src.mjs --write` a partir dos artefatos testados. Os SHA-256 permitem conferir a distribuição sem caminhos locais.
 
-Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:11434`; `timeout_ms=0` (sem teto temporal total); 40 passos por segmento de contexto; 4 tentativas transitórias.
+Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:11434`; `timeout_ms=0` (sem teto temporal total); teto de 40 ciclos por job (configurável); 4 tentativas transitórias.
 
 | Artefato portável | SHA-256 |
 | --- | --- |
@@ -64,7 +64,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/server.mjs` | `263606fe58785410d0c4402e89dfcd291a7556a1ce39515b3401048e94aa1828` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
-| `src/localworker/worker-core.mjs` | `61de61d9034e0517524d8831a9b4d2d4594f9e5fb300448ff4c7249dc130ce6d` |
+| `src/localworker/worker-core.mjs` | `d4603ffc9619395cc07d0ab2d140559ff487a9563bdb6afe5965f746baa84e91` |
 | `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
 | `src/localworker/delivery.mjs` | `54bc2838896065e604df8c3992f665909b1f9f9209be3e94d372c64c706ec881` |
 | `src/localworker/watchdog.mjs` | `2269620e4e43a847c1eacd894399f632fc1b66086b257b65118926049862caaf` |
