@@ -365,11 +365,12 @@ async function runCheckedCommand(repo, program, args) {
 
 async function gitChangeFingerprint(repo) {
   try {
-    const [status, diff] = await Promise.all([
+    const [status, diff, head] = await Promise.all([
       execFileAsync("git", ["-C", repo, "status", "--porcelain=v1", "-uall"], { windowsHide: true, maxBuffer: 4 * 1024 * 1024 }),
       execFileAsync("git", ["-C", repo, "diff", "--no-ext-diff", "--binary", "HEAD", "--"], { windowsHide: true, maxBuffer: 16 * 1024 * 1024 }),
+      execFileAsync("git", ["-C", repo, "rev-parse", "HEAD"], { windowsHide: true, maxBuffer: 1024 }),
     ]);
-    const hash = createHash("sha256").update(status.stdout).update("\0").update(diff.stdout);
+    const hash = createHash("sha256").update(head.stdout).update("\0").update(status.stdout).update("\0").update(diff.stdout);
     // git diff HEAD não inclui conteúdo de arquivos ainda não rastreados.
     for (const line of status.stdout.split(/\r?\n/)) {
       if (!line.startsWith("?? ")) continue;
@@ -381,6 +382,65 @@ async function gitChangeFingerprint(repo) {
     }
     return hash.digest("hex");
   } catch { return null; }
+}
+
+export async function initiallyDirtyPaths(repo) {
+  const { stdout } = await execFileAsync("git", ["-C", repo, "status", "--porcelain=v1", "-z", "-uall"],
+    { windowsHide: true, encoding: "buffer", maxBuffer: 4 * 1024 * 1024 });
+  const entries = Buffer.isBuffer(stdout) ? stdout.toString("utf8") : String(stdout);
+  const values = entries.split("\0");
+  const dirty = new Set();
+  for (let index = 0; index < values.length; index++) {
+    const entry = values[index];
+    if (!entry) continue;
+    dirty.add(entry.slice(3).toLowerCase());
+    if (/[RC]/.test(entry.slice(0, 2)) && values[index + 1]) dirty.add(values[++index].toLowerCase());
+  }
+  return dirty;
+}
+
+export async function gitCommitUnit(repo, message, paths, context) {
+  if (typeof message !== "string" || !message.trim() || message.length > 120 || /[\r\n]/.test(message)) throw new ToolRejected("Mensagem de commit curta, sem quebra de linha, obrigatória.");
+  if (!Array.isArray(paths) || !paths.length || paths.length > 32 || paths.some(value => typeof value !== "string")) throw new ToolRejected("Informe de 1 a 32 caminhos relativos da unidade funcional.");
+  if (context.failedValidations.size) throw new ToolRejected("Validações falhas ainda pendentes; corrija e reexecute antes do commit.");
+  const normalized = [];
+  for (const relative of paths) {
+    if (!relative || relative === "." || relative.startsWith("-")) throw new ToolRejected(`Caminho de commit inválido: ${relative}`);
+    const target = await safeRepoPath(repo, relative);
+    const clean = path.relative(repo, target).replaceAll(path.sep, "/");
+    if (context.initiallyDirty.has(clean.toLowerCase())) throw new ToolRejected(`Arquivo já alterado antes deste job; não inclua trabalho preexistente no commit: ${clean}`);
+    if (!context.touched.has(clean.toLowerCase()) && !context.required.has(clean.toLowerCase())) throw new ToolRejected(`Arquivo não alterado por esta unidade: ${clean}`);
+    let parent = path.dirname(target);
+    while (!(await fs.stat(parent).then(stat => stat.isDirectory()).catch(() => false)) && parent !== repo) parent = path.dirname(parent);
+    const { stdout: root } = await execFileAsync("git", ["-C", parent, "rev-parse", "--show-toplevel"], { windowsHide: true, timeout: 5000 });
+    if (path.resolve(root.trim()).toLowerCase() !== path.resolve(repo).toLowerCase()) throw new ToolRejected(`Repositório aninhado ou externo: ${clean}`);
+    normalized.push(clean);
+  }
+  if (new Set(normalized.map(value => value.toLowerCase())).size !== normalized.length) throw new ToolRejected("Caminhos duplicados no commit.");
+  const { stdout: changed } = await execFileAsync("git", ["-C", repo, "status", "--porcelain=v1", "--", ...normalized], { windowsHide: true, timeout: 5000 });
+  if (!changed.trim()) throw new ToolRejected("Nenhuma alteração desses arquivos para registrar.");
+  await execFileAsync("git", ["-C", repo, "diff", "--check", "--", ...normalized], { windowsHide: true, timeout: 5000 });
+  const intent = [];
+  let stdout;
+  try {
+    for (const relative of normalized) {
+      const tracked = await execFileAsync("git", ["-C", repo, "ls-files", "--error-unmatch", "--", relative],
+        { windowsHide: true, timeout: 5000 }).then(() => true).catch(() => false);
+      if (!tracked) {
+        await execFileAsync("git", ["-C", repo, "add", "-N", "--", relative], { windowsHide: true, timeout: 5000 });
+        intent.push(relative);
+      }
+    }
+    await execFileAsync("git", ["-C", repo, "diff", "--check", "--", ...normalized], { windowsHide: true, timeout: 5000 });
+    ({ stdout } = await execFileAsync("git", ["-C", repo, "commit", "--only", "-m", message, "--", ...normalized],
+      { windowsHide: true, timeout: 120_000, maxBuffer: 2 * 1024 * 1024 }));
+  } catch (error) {
+    for (const relative of intent) await execFileAsync("git", ["-C", repo, "reset", "-q", "--", relative],
+      { windowsHide: true, timeout: 5000 }).catch(() => {});
+    throw error;
+  }
+  const { stdout: sha } = await execFileAsync("git", ["-C", repo, "rev-parse", "HEAD"], { windowsHide: true, timeout: 5000 });
+  return `Unidade funcional registrada em ${sha.trim()}: ${compact(stdout, 1000)}`;
 }
 
 async function fileFingerprint(repo, relativePath) {
@@ -953,6 +1013,16 @@ const TOOL_DEFINITIONS = [
   {
     type: "function",
     function: {
+      name: "git_commit_unit",
+      description: "Após validar uma unidade funcional autônoma, registra commit somente dos caminhos desta unidade; recusa mudanças preexistentes ou de terceiros.",
+      parameters: { type: "object", required: ["message", "paths"], properties: {
+        message: { type: "string" }, paths: { type: "array", items: { type: "string" } },
+      } },
+    },
+  },
+  {
+    type: "function",
+    function: {
       name: "file_info",
       description: "Lê tamanho e SHA-256 de arquivo regular dentro do repositório. Somente leitura.",
       parameters: { type: "object", required: ["path"], properties: { path: { type: "string" } } },
@@ -1036,7 +1106,7 @@ function parseArguments(value) {
   return {};
 }
 
-async function executeTool(repo, call, deliveredInstructions, mode, authorizedCommands) {
+async function executeTool(repo, call, deliveredInstructions, mode, authorizedCommands, commitContext) {
   const name = call?.function?.name;
   const args = parseArguments(call?.function?.arguments);
   if (mode === "read-only" && !READ_ONLY_TOOLS.has(name)) {
@@ -1081,6 +1151,9 @@ async function executeTool(repo, call, deliveredInstructions, mode, authorizedCo
 
     case "git_diff":
       return gitDiff(repo, Boolean(args.staged));
+
+    case "git_commit_unit":
+      return gitCommitUnit(repo, args.message, args.paths, commitContext);
 
     case "file_info":
       return fileInfo(repo, args.path);
@@ -1265,7 +1338,7 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
 
 export class WorkerIncompleteError extends Error {}
 
-export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false, requiredChangePaths = []) {
+export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false, requiredChangePaths = [], requireCommits = false) {
   if (!Array.isArray(authorizedCommands) || (mode !== "write" && authorizedCommands.length)) {
     throw new Error("Comandos autorizados exigem modo write e lista válida");
   }
@@ -1403,6 +1476,9 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   let forcedImplementation = false;
   let forcedValidation = false;
   const failedValidations = new Set();
+  const ownedPath = value => path.relative(repo, path.resolve(repo, value)).replaceAll(path.sep, "/").toLowerCase();
+  const commitContext = { failedValidations, initiallyDirty: mode === "write" ? await initiallyDirtyPaths(repo) : new Set(),
+    touched: new Set(), required: new Set(requiredChangePaths.map(ownedPath)), commits: 0 };
   const seenReads = new Map();
   const rejectedCalls = new Map();
   const rejectedCategories = new Map();
@@ -1504,6 +1580,18 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         continue;
       }
 
+      if (requireCommits && expectChanges && successfulMutations > 0) {
+        const owned = [...new Set([...commitContext.touched, ...commitContext.required])];
+        const { stdout: pending } = owned.length ? await execFileAsync("git", ["-C", repo, "status", "--porcelain=v1", "--", ...owned], { windowsHide: true, timeout: 5000 }) : { stdout: "" };
+        if (commitContext.commits === 0 || pending.trim()) {
+          if (commitContext.commitReminder) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: unidade funcional sem commit próprio ou com alterações pendentes; commits=${commitContext.commits}; pendências=${compact(pending, 1000)}`);
+          commitContext.commitReminder = true;
+          messages.push(message);
+          messages.push({ role: "user", content: "A unidade funcional validada requer commit próprio. Use git_commit_unit apenas nos arquivos produzidos neste job; não inclua alterações preexistentes. Se impedido, informe a causa exata ao supervisor." });
+          continue;
+        }
+      }
+
       return compact(finalText, MAX_FINAL_CHARS);
     }
 
@@ -1535,7 +1623,8 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
           if (count > 2) throw new ToolRejected(`Consulta idêntica repetida ${count} vezes; use a evidência já obtida e avance para a implementação.`);
         }
         const beforeCommand = toolName === "run_authorized_command" && expectChanges ? await gitChangeFingerprint(repo) : null;
-        result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands);
+        result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands, commitContext);
+        if (toolName === "git_commit_unit") commitContext.commits++;
         if (validationId) failedValidations.delete(validationId);
 
         toolExecutions++;
@@ -1543,6 +1632,8 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         const afterCommand = beforeCommand ? await gitChangeFingerprint(repo) : null;
         if (new Set(["write_file", "edit_file", "move_file", "delete_file"]).has(toolName) ||
             (beforeCommand && afterCommand && afterCommand !== beforeCommand)) successfulMutations++;
+        if (["write_file", "edit_file", "delete_file"].includes(toolName) && typeof args.path === "string") commitContext.touched.add(ownedPath(args.path));
+        if (toolName === "move_file") for (const value of [args.from, args.to]) if (typeof value === "string") commitContext.touched.add(ownedPath(value));
       } catch (error) {
         if (error instanceof WorkerIncompleteError) throw error;
         outcome = error instanceof ToolRejected ? "rejected" : "error";

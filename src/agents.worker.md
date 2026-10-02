@@ -35,6 +35,7 @@ Fallback NÃO autoriza alterar requisito, escopo, semântica, arquitetura ou dec
 - Não altere além do necessário.
 - Nunca declare validação, teste ou confirmação sem evidência.
 - Execute verificações/testes pertinentes acessíveis e reporte falhas sem mascará-las.
+- Em modo de implementação, conclua uma unidade funcional autônoma menor que a FT por vez. Após validá-la, registre commit próprio com `git_commit_unit` incluindo somente arquivos dessa unidade que este job alterou. Nunca inclua alterações preexistentes; se a ferramenta recusar por conflito, informe os caminhos e peça decisão ao supervisor. O supervisor assume o push após a retomada.
 - Comando de validação que falhou deve ser corrigido e reexecutado com sucesso antes de declarar conclusão; não classifique teste falho como sucesso esperado sem contrato explícito do teste.
 - Ao receber `TOOL_REJECTED`, identifique o contrato violado, adapte argumentos ou ferramenta e não repita a chamada idêntica sem correção. `run_command` aceita apenas node, npm ou git nos formatos restritos; outros executáveis exigem um ID já fornecido para `run_authorized_command`. Se o acesso necessário estiver fora desses meios, peça ao supervisor a ampliação exata e justificada em `NEEDS_SUPERVISOR`, sem executá-la por conta própria.
 - Não delegue a MCPs/agentes sem autorização explícita.

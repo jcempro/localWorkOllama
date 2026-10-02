@@ -136,6 +136,7 @@ Na última coluna do inventário e no cabeçalho do detalhe, **STOP** aparece pa
 
 Uma chamada rejeitada duas vezes não deve consumir todos os ciclos: o Worker bloqueia apenas aquela combinação de ferramenta e argumentos, registra o motivo e tenta outra forma permitida. Quando o contrato precisa de acesso maior, ele deve indicar ao supervisor o acesso exato em `NEEDS_SUPERVISOR`. A prova de edição compara também o conteúdo dos arquivos novos ainda não rastreados pelo Git; não exige `git add`.
 
+Em modo de escrita persistente, o Worker valida e registra cada unidade funcional autônoma com `git_commit_unit(message, paths)`, restrita aos caminhos alterados pelo próprio job e limpos no início. Arquivos já modificados antes do job, repositórios aninhados e validações ainda falhas impedem o commit. O supervisor confere o resultado e tenta o push antes da próxima unidade; uma FT grande deve ser delegada em segmentos menores para não acumular várias unidades completas sem commit.
 
 Cada pedido, estado, log e resultado fica em `jobs/<job_id>` exclusivo. A limpeza automática, a cada seis horas, mantém jobs terminais entregues por até 90 dias e limita esse histórico a 500 jobs e 512 MiB; remove os mais antigos quando algum limite é excedido. O log operacional de cada job é compactado ao atingir 2 MiB, preservando o evento de compactação e a cauda recente de 1 MiB; resultado e estado continuam separados. Jobs ativos ou com entrega pendente/ambígua nunca são apagados automaticamente. Ao chegar a 1000 jobs totais, o sistema tenta limpar os elegíveis e impede novos jobs com diagnóstico se o teto persistir. Configure antes de iniciar os processos por `LOCAL_WORKER_HISTORY_DAYS`, `LOCAL_WORKER_HISTORY_MAX_JOBS`, `LOCAL_WORKER_HISTORY_MAX_BYTES` e `LOCAL_WORKER_HISTORY_MAX_TOTAL_JOBS`. A limpeza registra contagem e erros em `history-cleanup.json` e não lê arquivos pessoais.
 
@@ -397,6 +398,7 @@ Fallback NÃO autoriza alterar requisito, escopo, semântica, arquitetura ou dec
 - Não altere além do necessário.
 - Nunca declare validação, teste ou confirmação sem evidência.
 - Execute verificações/testes pertinentes acessíveis e reporte falhas sem mascará-las.
+- Em modo de implementação, conclua uma unidade funcional autônoma menor que a FT por vez. Após validá-la, registre commit próprio com `git_commit_unit` incluindo somente arquivos dessa unidade que este job alterou. Nunca inclua alterações preexistentes; se a ferramenta recusar por conflito, informe os caminhos e peça decisão ao supervisor. O supervisor assume o push após a retomada.
 - Comando de validação que falhou deve ser corrigido e reexecutado com sucesso antes de declarar conclusão; não classifique teste falho como sucesso esperado sem contrato explícito do teste.
 - Ao receber `TOOL_REJECTED`, identifique o contrato violado, adapte argumentos ou ferramenta e não repita a chamada idêntica sem correção. `run_command` aceita apenas node, npm ou git nos formatos restritos; outros executáveis exigem um ID já fornecido para `run_authorized_command`. Se o acesso necessário estiver fora desses meios, peça ao supervisor a ampliação exata e justificada em `NEEDS_SUPERVISOR`, sem executá-la por conta própria.
 - Não delegue a MCPs/agentes sem autorização explícita.
@@ -444,7 +446,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `83756c141a6ad59cf29e120d514cb675e9ebabc643aa9012efc89b7f578c06dc` |
+| `src/localworker/AGENTS.md` | `956260020c1e60468300c65edce276301b2781e9c382b0872a13119d61a24df0` |
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -452,8 +454,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `895e84f6cb3043b287bde1d6814aa7fe1ca2662ecc538915b8556a498caad5eb` |
-| `src/localworker/worker-core.mjs` | `f28a1dcdbf431c5d3b19aca6d7e520b91e23bdd728c3aee97d37a1bc8e1d2775` |
-| `src/localworker/worker-runner.mjs` | `ae744e9dbbe4aa1d00c26f008076b89c5f07477b5d833a5817f16873ab31b44d` |
+| `src/localworker/worker-core.mjs` | `329ed6c90a757cf47ded69e5c1da1e0bef1bb93fea2af7de8e10b98647191fcd` |
+| `src/localworker/worker-runner.mjs` | `73eb23cbb58c014c0c1d93b69426504bd43e446284cbb5be6aa527bee50f0e15` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
 | `src/localworker/monitor.mjs` | `c0708bfb84fea0a0bdc5110d3467549e642fd1833aa27c20a89c636b7b56e6be` |

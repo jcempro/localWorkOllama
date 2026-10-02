@@ -26,6 +26,7 @@ O teto padrão de 40 ciclos por job é configurável e não limita o tempo total
 - A telemetria registra apenas eventos operacionais e resumos de raciocínio oficialmente expostos, se houver; nunca depende nem expõe chain-of-thought privado. UI e API atualizam dados sem recarregar a página, limitam volume de resposta, exigem token local e escapam texto não confiável. Preferência por padrões ou componentes open-source maduros é condicional a benefício líquido comprovado frente à solução nativa, sem dependência externa em tempo de execução, vazamento ou consumo material de recursos.
 - Cada job possui diretório exclusivo `jobs/<job_id>` validado. Pedido, estado, log, Git, resultado, erro e entrega pertencem somente a essa identidade. Metadados globais separados não podem substituir nem sobrescrever esses artefatos. Retenção configurável remove somente histórico terminal com entrega resolvida, nunca ativo, pendente ou ambíguo; mantém janela temporal, limites de contagem e bytes, com limpeza idempotente, observável e resistente a links/erros isolados. O log operacional por job é limitado por compactação auditável; um teto total de jobs impede crescimento ilimitado caso entregas não resolvidas se acumulem, com diagnóstico e sem apagar essas entregas.
 - Inventário e detalhe apresentam STOP no mesmo lugar lógico da lixeira para `QUEUED`/`RUNNING`; a ação desabilita imediatamente o controle com animação. O backend identifica o runner por PID, executável e início, tenta encerrar sua árvore e só registra `CANCELLED` após confirmar a morte; se a árvore não for confirmável, mantém estado real e informa erro. Cancelamento confirmado suprime definitivamente a entrega deste job ao chat, inclusive contra eventos tardios. A lixeira de job terminal apaga exclusivamente seu diretório e referências específicas, com lock por ID e rename para limpeza retomável; resíduos parciais aparecem como `DELETE_PENDING` e não são declarados sucesso. Backup recuperável ligado ao job ou legado de autoria ambígua bloqueia a exclusão para respeitar a proibição de perda de dados pessoais.
+- Cada módulo, API, endpoint, interface, componente ou integração autônoma e funcional, menor que a FT, recebe commit exclusivo assim que validado. `git_commit_unit` recusa arquivos já alterados antes do job, caminhos externos/aninhados e testes falhos; o supervisor tenta push imediatamente ao retomar cada unidade. Uma FT não pode acumular unidades concluídas sem commits intermediários.
 - A entrega direta ao chat na conclusão é o caminho primário, sem polling do supervisor. O watchdog gratuito e o monitor reconciliam anomalias e jobs órfãos sem repetir inferência nem duplicar entrega ambígua. Quinze minutos só é intervalo admissível para verificação que consuma processamento pago do supervisor; a referência gratuita de até três minutos somente vale quando não existir disparo de conclusão. Com o evento direto vigente, não há espera periódica de três minutos na conclusão normal.
 - O watchdog agendado usa um lançador sem console pelo Windows Script Host, que executa Node em janela oculta e aguarda o término; a tarefa migra a ação antiga de `node.exe` direto sem alterar sua finalidade. Processos auxiliares do runner e monitor usam lançamento oculto. Nenhuma tarefa de background pode tomar foco.
 
@@ -51,7 +52,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `83756c141a6ad59cf29e120d514cb675e9ebabc643aa9012efc89b7f578c06dc` |
+| `src/localworker/AGENTS.md` | `956260020c1e60468300c65edce276301b2781e9c382b0872a13119d61a24df0` |
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -59,8 +60,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `895e84f6cb3043b287bde1d6814aa7fe1ca2662ecc538915b8556a498caad5eb` |
-| `src/localworker/worker-core.mjs` | `f28a1dcdbf431c5d3b19aca6d7e520b91e23bdd728c3aee97d37a1bc8e1d2775` |
-| `src/localworker/worker-runner.mjs` | `ae744e9dbbe4aa1d00c26f008076b89c5f07477b5d833a5817f16873ab31b44d` |
+| `src/localworker/worker-core.mjs` | `329ed6c90a757cf47ded69e5c1da1e0bef1bb93fea2af7de8e10b98647191fcd` |
+| `src/localworker/worker-runner.mjs` | `73eb23cbb58c014c0c1d93b69426504bd43e446284cbb5be6aa527bee50f0e15` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
 | `src/localworker/monitor.mjs` | `c0708bfb84fea0a0bdc5110d3467549e642fd1833aa27c20a89c636b7b56e6be` |

@@ -73,7 +73,7 @@ async function main() {
         await setState(id, state);
       });
       await pendingHeartbeat;
-    }, request.authorized_commands ?? [], request.expect_changes ?? (request.mode === "write"), request.required_change_paths ?? []);
+    }, request.authorized_commands ?? [], request.expect_changes ?? (request.mode === "write"), request.required_change_paths ?? [], request.mode === "write");
     let gitEvidence;
     try {
       const { stdout } = await execFileAsync("git", ["-C", request.repoPath, "status", "--short", "--branch"], { windowsHide: true, maxBuffer: 2 * 1024 * 1024 });

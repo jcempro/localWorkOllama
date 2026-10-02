@@ -57,7 +57,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `83756c141a6ad59cf29e120d514cb675e9ebabc643aa9012efc89b7f578c06dc` |
+| `src/localworker/AGENTS.md` | `956260020c1e60468300c65edce276301b2781e9c382b0872a13119d61a24df0` |
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -65,8 +65,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `895e84f6cb3043b287bde1d6814aa7fe1ca2662ecc538915b8556a498caad5eb` |
-| `src/localworker/worker-core.mjs` | `f28a1dcdbf431c5d3b19aca6d7e520b91e23bdd728c3aee97d37a1bc8e1d2775` |
-| `src/localworker/worker-runner.mjs` | `ae744e9dbbe4aa1d00c26f008076b89c5f07477b5d833a5817f16873ab31b44d` |
+| `src/localworker/worker-core.mjs` | `329ed6c90a757cf47ded69e5c1da1e0bef1bb93fea2af7de8e10b98647191fcd` |
+| `src/localworker/worker-runner.mjs` | `73eb23cbb58c014c0c1d93b69426504bd43e446284cbb5be6aa527bee50f0e15` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
 | `src/localworker/monitor.mjs` | `c0708bfb84fea0a0bdc5110d3467549e642fd1833aa27c20a89c636b7b56e6be` |
