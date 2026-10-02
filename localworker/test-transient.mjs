@@ -24,21 +24,39 @@ let calls = 0;
 let unloadCalls = 0;
 let noToolMode = false;
 let noToolCalls = 0;
+let ramPressureMode = false;
+let ramCalls = 0;
+let simulatedFreeRam = null;
+const realFreeRam = os.freemem;
 const events = [];
 const ollama = createServer(async (req, res) => {
   let body = "";
   for await (const chunk of req) body += chunk;
+  if (req.url === "/proxy/api/ps") {
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify({ models: ramPressureMode ? [{ name: "fake-test-model" }] : [] }));
+    return;
+  }
   const payload = JSON.parse(body);
   if (req.url === "/proxy/api/generate") {
     assert.equal(payload.model, "fake-test-model");
     assert.equal(payload.keep_alive, 0);
     assert.equal(payload.stream, false);
     unloadCalls++;
+    if (ramPressureMode) simulatedFreeRam = 8 * 1024 ** 3;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify({ done: true }));
     return;
   }
   assert.equal(req.url, "/proxy/api/chat");
+  if (ramPressureMode) {
+    ramCalls++;
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify({ message: ramCalls === 1
+      ? { role: "assistant", content: "", tool_calls: [{ function: { name: "git_status", arguments: {} } }] }
+      : { role: "assistant", content: "RESULTADO: RAM recuperada sem reduzir a reserva." } }));
+    return;
+  }
   if (noToolMode) {
     noToolCalls++;
     if (noToolCalls === 2) assert.deepEqual(payload.tools.map(tool => tool.function.name), ["git_status"]);
@@ -69,7 +87,7 @@ await new Promise(resolve => ollama.listen(0, "127.0.0.1", resolve));
 process.env.OLLAMA_URL = `http://127.0.0.1:${ollama.address().port}/proxy`;
 process.env.LOCAL_MODEL = "fake-test-model";
 try {
-  const { runLocalAnalysis, resourceBudgetR8N, gpuBudgetR8N, relieveGpuPressureR8N, unloadWorkerModelR8N,
+  const { runLocalAnalysis, resourceBudgetR8N, gpuBudgetR8N, relieveGpuPressureR8N, relieveRamPressureR8N, unloadWorkerModelR8N,
     estimateGpuLayersR8N } = await import("./worker-core.mjs");
   assert.deepEqual(resourceBudgetR8N(8, 16 * 1024 ** 3, 1 * 1024 ** 3, "auto").allow, false);
   assert.equal(resourceBudgetR8N(8, 16 * 1024 ** 3, 8 * 1024 ** 3, "auto").threads, 6);
@@ -85,6 +103,14 @@ try {
   assert.equal(await relieveGpuPressureR8N(async () => gpuBudgetR8N(12_288, 540, 0),
     async () => { unloads++; }, async event => pressureEvents.push(event)), true);
   assert.equal(unloads, 1);
+  const ramEvents = [];
+  let ramUnloads = 0;
+  assert.equal(await relieveRamPressureR8N(async () => false, async () => { ramUnloads++; },
+    async event => ramEvents.push(event)), false);
+  assert.equal(await relieveRamPressureR8N(async () => true, async () => { ramUnloads++; },
+    async event => ramEvents.push(event)), true);
+  assert.equal(ramUnloads, 1);
+  assert.deepEqual(ramEvents.map(event => event.phase), ["resource_pressure", "resource_released"]);
   assert.equal(await relieveGpuPressureR8N(async () => gpuBudgetR8N(12_288, 540, 0), unloadWorkerModelR8N), true);
   assert.equal(unloadCalls, 1);
   assert.deepEqual(pressureEvents.map(event => event.phase), ["resource_pressure", "resource_released"]);
@@ -100,8 +126,19 @@ try {
   const recovered = await runLocalAnalysis(repo, "Consulte git_status antes de responder.", "read-only");
   assert.match(recovered, /Git consultado/);
   assert.equal(noToolCalls, 3);
+  ramPressureMode = true;
+  simulatedFreeRam = 3 * 1024 ** 3;
+  os.freemem = () => simulatedFreeRam ?? realFreeRam();
+  const ramRecoveryEvents = [];
+  const ramRecovery = await runLocalAnalysis(repo, "Consulte Git após recuperar RAM do próprio modelo.", "read-only",
+    async event => ramRecoveryEvents.push(event));
+  assert.match(ramRecovery, /RAM recuperada/);
+  assert.equal(ramCalls, 2);
+  assert.ok(ramRecoveryEvents.some(event => event.phase === "resource_released"));
+  assert.ok(ramRecoveryEvents.some(event => event.phase === "resource_budget" && event.ram_available_bytes >= event.ram_reserve_bytes));
   assert.equal(await status(), baseline, "Git deve permanecer no estado inicial");
   console.log(JSON.stringify({ status: "transient-recovered", calls, git: "preserved" }));
 } finally {
+  os.freemem = realFreeRam;
   ollama.close();
 }

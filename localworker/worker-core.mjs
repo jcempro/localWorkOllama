@@ -50,6 +50,7 @@ const GPU_POLICY_FILE_R8N = path.join(installRoot, "jobs", "gpu-policy.json");
 if (!/^\d+$/.test(String(GPU_RESERVE_REQUEST_BYTES_R8N))) throw new Error("LOCAL_WORKER_GPU_RESERVE_BYTES deve ser inteiro não negativo.");
 const RESOURCE_WAIT_MS_R8N = 5_000;
 const RESOURCE_WAIT_LIMIT_MS_R8N = 120_000;
+const RESOURCE_RELEASE_DELAY_MS_R8N = 30_000;
 const OLLAMA_KEEP_ALIVE_R8N = process.env.LOCAL_OLLAMA_KEEP_ALIVE ?? config.ollama_keep_alive ?? "2m";
 const THREAD_LIMIT_R8N = process.env.LOCAL_WORKER_CPU_THREADS ?? config.cpu_threads ?? "auto";
 const TRANSIENT_OLLAMA_CODES = new Set(["ECONNRESET", "ECONNREFUSED", "EPIPE", "ETIMEDOUT", "EHOSTUNREACH", "ENETUNREACH", "ABORT_ERR"]);
@@ -120,8 +121,32 @@ async function gpuMemoryBudgetR8N() {
   } catch { return null; }
 }
 
+async function workerModelLoadedR8N() {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 5_000);
+  try {
+    const ps = await ollamaPostJson(null, controller.signal, "api/ps", "GET");
+    return ps.models?.some(item => item.name === MODEL || item.name === `${MODEL}:latest`) ?? false;
+  } finally { clearTimeout(timer); }
+}
+
+export async function relieveRamPressureR8N(isModelLoaded, unloadModel, onProgress = async () => {}) {
+  try {
+    if (!await isModelLoaded()) return false;
+    await onProgress({ phase: "resource_pressure", reason: "RAM abaixo da reserva; liberando modelo local carregado" });
+    await unloadModel();
+    await onProgress({ phase: "resource_released", reason: "Modelo local descarregado para recuperar RAM" });
+    return true;
+  } catch (error) {
+    await onProgress({ phase: "resource_release_error", error: safeToolDiagnostic(error) });
+    return false;
+  }
+}
+
 async function awaitResourceBudgetR8N(deadline, onProgress) {
-  const waitingSince = Date.now();
+  let waitingSince = Date.now();
+  let releaseAttempted = false;
+  let releasedModel = false;
   while (true) {
     const budget = resourceBudgetR8N(os.availableParallelism(), os.totalmem(), os.freemem());
     const gpu = await gpuMemoryBudgetR8N();
@@ -130,8 +155,17 @@ async function awaitResourceBudgetR8N(deadline, onProgress) {
       ram_available_bytes: budget.ramAvailable, ram_reserve_bytes: budget.ramReserve,
       gpu_free_mib: gpu?.freeMiB ?? null, gpu_reserve_mib: gpu?.reserveMiB ?? null,
       cpu_threads: budget.threads, cpu_cores_reserved: budget.reservedCores });
+    if (!releaseAttempted && !budget.allow &&
+        (budget.ramAvailable < RAM_RESERVE_MIN_BYTES_R8N || Date.now() - waitingSince >= RESOURCE_RELEASE_DELAY_MS_R8N)) {
+      releaseAttempted = true;
+      if (await relieveRamPressureR8N(workerModelLoadedR8N, unloadWorkerModelR8N, onProgress)) {
+        releasedModel = true;
+        waitingSince = Date.now();
+        continue;
+      }
+    }
     const remaining = Math.min(deadline - Date.now(), RESOURCE_WAIT_LIMIT_MS_R8N - (Date.now() - waitingSince));
-    if (remaining <= 0) throw new Error(`WORKER_INFRA_ERROR: reserva de recursos indisponível após espera segura; RAM ${budget.ramAvailable}/${budget.ramReserve} B, VRAM ${gpu?.freeMiB ?? "indisponível"}/${gpu?.reserveMiB ?? "indisponível"} MiB.`);
+    if (remaining <= 0) throw new Error(`WORKER_INFRA_ERROR: reserva de recursos indisponível após espera segura; RAM ${budget.ramAvailable}/${budget.ramReserve} B, VRAM ${gpu?.freeMiB ?? "indisponível"}/${gpu?.reserveMiB ?? "indisponível"} MiB; tentativa de liberar modelo=${releaseAttempted}; modelo liberado=${releasedModel}.`);
     await new Promise(resolve => setTimeout(resolve, Math.min(RESOURCE_WAIT_MS_R8N, remaining)));
   }
 }
@@ -1354,6 +1388,8 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   let forcedInspection = false;
   let successfulMutations = 0;
   let forcedImplementation = false;
+  let forcedValidation = false;
+  const failedValidations = new Set();
   const seenReads = new Map();
   const requiredHashes = new Map();
   for (const requiredPath of requiredChangePaths) requiredHashes.set(requiredPath, await fileFingerprint(repo, requiredPath));
@@ -1442,6 +1478,16 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         continue;
       }
 
+      if (failedValidations.size) {
+        const pending = [...failedValidations];
+        if (forcedValidation) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: validações falharam e não passaram novamente: ${pending.join(", ")}. Última resposta: ${compact(finalText, 3000)}`);
+        forcedValidation = true;
+        messages.push(message);
+        messages.push({ role: "user", content: `Validações obrigatórias falharam: ${pending.join(", ")}. Corrija a causa e execute novamente cada comando até passar antes de concluir. Se houver impedimento real, documente-o; não declare teste falho como sucesso.` });
+        await onProgress({ phase: "validation_requirement", step: step + 1, pending });
+        continue;
+      }
+
       return compact(finalText, MAX_FINAL_CHARS);
     }
 
@@ -1458,6 +1504,10 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
       let result;
       let outcome = "ok";
       let diagnostic = null;
+      const validationId = toolName === "run_authorized_command" && authorizedCommands.some(item => item.id === args.id)
+        ? `autorizado:${args.id}`
+        : toolName === "run_command" && ["node", "npm"].includes(args.program)
+          ? `comando:${JSON.stringify([args.program, args.args])}` : null;
 
       try {
         if (new Set(["read_file", "list_dir", "repo_tree", "file_info", "search_text"]).has(toolName)) {
@@ -1468,6 +1518,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         }
         const beforeCommand = toolName === "run_authorized_command" && expectChanges ? await gitChangeFingerprint(repo) : null;
         result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands);
+        if (validationId) failedValidations.delete(validationId);
 
         toolExecutions++;
         const afterCommand = beforeCommand ? await gitChangeFingerprint(repo) : null;
@@ -1475,6 +1526,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
             (beforeCommand && afterCommand && afterCommand !== beforeCommand)) successfulMutations++;
       } catch (error) {
         outcome = error instanceof ToolRejected ? "rejected" : "error";
+        if (validationId && outcome === "error") failedValidations.add(validationId);
         diagnostic = error?.telemetry ?? safeToolDiagnostic(error);
         result =
           `${error instanceof ToolRejected ? "TOOL_REJECTED" : "WORKER_INFRA_ERROR"} na ferramenta ` +

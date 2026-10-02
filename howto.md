@@ -56,7 +56,7 @@ ollama list
 
 ### Recursos e fluidez do Windows
 
-O Worker limita automaticamente os threads de CPU por requisição a no máximo 75% dos processadores lógicos; isso reserva capacidade potencial para o sistema, embora outros aplicativos também possam usá-la. Ele aguarda até dois minutos quando a RAM disponível cai abaixo da reserva de 10% ou 4 GiB (o maior valor). Em GPU NVIDIA mensurável, também aguarda se a VRAM livre não satisfizer a reserva de 10% ou 512 MiB (o maior). O Ollama distribui camadas entre GPU e CPU conforme a memória disponível; o instalador contabiliza pelo menos 20% da menor GPU NVIDIA como margem no planejamento de carga via `OLLAMA_GPU_OVERHEAD`. Essa opção é uma estimativa de carga, não um limite rígido: a alocação real e outros aplicativos podem consumir VRAM adicional. `LOCAL_WORKER_GPU_RESERVE_BYTES` permite definir um mínimo em bytes antes de instalar; valor preexistente maior não é reduzido. Se a VRAM cair abaixo da reserva **após** uma inferência, o Worker registra o evento, reduz automaticamente as camadas de GPU da próxima requisição e descarrega seu modelo; a calibração é reutilizada por até sete dias enquanto o modelo e a memória disponível permanecerem equivalentes. Sem pressão, mantém o modelo por até dois minutos ociosos, ajustáveis por `LOCAL_OLLAMA_KEEP_ALIVE`. Essas opções protegem a capacidade para o SO sem prometer que a VRAM livre ficará constante durante uma inferência já iniciada. [Ollama: alocação e concorrência e descarga do modelo](https://docs.ollama.com/faq), [opção de reserva de VRAM](https://github.com/ollama/ollama/blob/main/envconfig/config.go).
+O Worker limita automaticamente os threads de CPU por requisição a no máximo 75% dos processadores lógicos; isso reserva capacidade potencial para o sistema, embora outros aplicativos também possam usá-la. Quando a RAM disponível cai abaixo da reserva de 10% ou 4 GiB (o maior valor), ele aguarda até dois minutos e tenta descarregar somente o próprio modelo Ollama carregado; após liberação comprovada, concede nova janela de até dois minutos sem reduzir a reserva do Windows. Em GPU NVIDIA mensurável, também aguarda se a VRAM livre não satisfizer a reserva de 10% ou 512 MiB (o maior). O Ollama distribui camadas entre GPU e CPU conforme a memória disponível; o instalador contabiliza pelo menos 20% da menor GPU NVIDIA como margem no planejamento de carga via `OLLAMA_GPU_OVERHEAD`. Essa opção é uma estimativa de carga, não um limite rígido: a alocação real e outros aplicativos podem consumir VRAM adicional. `LOCAL_WORKER_GPU_RESERVE_BYTES` permite definir um mínimo em bytes antes de instalar; valor preexistente maior não é reduzido. Se a VRAM cair abaixo da reserva **após** uma inferência, o Worker registra o evento, reduz automaticamente as camadas de GPU da próxima requisição e descarrega seu modelo; a calibração é reutilizada por até sete dias enquanto o modelo e a memória disponível permanecerem equivalentes. Sem pressão, mantém o modelo por até dois minutos ociosos, ajustáveis por `LOCAL_OLLAMA_KEEP_ALIVE`. Essas opções protegem a capacidade para o SO sem prometer que a VRAM livre ficará constante durante uma inferência já iniciada. [Ollama: alocação e concorrência e descarga do modelo](https://docs.ollama.com/faq), [opção de reserva de VRAM](https://github.com/ollama/ollama/blob/main/envconfig/config.go).
 
 Se a saída do instalador contiver `ollama_restart_required_for_gpu_reserve: true`, feche o Ollama pela bandeja do Windows e abra-o novamente **após os jobs atuais terminarem**. A variável de usuário só é lida quando o servidor inicia. Confirme com `ollama ps` que o modelo usa CPU/GPU conforme a máquina e acompanhe a RAM/VRAM pelo Monitor do Worker; o instalador não interrompe jobs alheios para forçar a mudança.
 
@@ -138,7 +138,7 @@ Para conferir afirmações sobre commits, use os campos `ahead` e `behind` da se
 
 Em tarefas de escrita, o Worker recebe avisos de orçamento de ciclos e deixa de fazer listagens amplas após metade deles sem alteração. Se ainda não concluir, a falha é `WORKER_INCOMPLETE`, acompanhada de contagens; o supervisor deve corrigir segmentação ou instrução antes de tentar novamente. Um limite de uso do Codex Desktop pode impedir que uma mensagem já enfileirada produza turno naquele momento: confira o estado da entrega e retome após a liberação da conta.
 
-Quando a unidade de implementação tem arquivos-alvo definidos, passe caminhos relativos em `required_change_paths` junto de `expect_changes: true`. Exemplo fictício: `required_change_paths: ["scripts/verificar.py", "scripts/testar_verificar.py"]`. O Worker só pode concluir após alterar efetivamente cada alvo; executar testes ou editar outro arquivo não substitui essa prova. Testes falhos devolvem `stdout` e `stderr` limitados ao Worker para correção. O transporte do Ollama respeita o prazo configurado do job, inclusive quando a geração de resposta demora mais de cinco minutos.
+Quando a unidade de implementação tem arquivos-alvo definidos, passe caminhos relativos em `required_change_paths` junto de `expect_changes: true`. Inclua o artefato funcional, não somente um arquivo de estado. Exemplo fictício: `required_change_paths: ["scripts/verificar.py", "scripts/testar_verificar.py"]`. O Worker só pode concluir após alterar efetivamente cada alvo; executar testes ou editar outro arquivo não substitui essa prova. Testes falhos devolvem `stdout` e `stderr` limitados ao Worker e bloqueiam `COMPLETED` até nova execução bem-sucedida do mesmo comando. O transporte do Ollama respeita o prazo configurado do job, inclusive quando a geração de resposta demora mais de cinco minutos.
 
 ## 4. Registrar o watchdog
 
@@ -327,7 +327,7 @@ NÃO delegue tarefa trivial, sem repositório local ou dependente de capacidade 
 Obtenha o `thread_id` pelos recursos do Codex Desktop, confirmando identidade e diretório; **nunca reutilize ID apenas por ter sido citado em prompt**.
 
 Passe `repoPath` absoluto e use `read-only` por padrão; `write` exige autorização para editar.
-Para implementação ou edição obrigatória delegada, use `expect_changes: true` em `local_analyze`; se os arquivos-alvo forem conhecidos, liste-os em `required_change_paths`. `COMPLETED` exige alteração líquida verificável nos alvos declarados; ainda assim o resultado deve demonstrar a execução do pedido e os testes pertinentes.
+Para implementação ou edição obrigatória delegada, use `expect_changes: true` em `local_analyze`; se os arquivos-alvo forem conhecidos, liste-os em `required_change_paths`, incluindo o artefato funcional pertinente, não somente arquivo de estado. `COMPLETED` exige alteração líquida verificável nos alvos declarados e ausência de validações executadas que permaneçam falhas; ainda assim o resultado deve demonstrar a execução do pedido e os testes pertinentes.
 
 Se a conversa atual não puder ser identificada com segurança, NÃO inicie o job e explique a limitação.
 
@@ -385,6 +385,7 @@ Fallback NÃO autoriza alterar requisito, escopo, semântica, arquitetura ou dec
 - Não altere além do necessário.
 - Nunca declare validação, teste ou confirmação sem evidência.
 - Execute verificações/testes pertinentes acessíveis e reporte falhas sem mascará-las.
+- Comando de validação que falhou deve ser corrigido e reexecutado com sucesso antes de declarar conclusão; não classifique teste falho como sucesso esperado sem contrato explícito do teste.
 - Não delegue a MCPs/agentes sem autorização explícita.
 - Não assuma decisões reservadas ao supervisor.
 
@@ -430,14 +431,14 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `026b4c3cf431a01c08583cd882574f0a19ea772799117084255d2b0e580bf3aa` |
+| `src/localworker/AGENTS.md` | `4904e38fa2b9e60d09a2b0231e92e8b204211568a6bb796a462553ac48d129c8` |
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `263606fe58785410d0c4402e89dfcd291a7556a1ce39515b3401048e94aa1828` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
-| `src/localworker/worker-core.mjs` | `cba00ce305d11eec23b022b03223703b6cf338b752330c736b3d805b497f6c31` |
+| `src/localworker/worker-core.mjs` | `279ac44e7e091a10bc1c98e76272128bcef9dba1508bfc4f9d4796c51c0c7b57` |
 | `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
 | `src/localworker/delivery.mjs` | `54bc2838896065e604df8c3992f665909b1f9f9209be3e94d372c64c706ec881` |
 | `src/localworker/watchdog.mjs` | `2269620e4e43a847c1eacd894399f632fc1b66086b257b65118926049862caaf` |
@@ -450,7 +451,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/update-installed.ps1` | `0567ac888f37fbfca393a579f16b0256c1ca5e81b65b07c525ccc33b741259d2` |
 | `src/localworker/register-watchdog.ps1` | `8f0e04f10ac19212b7fd128da389f38c7cddfda7268b87997e8a5d9ebf5e7b3f` |
 | `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |
-| `src/agents.supervisor.md` | `15fa57f9d1eaafb28f2b5edbb9a174001ef120a689f089e2b2dd0ac4333fcbf0` |
+| `src/agents.supervisor.md` | `4e80984b0221ee269ca7c3f2f5142f6a819e244bc9c4af75c95f2eb1cdd5858e` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

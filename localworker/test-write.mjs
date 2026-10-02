@@ -23,13 +23,37 @@ async function gitStatus() {
 const baseline = await gitStatus();
 let calls = 0;
 let refuseWrites = false;
+let validationMode = false;
+let validationCalls = 0;
+let validationFailureMode = false;
+let validationFailureCalls = 0;
 const ollama = createServer(async (req, res) => {
   let body = "";
   for await (const chunk of req) body += chunk;
   const parsed = JSON.parse(body);
   calls++;
   let message;
-  if (refuseWrites) {
+  if (validationFailureMode) {
+    validationFailureCalls++;
+    message = validationFailureCalls === 1 ? { role: "assistant", content: "", tool_calls: [
+      { function: { name: "git_status", arguments: {} } },
+      { function: { name: "run_authorized_command", arguments: { id: "always-fails" } } },
+    ] } : { role: "assistant", content: "RESULTADO: teste falho ignorado." };
+  } else if (validationMode) {
+    validationCalls++;
+    if (validationCalls === 4) assert.match(JSON.stringify(parsed.messages), /Validações obrigatórias falharam/);
+    const toolCall = (name, args) => ({ function: { name, arguments: args } });
+    message = validationCalls === 1 ? { role: "assistant", content: "", tool_calls: [toolCall("git_status", {})] }
+      : validationCalls === 2 ? { role: "assistant", content: "", tool_calls: [
+        toolCall("edit_file", { path: relative, before: "value = 2", after: "value = ;" }),
+        toolCall("run_authorized_command", { id: "syntax" }),
+      ] }
+      : validationCalls === 4 ? { role: "assistant", content: "", tool_calls: [
+        toolCall("edit_file", { path: relative, before: "value = ;", after: "value = 2" }),
+        toolCall("run_authorized_command", { id: "syntax" }),
+      ] }
+      : { role: "assistant", content: "RESULTADO: validação corrigida e aprovada." };
+  } else if (refuseWrites) {
     message = calls === 5
       ? { role: "assistant", content: "", tool_calls: [{ function: { name: "git_status", arguments: {} } }] }
       : { role: "assistant", content: "RESULTADO: farei a implementação depois." };
@@ -71,6 +95,18 @@ try {
     /WORKER_INCOMPLETE/,
   );
   assert.equal(calls, 7);
+  refuseWrites = false;
+  validationMode = true;
+  const validated = await runLocalAnalysis(repo, "Teste controlado de falha e correção de validação autorizada.",
+    "write", async () => {}, [{ id: "syntax", program: process.execPath, args: ["--check", relative] }], false);
+  assert.match(validated, /validação corrigida e aprovada/);
+  assert.equal(validationCalls, 5);
+  validationMode = false;
+  validationFailureMode = true;
+  await assert.rejects(runLocalAnalysis(repo, "Teste controlado de validação que permanece falha.",
+    "write", async () => {}, [{ id: "always-fails", program: process.execPath, args: ["-e", "process.exit(1)"] }], false),
+  /WORKER_INCOMPLETE: validações falharam/);
+  assert.equal(validationFailureCalls, 3);
   console.log(JSON.stringify({ status: "write-verified", calls, file: relative }));
 } finally {
   const current = await fs.readFile(target, "utf8").catch(error => error?.code === "ENOENT" ? null : Promise.reject(error));

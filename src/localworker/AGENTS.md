@@ -35,6 +35,7 @@ Fallback NÃO autoriza alterar requisito, escopo, semântica, arquitetura ou dec
 - Não altere além do necessário.
 - Nunca declare validação, teste ou confirmação sem evidência.
 - Execute verificações/testes pertinentes acessíveis e reporte falhas sem mascará-las.
+- Comando de validação que falhou deve ser corrigido e reexecutado com sucesso antes de declarar conclusão; não classifique teste falho como sucesso esperado sem contrato explícito do teste.
 - Não delegue a MCPs/agentes sem autorização explícita.
 - Não assuma decisões reservadas ao supervisor.
 
