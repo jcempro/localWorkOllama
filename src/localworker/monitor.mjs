@@ -13,6 +13,8 @@ const ROOT_M7Q = path.dirname(fileURLToPath(import.meta.url));
 const DESCRIPTOR_M7Q = path.join(ROOT_M7Q, "monitor.json");
 const START_LOCK_M7Q = path.join(ROOT_M7Q, "monitor-start.lock");
 const HOST_M7Q = "127.0.0.1";
+const PRIMARY_PORT_M7Q = 49767;
+const FALLBACK_PORT_M7Q = 49768;
 const MAX_EVENTS_M7Q = 2000;
 const MAX_LIST_LIMIT_M7Q = 100;
 const STALE_HEARTBEAT_MS_M7Q = 90_000;
@@ -31,6 +33,24 @@ async function health(descriptor) {
     const response = await fetch(`http://${HOST_M7Q}:${descriptor.port}/health?token=${descriptor.token}`, { signal: AbortSignal.timeout(1500) });
     return response.ok;
   } catch { return false; }
+}
+
+export async function listenPreferredM7Q(server, host = HOST_M7Q, ports = [PRIMARY_PORT_M7Q, FALLBACK_PORT_M7Q]) {
+  for (const port of ports) {
+    try {
+      await new Promise((resolve, reject) => {
+        const onError = error => { server.off("listening", onListening); reject(error); };
+        const onListening = () => { server.off("error", onError); resolve(); };
+        server.once("error", onError);
+        server.once("listening", onListening);
+        server.listen(port, host);
+      });
+      return port;
+    } catch (error) {
+      if (error?.code !== "EADDRINUSE") throw error;
+    }
+  }
+  throw new Error(`Monitor indisponível: portas fixas ${ports.join(" e ")} ocupadas em ${host}.`);
 }
 
 export async function ensureMonitor() {
@@ -277,7 +297,7 @@ async function serve() {
       }
     } catch (error) { res.writeHead(500).end(String(error?.message ?? error)); }
   });
-  await new Promise((resolve, reject) => server.listen(0, HOST_M7Q, error => error ? reject(error) : resolve()));
+  await listenPreferredM7Q(server);
   const source_sha256 = await sourceHashM7Q();
   await atomicJson(DESCRIPTOR_M7Q, { pid: process.pid, port: server.address().port, token, source_sha256, started_at: new Date().toISOString() });
   let watchdogRunning = false;

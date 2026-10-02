@@ -130,7 +130,7 @@ Para consultar um job já concluído, substitua `$request` por `@{ job_id = $Job
 
 Cada `local_analyze` devolve `job_id`, estado, `monitor_url` (detalhe) e `monitor_index_url` (inventário). `local_monitor` fornece o link atual do inventário sem `job_id`; `node <PASTA_DO_WORKER>/monitor.mjs index` faz o mesmo fora do MCP. Abra os links no navegador da mesma máquina quando quiser observar os jobs; a página é somente leitura e pode ser fechada a qualquer momento. Guarde os links como informação privada: contêm uma chave temporária de acesso local. O serviço escuta apenas em `127.0.0.1`, roda separado do runner e o watchdog o recupera após reinício. O inventário filtra por repositório Git e status, ordena por tempo ou status em ambos os sentidos e começa pelo mais recente. O detalhe apresenta duração, ciclos, ferramentas, caminhos acessados, eventos em ordem cronológica, erros, retries, entrega, tokens de entrada/saída e sinais de CPU/memória/GPU quando disponíveis. Contexto não comprovado aparece como indisponível; o custo de API da inferência Ollama local é zero, sem estimar energia. A UI atualiza sem recarga a cada três segundos no detalhe e dez segundos no inventário enquanto visível. Não mostra conteúdo dos arquivos nem raciocínio privado do modelo.
 
-`ACTIVE` indica evento ou uso de recursos recente; `WAITING_MODEL` indica resposta do Ollama pendente; `STALLED_SUSPECTED` indica longa espera sem atividade observável; `STALLED` indica heartbeat/eventos atrasados; `ORPHANED` indica runner ausente; `TERMINAL_NOT_PROPAGATED` indica artefato final persistido antes de atualizar o estado. GPU não mensurável impede certeza sobre uma espera longa; o diagnóstico explicita esse limite. `local_status` fornece o mesmo diagnóstico sem abrir o navegador e reconcilia um job órfão. O runner chama `codex queue` assim que termina, sem polling do supervisor; o monitor e a tarefa agendada verificam somente anomalias. A recuperação registra o estado Git e não apaga arquivos parciais.
+`ACTIVE` indica evento ou uso de recursos recente; `WAITING_MODEL` indica resposta do Ollama pendente; `STALLED_SUSPECTED` indica longa espera sem atividade observável; `STALLED` indica heartbeat/eventos atrasados; `ORPHANED` indica runner ausente; `TERMINAL_NOT_PROPAGATED` indica artefato final persistido antes de atualizar o estado. GPU não mensurável impede certeza sobre uma espera longa; o diagnóstico explicita esse limite. `local_status` fornece o mesmo diagnóstico sem abrir o navegador e reconcilia um job órfão. O runner chama `codex queue` assim que termina, sem polling do supervisor; o monitor e a tarefa agendada verificam somente anomalias. A recuperação registra o estado Git e não apaga arquivos parciais. O monitor usa `127.0.0.1:49767`, ou `127.0.0.1:49768` se a primeira porta estiver ocupada; ambas ocupadas exigem liberar uma delas. A tarefa agendada usa Windows Script Host para iniciar o watchdog sem console visível.
 
 Uma chamada rejeitada duas vezes não deve consumir todos os ciclos: o Worker bloqueia apenas aquela combinação de ferramenta e argumentos, registra o motivo e tenta outra forma permitida. Quando o contrato precisa de acesso maior, ele deve indicar ao supervisor o acesso exato em `NEEDS_SUPERVISOR`. A prova de edição compara também o conteúdo dos arquivos novos ainda não rastreados pelo Git; não exige `git add`.
 
@@ -447,14 +447,14 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
 | `src/localworker/delivery.mjs` | `54bc2838896065e604df8c3992f665909b1f9f9209be3e94d372c64c706ec881` |
 | `src/localworker/watchdog.mjs` | `2269620e4e43a847c1eacd894399f632fc1b66086b257b65118926049862caaf` |
-| `src/localworker/monitor.mjs` | `9538f4a27d12663b4fa1902c47eb880bf854b2c2c05173d34f5175ec0b2dcdb3` |
+| `src/localworker/monitor.mjs` | `e60e511d5d75ec19e85a7564a546e8f9c516454f0996f860bca725c9b8af7cdf` |
 | `src/localworker/monitor-page.mjs` | `5088b3c3399057ede65196afabf633b43c7eb83f9dc76f2d6fb2842355193de8` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
 | `src/localworker/install.ps1` | `c5ea8dd419ccac7c0c438a56c13d386d4715e1325c7f7b273150ea82b47fb797` |
 | `src/localworker/update-installed.ps1` | `0567ac888f37fbfca393a579f16b0256c1ca5e81b65b07c525ccc33b741259d2` |
-| `src/localworker/register-watchdog.ps1` | `8f0e04f10ac19212b7fd128da389f38c7cddfda7268b87997e8a5d9ebf5e7b3f` |
+| `src/localworker/register-watchdog.ps1` | `6066c1ba2a06d6edda2aab56a12e5381ce28f9ca2b9bd7cb730e78a2eba29dc4` |
 | `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |
 | `src/agents.supervisor.md` | `4e80984b0221ee269ca7c3f2f5142f6a819e244bc9c4af75c95f2eb1cdd5858e` |
 <!-- LOCALWORKER_GENERATED_END -->

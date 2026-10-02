@@ -3,8 +3,9 @@ import { promises as fs } from "node:fs";
 import { randomUUID } from "node:crypto";
 import path from "node:path";
 import vm from "node:vm";
+import { createServer } from "node:http";
 import { jobDir } from "./job-store.mjs";
-import { ensureMonitor, monitorUrl, monitorIndexUrl, monitorSnapshot, inventorySnapshot, classifyActivity } from "./monitor.mjs";
+import { ensureMonitor, monitorUrl, monitorIndexUrl, monitorSnapshot, inventorySnapshot, classifyActivity, listenPreferredM7Q } from "./monitor.mjs";
 
 const repo = process.env.TEST_REPO_PATH;
 const id = process.env.TEST_JOB_ID;
@@ -12,6 +13,20 @@ if (!repo || path.basename(path.resolve(repo)).toLowerCase() !== "jeancarloem.co
   throw new Error("Defina TEST_REPO_PATH para o blog autorizado e TEST_JOB_ID para um job de teste existente.");
 }
 const monitor = await ensureMonitor();
+assert.ok([49767, 49768].includes(monitor.port));
+const blocker = createServer();
+await new Promise(resolve => blocker.listen(0, "127.0.0.1", resolve));
+const probe = createServer();
+await new Promise(resolve => probe.listen(0, "127.0.0.1", resolve));
+const fallbackPort = probe.address().port;
+await new Promise(resolve => probe.close(resolve));
+const fallbackServer = createServer();
+try {
+  assert.equal(await listenPreferredM7Q(fallbackServer, "127.0.0.1", [blocker.address().port, fallbackPort]), fallbackPort);
+} finally {
+  await new Promise(resolve => fallbackServer.close(resolve));
+  await new Promise(resolve => blocker.close(resolve));
+}
 const url = monitorUrl(monitor, id);
 const html = await fetch(url);
 assert.equal(html.status, 200);
