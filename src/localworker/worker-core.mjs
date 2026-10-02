@@ -6,6 +6,8 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash, randomUUID } from "node:crypto";
+import http from "node:http";
+import https from "node:https";
 
 const execFileAsync = promisify(execFile);
 
@@ -30,9 +32,105 @@ const WRITE_FOCUS_STEP = Math.max(WRITE_NUDGE_STEP + 1, Math.floor(MAX_STEPS / 2
 
 const MAX_FINAL_CHARS = 16_000;
 const MAX_TOOL_CHARS = 24_000;
+const MAX_OLLAMA_RESPONSE_BYTES = 32 * 1024 * 1024;
 const MAX_FILE_LINES = 600;
 const MAX_SEARCH_FILE_BYTES = 2 * 1024 * 1024;
 const OLLAMA_ATTEMPTS = Math.max(1, Math.min(10, Number(process.env.LOCAL_OLLAMA_ATTEMPTS ?? config.ollama_attempts ?? 4)));
+const CPU_RESERVE_FRACTION_R8N = 0.25;
+const RAM_RESERVE_FRACTION_R8N = 0.10;
+const RAM_RESERVE_MIN_BYTES_R8N = 4 * 1024 ** 3;
+const GPU_RESERVE_MIN_MIB_R8N = 512;
+const GPU_RESERVE_FRACTION_R8N = 0.10;
+const GPU_RESERVE_REQUEST_BYTES_R8N = process.env.LOCAL_WORKER_GPU_RESERVE_BYTES ?? "0";
+const GPU_POLICY_FILE_R8N = path.join(installRoot, "jobs", "gpu-policy.json");
+if (!/^\d+$/.test(String(GPU_RESERVE_REQUEST_BYTES_R8N))) throw new Error("LOCAL_WORKER_GPU_RESERVE_BYTES deve ser inteiro não negativo.");
+const RESOURCE_WAIT_MS_R8N = 5_000;
+const RESOURCE_WAIT_LIMIT_MS_R8N = 120_000;
+const OLLAMA_KEEP_ALIVE_R8N = process.env.LOCAL_OLLAMA_KEEP_ALIVE ?? config.ollama_keep_alive ?? "2m";
+const THREAD_LIMIT_R8N = process.env.LOCAL_WORKER_CPU_THREADS ?? config.cpu_threads ?? "auto";
+const TRANSIENT_OLLAMA_CODES = new Set(["ECONNRESET", "ECONNREFUSED", "EPIPE", "ETIMEDOUT", "EHOSTUNREACH", "ENETUNREACH", "ABORT_ERR"]);
+
+export function resourceBudgetR8N(logicalCpus, totalRam, freeRam, threadLimit = THREAD_LIMIT_R8N) {
+  const cores = Math.max(1, Math.floor(logicalCpus));
+  const reservedCores = cores === 1 ? 0 : Math.max(1, Math.ceil(cores * CPU_RESERVE_FRACTION_R8N));
+  const autoThreads = Math.max(1, cores - reservedCores);
+  const configured = threadLimit === "auto" ? autoThreads : Number(threadLimit);
+  if (!Number.isInteger(configured) || configured < 1) throw new Error("LOCAL_WORKER_CPU_THREADS deve ser 'auto' ou inteiro positivo.");
+  const threads = Math.min(autoThreads, configured);
+  const ramReserve = Math.min(totalRam, Math.max(RAM_RESERVE_MIN_BYTES_R8N, Math.ceil(totalRam * RAM_RESERVE_FRACTION_R8N)));
+  return { threads, reservedCores, ramReserve, ramAvailable: freeRam, allow: freeRam >= ramReserve };
+}
+
+export function gpuBudgetR8N(totalMiB, freeMiB, requestedBytes = GPU_RESERVE_REQUEST_BYTES_R8N) {
+  const requestedMiB = requestedBytes ? Math.ceil(Number(requestedBytes) / 1048576) : 0;
+  if (!Number.isInteger(requestedMiB) || requestedMiB < 0) throw new Error("LOCAL_WORKER_GPU_RESERVE_BYTES deve ser inteiro não negativo.");
+  const reserveMiB = Math.max(GPU_RESERVE_MIN_MIB_R8N, Math.ceil(totalMiB * GPU_RESERVE_FRACTION_R8N), requestedMiB);
+  return { totalMiB, reserveMiB, freeMiB, allow: freeMiB >= reserveMiB };
+}
+
+async function loadGpuPolicyR8N() {
+  try {
+    const saved = JSON.parse(await fs.readFile(GPU_POLICY_FILE_R8N, "utf8"));
+    const gpu = await gpuMemoryBudgetR8N();
+    if (!gpu || saved.schema !== "localworker-gpu-policy/v1" || saved.model !== MODEL ||
+        saved.gpu_total_mib !== gpu.totalMiB || !Number.isInteger(saved.layers) ||
+        saved.layers < 0 || saved.layers > 1024 || !Number.isFinite(saved.gpu_free_before_mib) ||
+        !Number.isFinite(Date.parse(saved.updated_at)) ||
+        Date.now() - Date.parse(saved.updated_at) > 7 * 24 * 60 * 60 * 1000) return null;
+    let comparableFreeMiB = gpu.freeMiB;
+    const toleranceMiB = Math.max(512, Math.ceil(gpu.totalMiB * 0.05));
+    if (Math.abs(saved.gpu_free_before_mib - comparableFreeMiB) > toleranceMiB) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5_000);
+      try {
+        const ps = await ollamaPostJson(null, controller.signal, "api/ps", "GET");
+        const loaded = ps.models?.find(item => item.name === MODEL || item.name === `${MODEL}:latest`);
+        if (loaded && Number.isFinite(loaded.size_vram)) comparableFreeMiB += Math.round(loaded.size_vram / 1048576);
+      } catch {} finally { clearTimeout(timer); }
+    }
+    return Math.abs(saved.gpu_free_before_mib - comparableFreeMiB) <= toleranceMiB ? saved.layers : null;
+  } catch { return null; }
+}
+
+async function saveGpuPolicyR8N(gpu, layers, freeBeforeMiB) {
+  const directory = path.dirname(GPU_POLICY_FILE_R8N);
+  const temporary = `${GPU_POLICY_FILE_R8N}.${randomUUID()}.tmp`;
+  await fs.mkdir(directory, { recursive: true });
+  try {
+    await fs.writeFile(temporary, JSON.stringify({ schema: "localworker-gpu-policy/v1", model: MODEL,
+      gpu_total_mib: gpu.totalMiB, gpu_free_before_mib: freeBeforeMiB, layers,
+      updated_at: new Date().toISOString() }), { flag: "wx" });
+    await fs.rename(temporary, GPU_POLICY_FILE_R8N);
+  } finally { await fs.rm(temporary, { force: true }).catch(() => {}); }
+}
+
+async function gpuMemoryBudgetR8N() {
+  try {
+    const { stdout } = await execFileAsync("nvidia-smi", ["--query-gpu=memory.total,memory.free", "--format=csv,noheader,nounits"],
+      { windowsHide: true, timeout: 2_000 });
+    const samples = stdout.trim().split(/\r?\n/).map(line => line.split(",").map(part => Number(part.trim())))
+      .filter(parts => parts.length === 2 && parts.every(Number.isFinite));
+    if (!samples.length) return null;
+    const budgets = samples.map(([total, free]) => gpuBudgetR8N(total, free));
+    return budgets.find(sample => !sample.allow) ?? budgets.sort((a, b) => a.freeMiB - b.freeMiB)[0];
+  } catch { return null; }
+}
+
+async function awaitResourceBudgetR8N(deadline, onProgress) {
+  const waitingSince = Date.now();
+  while (true) {
+    const budget = resourceBudgetR8N(os.availableParallelism(), os.totalmem(), os.freemem());
+    const gpu = await gpuMemoryBudgetR8N();
+    if (budget.allow && (gpu === null || gpu.allow)) return { ...budget, gpu };
+    await onProgress({ phase: "resource_wait", reason: !budget.allow ? "RAM disponível abaixo da reserva do sistema" : "VRAM livre abaixo da reserva do sistema",
+      ram_available_bytes: budget.ramAvailable, ram_reserve_bytes: budget.ramReserve,
+      gpu_free_mib: gpu?.freeMiB ?? null, gpu_reserve_mib: gpu?.reserveMiB ?? null,
+      cpu_threads: budget.threads, cpu_cores_reserved: budget.reservedCores });
+    const remaining = Math.min(deadline - Date.now(), RESOURCE_WAIT_LIMIT_MS_R8N - (Date.now() - waitingSince));
+    if (remaining <= 0) throw new Error(`WORKER_INFRA_ERROR: reserva de recursos indisponível após espera segura; RAM ${budget.ramAvailable}/${budget.ramReserve} B, VRAM ${gpu?.freeMiB ?? "indisponível"}/${gpu?.reserveMiB ?? "indisponível"} MiB.`);
+    await new Promise(resolve => setTimeout(resolve, Math.min(RESOURCE_WAIT_MS_R8N, remaining)));
+  }
+}
 class ToolRejected extends Error {}
 
 const SKIP_DIRS = new Set([
@@ -106,6 +204,8 @@ async function safeRepoPath(repo, relativePath = ".") {
 async function writeTextFile(repo, relativePath, content) {
   const target = await safeRepoPath(repo, relativePath);
   if (typeof content !== "string") throw new Error("Conteúdo textual obrigatório");
+  const existing = await fs.readFile(target, "utf8").catch(error => error?.code === "ENOENT" ? null : Promise.reject(error));
+  if (existing === content) throw new ToolRejected(`Arquivo já contém o texto solicitado: ${relativePath}`);
   await fs.mkdir(path.dirname(target), { recursive: true });
   const temp = `${target}.${process.pid}.tmp`;
   try {
@@ -122,6 +222,7 @@ async function editTextFile(repo, relativePath, before, after) {
   if (!before || typeof before !== "string" || typeof after !== "string") {
     throw new Error("Edição requer before não vazio e after textual");
   }
+  if (before === after) throw new ToolRejected(`Edição sem mudança: ${relativePath}`);
   const old = await fs.readFile(target, "utf8");
   const first = old.indexOf(before);
   if (first < 0 || old.indexOf(before, first + before.length) >= 0) {
@@ -180,11 +281,19 @@ async function deleteFile(repo, relativePath, expectedSha256) {
 async function runAuthorizedCommand(repo, commandId, authorizedCommands) {
   const command = authorizedCommands.find(item => item.id === commandId);
   if (!command) throw new ToolRejected(`Comando não autorizado: ${commandId}`);
-  const { stdout, stderr } = await execFileAsync(command.program, command.args, {
-    cwd: repo, windowsHide: true, timeout: command.timeout_ms ?? 300_000,
-    maxBuffer: 4 * 1024 * 1024, env: { ...process.env, CI: "1" },
-  });
-  return compact(`stdout:\n${stdout}\nstderr:\n${stderr}`);
+  try {
+    const { stdout, stderr } = await execFileAsync(command.program, command.args, {
+      cwd: repo, windowsHide: true, timeout: command.timeout_ms ?? 300_000,
+      maxBuffer: 4 * 1024 * 1024, env: { ...process.env, CI: "1" },
+    });
+    return compact(`stdout:\n${stdout}\nstderr:\n${stderr}`);
+  } catch (error) {
+    const stdout = String(error?.stdout ?? "");
+    const stderr = String(error?.stderr ?? "");
+    const failure = new Error(`Comando autorizado ${commandId} falhou (${error?.code ?? error?.signal ?? "erro"}):\nstdout:\n${compact(stdout, 4000)}\nstderr:\n${compact(stderr, 4000)}`, { cause: error });
+    failure.telemetry = `comando ${commandId}: falha ${error?.code ?? error?.signal ?? "erro"}; stdout=${stdout.length} caracteres; stderr=${stderr.length} caracteres`;
+    throw failure;
+  }
 }
 
 async function runCheckedCommand(repo, program, args) {
@@ -198,11 +307,41 @@ async function runCheckedCommand(repo, program, args) {
   if (program === "git" && !(args[0] === "status" || args[0] === "diff")) throw new ToolRejected("git limitado a status/diff");
   const executable = program === "npm" ? process.execPath : program;
   const actualArgs = program === "npm" ? [path.join(path.dirname(process.execPath), "node_modules", "npm", "bin", "npm-cli.js"), ...args] : args;
-  const { stdout, stderr } = await execFileAsync(executable, actualArgs, {
-    cwd: repo, windowsHide: true, timeout: 300_000, maxBuffer: 4 * 1024 * 1024,
-    env: { ...process.env, CI: "1", npm_config_offline: "true" },
-  });
-  return compact(`stdout:\n${stdout}\nstderr:\n${stderr}`);
+  try {
+    const { stdout, stderr } = await execFileAsync(executable, actualArgs, {
+      cwd: repo, windowsHide: true, timeout: 300_000, maxBuffer: 4 * 1024 * 1024,
+      env: { ...process.env, CI: "1", npm_config_offline: "true" },
+    });
+    return compact(`stdout:\n${stdout}\nstderr:\n${stderr}`);
+  } catch (error) {
+    const stdout = String(error?.stdout ?? "");
+    const stderr = String(error?.stderr ?? "");
+    const failure = new Error(`Comando ${program} falhou (${error?.code ?? error?.signal ?? "erro"}):\nstdout:\n${compact(stdout, 4000)}\nstderr:\n${compact(stderr, 4000)}`, { cause: error });
+    failure.telemetry = `comando ${program}: falha ${error?.code ?? error?.signal ?? "erro"}; stdout=${stdout.length} caracteres; stderr=${stderr.length} caracteres`;
+    throw failure;
+  }
+}
+
+async function gitChangeFingerprint(repo) {
+  try {
+    const [status, diff] = await Promise.all([
+      execFileAsync("git", ["-C", repo, "status", "--porcelain=v1", "-uall"], { windowsHide: true, maxBuffer: 4 * 1024 * 1024 }),
+      execFileAsync("git", ["-C", repo, "diff", "--no-ext-diff", "--binary", "HEAD", "--"], { windowsHide: true, maxBuffer: 16 * 1024 * 1024 }),
+    ]);
+    return createHash("sha256").update(status.stdout).update("\0").update(diff.stdout).digest("hex");
+  } catch { return null; }
+}
+
+async function fileFingerprint(repo, relativePath) {
+  const file = await safeRepoPath(repo, relativePath);
+  try {
+    const stat = await fs.lstat(file);
+    if (!stat.isFile()) throw new ToolRejected(`Caminho obrigatório não é arquivo regular: ${relativePath}`);
+    return await sha256File(file);
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
 }
 
 async function readOptional(file) {
@@ -609,8 +748,18 @@ async function gitStatus(repo) {
       maxBuffer: 2 * 1024 * 1024,
     },
   );
-
-  return compact(stdout || stderr || "(sem saída)");
+  let tracking = "upstream=ausente; ahead=indisponível; behind=indisponível";
+  try {
+    const upstream = (await execFileAsync("git", ["-C", repo, "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"],
+      { windowsHide: true })).stdout.trim();
+    const counts = (await execFileAsync("git", ["-C", repo, "rev-list", "--left-right", "--count", "HEAD...@{upstream}"],
+      { windowsHide: true })).stdout.trim().split(/\s+/).map(Number);
+    if (counts.length === 2 && counts.every(Number.isInteger)) {
+      tracking = `upstream=${upstream}; ahead=${counts[0]}; behind=${counts[1]}`;
+    }
+  } catch {}
+  return compact(`${stdout || stderr || "(sem saída)"}\nESTADO GIT DETERMINÍSTICO: ${tracking}. ` +
+    "Arquivos modificados no working tree não significam commits à frente do upstream.");
 }
 
 async function gitDiff(repo, staged) {
@@ -916,36 +1065,141 @@ function errorChain(error) {
   return parts.join("; cause: ");
 }
 
-async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {}) {
-  const deadline = Date.now() + timeoutMs;
-  const body = JSON.stringify({
-    model: MODEL, messages, tools, stream: false, keep_alive: "30m",
-    options: { temperature: 0.1 },
+function safeToolDiagnostic(error) {
+  return String(error?.message ?? error).replace(/\b(token|secret|password|authorization)\s*[:=]\s*\S+/gi, "$1=[redacted]")
+    .replace(/\s+/g, " ").slice(0, 360);
+}
+
+function ollamaPostJson(body, signal, route = "api/chat", method = "POST") {
+  const endpoint = new URL(route, OLLAMA_URL.endsWith("/") ? OLLAMA_URL : `${OLLAMA_URL}/`);
+  const transport = endpoint.protocol === "http:" ? http : endpoint.protocol === "https:" ? https : null;
+  if (!transport) throw new Error(`Ollama: protocolo inválido ${endpoint.protocol}`);
+  return new Promise((resolve, reject) => {
+    const request = transport.request(endpoint, {
+      method, headers: body == null ? {} : { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) }, signal,
+    }, response => {
+      const chunks = [];
+      let bytes = 0;
+      response.on("data", chunk => {
+        bytes += chunk.length;
+        if (bytes > MAX_OLLAMA_RESPONSE_BYTES) {
+          response.destroy(new Error("Ollama: resposta excedeu o limite de 32 MiB"));
+          return;
+        }
+        chunks.push(chunk);
+      });
+      response.on("error", reject);
+      response.on("end", () => {
+        const text = Buffer.concat(chunks).toString("utf8");
+        if ((response.statusCode ?? 0) < 200 || (response.statusCode ?? 0) >= 300) {
+          const error = new Error(`Ollama HTTP ${response.statusCode}: ${compact(text, 1000)}`);
+          error.status = response.statusCode;
+          reject(error);
+          return;
+        }
+        try { resolve(JSON.parse(text)); }
+        catch (error) { reject(new Error("Ollama retornou JSON inválido", { cause: error })); }
+      });
+    });
+    request.on("error", reject);
+    request.end(body ?? undefined);
   });
+}
+
+export function estimateGpuLayersR8N(blockCount, sizeBytes, vramBytes, freeMiB, reserveMiB, previous = null) {
+  if (![blockCount, sizeBytes, vramBytes, freeMiB, reserveMiB].every(Number.isFinite) ||
+      !Number.isInteger(blockCount) || blockCount < 1 || sizeBytes <= 0 || vramBytes <= 0) return null;
+  const safetyMiB = Math.max(512, Math.ceil(reserveMiB / 2));
+  const targetBytes = Math.max(0, vramBytes - (Math.max(0, reserveMiB - freeMiB) + safetyMiB) * 1048576);
+  const estimated = Math.max(0, Math.min(blockCount, Math.floor(targetBytes / (sizeBytes / blockCount))));
+  return previous == null ? estimated : Math.min(estimated, Math.max(0, previous - 1));
+}
+
+async function estimateLoadedModelGpuLayersR8N(gpu, previous) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10_000);
+  try {
+    const [ps, show] = await Promise.all([
+      ollamaPostJson(null, controller.signal, "api/ps", "GET"),
+      ollamaPostJson(JSON.stringify({ model: MODEL }), controller.signal, "api/show"),
+    ]);
+    const loaded = ps.models?.find(item => item.name === MODEL || item.name === `${MODEL}:latest`);
+    const blockCount = Object.entries(show.model_info ?? {}).find(([key, value]) => key.endsWith(".block_count") && Number.isInteger(value))?.[1];
+    return estimateGpuLayersR8N(blockCount, loaded?.size, loaded?.size_vram,
+      gpu.freeMiB, gpu.reserveMiB, previous);
+  } catch { return null; }
+  finally { clearTimeout(timer); }
+}
+
+export async function relieveGpuPressureR8N(sampleGpu, unloadModel, onProgress = async () => {}) {
+  const gpu = await sampleGpu();
+  if (!gpu || gpu.allow) return false;
+  await onProgress({ phase: "resource_pressure", reason: "VRAM livre caiu abaixo da reserva após inferência",
+    gpu_free_mib: gpu.freeMiB, gpu_reserve_mib: gpu.reserveMiB });
+  try {
+    await unloadModel();
+    await onProgress({ phase: "resource_released", reason: "Modelo descarregado após pressão de VRAM",
+      gpu_free_mib: gpu.freeMiB, gpu_reserve_mib: gpu.reserveMiB });
+    return true;
+  } catch (error) {
+    await onProgress({ phase: "resource_release_error", error: safeToolDiagnostic(error),
+      gpu_free_mib: gpu.freeMiB, gpu_reserve_mib: gpu.reserveMiB });
+    return false;
+  }
+}
+
+export async function unloadWorkerModelR8N() {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10_000);
+  try {
+    await ollamaPostJson(JSON.stringify({ model: MODEL, keep_alive: 0, stream: false }), controller.signal, "api/generate");
+  } finally { clearTimeout(timer); }
+}
+
+async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {}, gpuPolicy = { layers: null }) {
+  const deadline = Date.now() + timeoutMs;
   for (let attempt = 1; attempt <= OLLAMA_ATTEMPTS; attempt++) {
+    const budget = await awaitResourceBudgetR8N(deadline, onProgress);
+    await onProgress({ phase: "resource_budget", cpu_threads: budget.threads, cpu_cores_reserved: budget.reservedCores,
+      ram_available_bytes: budget.ramAvailable, ram_reserve_bytes: budget.ramReserve,
+      gpu_free_mib: budget.gpu?.freeMiB ?? null, gpu_reserve_mib: budget.gpu?.reserveMiB ?? null,
+      gpu_layers: gpuPolicy.layers });
+    const options = { temperature: 0.1, num_thread: budget.threads };
+    if (gpuPolicy.layers !== null) options.num_gpu = gpuPolicy.layers;
+    const body = JSON.stringify({
+      model: MODEL, messages, tools, stream: false, keep_alive: OLLAMA_KEEP_ALIVE_R8N,
+      options,
+    });
     const remaining = deadline - Date.now();
     if (remaining <= 0) throw new Error("Ollama: timeout total esgotado.");
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), remaining);
     try {
       await onProgress({ phase: "ollama_request", attempt });
-      const response = await fetch(`${OLLAMA_URL}/api/chat`, {
-        method: "POST", headers: { "Content-Type": "application/json" }, body,
-        signal: controller.signal,
-      });
-      if (!response.ok) {
-        const error = new Error(`Ollama HTTP ${response.status}: ${await response.text()}`);
-        error.status = response.status;
-        throw error;
-      }
-      const result = await response.json();
+      const result = await ollamaPostJson(body, controller.signal);
       await onProgress({ phase: "ollama_response", attempt,
         prompt_tokens: result.prompt_eval_count ?? null,
         output_tokens: result.eval_count ?? null,
         eval_duration_ms: result.eval_duration == null ? null : Math.round(result.eval_duration / 1e6) });
+      const postGpu = await gpuMemoryBudgetR8N();
+      if (postGpu && !postGpu.allow) {
+        const nextLayers = await estimateLoadedModelGpuLayersR8N(postGpu, gpuPolicy.layers);
+        if (nextLayers !== null) {
+          gpuPolicy.layers = nextLayers;
+          await onProgress({ phase: "gpu_layers_adjusted", gpu_layers: nextLayers,
+            gpu_free_mib: postGpu.freeMiB, gpu_reserve_mib: postGpu.reserveMiB });
+          try {
+            await saveGpuPolicyR8N(postGpu, nextLayers, budget.gpu?.freeMiB ?? postGpu.freeMiB);
+            await onProgress({ phase: "gpu_policy_saved", gpu_layers: nextLayers });
+          } catch (error) {
+            await onProgress({ phase: "gpu_policy_save_error", error: safeToolDiagnostic(error) });
+          }
+        }
+        await relieveGpuPressureR8N(async () => postGpu, unloadWorkerModelR8N, onProgress);
+      }
       return result;
     } catch (error) {
-      const retryable = error instanceof TypeError || error?.name === "AbortError" || Number(error?.status) >= 500;
+      const retryable = error instanceof TypeError || error?.name === "AbortError" || TRANSIENT_OLLAMA_CODES.has(error?.code) || Number(error?.status) >= 500;
       await onProgress({ phase: "ollama_error", attempt, error: errorChain(error), retryable });
       if (!retryable || attempt >= OLLAMA_ATTEMPTS || deadline - Date.now() <= 0) {
         throw new Error(`Ollama /api/chat falhou após ${attempt} tentativa(s): ${errorChain(error)}`, { cause: error });
@@ -960,9 +1214,14 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
 
 export class WorkerIncompleteError extends Error {}
 
-export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false) {
+export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false, requiredChangePaths = []) {
   if (!Array.isArray(authorizedCommands) || (mode !== "write" && authorizedCommands.length)) {
     throw new Error("Comandos autorizados exigem modo write e lista válida");
+  }
+  if (!Array.isArray(requiredChangePaths) || (mode !== "write" && requiredChangePaths.length) ||
+      requiredChangePaths.some(value => typeof value !== "string" || !value || path.isAbsolute(value)) ||
+      (requiredChangePaths.length && !expectChanges)) {
+    throw new Error("required_change_paths exige mode=write e expect_changes=true");
   }
   const commandIds = new Set();
   for (const command of authorizedCommands) {
@@ -1028,6 +1287,7 @@ REGRAS OPERACIONAIS ADICIONAIS:
 - Responda integralmente em português do Brasil.
 - Modo da tarefa: ${mode}. Em read-only, nenhuma ferramenta de escrita ou comando é disponibilizada.
 - Alterações obrigatórias neste job: ${expectChanges ? "sim; implemente antes da resposta final" : "não especificado"}.
+- Arquivos que precisam de mudança líquida neste job: ${requiredChangePaths.length ? requiredChangePaths.join(", ") : "nenhum alvo declarado"}.
 - Comandos exatos autorizados para este job: ${authorizedCommands.length ? JSON.stringify(authorizedCommands.map(({ id, description }) => ({ id, description }))) : "nenhum"}. Use somente run_authorized_command com um ID listado; não invente argumentos.
 - Alterações só são permitidas quando a tarefa recebida as autorizar; preserve arquivos pessoais e dados existentes.
 - Use obrigatoriamente as ferramentas fornecidas para estabelecer fatos sobre o repositório.
@@ -1084,11 +1344,23 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   ];
 
   const startedAt = Date.now();
+  const gpuPolicy = { layers: await loadGpuPolicyR8N() };
+  if (gpuPolicy.layers !== null) await onProgress({ phase: "gpu_policy_loaded", gpu_layers: gpuPolicy.layers });
   let toolExecutions = 0;
   let forcedInspection = false;
   let successfulMutations = 0;
   let forcedImplementation = false;
   const seenReads = new Map();
+  const requiredHashes = new Map();
+  for (const requiredPath of requiredChangePaths) requiredHashes.set(requiredPath, await fileFingerprint(repo, requiredPath));
+  const startingGitFingerprint = expectChanges ? await gitChangeFingerprint(repo) : null;
+  const unchangedRequiredPaths = async () => {
+    const unchanged = [];
+    for (const [requiredPath, initialHash] of requiredHashes) {
+      if (await fileFingerprint(repo, requiredPath) === initialHash) unchanged.push(requiredPath);
+    }
+    return unchanged;
+  };
 
   for (let step = 0; step < MAX_STEPS; step++) {
     await onProgress({ phase: "step", step: step + 1 });
@@ -1110,10 +1382,13 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
     let availableTools = mode === "read-only"
       ? TOOL_DEFINITIONS.filter(tool => READ_ONLY_TOOLS.has(tool.function.name))
       : TOOL_DEFINITIONS.filter(tool => tool.function.name !== "run_authorized_command" || authorizedCommands.length);
+    if (forcedInspection && toolExecutions === 0) {
+      availableTools = availableTools.filter(tool => tool.function.name === "git_status");
+    }
     if (expectChanges && successfulMutations === 0 && step + 1 >= WRITE_FOCUS_STEP) {
       availableTools = availableTools.filter(tool => !new Set(["repo_tree", "list_dir"]).has(tool.function.name));
     }
-    const response = await ollamaChat(messages, availableTools, remaining, onProgress);
+    const response = await ollamaChat(messages, availableTools, remaining, onProgress, gpuPolicy);
 
     const message = response?.message;
 
@@ -1129,14 +1404,15 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
       const finalText = String(message.content ?? "").trim();
 
       // Impede resposta "de cabeça" sem examinar o repo.
-      if (toolExecutions === 0 && !forcedInspection) {
+      if (toolExecutions === 0) {
+        if (forcedInspection) throw new WorkerIncompleteError("WORKER_INCOMPLETE: resposta final sem inspeção bem-sucedida após orientação explícita.");
         forcedInspection = true;
 
         messages.push(message);
         messages.push({
           role: "user",
           content:
-            "Você ainda não inspecionou o repositório. Use as ferramentas fornecidas antes de formular qualquer conclusão factual.",
+            "Você ainda não inspecionou o repositório. A próxima resposta deve chamar a única ferramenta disponível, git_status, antes de qualquer conclusão factual.",
         });
 
         continue;
@@ -1148,13 +1424,17 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         );
       }
 
-      if (expectChanges && successfulMutations === 0) {
+      const missingPaths = expectChanges ? await unchangedRequiredPaths() : [];
+      const noNetGitChange = expectChanges && startingGitFingerprint &&
+        await gitChangeFingerprint(repo) === startingGitFingerprint;
+      if (expectChanges && (successfulMutations === 0 || missingPaths.length || noNetGitChange)) {
         if (forcedImplementation) {
-          throw new WorkerIncompleteError(`WORKER_INCOMPLETE: tarefa de escrita terminou sem alteração bem-sucedida. Última resposta: ${compact(finalText, 3000)}`);
+          throw new WorkerIncompleteError(`WORKER_INCOMPLETE: alteração obrigatória não comprovada; caminhos inalterados: ${missingPaths.join(", ") || "nenhum"}; Git sem mudança líquida: ${Boolean(noNetGitChange)}. Última resposta: ${compact(finalText, 3000)}`);
         }
         forcedImplementation = true;
         messages.push(message);
-        messages.push({ role: "user", content: "A tarefa exige implementação, mas nenhuma ferramenta de escrita foi concluída. Continue e aplique as alterações autorizadas. Se houver impedimento real, descreva-o precisamente em NEEDS_SUPERVISOR; uma resposta preparatória não conclui o job." });
+        messages.push({ role: "user", content: `A tarefa exige alteração líquida comprovada. Caminhos obrigatórios ainda inalterados: ${missingPaths.join(", ") || "nenhum"}. Git sem mudança líquida: ${Boolean(noNetGitChange)}. Corrija antes de concluir; se houver impedimento real, descreva-o em NEEDS_SUPERVISOR.` });
+        await onProgress({ phase: "change_requirement", step: step + 1, missing_paths: missingPaths, no_net_git_change: Boolean(noNetGitChange) });
         continue;
       }
 
@@ -1173,6 +1453,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
       await onProgress({ phase: "tool", step: step + 1, tool: toolName, resource });
       let result;
       let outcome = "ok";
+      let diagnostic = null;
 
       try {
         if (new Set(["read_file", "list_dir", "repo_tree", "file_info", "search_text"]).has(toolName)) {
@@ -1181,18 +1462,26 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
           seenReads.set(signature, count);
           if (count > 2) throw new ToolRejected(`Consulta idêntica repetida ${count} vezes; use a evidência já obtida e avance para a implementação.`);
         }
+        const beforeCommand = toolName === "run_authorized_command" && expectChanges ? await gitChangeFingerprint(repo) : null;
         result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands);
 
         toolExecutions++;
-        if (new Set(["write_file", "edit_file", "move_file", "delete_file", "run_authorized_command"]).has(call?.function?.name)) successfulMutations++;
+        const afterCommand = beforeCommand ? await gitChangeFingerprint(repo) : null;
+        if (new Set(["write_file", "edit_file", "move_file", "delete_file"]).has(toolName) ||
+            (beforeCommand && afterCommand && afterCommand !== beforeCommand)) successfulMutations++;
       } catch (error) {
         outcome = error instanceof ToolRejected ? "rejected" : "error";
+        diagnostic = error?.telemetry ?? safeToolDiagnostic(error);
         result =
           `${error instanceof ToolRejected ? "TOOL_REJECTED" : "WORKER_INFRA_ERROR"} na ferramenta ` +
           `${call?.function?.name ?? "desconhecida"}: ` +
-          `${String(error?.message ?? error)}`;
+          `${String(error?.message ?? error)}` +
+          (toolName === "run_command" && authorizedCommands.length
+            ? ` Use run_authorized_command com ID autorizado: ${authorizedCommands.map(command => command.id).join(", ")}.`
+            : "");
       }
-      await onProgress({ phase: "tool_result", step: step + 1, tool: toolName, resource, outcome, duration_ms: Date.now() - startedTool });
+      await onProgress({ phase: "tool_result", step: step + 1, tool: toolName, resource, outcome, duration_ms: Date.now() - startedTool,
+        diagnostic });
 
       messages.push({
         role: "tool",
@@ -1202,5 +1491,6 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
     }
   }
 
-  throw new WorkerIncompleteError(`WORKER_INCOMPLETE: limite de ${MAX_STEPS} ciclos agentivos atingido; ${successfulMutations} alteração(ões) bem-sucedida(s), ${toolExecutions} ferramenta(s) executada(s). A tarefa requer segmentação ou correção da estratégia de exploração.`);
+  const missingPaths = await unchangedRequiredPaths();
+  throw new WorkerIncompleteError(`WORKER_INCOMPLETE: limite de ${MAX_STEPS} ciclos agentivos atingido; ${successfulMutations} mutação(ões) bem-sucedida(s), ${toolExecutions} ferramenta(s) executada(s); caminhos obrigatórios inalterados: ${missingPaths.join(", ") || "nenhum"}. A tarefa requer segmentação ou correção da estratégia de exploração.`);
 }

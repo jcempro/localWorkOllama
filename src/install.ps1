@@ -43,6 +43,11 @@ $WINGET_WAIT_ATTEMPTS_A3C = 60
 $WINGET_WAIT_SECONDS_A3C = 5
 $OLLAMA_WAIT_ATTEMPTS_A3C = 12
 $OLLAMA_WAIT_SECONDS_A3C = 2
+$GPU_RESERVE_MIN_BYTES_A3C = [UInt64](512 * 1024 * 1024)
+$GPU_RESERVE_FRACTION_A3C = 0.20
+$GPU_RESERVE_REQUEST_A3C = if ($env:LOCAL_WORKER_GPU_RESERVE_BYTES) { [UInt64]::Parse($env:LOCAL_WORKER_GPU_RESERVE_BYTES) } else { [UInt64]0 }
+$GPU_RESTART_REQUIRED_A3C = $false
+$GPU_RESERVE_APPLIED_BYTES_A3C = [UInt64]0
 
 function Find-Executable-A3C([string]$Given, [string[]]$Names) {
   if ($Given) {
@@ -117,6 +122,25 @@ if ($GIT_EXE_A3C) {
 $NODE_EXE_A3C = Find-Executable-A3C $NodeExe @('node.exe')
 $NPM_EXE_A3C = Find-Executable-A3C $NpmExe @('npm.cmd')
 $OLLAMA_EXE_A3C = Find-Executable-A3C $OllamaExe @('ollama.exe')
+if ($OLLAMA_EXE_A3C -and -not $SkipModel) {
+  $gpuReserve = if ($GPU_RESERVE_REQUEST_A3C -gt 0) { $GPU_RESERVE_REQUEST_A3C } else { $GPU_RESERVE_MIN_BYTES_A3C }
+  $nvidia = Find-Executable-A3C '' @('nvidia-smi.exe')
+  if ($nvidia -and $GPU_RESERVE_REQUEST_A3C -eq 0) {
+    $gpuSizes = & $nvidia --query-gpu=memory.total --format=csv,noheader,nounits 2>$null
+    if ($LASTEXITCODE -eq 0 -and $gpuSizes) {
+      $smallestMiB = ($gpuSizes | ForEach-Object { $size = 0; if ([int]::TryParse(([string]$_).Trim(),[ref]$size)) { $size } } | Measure-Object -Minimum).Minimum
+      if ($smallestMiB -gt 0) { $gpuReserve = [UInt64][Math]::Max($gpuReserve,[Math]::Ceiling($smallestMiB * 1048576 * $GPU_RESERVE_FRACTION_A3C)) }
+    }
+  }
+  $existingGpuReserve = [Environment]::GetEnvironmentVariable('OLLAMA_GPU_OVERHEAD','User')
+  $parsedGpuReserve = [UInt64]0
+  if (-not [UInt64]::TryParse($existingGpuReserve,[ref]$parsedGpuReserve) -or $parsedGpuReserve -lt $gpuReserve) {
+    [Environment]::SetEnvironmentVariable('OLLAMA_GPU_OVERHEAD',[string]$gpuReserve,'User')
+    $env:OLLAMA_GPU_OVERHEAD = [string]$gpuReserve
+    $GPU_RESTART_REQUIRED_A3C = $true
+  }
+  $GPU_RESERVE_APPLIED_BYTES_A3C = [UInt64][Math]::Max($gpuReserve,$parsedGpuReserve)
+}
 if (-not $NODE_EXE_A3C -or -not $NPM_EXE_A3C) { throw 'Node.js/npm não encontrados após instalação.' }
 if (-not $SkipPrerequisites -and (-not $GIT_EXE_A3C -or -not $OLLAMA_EXE_A3C)) { throw 'Git/Ollama não encontrados após instalação.' }
 $nodeMajor = [int]((& $NODE_EXE_A3C -p 'process.versions.node').Split('.')[0])
@@ -144,6 +168,7 @@ if (-not $SkipModel) {
   try { Invoke-RestMethod -Uri "$OLLAMA_API_A3C/api/version" -TimeoutSec 8 | Out-Null }
   catch {
     Start-Process -FilePath $OLLAMA_EXE_A3C -ArgumentList 'serve' -WindowStyle Hidden
+    $GPU_RESTART_REQUIRED_A3C = $false
     $ready = $false
     for ($attempt = 0; $attempt -lt $OLLAMA_WAIT_ATTEMPTS_A3C; $attempt++) {
       Start-Sleep -Seconds $OLLAMA_WAIT_SECONDS_A3C
@@ -153,7 +178,9 @@ if (-not $SkipModel) {
   }
   $models = & $OLLAMA_EXE_A3C list
   if ($LASTEXITCODE -ne 0) { throw 'ollama list falhou.' }
-  $modelPresent = ($models -join "`n") -match "(?m)^$([regex]::Escape($WorkerModel))\s"
+  $canonicalModel = if ($WorkerModel.Contains(':')) { $WorkerModel } else { "${WorkerModel}:latest" }
+  $listedModels = @($models | Select-Object -Skip 1 | ForEach-Object { (([string]$_).Trim() -split '\s+')[0] })
+  $modelPresent = $listedModels -contains $WorkerModel -or $listedModels -contains $canonicalModel
   if (-not $modelPresent -or $MODEL_BUILD_EXPLICIT_A3C) {
     & $OLLAMA_EXE_A3C pull $BaseModel
     if ($LASTEXITCODE -ne 0) { throw 'Download do modelo Ollama falhou.' }
@@ -212,4 +239,4 @@ if (-not $SkipWatchdog) {
   & (Join-Path $WORKER_SOURCE_A3C 'register-watchdog.ps1') -Target $WORKER_HOME_A3C -NodePath $NODE_EXE_A3C -TaskName $WatchdogTaskName -IntervalMinutes $WatchdogIntervalMinutes
   if ($LASTEXITCODE -ne 0) { throw 'Registro do watchdog falhou.' }
 }
-[pscustomobject]@{ worker = $WORKER_HOME_A3C; codex = $CODEX_HOME_A3C; model = $WorkerModel; source = $SOURCE_ROOT_A3C; status = 'INSTALLED' } | ConvertTo-Json
+[pscustomobject]@{ worker = $WORKER_HOME_A3C; codex = $CODEX_HOME_A3C; model = $WorkerModel; source = $SOURCE_ROOT_A3C; status = 'INSTALLED'; gpu_reserve_bytes = $GPU_RESERVE_APPLIED_BYTES_A3C; ollama_restart_required_for_gpu_reserve = $GPU_RESTART_REQUIRED_A3C } | ConvertTo-Json

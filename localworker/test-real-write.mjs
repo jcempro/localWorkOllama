@@ -3,6 +3,7 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { randomUUID } from "node:crypto";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 const execFileAsync = promisify(execFile);
 const repo = process.env.TEST_REPO_PATH;
@@ -11,19 +12,18 @@ if (!repo || path.basename(path.resolve(repo)).toLowerCase() !== "jeancarloem.co
 }
 const status = async () => (await execFileAsync("git", ["-C", repo, "status", "--porcelain=v1", "-uall"], { windowsHide: true })).stdout;
 const baseline = await status();
-if (baseline) throw new Error("Checkout de teste deve iniciar limpo.");
 const marker = `localworker-real-test-${randomUUID()}`;
 const relative = `.${marker}.txt`;
 const target = path.join(repo, relative);
 let result = "";
 try {
-  const { runLocalAnalysis } = await import("./worker-core.mjs");
+  const { runLocalAnalysis } = await import(process.env.TEST_CORE_PATH ? pathToFileURL(process.env.TEST_CORE_PATH).href : "./worker-core.mjs");
   result = await runLocalAnalysis(repo,
     `Teste operacional mínimo: crie exclusivamente o arquivo ${relative} com uma única linha literal ${marker}. Não altere outro arquivo. Use write_file e então responda com o caminho.`,
     "write", async event => {
-      if (["step", "tool", "tool_result", "write_budget_warning", "ollama_error"].includes(event.phase))
+      if (["step", "tool", "tool_result", "write_budget_warning", "ollama_error", "resource_budget", "resource_pressure", "resource_released", "resource_release_error", "gpu_layers_adjusted", "gpu_policy_loaded", "gpu_policy_saved", "gpu_policy_save_error"].includes(event.phase))
         process.stdout.write(JSON.stringify(event) + "\n");
-    }, [], true);
+    }, [], true, [relative]);
   if ((await fs.readFile(target, "utf8")).trim() !== marker) throw new Error("Conteúdo do arquivo de teste diverge.");
   process.stdout.write(JSON.stringify({ test: "real-write", status: "ok", result: result.slice(0, 300) }) + "\n");
 } finally {

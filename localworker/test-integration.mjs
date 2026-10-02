@@ -107,6 +107,10 @@ try {
     authorized_commands: [{ id: "git-status", description: "Status", program: process.execPath, args: ["--version"] }] } });
   assert.match(unsafeMode.result.content[0].text, /WORKER_REQUEST_REJECTED/);
   assert.match(unsafeMode.result.content[0].text, /authorized_commands exige mode=write/);
+  const unsafePath = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: repo, task: "Não executar", mode: "write", expect_changes: true,
+    required_change_paths: ["../fora-do-repo.txt"], thread_id: thread } });
+  assert.match(unsafePath.result.content[0].text, /WORKER_REQUEST_REJECTED/);
+  assert.match(unsafePath.result.content[0].text, /required_change_paths fora do repositório/);
   const rejected = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: repo, task: "Somente leia o status Git.", mode: "read-only", thread_id: archivedThread } });
   assert.match(rejected.result.content[0].text, /WORKER_REQUEST_REJECTED/);
   assert.match(rejected.result.content[0].text, /conversa arquivada/);
@@ -154,10 +158,26 @@ try {
   const failedStatus = await rpc("tools/call", { name: "local_status", arguments: { job_id: failedId } });
   assert.equal(JSON.parse(failedStatus.result.content[0].text).status, "FAILED");
   assert.equal(JSON.parse(await fs.readFile(failedFile, "utf8")).thread_id, thread);
+  const orphanId = randomUUID();
+  const orphanDir = path.join(runtimeRoot, "jobs", orphanId);
+  await fs.mkdir(orphanDir);
+  await fs.writeFile(path.join(orphanDir, "state.json"), JSON.stringify({ job_id: orphanId, status: "RUNNING", pid: 2147483647,
+    created_at: new Date(Date.now() - 300_000).toISOString(), heartbeat_at: new Date(Date.now() - 300_000).toISOString() }));
+  await fs.writeFile(path.join(orphanDir, "request.json"), JSON.stringify({ repoPath: repo, thread_id: thread, mode: "read-only", task: "Teste de órfão" }));
+  await fs.writeFile(path.join(orphanDir, "delivery.json"), JSON.stringify({ status: "PENDING" }));
+  const orphanCalls = await Promise.all(["local_status", "local_result"].map(name =>
+    rpc("tools/call", { name, arguments: { job_id: orphanId } })));
+  assert.ok(orphanCalls.every(call => JSON.parse(call.result.content[0].text).status === "FAILED"));
+  const orphanError = await fs.readFile(path.join(orphanDir, "error.txt"), "utf8");
+  assert.match(orphanError, /runner ausente/);
+  assert.match(orphanError, /ESTADO GIT DETERMINÍSTICO/);
+  const orphanAgain = await rpc("tools/call", { name: "local_status", arguments: { job_id: orphanId } });
+  assert.equal(JSON.parse(orphanAgain.result.content[0].text).delivery, "QUEUED_TO_CHAT");
   const queued = (await fs.readFile(queueLog, "utf8")).trim().split("\n").map(line => JSON.parse(line)).filter(item => item.thread === thread);
-  assert.equal(queued.length, 2);
+  assert.equal(queued.length, 3);
   assert.ok(queued.every(item => item.thread === thread && item.repo === repo));
   assert.match(queued[1].message, /FAILED/);
+  assert.match(queued[2].message, /FAILED/);
   assert.match(await fs.readFile(path.join(runtimeRoot, "jobs", failedId, "error.txt"), "utf8"), /WORKER_INFRA_ERROR/);
   const after = await new Promise((resolve, reject) => {
     const git = spawn("git", ["-C", repo, "status", "--porcelain=v1", "-uall"]);

@@ -54,6 +54,12 @@ ollama list
 
 `qwen3-coder-next-32k` deve aparecer na lista. Se faltar espaço, escolha um volume adequado e repita o download; preserve arquivos pessoais. Veja a sintaxe do [Modelfile](https://docs.ollama.com/modelfile).
 
+### Recursos e fluidez do Windows
+
+O Worker limita automaticamente os threads de CPU por requisição a no máximo 75% dos processadores lógicos; isso reserva capacidade potencial para o sistema, embora outros aplicativos também possam usá-la. Ele aguarda até dois minutos quando a RAM disponível cai abaixo da reserva de 10% ou 4 GiB (o maior valor). Em GPU NVIDIA mensurável, também aguarda se a VRAM livre não satisfizer a reserva de 10% ou 512 MiB (o maior). O Ollama distribui camadas entre GPU e CPU conforme a memória disponível; o instalador contabiliza pelo menos 20% da menor GPU NVIDIA como margem no planejamento de carga via `OLLAMA_GPU_OVERHEAD`. Essa opção é uma estimativa de carga, não um limite rígido: a alocação real e outros aplicativos podem consumir VRAM adicional. `LOCAL_WORKER_GPU_RESERVE_BYTES` permite definir um mínimo em bytes antes de instalar; valor preexistente maior não é reduzido. Se a VRAM cair abaixo da reserva **após** uma inferência, o Worker registra o evento, reduz automaticamente as camadas de GPU da próxima requisição e descarrega seu modelo; a calibração é reutilizada por até sete dias enquanto o modelo e a memória disponível permanecerem equivalentes. Sem pressão, mantém o modelo por até dois minutos ociosos, ajustáveis por `LOCAL_OLLAMA_KEEP_ALIVE`. Essas opções protegem a capacidade para o SO sem prometer que a VRAM livre ficará constante durante uma inferência já iniciada. [Ollama: alocação e concorrência e descarga do modelo](https://docs.ollama.com/faq), [opção de reserva de VRAM](https://github.com/ollama/ollama/blob/main/envconfig/config.go).
+
+Se a saída do instalador contiver `ollama_restart_required_for_gpu_reserve: true`, feche o Ollama pela bandeja do Windows e abra-o novamente **após os jobs atuais terminarem**. A variável de usuário só é lida quando o servidor inicia. Confirme com `ollama ps` que o modelo usa CPU/GPU conforme a máquina e acompanhe a RAM/VRAM pelo Monitor do Worker; o instalador não interrompe jobs alheios para forçar a mudança.
+
 ## 3. Instalar o Worker como MCP
 
 O instalador portável em `src/install.ps1` também instala os pré-requisitos da etapa 1, prepara o modelo da etapa 2, configura MCP/instruções globais e registra watchdog. As etapas 1 e 2 permitem inspecionar cada programa antes de executar a automação. Execute em PowerShell:
@@ -113,9 +119,11 @@ No Desktop, confira o servidor em **Settings → MCP servers** e reinicie o apli
 
 Cada `local_analyze` devolve `job_id`, estado e `monitor_url`. Abra esse link no navegador da mesma máquina quando quiser observar o job; a página é somente leitura e pode ser fechada a qualquer momento. Guarde o link como informação privada: ele contém uma chave temporária de acesso local. O serviço escuta apenas em `127.0.0.1` e o watchdog o recupera após reinício. O link mostra ciclos, etapas, ferramentas, caminhos acessados, erros, retries, horários, entrega ao chat e sinais de CPU/memória/GPU quando disponíveis. Não mostra conteúdo dos arquivos nem raciocínio privado do modelo.
 
-`ACTIVE` indica evento ou uso de recursos recente; `WAITING_MODEL` indica resposta do Ollama pendente; `STALLED_SUSPECTED` indica longa espera sem atividade observável; `STALLED` indica heartbeat/eventos atrasados; `ORPHANED` indica runner ausente; `TERMINAL_NOT_PROPAGATED` indica artefato final persistido antes de atualizar o estado. GPU não mensurável impede certeza sobre uma espera longa; o diagnóstico explicita esse limite. `local_status` fornece o mesmo diagnóstico sem abrir o navegador. O watchdog restaura estados terminais quando encontra artefatos finais de runner encerrado.
+`ACTIVE` indica evento ou uso de recursos recente; `WAITING_MODEL` indica resposta do Ollama pendente; `STALLED_SUSPECTED` indica longa espera sem atividade observável; `STALLED` indica heartbeat/eventos atrasados; `ORPHANED` indica runner ausente; `TERMINAL_NOT_PROPAGATED` indica artefato final persistido antes de atualizar o estado. GPU não mensurável impede certeza sobre uma espera longa; o diagnóstico explicita esse limite. `local_status` fornece o mesmo diagnóstico sem abrir o navegador e reconcilia um job órfão. O monitor independente também aciona a reconciliação periodicamente enquanto estiver ativo; a tarefa agendada oferece recuperação após novo logon. A recuperação registra o estado Git e não apaga arquivos parciais.
 
 Em tarefas de escrita, o Worker recebe avisos de orçamento de ciclos e deixa de fazer listagens amplas após metade deles sem alteração. Se ainda não concluir, a falha é `WORKER_INCOMPLETE`, acompanhada de contagens; o supervisor deve corrigir segmentação ou instrução antes de tentar novamente. Um limite de uso do Codex Desktop pode impedir que uma mensagem já enfileirada produza turno naquele momento: confira o estado da entrega e retome após a liberação da conta.
+
+Quando a unidade de implementação tem arquivos-alvo definidos, passe caminhos relativos em `required_change_paths` junto de `expect_changes: true`. Exemplo fictício: `required_change_paths: ["scripts/verificar.py", "scripts/testar_verificar.py"]`. O Worker só pode concluir após alterar efetivamente cada alvo; executar testes ou editar outro arquivo não substitui essa prova. Testes falhos devolvem `stdout` e `stderr` limitados ao Worker para correção. O transporte do Ollama respeita o prazo configurado do job, inclusive quando a geração de resposta demora mais de cinco minutos.
 
 ## 4. Registrar o watchdog
 
@@ -152,6 +160,8 @@ Você é um supervisor pago. **Minimizar tokens/processamento pago antes, durant
 - Explicações, progresso, conclusões e relatórios: **pt-BR**.
 
 ## Worker local: capacidade e contrato
+
+O Worker deve preservar a fluidez do SO: kernel e serviços vitais têm precedência; CPU/GPU e respectivas memórias são combinadas conforme benefício mensurável, com reserva para o Windows e preferência operacional sobre apps não essenciais apenas na capacidade restante. Não solicite saturação, prioridade de tempo real nem consumo que prejudique a responsividade. Falta de recursos exige espera finita e diagnóstico. Correções devem alcançar a causa-raiz e generalizar para casos análogos.
 
 `localWorker`/`localworker` (insensitive case) absorve processamento volumoso por inferência local **gratuita, deliberadamente lenta e com inteligência/contexto inferiores ao supervisor**.
 
@@ -300,7 +310,7 @@ NÃO delegue tarefa trivial, sem repositório local ou dependente de capacidade 
 Obtenha o `thread_id` pelos recursos do Codex Desktop, confirmando identidade e diretório; **nunca reutilize ID apenas por ter sido citado em prompt**.
 
 Passe `repoPath` absoluto e use `read-only` por padrão; `write` exige autorização para editar.
-Para implementação ou edição obrigatória delegada, use `expect_changes: true` em `local_analyze`; `COMPLETED` só encerra a inferência, e o resultado deve demonstrar a execução do pedido.
+Para implementação ou edição obrigatória delegada, use `expect_changes: true` em `local_analyze`; se os arquivos-alvo forem conhecidos, liste-os em `required_change_paths`. `COMPLETED` exige alteração líquida verificável nos alvos declarados; ainda assim o resultado deve demonstrar a execução do pedido e os testes pertinentes.
 
 Se a conversa atual não puder ser identificada com segurança, NÃO inicie o job e explique a limitação.
 
@@ -334,6 +344,10 @@ Worker subordinado ao supervisor. Execute estritamente a tarefa recebida, soment
 5. Conflito material entre tarefa e regra aplicável: não decida nem improvise; retorne `NEEDS_SUPERVISOR` com conflito e evidência exatos.
 
 ## Execução fail-safe
+
+Preserve a responsividade do sistema: kernel e serviços essenciais precedem o Worker; o Worker utiliza apenas a capacidade restante de CPU/GPU e RAM/VRAM, com preferência por GPU quando benéfica. Não force ocupação total ou prioridade que degrade o SO. Se recursos mínimos não puderem ser reservados, espere de forma limitada e registre o bloqueio técnico.
+
+Corrija causas-raiz de maneira generalizável; não encerre uma correção limitada ao sintoma ou exemplo recebido.
 
 Persiga o objetivo por meios legítimos, seguros, finitos e compatíveis com tarefa/regras. Falha de método, ferramenta, comando, processo ou canal NÃO encerra automaticamente a execução: diagnostique-a e tente fallbacks tecnicamente equivalentes disponíveis, variando método/comando/canal quando pertinente, com limites explícitos contra loops.
 
@@ -399,24 +413,24 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `9e7fefc62c38fbca9d33435c6f1a41e314cf88925cf940902c7d396ecb35520b` |
+| `src/localworker/AGENTS.md` | `026b4c3cf431a01c08583cd882574f0a19ea772799117084255d2b0e580bf3aa` |
 | `src/localworker/config.json` | `6128724ed765dcb78cbc457bac81ee7257ffb11dc196ec3730b5e1a605ddd3c7` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `92e74f98548af2424666118413dcc0055ca8ebda63c49a34dadd0c15e8ced68b` |
+| `src/localworker/server.mjs` | `91179c46638fcb581a8164acfe7dad969dabfbf46cca98eda6d6be671861134d` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `d30240c99c6c4f3832c577a3ccc55c49c84807617dc8b1c2d657b62797dfa497` |
-| `src/localworker/worker-core.mjs` | `36bfebbdc96fbc09860f100dcebbc2af0f8e0ff22de80d2ef6c323e302484ef9` |
-| `src/localworker/worker-runner.mjs` | `8200deda2117eab2ad19dc048ba128ab00d6a93c9c575aca5c73904fa9645cf9` |
+| `src/localworker/worker-core.mjs` | `66d404325251794894de5093523ef441c925f7655c726e77b28022d00233ff2e` |
+| `src/localworker/worker-runner.mjs` | `fa3150b3b00c7353725189991267ed4521e92829d5aef11e0a7a8c64282a7703` |
 | `src/localworker/delivery.mjs` | `d02c74839dcf59292c88f1124113b2fa08b4ad8f1413c888f562b0cb0d631674` |
-| `src/localworker/watchdog.mjs` | `2fe0b9e1a852cf5c787f6a8311b780348714f705f14d42925a6ee8c325de7024` |
-| `src/localworker/monitor.mjs` | `b24b452a274fcf41cae4e98bea79c07bf3cae58e837b6985f7d7773ff8e009ba` |
+| `src/localworker/watchdog.mjs` | `bfd62e143e17bb416e607f213fac6abba03699951b191b12e53d8afa733fa3da` |
+| `src/localworker/monitor.mjs` | `86f56c938b326c57293242d5acc2ead10d5e595985a661783622ba78c2a17bb4` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
 | `src/localworker/install.ps1` | `4d4beeb08f5d9faa50f9d2a720d6a89b023d6cab7412eb2a0b3a3aca644685dd` |
 | `src/localworker/update-installed.ps1` | `8777979eedf9d8c6e0bbc3665da9d008fa58392da27e3c9b24e04ca78df58546` |
 | `src/localworker/register-watchdog.ps1` | `d78fa380059112826d061097c4138bcbcabc369a6888d6a875cda649bcad3efb` |
-| `src/install.ps1` | `34dbaab7cb7fdfdb1caae911691d44a13d95cab421f9336761d5e1ce74367b80` |
-| `src/agents.supervisor.md` | `645816c550ae50adb49fb79093d407fa0acf394c6f2f66d03937db468c23d694` |
+| `src/install.ps1` | `a553471c7076ffa68dc22242d0dd225ed6393e47764e51204bcc171bce0d52b8` |
+| `src/agents.supervisor.md` | `e95a4a0c0184f3c94637ad2dfcc3dd19a2f3a11b297bf16ee38ed2adcd2dd520` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

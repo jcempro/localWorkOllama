@@ -4,6 +4,7 @@ import { spawn, execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { randomBytes, createHash } from "node:crypto";
 import path from "node:path";
+import os from "node:os";
 import { fileURLToPath } from "node:url";
 import { jobDir, getState, readJson, atomicJson, alive } from "./job-store.mjs";
 
@@ -13,6 +14,7 @@ const HOST_M7Q = "127.0.0.1";
 const MAX_EVENTS_M7Q = 120;
 const STALE_HEARTBEAT_MS_M7Q = 90_000;
 const WAIT_MODEL_MS_M7Q = 180_000;
+const WATCHDOG_INTERVAL_MS_M7Q = 60_000;
 const execFileAsync = promisify(execFile);
 
 async function health(descriptor) {
@@ -61,7 +63,8 @@ async function eventsFor(id) {
 let resourceCache = { at: 0, value: { ollama_cpu_seconds: null, ollama_memory_bytes: null, gpu_percent: null } };
 async function resources() {
   if (Date.now() - resourceCache.at < 10_000) return resourceCache.value;
-  const value = { ollama_cpu_seconds: null, ollama_memory_bytes: null, gpu_percent: null };
+  const value = { ollama_cpu_seconds: null, ollama_memory_bytes: null, gpu_percent: null,
+    ram_available_bytes: os.freemem(), ram_total_bytes: os.totalmem(), gpu_used_mib: null, gpu_free_mib: null };
   if (process.platform === "win32") {
     try {
       const script = '$p=Get-Process -Name "ollama*" -ErrorAction SilentlyContinue; [pscustomobject]@{cpu=(($p | Measure-Object CPU -Sum).Sum); memory=(($p | Measure-Object WorkingSet64 -Sum).Sum)} | ConvertTo-Json -Compress';
@@ -71,9 +74,14 @@ async function resources() {
       value.ollama_memory_bytes = Number(parsed.memory ?? 0);
     } catch {}
     try {
-      const { stdout } = await execFileAsync("nvidia-smi", ["--query-gpu=utilization.gpu", "--format=csv,noheader,nounits"], { windowsHide: true, timeout: 2000 });
-      const samples = stdout.trim().split(/\r?\n/).map(Number).filter(Number.isFinite);
-      if (samples.length) value.gpu_percent = Math.max(...samples);
+      const { stdout } = await execFileAsync("nvidia-smi", ["--query-gpu=utilization.gpu,memory.used,memory.free", "--format=csv,noheader,nounits"], { windowsHide: true, timeout: 2000 });
+      const samples = stdout.trim().split(/\r?\n/).map(line => line.split(",").map(part => Number(part.trim())))
+        .filter(parts => parts.length === 3 && parts.every(Number.isFinite));
+      if (samples.length) {
+        value.gpu_percent = Math.max(...samples.map(parts => parts[0]));
+        value.gpu_used_mib = samples.reduce((sum, parts) => sum + parts[1], 0);
+        value.gpu_free_mib = Math.min(...samples.map(parts => parts[2]));
+      }
     } catch {}
   }
   resourceCache = { at: Date.now(), value };
@@ -91,13 +99,16 @@ export function classifyActivity(state, events, resource, files) {
   const heartbeatAge = Date.now() - Date.parse(state.heartbeat_at ?? state.created_at);
   if (running && heartbeatAge > STALE_HEARTBEAT_MS_M7Q) return { kind: "STALLED", reason: `Heartbeat há ${Math.round(heartbeatAge / 1000)} s.` };
   const recent = events.at(-1);
+  if (recent?.phase === "resource_wait") return { kind: "WAITING_RESOURCES", reason: `${recent.reason ?? "Recursos insuficientes"}; RAM ${Math.round((recent.ram_available_bytes ?? 0) / 1048576)}/${Math.round((recent.ram_reserve_bytes ?? 0) / 1048576)} MiB, VRAM ${recent.gpu_free_mib ?? "indisponível"}/${recent.gpu_reserve_mib ?? "indisponível"} MiB; Worker aguarda sem inferir.` };
   const request = [...events].reverse().find(event => event.phase === "ollama_request" || event.phase === "ollama_response" || event.phase === "ollama_error");
   const eventAge = recent ? Date.now() - Date.parse(recent.at) : Infinity;
   const previous = lastSamples.get(state.job_id);
   const cpuActive = previous && resource.ollama_cpu_seconds != null && previous.cpu != null && resource.ollama_cpu_seconds - previous.cpu > 0.1;
   const activeUntil = cpuActive ? Date.now() + 20_000 : previous?.activeUntil ?? 0;
   lastSamples.set(state.job_id, { at: Date.now(), cpu: resource.ollama_cpu_seconds, activeUntil });
-  if (Date.now() < activeUntil || (resource.gpu_percent ?? 0) >= 5) return { kind: "ACTIVE", reason: "Uso de CPU do Ollama aumentou ou há atividade de GPU." };
+  if (request?.phase === "ollama_request" && (Date.now() < activeUntil || (resource.gpu_percent ?? 0) >= 5)) {
+    return { kind: "ACTIVE", reason: "Há requisição deste job pendente e uso observável de CPU/GPU do Ollama; recursos podem ser compartilhados com outras tarefas." };
+  }
   if (eventAge < 30_000 && recent.phase !== "ollama_request") return { kind: "ACTIVE", reason: `Evento ${recent.phase} há ${Math.round(eventAge / 1000)} s.` };
   if (request?.phase === "ollama_request") {
     const age = Date.now() - Date.parse(request.at);
@@ -125,7 +136,7 @@ export async function monitorSnapshot(id) {
   return { state, delivery, events, resource, progress, activity: classifyActivity(state, events, resource, { result, error }), observed_at: new Date().toISOString() };
 }
 
-const PAGE_M7Q = `<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>localWorker · acompanhamento</title><style>body{font:16px system-ui;background:#101521;color:#eef2fb;max-width:1080px;margin:auto;padding:24px}h1{font-size:1.5rem}small,.muted{color:#aab6cb}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.card{background:#1d2737;border-radius:10px;padding:14px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#1d2737;padding:16px;border-radius:10px}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #3d4b61;text-align:left;vertical-align:top}code{overflow-wrap:anywhere}a{color:#9ec8ff}</style><h1>localWorker · acompanhamento</h1><p class="muted">Esta página apenas observa o job. Fechá-la não interrompe a execução. Atualização automática a cada 3 segundos.</p><div class="cards"><div class="card"><small>Job</small><div id="job"></div></div><div class="card"><small>Estado</small><div id="status"></div></div><div class="card"><small>Atividade</small><div id="activity"></div></div><div class="card"><small>Progresso</small><div id="step"></div></div><div class="card"><small>Entrega ao chat</small><div id="delivery"></div></div><div class="card"><small>Recursos</small><div id="resources"></div></div></div><h2>Diagnóstico</h2><pre id="reason"></pre><h2>Eventos recentes</h2><table><thead><tr><th>Horário</th><th>Evento</th><th>Recurso/resultado</th></tr></thead><tbody id="events"></tbody></table><script>const id=location.pathname.split('/').pop(), token=new URLSearchParams(location.search).get('token');const put=(name,value)=>document.getElementById(name).textContent=String(value??'—');async function update(){try{const r=await fetch('/api/job/'+encodeURIComponent(id)+'?token='+encodeURIComponent(token),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const x=await r.json(),m=x.resource,p=x.progress;put('job',id);put('status',x.state.status);put('activity',x.activity.kind);put('step',p.step+'/'+p.max_steps+' ciclos · '+p.completed_tools+' ferramentas concluídas · '+p.failed_tools+' falhas · '+p.output_tokens_observed+' tokens de saída observados');put('delivery',x.delivery.status);put('resources','Ollama CPU: '+(m.ollama_cpu_seconds??'indisponível')+' s; memória: '+(m.ollama_memory_bytes==null?'indisponível':Math.round(m.ollama_memory_bytes/1048576)+' MiB')+'; GPU: '+(m.gpu_percent??'indisponível')+'%');put('reason',x.activity.reason+'\nHeartbeat: '+(x.state.heartbeat_at??'—')+'\nObservado: '+x.observed_at);const rows=document.getElementById('events');rows.replaceChildren();for(const v of x.events.slice().reverse()){const tr=document.createElement('tr');for(const t of [v.at,v.phase+' '+(v.tool??''),[v.resource,v.outcome,v.reason,v.error].filter(Boolean).join(' · ')]){const td=document.createElement('td');td.textContent=t;tr.append(td)}rows.append(tr)}}catch(e){put('reason','Monitor indisponível: '+e.message)}}update();setInterval(update,3000)</script></html>`;
+const PAGE_M7Q = `<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>localWorker · acompanhamento</title><style>body{font:16px system-ui;background:#101521;color:#eef2fb;max-width:1080px;margin:auto;padding:24px}h1{font-size:1.5rem}small,.muted{color:#aab6cb}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.card{background:#1d2737;border-radius:10px;padding:14px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#1d2737;padding:16px;border-radius:10px}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #3d4b61;text-align:left;vertical-align:top}code{overflow-wrap:anywhere}a{color:#9ec8ff}</style><h1>localWorker · acompanhamento</h1><p class="muted">Esta página apenas observa o job. Fechá-la não interrompe a execução. Atualização automática a cada 3 segundos.</p><div class="cards"><div class="card"><small>Job</small><div id="job"></div></div><div class="card"><small>Estado</small><div id="status"></div></div><div class="card"><small>Atividade</small><div id="activity"></div></div><div class="card"><small>Progresso</small><div id="step"></div></div><div class="card"><small>Entrega ao chat</small><div id="delivery"></div></div><div class="card"><small>Recursos</small><div id="resources"></div></div></div><h2>Diagnóstico</h2><pre id="reason"></pre><h2>Eventos recentes</h2><table><thead><tr><th>Horário</th><th>Evento</th><th>Recurso/resultado</th></tr></thead><tbody id="events"></tbody></table><script>const id=location.pathname.split('/').pop(), token=new URLSearchParams(location.search).get('token');const put=(name,value)=>document.getElementById(name).textContent=String(value??'—');async function update(){try{const r=await fetch('/api/job/'+encodeURIComponent(id)+'?token='+encodeURIComponent(token),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const x=await r.json(),m=x.resource,p=x.progress;put('job',id);put('status',x.state.status);put('activity',x.activity.kind);put('step',p.step+'/'+p.max_steps+' ciclos · '+p.completed_tools+' ferramentas concluídas · '+p.failed_tools+' falhas · '+p.output_tokens_observed+' tokens de saída observados');put('delivery',x.delivery.status);put('resources','Ollama CPU: '+(m.ollama_cpu_seconds??'indisponível')+' s; RAM Ollama: '+(m.ollama_memory_bytes==null?'indisponível':Math.round(m.ollama_memory_bytes/1048576)+' MiB')+'; RAM livre: '+Math.round(m.ram_available_bytes/1048576)+' MiB; GPU: '+(m.gpu_percent??'indisponível')+'%; VRAM usada: '+(m.gpu_used_mib??'indisponível')+' MiB; VRAM livre mínima: '+(m.gpu_free_mib??'indisponível')+' MiB');put('reason',x.activity.reason+'\nHeartbeat: '+(x.state.heartbeat_at??'—')+'\nObservado: '+x.observed_at);const rows=document.getElementById('events');rows.replaceChildren();for(const v of x.events.slice().reverse()){const tr=document.createElement('tr');for(const t of [v.at,v.phase+' '+(v.tool??''),[v.resource,v.outcome,v.reason,v.error,v.diagnostic].filter(Boolean).join(' · ')]){const td=document.createElement('td');td.textContent=t;tr.append(td)}rows.append(tr)}}catch(e){put('reason','Monitor indisponível: '+e.message)}}update();setInterval(update,3000)</script></html>`;
 
 async function serve() {
   const token = randomBytes(32).toString("hex");
@@ -153,6 +164,18 @@ async function serve() {
   await new Promise((resolve, reject) => server.listen(0, HOST_M7Q, error => error ? reject(error) : resolve()));
   const source_sha256 = createHash("sha256").update(await fs.readFile(fileURLToPath(import.meta.url))).digest("hex");
   await atomicJson(DESCRIPTOR_M7Q, { pid: process.pid, port: server.address().port, token, source_sha256, started_at: new Date().toISOString() });
+  let watchdogRunning = false;
+  const runWatchdog = () => {
+    if (watchdogRunning) return;
+    watchdogRunning = true;
+    const child = spawn(process.execPath, [path.join(ROOT_M7Q, "watchdog.mjs")], {
+      cwd: ROOT_M7Q, stdio: "ignore", windowsHide: true,
+    });
+    child.on("error", () => { watchdogRunning = false; });
+    child.on("exit", () => { watchdogRunning = false; });
+  };
+  setTimeout(runWatchdog, 5_000).unref();
+  setInterval(runWatchdog, WATCHDOG_INTERVAL_MS_M7Q).unref();
 }
 
 if (process.argv[2] === "serve") await serve();

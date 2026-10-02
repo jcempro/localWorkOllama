@@ -21,7 +21,6 @@ async function gitStatus() {
   });
 }
 const baseline = await gitStatus();
-assert.equal(baseline, "", "Checkout de teste deve iniciar limpo");
 let calls = 0;
 let refuseWrites = false;
 const ollama = createServer(async (req, res) => {
@@ -41,7 +40,7 @@ const ollama = createServer(async (req, res) => {
   } else if (calls === 2) {
     message = { role: "assistant", content: "RESULTADO: vou implementar o arquivo." };
   } else if (calls === 3) {
-    assert.match(JSON.stringify(parsed.messages), /nenhuma ferramenta de escrita foi concluída/);
+    assert.match(JSON.stringify(parsed.messages), /alteração líquida comprovada/);
     message = { role: "assistant", content: "", tool_calls: [
       { function: { name: "write_file", arguments: { path: relative, content: "export const value = 1;\n" } } },
       { function: { name: "edit_file", arguments: { path: relative, before: "value = 1", after: "value = 2" } } },
@@ -63,7 +62,7 @@ process.env.OLLAMA_URL = `http://127.0.0.1:${ollama.address().port}`;
 process.env.LOCAL_MODEL = "fake-test-model";
 try {
   const { runLocalAnalysis } = await import("./worker-core.mjs");
-  const result = await runLocalAnalysis(repo, "Teste controlado de criar, editar, verificar sintaxe e consultar Git em arquivo único temporário.", "write", async () => {}, [], true);
+  const result = await runLocalAnalysis(repo, "Teste controlado de criar, editar, verificar sintaxe e consultar Git em arquivo único temporário.", "write", async () => {}, [], true, [relative]);
   assert.match(result, /arquivo temporário validado/);
   assert.equal(await fs.readFile(target, "utf8"), "export const value = 2;\n");
   refuseWrites = true;

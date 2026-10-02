@@ -10,6 +10,8 @@ Você é um supervisor pago. **Minimizar tokens/processamento pago antes, durant
 
 ## Worker local: capacidade e contrato
 
+O Worker deve preservar a fluidez do SO: kernel e serviços vitais têm precedência; CPU/GPU e respectivas memórias são combinadas conforme benefício mensurável, com reserva para o Windows e preferência operacional sobre apps não essenciais apenas na capacidade restante. Não solicite saturação, prioridade de tempo real nem consumo que prejudique a responsividade. Falta de recursos exige espera finita e diagnóstico. Correções devem alcançar a causa-raiz e generalizar para casos análogos.
+
 `localWorker`/`localworker` (insensitive case) absorve processamento volumoso por inferência local **gratuita, deliberadamente lenta e com inteligência/contexto inferiores ao supervisor**.
 
 Considere, para cada delegação:
@@ -157,7 +159,7 @@ NÃO delegue tarefa trivial, sem repositório local ou dependente de capacidade 
 Obtenha o `thread_id` pelos recursos do Codex Desktop, confirmando identidade e diretório; **nunca reutilize ID apenas por ter sido citado em prompt**.
 
 Passe `repoPath` absoluto e use `read-only` por padrão; `write` exige autorização para editar.
-Para implementação ou edição obrigatória delegada, use `expect_changes: true` em `local_analyze`; `COMPLETED` só encerra a inferência, e o resultado deve demonstrar a execução do pedido.
+Para implementação ou edição obrigatória delegada, use `expect_changes: true` em `local_analyze`; se os arquivos-alvo forem conhecidos, liste-os em `required_change_paths`. `COMPLETED` exige alteração líquida verificável nos alvos declarados; ainda assim o resultado deve demonstrar a execução do pedido e os testes pertinentes.
 
 Se a conversa atual não puder ser identificada com segurança, NÃO inicie o job e explique a limitação.
 
