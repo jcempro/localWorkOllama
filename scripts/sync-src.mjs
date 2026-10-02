@@ -12,7 +12,7 @@ const RUNTIME_A3C = [
   'AGENTS.md', 'config.json', 'package.json', 'package-lock.json',
   'server.mjs', 'thread-check.mjs', 'job-store.mjs', 'worker-core.mjs',
   'worker-runner.mjs', 'delivery.mjs', 'watchdog.mjs', 'monitor.mjs', 'monitor-page.mjs', 'mcp-config.mjs', 'mcp-call.mjs', 'notify.ps1',
-  'install.ps1', 'update-installed.ps1', 'register-watchdog.ps1',
+  'install.ps1', 'update-installed.ps1', 'register-watchdog.ps1', 'watchdog-launch.vbs.template',
 ];
 const PRIVATE_A3C = [/C:\\auto-local/i, /C:\\Users\\admin/i, /D:\\trampo/i,
   /jeancarloem\.com\.blog/i, /<CAMINHO_REAL_DO_BLOG>/i];

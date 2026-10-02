@@ -153,6 +153,13 @@ O watchdog recupera jobs persistidos após logon e verifica anomalias a cada 2 m
 Get-ScheduledTask -TaskName 'CodexLocalWorkerWatchdog' | Select-Object TaskName,State
 ```
 
+O registro usa `src/localworker/watchdog-launch.vbs.template`, substituindo os dois marcadores por paths descobertos e escapados; não edite o `.vbs` instalado:
+
+```vbscript
+Set shell = CreateObject("WScript.Shell")
+shell.Run Chr(34) & "__NODE_EXECUTABLE__" & Chr(34) & " " & Chr(34) & "__WATCHDOG_SCRIPT__" & Chr(34), 0, True
+```
+
 O script aceita uma tarefa já existente quando ela aponta ao mesmo destino. Para atualizar uma instalação, **sem job ativo**, após revisar a nova fonte e os backups, execute:
 
 ```powershell
@@ -454,7 +461,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
 | `src/localworker/install.ps1` | `c5ea8dd419ccac7c0c438a56c13d386d4715e1325c7f7b273150ea82b47fb797` |
 | `src/localworker/update-installed.ps1` | `0567ac888f37fbfca393a579f16b0256c1ca5e81b65b07c525ccc33b741259d2` |
-| `src/localworker/register-watchdog.ps1` | `6066c1ba2a06d6edda2aab56a12e5381ce28f9ca2b9bd7cb730e78a2eba29dc4` |
+| `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
+| `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |
 | `src/agents.supervisor.md` | `4e80984b0221ee269ca7c3f2f5142f6a819e244bc9c4af75c95f2eb1cdd5858e` |
 <!-- LOCALWORKER_GENERATED_END -->

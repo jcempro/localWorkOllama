@@ -15,7 +15,9 @@ $rootItem = Get-Item -LiteralPath $Target -Force
 if (-not $rootItem.PSIsContainer -or ($rootItem.Attributes -band [IO.FileAttributes]::ReparsePoint)) { throw 'Raiz do Worker inválida.' }
 $escapedNode = $node.Replace('"','""')
 $escapedScript = $script.Replace('"','""')
-$launcherText = "Set shell = CreateObject(""WScript.Shell"")`r`nshell.Run Chr(34) & ""$escapedNode"" & Chr(34) & "" "" & Chr(34) & ""$escapedScript"" & Chr(34), 0, True`r`n"
+$template = Join-Path $PSScriptRoot 'watchdog-launch.vbs.template'
+if (-not (Test-Path -LiteralPath $template -PathType Leaf)) { throw 'Modelo do lançador oculto ausente.' }
+$launcherText = [IO.File]::ReadAllText($template).Replace('__NODE_EXECUTABLE__',$escapedNode).Replace('__WATCHDOG_SCRIPT__',$escapedScript).Replace("`n","`r`n").Replace("`r`r`n","`r`n")
 $currentLauncher = if (Test-Path -LiteralPath $launcher -PathType Leaf) { [IO.File]::ReadAllText($launcher) } else { '' }
 if ($currentLauncher -ne $launcherText) {
   $tempLauncher = "$launcher.$PID.tmp"

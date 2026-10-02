@@ -1,0 +1,2 @@
+Set shell = CreateObject("WScript.Shell")
+shell.Run Chr(34) & "__NODE_EXECUTABLE__" & Chr(34) & " " & Chr(34) & "__WATCHDOG_SCRIPT__" & Chr(34), 0, True
