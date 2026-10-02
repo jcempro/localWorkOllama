@@ -65,7 +65,7 @@ const env = { ...process.env, OLLAMA_URL: `http://127.0.0.1:${port}`, LOCAL_MODE
   LOCAL_WORKER_MAINTENANCE_REPO: path.resolve(root, ".."),
   LOCAL_CODEX_CMD: path.join(root, "missing-stale-codex.exe"), CODEX_CLI_PATH: process.execPath,
   LOCAL_CODEX_PREARGS_JSON: JSON.stringify([path.join(root, "fake-codex.mjs")]),
-  LOCAL_FAKE_QUEUE_LOG: queueLog, LOCAL_DISABLE_NOTIFY: "1" };
+  LOCAL_FAKE_QUEUE_LOG: queueLog, LOCAL_DISABLE_NOTIFY: "1", LOCAL_DISABLE_MCP_REPAIR: "1" };
 env.LOCAL_CODEX_HOME = codexHome;
 const server = spawn(process.execPath, [process.env.TEST_SERVER_PATH ?? path.join(root, "server.mjs")], { env, stdio: ["pipe", "pipe", "pipe"] });
 server.stderr.on("data", chunk => process.stderr.write(chunk));

@@ -197,7 +197,7 @@ if (-not $SkipModel) {
 $WORKER_HOME_A3C = [IO.Path]::GetFullPath($WORKER_HOME_A3C)
 $CODEX_HOME_A3C = [IO.Path]::GetFullPath($CODEX_HOME_A3C)
 if (Test-Path -LiteralPath $WORKER_HOME_A3C) {
-  $updateArgs = @{ Target = $WORKER_HOME_A3C; NodePath = $NODE_EXE_A3C; CodexCommand = $CODEX_EXE_A3C; MaintenanceRepo = $MAINTENANCE_REPO_A3C }
+  $updateArgs = @{ Target = $WORKER_HOME_A3C; NodePath = $NODE_EXE_A3C; CodexCommand = $CODEX_EXE_A3C; CodexConfig = $CODEX_CONFIG_A3C; MaintenanceRepo = $MAINTENANCE_REPO_A3C }
   if ($MODEL_EXPLICIT_A3C) { $updateArgs.WorkerModel = $WorkerModel }
   & (Join-Path $WORKER_SOURCE_A3C 'update-installed.ps1') @updateArgs
 } else {

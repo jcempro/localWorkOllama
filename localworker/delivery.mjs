@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { jobDir, getState, readJson, atomicJson, atomicText } from "./job-store.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-async function codexCommand() {
+export async function codexCommand() {
   const config = JSON.parse(await fs.readFile(path.join(root, "config.json"), "utf8"));
   const candidates = [
     process.env.LOCAL_CODEX_CMD,

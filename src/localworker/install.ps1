@@ -29,7 +29,7 @@ if (-not $CodexCommand) {
     $CodexCommand = $native.FullName
   }
 }
-$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','notify.ps1')
+$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','notify.ps1')
 foreach ($exe in @($NodePath,$NpmCommand,$CodexCommand)) {
   if (-not (Test-Path -LiteralPath $exe -PathType Leaf)) { throw "Executável ausente: $exe" }
 }
@@ -45,20 +45,15 @@ $CodexConfig = [IO.Path]::GetFullPath($CodexConfig)
 if (Test-Path -LiteralPath $Target) { throw "Destino já existe; preserve ou use update-installed.ps1: $Target" }
 $StageTarget = "$Target.installing-$PID"
 if (Test-Path -LiteralPath $StageTarget) { throw "Área temporária já existe: $StageTarget" }
-$content = if (Test-Path -LiteralPath $CodexConfig -PathType Leaf) { [IO.File]::ReadAllText($CodexConfig) } else { '' }
-if ($content -match '(?m)^\[mcp_servers\.localworker(?:\.env)?\][ \t]*\r?$') { throw 'MCP localworker já configurado; preserve a configuração existente.' }
 New-Item -ItemType Directory -Path $StageTarget | Out-Null
 $targetItem = Get-Item -LiteralPath $StageTarget -Force
 if (-not $targetItem.PSIsContainer -or ($targetItem.Attributes -band [IO.FileAttributes]::ReparsePoint)) { throw 'Raiz de instalação inválida ou reparse point.' }
-$nodeToml = ConvertTo-Json -InputObject $NodePath -Compress
-$serverToml = ConvertTo-Json -InputObject (Join-Path $Target 'server.mjs') -Compress
-$content = $content.TrimEnd() + "`r`n`r`n[mcp_servers.localworker]`r`ncommand = $nodeToml`r`nargs = [$serverToml]`r`nenabled = true`r`nstartup_timeout_sec = 120`r`n"
-
 try {
 foreach ($name in $files) { Copy-Item -LiteralPath (Join-Path $source $name) -Destination (Join-Path $StageTarget $name) }
 $workerConfig = Get-Content -LiteralPath (Join-Path $source 'config.json') -Raw | ConvertFrom-Json
 $workerConfig | Add-Member -NotePropertyName maintenance_repo -NotePropertyValue $maintenanceRepo -Force
 $workerConfig | Add-Member -NotePropertyName codex_command -NotePropertyValue $CodexCommand -Force
+$workerConfig | Add-Member -NotePropertyName codex_config -NotePropertyValue $CodexConfig -Force
 $workerConfig.model = $WorkerModel
 [IO.File]::WriteAllText((Join-Path $StageTarget 'config.json'), ($workerConfig | ConvertTo-Json -Depth 10) + "`n", [Text.UTF8Encoding]::new($false))
 & $NpmCommand ci --ignore-scripts --prefix $StageTarget
@@ -77,14 +72,6 @@ Move-Item -LiteralPath $StageTarget -Destination $Target
   }
   throw
 }
-New-Item -ItemType Directory -Path (Split-Path -Parent $CodexConfig) -Force | Out-Null
-$backup = $null
-if (Test-Path -LiteralPath $CodexConfig -PathType Leaf) {
-  $backup = "$CodexConfig.localworker-backup-$(Get-Date -Format yyyyMMddHHmmss)"
-  Copy-Item -LiteralPath $CodexConfig -Destination $backup
-}
-$temporary = "$CodexConfig.$PID.tmp"
-[IO.File]::WriteAllText($temporary, $content, [Text.UTF8Encoding]::new($false))
-if (Test-Path -LiteralPath $CodexConfig -PathType Leaf) { [IO.File]::Replace($temporary, $CodexConfig, $backup) }
-else { [IO.File]::Move($temporary, $CodexConfig) }
-[pscustomobject]@{ installed = $files.Count; backup = $backup; target = $Target; config_updated = $true; model = $WorkerModel } | ConvertTo-Json
+$registration = & $NodePath (Join-Path $Target 'mcp-config.mjs') $CodexConfig $CodexCommand
+if ($LASTEXITCODE -ne 0) { throw 'Instalação concluída, mas registro MCP falhou; reexecute o instalador após corrigir o diagnóstico.' }
+[pscustomobject]@{ installed = $files.Count; registration = ($registration | ConvertFrom-Json); target = $Target; model = $WorkerModel } | ConvertTo-Json

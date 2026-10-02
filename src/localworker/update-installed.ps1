@@ -1,4 +1,4 @@
-param([string]$Target, [string]$NodePath, [string]$CodexCommand, [string]$MaintenanceRepo, [string]$WorkerModel)
+param([string]$Target, [string]$NodePath, [string]$CodexCommand, [string]$CodexConfig, [string]$MaintenanceRepo, [string]$WorkerModel)
 $ErrorActionPreference = 'Stop'
 $source = $PSScriptRoot
 $target = if ($Target) { $Target } else { Join-Path $env:USERPROFILE '.codex-local-worker' }
@@ -20,7 +20,7 @@ if (Test-Path -LiteralPath $activeFile) {
   if ($state.status -notin @('COMPLETED','FAILED','CANCELLED')) { throw 'Job ativo: instalação adiada.' }
 }
 $stamp = Get-Date -Format yyyyMMddHHmmss
-$files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','notify.ps1','package.json','package-lock.json')
+$files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','notify.ps1','package.json','package-lock.json')
 $existingFiles = @()
 $newFiles = @()
 foreach ($name in $files) {
@@ -42,6 +42,8 @@ $config.PSObject.Properties.Remove('worker_rules')
 $maintenance = if ($MaintenanceRepo) { (Resolve-Path -LiteralPath $MaintenanceRepo).Path } elseif ($env:LOCAL_WORKER_MAINTENANCE_REPO) { (Resolve-Path -LiteralPath $env:LOCAL_WORKER_MAINTENANCE_REPO).Path } else { (Resolve-Path -LiteralPath (Join-Path $source '..')).Path }
 $config | Add-Member -NotePropertyName maintenance_repo -NotePropertyValue $maintenance -Force
 $config | Add-Member -NotePropertyName codex_command -NotePropertyValue $CodexCommand -Force
+$codexConfigPath = if ($CodexConfig) { [IO.Path]::GetFullPath($CodexConfig) } elseif ($config.codex_config) { [IO.Path]::GetFullPath($config.codex_config) } else { Join-Path (if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $env:USERPROFILE '.codex' }) 'config.toml' }
+$config | Add-Member -NotePropertyName codex_config -NotePropertyValue $codexConfigPath -Force
 if (-not $config.PSObject.Properties['ollama_attempts']) { $config | Add-Member -NotePropertyName ollama_attempts -NotePropertyValue 4 }
 if ($config.timeout_ms -eq 7200000) { $config.timeout_ms = 0 } # Migração do antigo padrão; demais escolhas explícitas permanecem.
 if ($WorkerModel) { $config.model = $WorkerModel }
@@ -66,4 +68,6 @@ try {
   Copy-Item -LiteralPath "$configFile.backup-$stamp" -Destination $configFile -Force
   throw
 }
-[pscustomobject]@{ updated = $files; backup_suffix = $stamp } | ConvertTo-Json
+$registration = & $node (Join-Path $target 'mcp-config.mjs') $codexConfigPath $CodexCommand
+if ($LASTEXITCODE -ne 0) { throw 'Runtime atualizado, mas registro MCP falhou; reexecute após corrigir o diagnóstico.' }
+[pscustomobject]@{ updated = $files; backup_suffix = $stamp; registration = ($registration | ConvertFrom-Json) } | ConvertTo-Json

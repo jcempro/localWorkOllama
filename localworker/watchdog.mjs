@@ -6,6 +6,7 @@ import { promisify } from "node:util";
 import { listJobs, jobDir, getState, setState, alive, readJson, atomicText, atomicJson, pruneJobHistory } from "./job-store.mjs";
 import { deliver, notify } from "./delivery.mjs";
 import { ensureMonitor } from "./monitor.mjs";
+import { ensureMcpRegistration } from "./mcp-config.mjs";
 
 const ORPHAN_GRACE_MS_W8K = 120_000;
 const execFileAsync = promisify(execFile);
@@ -89,6 +90,15 @@ export async function reconcileJob(id) {
 }
 
 async function main() {
+  if (process.env.LOCAL_DISABLE_MCP_REPAIR !== "1") {
+    try {
+      const config = await readJson(path.join(path.dirname(fileURLToPath(import.meta.url)), "config.json"));
+      if (config.codex_config) {
+        const registration = await ensureMcpRegistration({ configPath: config.codex_config });
+        if (registration.status === "REPAIRED") console.error("MCP localworker restaurado; novas sessões do Codex devem carregar as ferramentas.");
+      }
+    } catch (error) { console.error(`MCP localworker: ${error?.message ?? error}`); }
+  }
   try { await ensureMonitor(); } catch (error) { console.error(`monitor: ${error?.message ?? error}`); }
   for (const id of await listJobs()) {
     try { await reconcileJob(id); }
