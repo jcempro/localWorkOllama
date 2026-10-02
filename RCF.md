@@ -31,6 +31,7 @@ O localWorker executa tarefas delegáveis em inferência Ollama local, com jobs 
 - A preferência automática do Worker é instalada no arquivo global de instruções efetivamente carregado: `AGENTS.override.md` se existir no Codex home, senão `AGENTS.md`. O seletor nativo documentado do Desktop controla modelo e esforço, sem extensão documentada para variantes `+ Worker`; as instruções globais são a alternativa compatível e não alteram o modelo/esforço escolhido.
 - O instalador é idempotente: verifica estado antes de alterar, preserva configuração anterior, usa backups e valida cada etapa. Se um método falhar, tenta alternativas tecnicamente equivalentes e seguras. Não altera dados pessoais nem presume usernames, volumes ou roots.
 - O registro MCP é verificado semanticamente pelo CLI oficial na instalação e em cada atualização. A falta do registro no `config.toml` ativo é corrigida com backup e revalidação, mesmo quando o runtime já existe. O watchdog já agendado verifica essa disponibilidade e repara a perda posterior sem alterar jobs; registro presente divergente não é sobrescrito. O catálogo inicial do Codex recebe janela suficiente para inicialização do MCP; sessões abertas antes da restauração precisam recarregar o catálogo.
+- Se o catálogo de ferramentas de um chat já iniciado não contiver o MCP, `mcp-call.mjs` oferece a mesma chamada JSON-RPC ao `server.mjs` instalado, sem repetir implementação, remover validações nem depender de novo chat. A ponte inicia ou consulta jobs e termina sem encerrar o runner persistente; ela é usada somente como recuperação quando a ferramenta nativa estiver ausente.
 - Credenciais, caminhos e repositórios exclusivos do ambiente de desenvolvimento não entram em `src/` ou `howto.md`. Testes reais usam repositório externo autorizado e preservam seu Git.
 
 ## Espelhamento e aceitação
@@ -60,10 +61,11 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/monitor.mjs` | `9538f4a27d12663b4fa1902c47eb880bf854b2c2c05173d34f5175ec0b2dcdb3` |
 | `src/localworker/monitor-page.mjs` | `5088b3c3399057ede65196afabf633b43c7eb83f9dc76f2d6fb2842355193de8` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
+| `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `adcf89ca74cae47daf6665a39598bf18797716884b7fc077f5da0b25157ba094` |
-| `src/localworker/update-installed.ps1` | `6dd91317fe29ef4c133baf8ba99f81ad2fe7b5e69a2ca72a79a8cfd4a4e16cf3` |
+| `src/localworker/install.ps1` | `c5ea8dd419ccac7c0c438a56c13d386d4715e1325c7f7b273150ea82b47fb797` |
+| `src/localworker/update-installed.ps1` | `0567ac888f37fbfca393a579f16b0256c1ca5e81b65b07c525ccc33b741259d2` |
 | `src/localworker/register-watchdog.ps1` | `8f0e04f10ac19212b7fd128da389f38c7cddfda7268b87997e8a5d9ebf5e7b3f` |
 | `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |
-| `src/agents.supervisor.md` | `f3ef7af884c8604d217ecfd06319e782a9fdbfe0c1a5495ca899304299fd3458` |
+| `src/agents.supervisor.md` | `15fa57f9d1eaafb28f2b5edbb9a174001ef120a689f089e2b2dd0ac4333fcbf0` |
 <!-- LOCALWORKER_GENERATED_END -->

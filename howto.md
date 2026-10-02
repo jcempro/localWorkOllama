@@ -114,7 +114,17 @@ O `config.json` instalado recebe os caminhos reais em `maintenance_repo` e `code
 }
 ```
 
-No Desktop, confira o servidor em **Settings → MCP servers** e reinicie o aplicativo para recarregar `config.toml`. No PowerShell, defina `$env:CODEX_HOME = $CodexHome` e execute `& $CodexExe mcp list`; ele deve mostrar `localworker`. O caminho explícito evita consultar outro perfil do CLI em uma sessão isolada. Se não mostrar, execute novamente `src/install.ps1`. O watchdog agendado também repara uma perda posterior do registro sem reiniciar jobs, mas uma conversa já iniciada sem as ferramentas precisa ser retomada depois que o Codex recarregar seu catálogo. O valor de 5 s é uma janela para o catálogo inicial aguardar o MCP opcional; não limita a duração do job.
+No Desktop, confira o servidor em **Settings → MCP servers** e reinicie o aplicativo para recarregar `config.toml`. No PowerShell, defina `$env:CODEX_HOME = $CodexHome` e execute `& $CodexExe mcp list`; ele deve mostrar `localworker`. O caminho explícito evita consultar outro perfil do CLI em uma sessão isolada. Se não mostrar, execute novamente `src/install.ps1`. O watchdog agendado também repara uma perda posterior do registro sem reiniciar jobs. Uma conversa já iniciada pode usar a ponte abaixo imediatamente; para exibir as ferramentas nativas, o Desktop precisa recarregar seu catálogo. O valor de 5 s é uma janela para o catálogo inicial aguardar o MCP opcional; não limita a duração do job.
+
+Se uma conversa já iniciada ainda não tiver `local_analyze`/`local_result`, use a ponte instalada para chamar **o mesmo servidor MCP** sem abrir outra conversa. Primeiro confirme pelo recurso de chats do Desktop que `$env:CODEX_THREAD_ID` é o ID desta conversa e que o diretório corresponde a `$RepoPath`; defina `$TaskText` com a unidade a delegar. No PowerShell:
+
+```powershell
+$request = @{ repoPath = $RepoPath; task = $TaskText; mode = 'read-only'; thread_id = $env:CODEX_THREAD_ID }
+$encoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($request | ConvertTo-Json -Compress -Depth 10)))
+& $NodeExe (Join-Path $WorkerHome 'mcp-call.mjs') local_analyze $encoded
+```
+
+Para consultar um job já concluído, substitua `$request` por `@{ job_id = $JobId }` e `local_analyze` por `local_result`. Em escrita autorizada, use `mode='write'`, `expect_changes=$true` e, se conhecidos, `required_change_paths`. O resultado JSON e o `job_id` são os mesmos da ferramenta MCP; ao terminar, o runner envia a retomada ao chat validado. A ponte recebe Base64 para que texto do pedido nunca seja interpolado como comando de shell. Ela não serve para contornar o bloqueio de autouso neste repositório.
 
 ### Acompanhamento e diagnóstico
 
@@ -308,6 +318,8 @@ e, salvo autorização expressa:
 
 A preferência pelo `localWorker` vale em toda conversa nova ou retomada no Codex Desktop, sem nova solicitação do usuário.
 
+Se `local_analyze` ou `local_result` estiver ausente do catálogo da sessão, trate isso como falha de integração recuperável, sem pedir fallback pago. Verifique o `CODEX_HOME` efetivo e repare o registro MCP pelo `mcp-config.mjs` instalado, usando o CLI Codex com `CODEX_HOME` explícito; confirme com `codex mcp get localworker --json`. Enquanto o catálogo do Desktop não recarrega, invoque a mesma ferramenta pelo `mcp-call.mjs` instalado, com argumentos JSON UTF-8 codificados em Base64. Essa ponte usa o próprio servidor e suas validações, retorna `job_id`/resultado e preserva a entrega automática ao chat. Não passe conteúdo bruto do usuário ao shell nem use o Worker para manter a si próprio. Se a ponte também falhar, classifique a falha concreta conforme as regras abaixo antes de interromper o pedido.
+
 Para etapa de repositório adequada à inferência local — exploração extensa, análise, implementação ou verificação delegável — inicie preferencialmente **um único `local_analyze` persistente** com tarefa completa **ou, quando necessário pelo limite de contexto/capacidade, segmentos sequenciais mínimos e independentes**.
 
 NÃO delegue tarefa trivial, sem repositório local ou dependente de capacidade ausente. Respeite instruções explícitas do usuário e segurança/autoridade do repositório.
@@ -432,12 +444,13 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/monitor.mjs` | `9538f4a27d12663b4fa1902c47eb880bf854b2c2c05173d34f5175ec0b2dcdb3` |
 | `src/localworker/monitor-page.mjs` | `5088b3c3399057ede65196afabf633b43c7eb83f9dc76f2d6fb2842355193de8` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
+| `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `adcf89ca74cae47daf6665a39598bf18797716884b7fc077f5da0b25157ba094` |
-| `src/localworker/update-installed.ps1` | `6dd91317fe29ef4c133baf8ba99f81ad2fe7b5e69a2ca72a79a8cfd4a4e16cf3` |
+| `src/localworker/install.ps1` | `c5ea8dd419ccac7c0c438a56c13d386d4715e1325c7f7b273150ea82b47fb797` |
+| `src/localworker/update-installed.ps1` | `0567ac888f37fbfca393a579f16b0256c1ca5e81b65b07c525ccc33b741259d2` |
 | `src/localworker/register-watchdog.ps1` | `8f0e04f10ac19212b7fd128da389f38c7cddfda7268b87997e8a5d9ebf5e7b3f` |
 | `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |
-| `src/agents.supervisor.md` | `f3ef7af884c8604d217ecfd06319e782a9fdbfe0c1a5495ca899304299fd3458` |
+| `src/agents.supervisor.md` | `15fa57f9d1eaafb28f2b5edbb9a174001ef120a689f089e2b2dd0ac4333fcbf0` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

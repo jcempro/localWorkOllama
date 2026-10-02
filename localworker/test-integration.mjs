@@ -1,5 +1,6 @@
 import { createServer } from "node:http";
-import { spawn } from "node:child_process";
+import { spawn, execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,6 +9,7 @@ import { randomUUID } from "node:crypto";
 import { DatabaseSync } from "node:sqlite";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
+const execFileAsync = promisify(execFile);
 const runtimeRoot = path.dirname(process.env.TEST_SERVER_PATH ?? path.join(root, "server.mjs"));
 const repo = process.env.TEST_REPO_PATH;
 if (!repo || path.basename(path.resolve(repo)).toLowerCase() !== "jeancarloem.com.blog") {
@@ -65,7 +67,8 @@ const env = { ...process.env, OLLAMA_URL: `http://127.0.0.1:${port}`, LOCAL_MODE
   LOCAL_WORKER_MAINTENANCE_REPO: path.resolve(root, ".."),
   LOCAL_CODEX_CMD: path.join(root, "missing-stale-codex.exe"), CODEX_CLI_PATH: process.execPath,
   LOCAL_CODEX_PREARGS_JSON: JSON.stringify([path.join(root, "fake-codex.mjs")]),
-  LOCAL_FAKE_QUEUE_LOG: queueLog, LOCAL_DISABLE_NOTIFY: "1", LOCAL_DISABLE_MCP_REPAIR: "1" };
+  LOCAL_FAKE_QUEUE_LOG: queueLog, LOCAL_DISABLE_NOTIFY: "1", LOCAL_DISABLE_MCP_REPAIR: "1",
+  LOCAL_WORKER_BRIDGE_SERVER: process.env.TEST_SERVER_PATH ?? path.join(root, "server.mjs") };
 env.LOCAL_CODEX_HOME = codexHome;
 const server = spawn(process.execPath, [process.env.TEST_SERVER_PATH ?? path.join(root, "server.mjs")], { env, stdio: ["pipe", "pipe", "pipe"] });
 server.stderr.on("data", chunk => process.stderr.write(chunk));
@@ -119,8 +122,9 @@ try {
   const rejected = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: repo, task: "Somente leia o status Git.", mode: "read-only", thread_id: archivedThread } });
   assert.match(rejected.result.content[0].text, /WORKER_REQUEST_REJECTED/);
   assert.match(rejected.result.content[0].text, /conversa arquivada/);
-  const start = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: repo, task: "Somente leia o status Git.", mode: "read-only", thread_id: thread } });
-  const receipt = JSON.parse(start.result.content[0].text);
+  const encodedStart = Buffer.from(JSON.stringify({ repoPath: repo, task: "Somente leia o status Git.", mode: "read-only", thread_id: thread })).toString("base64");
+  const bridgeStart = await execFileAsync(process.execPath, [process.env.TEST_BRIDGE_PATH ?? path.join(root, "mcp-call.mjs"), "local_analyze", encodedStart], { env, windowsHide: true, timeout: 120_000, maxBuffer: 1024 * 1024 });
+  const receipt = JSON.parse(bridgeStart.stdout.trim());
   assert.equal(receipt.status, "RUNNING");
   assert.equal(receipt.monitor_index_url, monitorIndexUrl);
   const id = receipt.job_id;

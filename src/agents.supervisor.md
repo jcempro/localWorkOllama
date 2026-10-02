@@ -152,6 +152,8 @@ e, salvo autorização expressa:
 
 A preferência pelo `localWorker` vale em toda conversa nova ou retomada no Codex Desktop, sem nova solicitação do usuário.
 
+Se `local_analyze` ou `local_result` estiver ausente do catálogo da sessão, trate isso como falha de integração recuperável, sem pedir fallback pago. Verifique o `CODEX_HOME` efetivo e repare o registro MCP pelo `mcp-config.mjs` instalado, usando o CLI Codex com `CODEX_HOME` explícito; confirme com `codex mcp get localworker --json`. Enquanto o catálogo do Desktop não recarrega, invoque a mesma ferramenta pelo `mcp-call.mjs` instalado, com argumentos JSON UTF-8 codificados em Base64. Essa ponte usa o próprio servidor e suas validações, retorna `job_id`/resultado e preserva a entrega automática ao chat. Não passe conteúdo bruto do usuário ao shell nem use o Worker para manter a si próprio. Se a ponte também falhar, classifique a falha concreta conforme as regras abaixo antes de interromper o pedido.
+
 Para etapa de repositório adequada à inferência local — exploração extensa, análise, implementação ou verificação delegável — inicie preferencialmente **um único `local_analyze` persistente** com tarefa completa **ou, quando necessário pelo limite de contexto/capacidade, segmentos sequenciais mínimos e independentes**.
 
 NÃO delegue tarefa trivial, sem repositório local ou dependente de capacidade ausente. Respeite instruções explícitas do usuário e segurança/autoridade do repositório.
