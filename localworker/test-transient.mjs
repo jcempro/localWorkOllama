@@ -42,6 +42,10 @@ const ollama = createServer(async (req, res) => {
   if (noToolMode) {
     noToolCalls++;
     if (noToolCalls === 2) assert.deepEqual(payload.tools.map(tool => tool.function.name), ["git_status"]);
+    if (noToolCalls === 3) {
+      const evidence = payload.messages.filter(message => message.role === "tool").map(message => message.content).join("\n");
+      assert.match(evidence, /ESTADO GIT DETERMINÍSTICO: upstream=origin\/dev; ahead=0; behind=0/);
+    }
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify({ message: noToolCalls === 2
       ? { role: "assistant", content: "", tool_calls: [{ function: { name: "git_status", arguments: {} } }] }

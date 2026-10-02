@@ -13,6 +13,8 @@ const execFileAsync = promisify(execFile);
 const git = async () => (await execFileAsync("git", ["-C", repo, "status", "--porcelain=v1", "-uall"],
   { windowsHide: true })).stdout;
 const baseline = await git();
+const ahead = Number((await execFileAsync("git", ["-C", repo, "rev-list", "--count", "@{upstream}..HEAD"],
+  { windowsHide: true })).stdout.trim());
 const events = [];
 try {
   const { runLocalAnalysis } = await import(pathToFileURL(core).href);
@@ -24,12 +26,14 @@ try {
         process.stdout.write(JSON.stringify(event) + "\n");
     });
   assert.match(result, /\S/);
+  if (ahead === 0) assert.doesNotMatch(result, /commits? não enviados|à frente do upstream|divergência local em relação ao remoto/i,
+    "A resposta não pode confundir arquivo modificado com commit não enviado.");
   const expected = process.env.TEST_EXPECT_GPU_LAYERS;
   if (expected !== undefined) {
     assert.ok(events.some(event => event.phase === "gpu_policy_loaded" && event.gpu_layers === Number(expected)),
       `Calibração esperada de ${expected} camadas não foi carregada.`);
   }
-  process.stdout.write(JSON.stringify({ test: "real-read", status: "ok", result: result.slice(0, 200) }) + "\n");
+  process.stdout.write(JSON.stringify({ test: "real-read", status: "ok", result: result.slice(0, 1000) }) + "\n");
 } finally {
   assert.equal(await git(), baseline, "Git do blog deve voltar exatamente ao estado inicial.");
 }
