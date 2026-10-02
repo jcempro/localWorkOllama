@@ -152,17 +152,17 @@ export async function deleteJob(id) {
           throw new Error("Backup legado sem job_id no mesmo repositório; autoria ambígua. Exclusão bloqueada para evitar resíduo ou perda de dados.");
         }
       }
-      await fs.rename(dir, deleting);
-    }
-    if (partial || current) {
-      await safeJobDirectory(deleting);
-      await fs.rm(deleting, { recursive: true });
     }
     await clearActiveReference(id);
     const historyFile = path.join(ROOT, "history-cleanup.json");
     const history = await readJson(historyFile).catch(() => null);
     if (history?.errors?.some(error => error.job_id === id)) {
       await atomicJson(historyFile, { ...history, errors: history.errors.filter(error => error.job_id !== id) });
+    }
+    if (current) await fs.rename(dir, deleting);
+    if (partial || current) {
+      await safeJobDirectory(deleting);
+      await fs.rm(deleting, { recursive: true });
     }
     return { job_id: id, status: current || partial ? "DELETED" : "ALREADY_ABSENT", confirmed: true };
   });
