@@ -9,15 +9,33 @@ import { deliver } from "./delivery.mjs";
 const id = process.argv[2];
 const dir = jobDir(id);
 const started = Date.now();
+const MAX_AUDIT_LOG_BYTES_K9P = 2 * 1024 * 1024;
+const AUDIT_LOG_TAIL_BYTES_K9P = 1024 * 1024;
 const execFileAsync = promisify(execFile);
 let heartbeat;
 let pendingHeartbeat = Promise.resolve();
+
+async function appendAuditK9P(event, at) {
+  const file = path.join(dir, "worker.log");
+  await fs.appendFile(file, `${at} ${JSON.stringify(event)}\n`);
+  const size = (await fs.stat(file)).size;
+  if (size <= MAX_AUDIT_LOG_BYTES_K9P) return;
+  const handle = await fs.open(file, "r");
+  let tail;
+  try {
+    const buffer = Buffer.alloc(AUDIT_LOG_TAIL_BYTES_K9P);
+    const { bytesRead } = await handle.read(buffer, 0, buffer.length, size - buffer.length);
+    tail = buffer.subarray(0, bytesRead).toString("utf8");
+  } finally { await handle.close(); }
+  tail = tail.slice(tail.indexOf("\n") + 1);
+  await atomicText(file, `${new Date().toISOString()} ${JSON.stringify({ phase: "log_compacted", reason: "Limite do log atingido; eventos recentes preservados.", prior_bytes: size })}\n${tail}`);
+}
 
 async function main() {
   const request = await readJson(path.join(dir, "request.json"));
   const initial = await getState(id);
   if (initial.status !== "QUEUED") return;
-  let state = { ...initial, status: "RUNNING", pid: process.pid, started_at: new Date().toISOString(), heartbeat_at: new Date().toISOString(), last_event_at: null, phase: "starting", step: 0, event_count: 0, completed_tools: 0, failed_tools: 0, output_tokens_observed: 0 };
+  let state = { ...initial, status: "RUNNING", pid: process.pid, started_at: new Date().toISOString(), heartbeat_at: new Date().toISOString(), last_event_at: null, phase: "starting", step: 0, event_count: 0, completed_tools: 0, failed_tools: 0, prompt_tokens_observed: 0, output_tokens_observed: 0, generation_ms_observed: 0 };
   await setState(id, state);
   heartbeat = setInterval(() => {
     pendingHeartbeat = pendingHeartbeat.then(async () => {
@@ -35,14 +53,16 @@ async function main() {
   try {
     const result = await runLocalAnalysis(request.repoPath, request.task, request.mode, async event => {
       const at = new Date().toISOString();
-      await fs.appendFile(path.join(dir, "worker.log"), `${at} ${JSON.stringify(event)}\n`);
+      await appendAuditK9P(event, at);
       pendingHeartbeat = pendingHeartbeat.then(async () => {
         state = { ...state, last_event_at: at, phase: event.phase, step: event.step ?? state.step,
           tool: event.tool ?? state.tool, resource: event.resource ?? state.resource,
           event_count: state.event_count + 1,
           completed_tools: state.completed_tools + Number(event.phase === "tool_result" && event.outcome === "ok"),
           failed_tools: state.failed_tools + Number(event.phase === "tool_result" && event.outcome !== "ok"),
-          output_tokens_observed: state.output_tokens_observed + (event.phase === "ollama_response" ? Number(event.output_tokens) || 0 : 0) };
+          prompt_tokens_observed: state.prompt_tokens_observed + (event.phase === "ollama_response" ? Number(event.prompt_tokens) || 0 : 0),
+          output_tokens_observed: state.output_tokens_observed + (event.phase === "ollama_response" ? Number(event.output_tokens) || 0 : 0),
+          generation_ms_observed: state.generation_ms_observed + (event.phase === "ollama_response" ? Number(event.eval_duration_ms) || 0 : 0) };
         await setState(id, state);
       });
       await pendingHeartbeat;

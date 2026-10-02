@@ -8,7 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createJob, getState, jobDir, readJson, setState } from "./job-store.mjs";
 import { assertTargetThread } from "./thread-check.mjs";
-import { ensureMonitor, monitorUrl, monitorSnapshot } from "./monitor.mjs";
+import { ensureMonitor, monitorUrl, monitorIndexUrl, monitorSnapshot, inventorySnapshot } from "./monitor.mjs";
 import { reconcileJob } from "./watchdog.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
@@ -23,6 +23,13 @@ async function gitCommonDir(repo) {
     const { stdout } = await execFileAsync("git", ["-C", repo, "rev-parse", "--path-format=absolute", "--git-common-dir"], { windowsHide: true, timeout: 5000 });
     return (await fs.realpath(stdout.trim())).toLowerCase();
   } catch { return null; }
+}
+
+async function gitRoot(repo) {
+  try {
+    const { stdout } = await execFileAsync("git", ["-C", repo, "rev-parse", "--show-toplevel"], { windowsHide: true, timeout: 5000 });
+    return await fs.realpath(stdout.trim());
+  } catch { return repo; }
 }
 
 function createServer() {
@@ -75,13 +82,17 @@ server.registerTool("local_analyze", {
       throw error;
     }
     const monitor = await ensureMonitor();
-    const created = await createJob({ repoPath: repo, task, mode, expect_changes: expect_changes ?? (mode === "write"), required_change_paths, thread_id, authorized_commands });
-    if (created.busy) return reply({ status: "WORKER_BUSY", job_id: created.job_id, monitor_url: monitorUrl(monitor, created.job_id) });
+    const created = await createJob({ repoPath: repo, git_root: await gitRoot(repo), task, mode,
+      expect_changes: expect_changes ?? (mode === "write"), required_change_paths, thread_id, authorized_commands });
+    if (created.busy) return reply({ status: "WORKER_BUSY", job_id: created.job_id, monitor_url: monitorUrl(monitor, created.job_id), monitor_index_url: monitorIndexUrl(monitor) });
+    const runnerDiagnostic = await fs.open(path.join(jobDir(created.job_id), "runner-stderr.log"), "a");
     const child = spawn(process.execPath, [path.join(root, "worker-runner.mjs"), created.job_id], {
-      detached: true, stdio: "ignore", windowsHide: true, cwd: root,
+      detached: true, stdio: ["ignore", "ignore", runnerDiagnostic.fd], windowsHide: true, cwd: root,
       env: { ...process.env, LOCAL_WORKER_ROOT: root },
     });
+    child.on("spawn", () => { void runnerDiagnostic.close(); });
     child.on("error", async error => {
+      await runnerDiagnostic.close().catch(() => {});
       try {
         const state = await getState(created.job_id);
         await fs.writeFile(path.join(jobDir(created.job_id), "error.txt"), `WORKER_INFRA_ERROR: spawn: ${error}\n`);
@@ -89,7 +100,7 @@ server.registerTool("local_analyze", {
       } catch {}
     });
     child.unref();
-    return reply({ job_id: created.job_id, status: "RUNNING", monitor_url: monitorUrl(monitor, created.job_id) });
+    return reply({ job_id: created.job_id, status: "RUNNING", monitor_url: monitorUrl(monitor, created.job_id), monitor_index_url: monitorIndexUrl(monitor) });
   } catch (error) { return errorReply(error); }
 });
 
@@ -101,7 +112,18 @@ server.registerTool("local_status", {
     await reconcileJob(job_id);
     const snapshot = await monitorSnapshot(job_id);
     const monitor = await ensureMonitor();
-    return reply({ ...snapshot.state, delivery: snapshot.delivery.status, activity: snapshot.activity, progress: snapshot.progress, monitor_url: monitorUrl(monitor, job_id) });
+    return reply({ ...snapshot.state, delivery: snapshot.delivery.status, activity: snapshot.activity, progress: snapshot.progress, monitor_url: monitorUrl(monitor, job_id), monitor_index_url: monitorIndexUrl(monitor) });
+  } catch (error) { return errorReply(error); }
+});
+
+server.registerTool("local_monitor", {
+  description: "Obtém o endereço atual do painel de todos os jobs retidos, sem acionar modelo nem exigir job_id.",
+  inputSchema: z.object({}),
+}, async () => {
+  try {
+    const monitor = await ensureMonitor();
+    const inventory = await inventorySnapshot({ limit: 1 });
+    return reply({ monitor_index_url: monitorIndexUrl(monitor), jobs_retained: inventory.all_total });
   } catch (error) { return errorReply(error); }
 });
 

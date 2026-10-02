@@ -10,7 +10,7 @@ param(
   [string]$BaseModel = 'qwen3-coder-next:q4_K_M',
   [ValidateRange(4096,262144)][int]$ModelContextTokens = 32768,
   [string]$WatchdogTaskName = 'CodexLocalWorkerWatchdog',
-  [ValidateRange(1,1440)][int]$WatchdogIntervalMinutes = 15,
+  [ValidateRange(1,1440)][int]$WatchdogIntervalMinutes = 2,
   [switch]$SkipPrerequisites,
   [switch]$SkipModel,
   [switch]$SkipWatchdog,
@@ -26,7 +26,8 @@ $WORKER_SOURCE_A3C = Join-Path $SOURCE_ROOT_A3C 'localworker'
 $WORKER_HOME_A3C = if ($WorkerHome) { $WorkerHome } elseif ($env:LOCAL_WORKER_HOME) { $env:LOCAL_WORKER_HOME } else { Join-Path $env:USERPROFILE '.codex-local-worker' }
 $CODEX_HOME_A3C = if ($CodexHome) { $CodexHome } elseif ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $env:USERPROFILE '.codex' }
 $CODEX_CONFIG_A3C = Join-Path $CODEX_HOME_A3C 'config.toml'
-$GLOBAL_RULES_A3C = Join-Path $CODEX_HOME_A3C 'AGENTS.md'
+$GLOBAL_OVERRIDE_A3C = Join-Path $CODEX_HOME_A3C 'AGENTS.override.md'
+$GLOBAL_RULES_A3C = if (Test-Path -LiteralPath $GLOBAL_OVERRIDE_A3C -PathType Leaf) { $GLOBAL_OVERRIDE_A3C } else { Join-Path $CODEX_HOME_A3C 'AGENTS.md' }
 $RULES_START_A3C = '<!-- LOCALWORKER_GLOBAL_START -->'
 $RULES_END_A3C = '<!-- LOCALWORKER_GLOBAL_END -->'
 $LEGACY_GLOBAL_SHA256_A3C = 'a8eff5e87698169d7d658758b165a27735a1272a6bebad8f35f98736b527603e'

@@ -163,6 +163,6 @@ Para implementação ou edição obrigatória delegada, use `expect_changes: tru
 
 Se a conversa atual não puder ser identificada com segurança, NÃO inicie o job e explique a limitação.
 
-Ao receber `RUNNING`, informe o `job_id` e o `monitor_url` para acompanhamento opcional e encerre o turno sem polling. Abrir ou fechar a interface não altera o job. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
+Ao receber `RUNNING`, informe o `job_id`, o `monitor_url` e, quando presente, o `monitor_index_url` para acompanhar o job ou navegar pelo histórico; encerre o turno sem polling. Abrir ou fechar a interface não altera o job. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
 
 O Worker é independente da escolha de modelo/esforço do supervisor. Preserve seleções da UI; esta instrução **NÃO troca modelo, esforço, provider, catálogo ou preferências do usuário**.

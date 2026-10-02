@@ -8,7 +8,7 @@
 | --- | --- |
 | Pasta da distribuição | Localização deste `src/`; descoberta pelo instalador. |
 | Destino do Worker | `-WorkerHome` ou `LOCAL_WORKER_HOME`; padrão derivado do perfil do usuário. |
-| Diretório/configuração Codex | `-CodexHome` ou `CODEX_HOME`; arquivo `config.toml` derivado. |
+| Diretório/configuração Codex | `-CodexHome` ou `CODEX_HOME`; arquivo `config.toml` derivado. Para regras globais, o instalador usa `AGENTS.override.md` se existir, senão `AGENTS.md`, preservando conteúdo não gerido. |
 | Sobrescrita da base Codex para entrega/consulta | `LOCAL_CODEX_HOME`; padrão `CODEX_HOME` ou perfil atual. |
 | Executáveis Git, Node, npm, Ollama e Codex | `-GitExe`, `-NodeExe`, `-NpmExe`, `-OllamaExe`, `-CodexExe` ou descoberta no PATH/instalação. |
 | Modelo Ollama e base | `-WorkerModel`/`LOCAL_MODEL`; `-BaseModel`/`LOCAL_BASE_MODEL`; padrões em `config.json` e no instalador. |
@@ -24,7 +24,11 @@
 | CLI de entrega | `LOCAL_CODEX_CMD`, `CODEX_CLI_PATH` ou `config.json:codex_command`, com redescoberta no PATH/Desktop. |
 | Pré-argumentos do CLI | `LOCAL_CODEX_PREARGS_JSON`; somente cenários controlados. |
 | Pasta de jobs, recuperação e latência | Derivadas do diretório instalado; não editar manualmente. |
-| Intervalo do watchdog | `-WatchdogIntervalMinutes` ou `-IntervalMinutes` no registro da tarefa; padrão 15 minutos. |
+| Recuperação de anomalias | `-WatchdogIntervalMinutes` ou `-IntervalMinutes` no registro da tarefa; padrão 2 minutos. A conclusão normal chama `codex queue` diretamente, sem aguardar esse intervalo. |
+| Retenção do histórico | `LOCAL_WORKER_HISTORY_DAYS` (90), `LOCAL_WORKER_HISTORY_MAX_JOBS` (500), `LOCAL_WORKER_HISTORY_MAX_BYTES` (536870912) e `LOCAL_WORKER_HISTORY_MAX_TOTAL_JOBS` (1000). A limpeza verifica a cada 6 h e só remove jobs terminais com entrega `QUEUED_TO_CHAT`; jobs ativos, pendentes e ambíguos são preservados. Ao chegar ao teto total, tenta limpar elegíveis e, se persistir, impede novo job com diagnóstico. |
+| Log operacional por job | `MAX_AUDIT_LOG_BYTES_K9P` (2 MiB) e `AUDIT_LOG_TAIL_BYTES_K9P` (1 MiB) no topo de `worker-runner.mjs`; compactação registra o evento e preserva a cauda recente, sem afetar resultado/estado. |
+| Limites da UI/API | `MAX_EVENTS_M7Q` (2000 eventos recentes por detalhe), `MAX_LIST_LIMIT_M7Q` (100 linhas por resposta), `PAGE_LIMIT_M7Q` (50 linhas por página); constantes no topo de `monitor.mjs`/script de `monitor-page.mjs`. Se houver mais eventos que o limite, a timeline mostra os mais recentes em ordem cronológica. |
+| Tempos de observação | `STALE_HEARTBEAT_MS_M7Q` (90 s), `WAIT_MODEL_MS_M7Q` (180 s), `WATCHDOG_INTERVAL_MS_M7Q` (60 s), `DETAIL_REFRESH_MS_M7Q` (3 s), `INDEX_REFRESH_MS_M7Q` (10 s), carência de órfão `ORPHAN_GRACE_MS_W8K` (120 s). Alterar somente com validação proporcional e atualização do guia. |
 | Nome da tarefa agendada | `-WatchdogTaskName` no instalador ou `-TaskName` no script de registro; padrão `CodexLocalWorkerWatchdog`. |
 | Identidade do repositório que mantém o Worker | `-MaintenanceRepo` nos scripts internos ou `LOCAL_WORKER_MAINTENANCE_REPO`; padrão descoberto pela raiz Git da fonte, sem caminho fixo. |
 | Configuração Codex dos scripts internos | `-CodexConfig`; padrão `CODEX_HOME/config.toml`. |
@@ -32,7 +36,7 @@
 | Recursos opcionais do instalador | `-SkipPrerequisites`, `-SkipModel`, `-SkipWatchdog`, `-SkipGlobalRules`; apenas para instalação parcial/controlada. |
 | Download de modelos Ollama | `OLLAMA_MODELS` conforme configuração oficial do Ollama. |
 | Remoção de notificações | `LOCAL_DISABLE_NOTIFY=1` para testes sem balão. |
-| Monitor local | `monitor_url` é gerado em cada delegação; host `127.0.0.1`, porta dinâmica, chave aleatória em `monitor.json` no destino. Não publique o link. Limites de heartbeat/espera e intervalo de reconciliação (60 s) estão no topo de `monitor.mjs`; carência de órfão (120 s) no topo de `watchdog.mjs`. |
+| Monitor local | `monitor_url` abre o detalhe; `monitor_index_url`, `local_monitor` ou `node monitor.mjs index` dão acesso ao inventário. Host `127.0.0.1`, porta dinâmica, chave aleatória em `monitor.json` no destino. Não publique os links. Limites de heartbeat/espera e reconciliação de anomalias (60 s) estão no topo de `monitor.mjs`; carência de órfão (120 s) no topo de `watchdog.mjs`. A UI atualiza sem reload em 3 s no detalhe e 10 s no inventário enquanto visível. |
 | Alvos obrigatórios de escrita | `required_change_paths` em `local_analyze`, lista de caminhos relativos; cada alvo deve mudar durante o job. Use com `expect_changes=true`. |
 | Descoberta de aplicativos | `PATH` e `LOCALAPPDATA`, fornecidos pelo Windows; redescobertos no momento da entrega. |
 | Origem do App Installer | URL oficial `https://aka.ms/getwinget`, família Windows `Microsoft.DesktopAppInstaller_8wekyb3d8bbwe` e produto Microsoft Store `9NBLGGH4NNS1`; definidos uma vez no topo do instalador. |
@@ -52,18 +56,19 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `6128724ed765dcb78cbc457bac81ee7257ffb11dc196ec3730b5e1a605ddd3c7` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `91179c46638fcb581a8164acfe7dad969dabfbf46cca98eda6d6be671861134d` |
+| `src/localworker/server.mjs` | `263606fe58785410d0c4402e89dfcd291a7556a1ce39515b3401048e94aa1828` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `d30240c99c6c4f3832c577a3ccc55c49c84807617dc8b1c2d657b62797dfa497` |
+| `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/worker-core.mjs` | `66d404325251794894de5093523ef441c925f7655c726e77b28022d00233ff2e` |
-| `src/localworker/worker-runner.mjs` | `fa3150b3b00c7353725189991267ed4521e92829d5aef11e0a7a8c64282a7703` |
+| `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
 | `src/localworker/delivery.mjs` | `d02c74839dcf59292c88f1124113b2fa08b4ad8f1413c888f562b0cb0d631674` |
-| `src/localworker/watchdog.mjs` | `bfd62e143e17bb416e607f213fac6abba03699951b191b12e53d8afa733fa3da` |
-| `src/localworker/monitor.mjs` | `86f56c938b326c57293242d5acc2ead10d5e595985a661783622ba78c2a17bb4` |
+| `src/localworker/watchdog.mjs` | `8074f565f142339dcd179c83377219d18a387831a48a563d69931ff1047672a6` |
+| `src/localworker/monitor.mjs` | `9538f4a27d12663b4fa1902c47eb880bf854b2c2c05173d34f5175ec0b2dcdb3` |
+| `src/localworker/monitor-page.mjs` | `5088b3c3399057ede65196afabf633b43c7eb83f9dc76f2d6fb2842355193de8` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `4d4beeb08f5d9faa50f9d2a720d6a89b023d6cab7412eb2a0b3a3aca644685dd` |
-| `src/localworker/update-installed.ps1` | `8777979eedf9d8c6e0bbc3665da9d008fa58392da27e3c9b24e04ca78df58546` |
-| `src/localworker/register-watchdog.ps1` | `d78fa380059112826d061097c4138bcbcabc369a6888d6a875cda649bcad3efb` |
-| `src/install.ps1` | `a553471c7076ffa68dc22242d0dd225ed6393e47764e51204bcc171bce0d52b8` |
-| `src/agents.supervisor.md` | `e95a4a0c0184f3c94637ad2dfcc3dd19a2f3a11b297bf16ee38ed2adcd2dd520` |
+| `src/localworker/install.ps1` | `d1e4b04759630e48898341d933fa62146b0ac6eb3705ed14498c48b7d4c9db77` |
+| `src/localworker/update-installed.ps1` | `a86f0954f4d1b45495df9b5504847e185ed2023731c3fbbf7f833344cf78569b` |
+| `src/localworker/register-watchdog.ps1` | `8f0e04f10ac19212b7fd128da389f38c7cddfda7268b87997e8a5d9ebf5e7b3f` |
+| `src/install.ps1` | `837f0627274f11789ce40964f0911200efcfb83239368d5dc457341dee2f0beb` |
+| `src/agents.supervisor.md` | `f3ef7af884c8604d217ecfd06319e782a9fdbfe0c1a5495ca899304299fd3458` |
 <!-- LOCALWORKER_GENERATED_END -->

@@ -3,12 +3,26 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { listJobs, jobDir, getState, setState, alive, readJson, atomicText, atomicJson } from "./job-store.mjs";
+import { listJobs, jobDir, getState, setState, alive, readJson, atomicText, atomicJson, pruneJobHistory } from "./job-store.mjs";
 import { deliver, notify } from "./delivery.mjs";
 import { ensureMonitor } from "./monitor.mjs";
 
 const ORPHAN_GRACE_MS_W8K = 120_000;
 const execFileAsync = promisify(execFile);
+
+async function runnerDiagnosticW8K(dir) {
+  const file = path.join(dir, "runner-stderr.log");
+  try {
+    const info = await fs.stat(file);
+    const handle = await fs.open(file, "r");
+    try {
+      const size = Math.min(2048, info.size);
+      const buffer = Buffer.alloc(size);
+      const { bytesRead } = await handle.read(buffer, 0, size, info.size - size);
+      return buffer.subarray(0, bytesRead).toString("utf8").trim();
+    } finally { await handle.close(); }
+  } catch { return ""; }
+}
 
 async function captureGitEvidence(dir) {
   const request = await readJson(path.join(dir, "request.json"));
@@ -46,7 +60,8 @@ export async function reconcileJob(id) {
         await setState(id, { ...state, status: "FAILED", phase: "failed", error_kind: kind, completed_at: new Date().toISOString(), recovered_from: "error.txt" });
       } else if (now - last > ORPHAN_GRACE_MS_W8K && !alive(state.pid)) {
         const git = await captureGitEvidence(dir);
-        await atomicText(path.join(dir, "error.txt"), `WORKER_INFRA_ERROR: runner ausente após heartbeat vencido; alterações parciais preservadas.\n\n${git}`);
+        const diagnostic = await runnerDiagnosticW8K(dir);
+        await atomicText(path.join(dir, "error.txt"), `WORKER_INFRA_ERROR: runner ausente após heartbeat vencido; alterações parciais preservadas.\nÚltimo evento: ${state.last_event_at ?? "indisponível"}; heartbeat: ${state.heartbeat_at ?? "indisponível"}; PID: ${state.pid ?? "indisponível"}.\n${diagnostic ? `Diagnóstico stderr do runner (cauda):\n${diagnostic}\n` : "stderr do runner indisponível.\n"}\n${git}`);
         await setState(id, { ...state, status: "FAILED", phase: "failed", error_kind: "WORKER_INFRA_ERROR", completed_at: new Date().toISOString(), recovered_from: "runner-orphaned" });
       } else return { status: state.status, reconciled: false };
     }
@@ -79,6 +94,8 @@ async function main() {
     try { await reconcileJob(id); }
     catch (error) { console.error(`watchdog ${id}: ${error?.stack ?? error}`); }
   }
+  try { await pruneJobHistory(); }
+  catch (error) { console.error(`history cleanup: ${error?.stack ?? error}`); }
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();

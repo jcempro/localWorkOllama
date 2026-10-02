@@ -11,7 +11,7 @@ O localWorker executa tarefas delegáveis em inferência Ollama local, com jobs 
 3. A conclusão é enviada por `codex queue` ao mesmo `thread_id`. O caminho do CLI é descoberto novamente na entrega. Erro comprovadamente anterior ao envio pode ser recuperado uma vez; estado ambíguo não permite duplicação automática.
 4. O Worker dispõe de leitura, busca, status/diff Git e, quando autorizado, escrita, edição, movimentação sem sobrescrita, exclusão com backup recuperável e comandos delimitados. `git_status` explicita upstream e contagens determinísticas de commits à frente/atrás; arquivo modificado no working tree não implica commit não enviado. Confinamento por caminho real e regras aplicáveis do repositório são obrigatórios.
 5. O supervisor consulta o resultado uma vez após retomada, revisa riscos e evidência proporcionalmente e continua unidades pendentes; término da inferência não prova conclusão da solicitação.
-6. Cada delegação fornece `monitor_url` local autenticado. O monitor HTTP liga somente em `127.0.0.1`, corre em processo separado e lê telemetria persistida; abrir ou fechar a página não afeta o runner. Ele mostra fase, ferramentas, recursos acessados, tempos, contadores de progresso, uso observável de CPU/memória/GPU, erros e entrega. Não expõe raciocínio interno nem conteúdo de arquivos. `local_status` também expõe atividade derivada.
+6. Cada delegação fornece `monitor_url` para o job e `monitor_index_url` para todos os jobs retidos; `local_monitor` e `node monitor.mjs index` redescobrem o link atual sem ID. O monitor HTTP liga somente em `127.0.0.1`, corre em processo separado e lê telemetria persistida; abrir ou fechar a página não afeta o runner. Ele mostra fase, ferramentas, recursos acessados, tempos, contadores de progresso, uso observável de CPU/memória/GPU, erros e entrega. Não expõe raciocínio interno nem conteúdo de arquivos. `local_status` também expõe atividade derivada.
 7. `RUNNING` é estado formal, não prova de processamento ativo. Heartbeat, PID, último evento, espera por Ollama e uso observável de recursos distinguem `ACTIVE`, `WAITING_MODEL`, `WAITING`, `STALLED_SUSPECTED`, `STALLED`, `ORPHANED` e `TERMINAL_NOT_PROPAGATED`. GPU indisponível torna estagnação uma suspeita explicitada. O watchdog, o monitor independente e as consultas de estado/resultado reconciliam runner desaparecido, preservam alterações parciais, registram Git determinístico e entregam o diagnóstico sem duplicar inferência.
 8. Em escrita obrigatória, o Worker recebe alertas de orçamento antes do limite, deixa de receber ferramentas de listagem ampla na metade dos ciclos e rejeita consultas idênticas recorrentes. Esgotamento de ciclos é `WORKER_INCOMPLETE`, com contagem de mutações e ferramentas, nunca falha de transporte. Isso exige correção de segmentação/estratégia antes de nova delegação.
 9. O transporte HTTP do Ollama usa o prazo total explícito do job, sem timeout implícito de cabeçalho de cinco minutos. Falhas transitórias de conexão recebem tentativas limitadas. A saída padrão e de erro de comandos autorizados falhos é devolvida de forma limitada ao Worker para diagnóstico; o monitor recebe apenas resumo operacional.
@@ -22,12 +22,13 @@ O localWorker executa tarefas delegáveis em inferência Ollama local, com jobs 
 
 - O monitor é serviço local idempotente e independente do runner. Sua disponibilidade, navegação, abertura, fechamento e atualização não governam a vida do job. O inventário abrange jobs ativos e terminais retidos, permite filtro por projeto Codex Desktop se essa identidade estiver comprovadamente disponível, senão por raiz Git, e ordena por estado ou criação, ascendente/descendente; o padrão é mais recente primeiro. O detalhe oferece link de volta ao inventário, status, duração, atividade derivada, entrega, timeline cronológica de eventos, erros e bloqueios, tokens de entrada/saída, contexto e custo quando fornecidos pelo runtime. Campo não medido é identificado como indisponível, jamais estimado como fato.
 - A telemetria registra apenas eventos operacionais e resumos de raciocínio oficialmente expostos, se houver; nunca depende nem expõe chain-of-thought privado. UI e API atualizam dados sem recarregar a página, limitam volume de resposta, exigem token local e escapam texto não confiável. Preferência por padrões ou componentes open-source maduros é condicional a benefício líquido comprovado frente à solução nativa, sem dependência externa em tempo de execução, vazamento ou consumo material de recursos.
-- Cada job possui diretório exclusivo `jobs/<job_id>` validado. Pedido, estado, log, Git, resultado, erro e entrega pertencem somente a essa identidade. Metadados globais separados não podem substituir nem sobrescrever esses artefatos. Retenção configurável remove somente histórico terminal com entrega resolvida, nunca ativo, pendente ou ambíguo; mantém janela temporal e limite de contagem, com limpeza idempotente, observável e resistente a links/erros isolados.
+- Cada job possui diretório exclusivo `jobs/<job_id>` validado. Pedido, estado, log, Git, resultado, erro e entrega pertencem somente a essa identidade. Metadados globais separados não podem substituir nem sobrescrever esses artefatos. Retenção configurável remove somente histórico terminal com entrega resolvida, nunca ativo, pendente ou ambíguo; mantém janela temporal, limites de contagem e bytes, com limpeza idempotente, observável e resistente a links/erros isolados. O log operacional por job é limitado por compactação auditável; um teto total de jobs impede crescimento ilimitado caso entregas não resolvidas se acumulem, com diagnóstico e sem apagar essas entregas.
 - A entrega direta ao chat na conclusão é o caminho primário, sem polling do supervisor. O watchdog gratuito e o monitor reconciliam anomalias e jobs órfãos sem repetir inferência nem duplicar entrega ambígua. Quinze minutos só é intervalo admissível para verificação que consuma processamento pago do supervisor; a referência gratuita de até três minutos somente vale quando não existir disparo de conclusão. Com o evento direto vigente, não há espera periódica de três minutos na conclusão normal.
 
 ## Instalação reproduzível
 
 - `src/` contém a representação generalista de todos os artefatos instaláveis; `src/install.ps1` instala e configura em Windows 11 2025H2+ limpo, com descoberta de caminhos e parâmetros. `howto.md` é o procedimento humano equivalente.
+- A preferência automática do Worker é instalada no arquivo global de instruções efetivamente carregado: `AGENTS.override.md` se existir no Codex home, senão `AGENTS.md`. O seletor nativo documentado do Desktop controla modelo e esforço, sem extensão documentada para variantes `+ Worker`; as instruções globais são a alternativa compatível e não alteram o modelo/esforço escolhido.
 - O instalador é idempotente: verifica estado antes de alterar, preserva configuração anterior, usa backups e valida cada etapa. Se um método falhar, tenta alternativas tecnicamente equivalentes e seguras. Não altera dados pessoais nem presume usernames, volumes ou roots.
 - Credenciais, caminhos e repositórios exclusivos do ambiente de desenvolvimento não entram em `src/` ou `howto.md`. Testes reais usam repositório externo autorizado e preservam seu Git.
 
@@ -48,18 +49,19 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `6128724ed765dcb78cbc457bac81ee7257ffb11dc196ec3730b5e1a605ddd3c7` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `91179c46638fcb581a8164acfe7dad969dabfbf46cca98eda6d6be671861134d` |
+| `src/localworker/server.mjs` | `263606fe58785410d0c4402e89dfcd291a7556a1ce39515b3401048e94aa1828` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `d30240c99c6c4f3832c577a3ccc55c49c84807617dc8b1c2d657b62797dfa497` |
+| `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/worker-core.mjs` | `66d404325251794894de5093523ef441c925f7655c726e77b28022d00233ff2e` |
-| `src/localworker/worker-runner.mjs` | `fa3150b3b00c7353725189991267ed4521e92829d5aef11e0a7a8c64282a7703` |
+| `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
 | `src/localworker/delivery.mjs` | `d02c74839dcf59292c88f1124113b2fa08b4ad8f1413c888f562b0cb0d631674` |
-| `src/localworker/watchdog.mjs` | `bfd62e143e17bb416e607f213fac6abba03699951b191b12e53d8afa733fa3da` |
-| `src/localworker/monitor.mjs` | `86f56c938b326c57293242d5acc2ead10d5e595985a661783622ba78c2a17bb4` |
+| `src/localworker/watchdog.mjs` | `8074f565f142339dcd179c83377219d18a387831a48a563d69931ff1047672a6` |
+| `src/localworker/monitor.mjs` | `9538f4a27d12663b4fa1902c47eb880bf854b2c2c05173d34f5175ec0b2dcdb3` |
+| `src/localworker/monitor-page.mjs` | `5088b3c3399057ede65196afabf633b43c7eb83f9dc76f2d6fb2842355193de8` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `4d4beeb08f5d9faa50f9d2a720d6a89b023d6cab7412eb2a0b3a3aca644685dd` |
-| `src/localworker/update-installed.ps1` | `8777979eedf9d8c6e0bbc3665da9d008fa58392da27e3c9b24e04ca78df58546` |
-| `src/localworker/register-watchdog.ps1` | `d78fa380059112826d061097c4138bcbcabc369a6888d6a875cda649bcad3efb` |
-| `src/install.ps1` | `a553471c7076ffa68dc22242d0dd225ed6393e47764e51204bcc171bce0d52b8` |
-| `src/agents.supervisor.md` | `e95a4a0c0184f3c94637ad2dfcc3dd19a2f3a11b297bf16ee38ed2adcd2dd520` |
+| `src/localworker/install.ps1` | `d1e4b04759630e48898341d933fa62146b0ac6eb3705ed14498c48b7d4c9db77` |
+| `src/localworker/update-installed.ps1` | `a86f0954f4d1b45495df9b5504847e185ed2023731c3fbbf7f833344cf78569b` |
+| `src/localworker/register-watchdog.ps1` | `8f0e04f10ac19212b7fd128da389f38c7cddfda7268b87997e8a5d9ebf5e7b3f` |
+| `src/install.ps1` | `837f0627274f11789ce40964f0911200efcfb83239368d5dc457341dee2f0beb` |
+| `src/agents.supervisor.md` | `f3ef7af884c8604d217ecfd06319e782a9fdbfe0c1a5495ca899304299fd3458` |
 <!-- LOCALWORKER_GENERATED_END -->

@@ -98,6 +98,11 @@ try {
   server.stdin.write(JSON.stringify({ jsonrpc: "2.0", method: "notifications/initialized" }) + "\n");
   const tools = await rpc("tools/list", {});
   assert.ok(tools.result.tools.some(x => x.name === "local_status"));
+  assert.ok(tools.result.tools.some(x => x.name === "local_monitor"));
+  const monitorTool = await rpc("tools/call", { name: "local_monitor", arguments: {} });
+  const monitorIndexUrl = JSON.parse(monitorTool.result.content[0].text).monitor_index_url;
+  assert.match(monitorIndexUrl, /\/\?token=/);
+  assert.equal((await fetch(monitorIndexUrl)).status, 200);
   const selfUse = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: path.resolve(root, ".."), task: "Não executar", mode: "read-only", thread_id: thread } });
   assert.match(selfUse.result.content[0].text, /WORKER_REQUEST_REJECTED/);
   assert.match(selfUse.result.content[0].text, /Proibido usar localWorker/);
@@ -117,6 +122,7 @@ try {
   const start = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: repo, task: "Somente leia o status Git.", mode: "read-only", thread_id: thread } });
   const receipt = JSON.parse(start.result.content[0].text);
   assert.equal(receipt.status, "RUNNING");
+  assert.equal(receipt.monitor_index_url, monitorIndexUrl);
   const id = receipt.job_id;
   const deliveryFile = path.join(runtimeRoot, "jobs", id, "delivery.json");
   const terminal = await new Promise((resolve, reject) => {
@@ -131,6 +137,7 @@ try {
   });
   assert.equal(terminal.thread_id, thread);
   assert.match(terminal.acknowledgement, /Queued message fake/);
+  assert.match(await fs.readFile(path.join(runtimeRoot, "jobs", id, "runner-stderr.log"), "utf8"), /filesystem OK/);
   const status = await rpc("tools/call", { name: "local_status", arguments: { job_id: id } });
   assert.equal(JSON.parse(status.result.content[0].text).status, "COMPLETED");
   const result = await rpc("tools/call", { name: "local_result", arguments: { job_id: id } });

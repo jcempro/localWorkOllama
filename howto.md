@@ -17,7 +17,7 @@ Pessoa ─► chat Codex Desktop ─► MCP localWorker ─► Ollama local
 | Preparar o modelo | `qwen3-coder-next-32k` aparece no Ollama. |
 | Instalar o MCP e instruções | `local_analyze` aparece no Desktop; tarefas adequadas usam o Worker sem pedido repetido. |
 | Validar | O job conclui e o chat de origem retoma para `local_result` e revisão. |
-| Acompanhar | O link `monitor_url` mostra atividade e eventos; fechar a página não altera o job. |
+| Acompanhar | `monitor_index_url` lista os jobs retidos e `monitor_url` mostra o detalhe; fechar a página não altera o job. |
 
 Os caminhos neste artigo são calculados a partir da máquina. Um caminho como `C:\Exemplo\projeto` é **fictício**, nunca um local presumido. Execute os comandos em PowerShell como o usuário do Codex; aceite elevação somente quando o Windows a pedir para instalar aplicativos ou registrar uma tarefa. Tenha internet, autorização de instalação e espaço para um modelo Ollama de dezenas de GB. Não coloque tokens, senhas nem dados privados nos exemplos.
 
@@ -117,9 +117,11 @@ No Desktop, confira o servidor em **Settings → MCP servers** e reinicie o apli
 
 ### Acompanhamento e diagnóstico
 
-Cada `local_analyze` devolve `job_id`, estado e `monitor_url`. Abra esse link no navegador da mesma máquina quando quiser observar o job; a página é somente leitura e pode ser fechada a qualquer momento. Guarde o link como informação privada: ele contém uma chave temporária de acesso local. O serviço escuta apenas em `127.0.0.1` e o watchdog o recupera após reinício. O link mostra ciclos, etapas, ferramentas, caminhos acessados, erros, retries, horários, entrega ao chat e sinais de CPU/memória/GPU quando disponíveis. Não mostra conteúdo dos arquivos nem raciocínio privado do modelo.
+Cada `local_analyze` devolve `job_id`, estado, `monitor_url` (detalhe) e `monitor_index_url` (inventário). `local_monitor` fornece o link atual do inventário sem `job_id`; `node <PASTA_DO_WORKER>/monitor.mjs index` faz o mesmo fora do MCP. Abra os links no navegador da mesma máquina quando quiser observar os jobs; a página é somente leitura e pode ser fechada a qualquer momento. Guarde os links como informação privada: contêm uma chave temporária de acesso local. O serviço escuta apenas em `127.0.0.1`, roda separado do runner e o watchdog o recupera após reinício. O inventário filtra por repositório Git e status, ordena por tempo ou status em ambos os sentidos e começa pelo mais recente. O detalhe apresenta duração, ciclos, ferramentas, caminhos acessados, eventos em ordem cronológica, erros, retries, entrega, tokens de entrada/saída e sinais de CPU/memória/GPU quando disponíveis. Contexto não comprovado aparece como indisponível; o custo de API da inferência Ollama local é zero, sem estimar energia. A UI atualiza sem recarga a cada três segundos no detalhe e dez segundos no inventário enquanto visível. Não mostra conteúdo dos arquivos nem raciocínio privado do modelo.
 
-`ACTIVE` indica evento ou uso de recursos recente; `WAITING_MODEL` indica resposta do Ollama pendente; `STALLED_SUSPECTED` indica longa espera sem atividade observável; `STALLED` indica heartbeat/eventos atrasados; `ORPHANED` indica runner ausente; `TERMINAL_NOT_PROPAGATED` indica artefato final persistido antes de atualizar o estado. GPU não mensurável impede certeza sobre uma espera longa; o diagnóstico explicita esse limite. `local_status` fornece o mesmo diagnóstico sem abrir o navegador e reconcilia um job órfão. O monitor independente também aciona a reconciliação periodicamente enquanto estiver ativo; a tarefa agendada oferece recuperação após novo logon. A recuperação registra o estado Git e não apaga arquivos parciais.
+`ACTIVE` indica evento ou uso de recursos recente; `WAITING_MODEL` indica resposta do Ollama pendente; `STALLED_SUSPECTED` indica longa espera sem atividade observável; `STALLED` indica heartbeat/eventos atrasados; `ORPHANED` indica runner ausente; `TERMINAL_NOT_PROPAGATED` indica artefato final persistido antes de atualizar o estado. GPU não mensurável impede certeza sobre uma espera longa; o diagnóstico explicita esse limite. `local_status` fornece o mesmo diagnóstico sem abrir o navegador e reconcilia um job órfão. O runner chama `codex queue` assim que termina, sem polling do supervisor; o monitor e a tarefa agendada verificam somente anomalias. A recuperação registra o estado Git e não apaga arquivos parciais.
+
+Cada pedido, estado, log e resultado fica em `jobs/<job_id>` exclusivo. A limpeza automática, a cada seis horas, mantém jobs terminais entregues por até 90 dias e limita esse histórico a 500 jobs e 512 MiB; remove os mais antigos quando algum limite é excedido. O log operacional de cada job é compactado ao atingir 2 MiB, preservando o evento de compactação e a cauda recente de 1 MiB; resultado e estado continuam separados. Jobs ativos ou com entrega pendente/ambígua nunca são apagados automaticamente. Ao chegar a 1000 jobs totais, o sistema tenta limpar os elegíveis e impede novos jobs com diagnóstico se o teto persistir. Configure antes de iniciar os processos por `LOCAL_WORKER_HISTORY_DAYS`, `LOCAL_WORKER_HISTORY_MAX_JOBS`, `LOCAL_WORKER_HISTORY_MAX_BYTES` e `LOCAL_WORKER_HISTORY_MAX_TOTAL_JOBS`. A limpeza registra contagem e erros em `history-cleanup.json` e não lê arquivos pessoais.
 
 Para conferir afirmações sobre commits, use os campos `ahead` e `behind` da seção `ESTADO GIT DETERMINÍSTICO` retornada por `git_status`. Uma linha de arquivo modificado significa alteração no working tree; não demonstra commit não enviado.
 
@@ -129,7 +131,7 @@ Quando a unidade de implementação tem arquivos-alvo definidos, passe caminhos 
 
 ## 4. Registrar o watchdog
 
-O watchdog recupera jobs persistidos após logon e verifica entregas terminais a cada 15 minutos. Use os mesmos caminhos da instalação:
+O watchdog recupera jobs persistidos após logon e verifica anomalias a cada 2 minutos por padrão. A conclusão normal notifica o chat diretamente; esse intervalo não impõe espera ao job nem consome tokens do supervisor. Use os mesmos caminhos da instalação:
 
 ```powershell
 & (Join-Path $Source 'src/localworker/register-watchdog.ps1') -Target $WorkerHome -NodePath $NodeExe
@@ -144,7 +146,7 @@ O script aceita uma tarefa já existente quando ela aponta ao mesmo destino. Par
 
 ## 5. Instruções globais do supervisor
 
-O instalador grava as regras em `$CodexHome\AGENTS.md` com marcadores próprios e backup, preservando instruções preexistentes. Na execução manual, crie o arquivo em UTF-8 com o conteúdo abaixo ou mescle-o sem apagar regras existentes. O bloco é espelhado automaticamente de `src/agents.supervisor.md`:
+O instalador grava as regras com marcadores próprios e backup no arquivo global efetivo: `$CodexHome\AGENTS.override.md` se ele já existir; caso contrário, `$CodexHome\AGENTS.md`. O Codex lê o override primeiro, portanto gravar apenas no arquivo base quando houver override deixaria a preferência invisível. Na execução manual, escolha essa mesma regra e mescle o conteúdo abaixo em UTF-8 sem apagar instruções existentes. O bloco é espelhado automaticamente de `src/agents.supervisor.md` ([descoberta oficial de AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)):
 Uma cópia global legada idêntica à versão anterior, sem marcadores, é removida somente quando seu SHA-256 exato é reconhecido; outras instruções são preservadas.
 
 <details>
@@ -316,7 +318,7 @@ Para implementação ou edição obrigatória delegada, use `expect_changes: tru
 
 Se a conversa atual não puder ser identificada com segurança, NÃO inicie o job e explique a limitação.
 
-Ao receber `RUNNING`, informe o `job_id` e o `monitor_url` para acompanhamento opcional e encerre o turno sem polling. Abrir ou fechar a interface não altera o job. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
+Ao receber `RUNNING`, informe o `job_id`, o `monitor_url` e, quando presente, o `monitor_index_url` para acompanhar o job ou navegar pelo histórico; encerre o turno sem polling. Abrir ou fechar a interface não altera o job. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
 
 O Worker é independente da escolha de modelo/esforço do supervisor. Preserve seleções da UI; esta instrução **NÃO troca modelo, esforço, provider, catálogo ou preferências do usuário**.
 ```
@@ -419,24 +421,25 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `6128724ed765dcb78cbc457bac81ee7257ffb11dc196ec3730b5e1a605ddd3c7` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `91179c46638fcb581a8164acfe7dad969dabfbf46cca98eda6d6be671861134d` |
+| `src/localworker/server.mjs` | `263606fe58785410d0c4402e89dfcd291a7556a1ce39515b3401048e94aa1828` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `d30240c99c6c4f3832c577a3ccc55c49c84807617dc8b1c2d657b62797dfa497` |
+| `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/worker-core.mjs` | `66d404325251794894de5093523ef441c925f7655c726e77b28022d00233ff2e` |
-| `src/localworker/worker-runner.mjs` | `fa3150b3b00c7353725189991267ed4521e92829d5aef11e0a7a8c64282a7703` |
+| `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
 | `src/localworker/delivery.mjs` | `d02c74839dcf59292c88f1124113b2fa08b4ad8f1413c888f562b0cb0d631674` |
-| `src/localworker/watchdog.mjs` | `bfd62e143e17bb416e607f213fac6abba03699951b191b12e53d8afa733fa3da` |
-| `src/localworker/monitor.mjs` | `86f56c938b326c57293242d5acc2ead10d5e595985a661783622ba78c2a17bb4` |
+| `src/localworker/watchdog.mjs` | `8074f565f142339dcd179c83377219d18a387831a48a563d69931ff1047672a6` |
+| `src/localworker/monitor.mjs` | `9538f4a27d12663b4fa1902c47eb880bf854b2c2c05173d34f5175ec0b2dcdb3` |
+| `src/localworker/monitor-page.mjs` | `5088b3c3399057ede65196afabf633b43c7eb83f9dc76f2d6fb2842355193de8` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `4d4beeb08f5d9faa50f9d2a720d6a89b023d6cab7412eb2a0b3a3aca644685dd` |
-| `src/localworker/update-installed.ps1` | `8777979eedf9d8c6e0bbc3665da9d008fa58392da27e3c9b24e04ca78df58546` |
-| `src/localworker/register-watchdog.ps1` | `d78fa380059112826d061097c4138bcbcabc369a6888d6a875cda649bcad3efb` |
-| `src/install.ps1` | `a553471c7076ffa68dc22242d0dd225ed6393e47764e51204bcc171bce0d52b8` |
-| `src/agents.supervisor.md` | `e95a4a0c0184f3c94637ad2dfcc3dd19a2f3a11b297bf16ee38ed2adcd2dd520` |
+| `src/localworker/install.ps1` | `d1e4b04759630e48898341d933fa62146b0ac6eb3705ed14498c48b7d4c9db77` |
+| `src/localworker/update-installed.ps1` | `a86f0954f4d1b45495df9b5504847e185ed2023731c3fbbf7f833344cf78569b` |
+| `src/localworker/register-watchdog.ps1` | `8f0e04f10ac19212b7fd128da389f38c7cddfda7268b87997e8a5d9ebf5e7b3f` |
+| `src/install.ps1` | `837f0627274f11789ce40964f0911200efcfb83239368d5dc457341dee2f0beb` |
+| `src/agents.supervisor.md` | `f3ef7af884c8604d217ecfd06319e782a9fdbfe0c1a5495ca899304299fd3458` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI
 
-Continue selecionando GPT Luna, Sol, Astra ou outro modelo disponível e o esforço admitido por ele diretamente no Desktop. A preferência pelo Worker em `AGENTS.md` é independente; não altera o modelo, o esforço nem o catálogo. O Desktop não documenta um mecanismo para inserir `GPT 6 Sol + Worker` como variante do **mesmo** modelo no seletor. Isso exigiria um atributo de sessão `worker_enabled` independente de `model` e `model_reasoning_effort`, e um ID confiável do chat entregue ao MCP. Perfis da CLI e nomes artificiais no catálogo não fornecem essa integração. A instrução global acima é a alternativa nativa atualmente implementada; ela dispensa pedido repetido, embora dependa do cumprimento pelo supervisor.
+Continue selecionando GPT Luna, Sol, Astra ou outro modelo disponível e o esforço admitido por ele diretamente no Desktop. A preferência pelo Worker nas instruções globais é independente; não altera o modelo, o esforço nem o catálogo. A [documentação oficial de modelos](https://learn.chatgpt.com/docs/models) descreve o seletor de modelo/esforço, e as [configurações oficiais](https://learn.chatgpt.com/docs/developer-settings) documentam `config.toml` e MCP, mas não uma extensão do catálogo para variantes `GPT 6 Sol + Worker`. Isso exigiria um atributo de sessão `worker_enabled` independente de `model` e `model_reasoning_effort`, e um ID confiável do chat entregue ao MCP. Perfis da CLI e nomes artificiais no catálogo não fornecem essa integração. A instrução global acima é a alternativa nativa atualmente implementada; ela dispensa pedido repetido, embora dependa do cumprimento pelo supervisor.
 
 Fontes: [Codex Desktop no Windows](https://learn.chatgpt.com/docs/windows/windows-app), [MCP no Codex](https://learn.chatgpt.com/docs/extend/mcp?surface=cli), [configuração Codex](https://learn.chatgpt.com/docs/config-file/config-basic), [Ollama no Windows](https://docs.ollama.com/windows) e [Modelfile](https://docs.ollama.com/modelfile).

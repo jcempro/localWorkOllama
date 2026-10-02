@@ -4,4 +4,7 @@ active.json
 latency.json
 create.lock
 monitor.json
+monitor-start.lock
+history-cleanup.json
+history-cleanup.lock
 *.tmp
