@@ -132,6 +132,10 @@ Cada `local_analyze` devolve `job_id`, estado, `monitor_url` (detalhe) e `monito
 
 `ACTIVE` indica evento ou uso de recursos recente; `WAITING_MODEL` indica resposta do Ollama pendente; `STALLED_SUSPECTED` indica longa espera sem atividade observável; `STALLED` indica heartbeat/eventos atrasados; `ORPHANED` indica runner ausente; `TERMINAL_NOT_PROPAGATED` indica artefato final persistido antes de atualizar o estado. GPU não mensurável impede certeza sobre uma espera longa; o diagnóstico explicita esse limite. `local_status` fornece o mesmo diagnóstico sem abrir o navegador e reconcilia um job órfão. O runner chama `codex queue` assim que termina, sem polling do supervisor; o monitor e a tarefa agendada verificam somente anomalias. A recuperação registra o estado Git e não apaga arquivos parciais.
 
+Uma chamada rejeitada duas vezes não deve consumir todos os ciclos: o Worker bloqueia apenas aquela combinação de ferramenta e argumentos, registra o motivo e tenta outra forma permitida. Quando o contrato precisa de acesso maior, ele deve indicar ao supervisor o acesso exato em `NEEDS_SUPERVISOR`. A prova de edição compara também o conteúdo dos arquivos novos ainda não rastreados pelo Git; não exige `git add`.
+
+Uma chamada rejeitada duas vezes não deve consumir todos os ciclos: o Worker bloqueia apenas aquela combinação de ferramenta e argumentos, registra o motivo e tenta outra forma permitida. Quando o contrato precisa de acesso maior, ele deve indicar ao supervisor o acesso exato em `NEEDS_SUPERVISOR`. A prova de edição compara também o conteúdo dos arquivos novos ainda não rastreados pelo Git; não exige `git add`.
+
 Cada pedido, estado, log e resultado fica em `jobs/<job_id>` exclusivo. A limpeza automática, a cada seis horas, mantém jobs terminais entregues por até 90 dias e limita esse histórico a 500 jobs e 512 MiB; remove os mais antigos quando algum limite é excedido. O log operacional de cada job é compactado ao atingir 2 MiB, preservando o evento de compactação e a cauda recente de 1 MiB; resultado e estado continuam separados. Jobs ativos ou com entrega pendente/ambígua nunca são apagados automaticamente. Ao chegar a 1000 jobs totais, o sistema tenta limpar os elegíveis e impede novos jobs com diagnóstico se o teto persistir. Configure antes de iniciar os processos por `LOCAL_WORKER_HISTORY_DAYS`, `LOCAL_WORKER_HISTORY_MAX_JOBS`, `LOCAL_WORKER_HISTORY_MAX_BYTES` e `LOCAL_WORKER_HISTORY_MAX_TOTAL_JOBS`. A limpeza registra contagem e erros em `history-cleanup.json` e não lê arquivos pessoais.
 
 Para conferir afirmações sobre commits, use os campos `ahead` e `behind` da seção `ESTADO GIT DETERMINÍSTICO` retornada por `git_status`. Uma linha de arquivo modificado significa alteração no working tree; não demonstra commit não enviado.
@@ -386,6 +390,7 @@ Fallback NÃO autoriza alterar requisito, escopo, semântica, arquitetura ou dec
 - Nunca declare validação, teste ou confirmação sem evidência.
 - Execute verificações/testes pertinentes acessíveis e reporte falhas sem mascará-las.
 - Comando de validação que falhou deve ser corrigido e reexecutado com sucesso antes de declarar conclusão; não classifique teste falho como sucesso esperado sem contrato explícito do teste.
+- Ao receber `TOOL_REJECTED`, identifique o contrato violado, adapte argumentos ou ferramenta e não repita a chamada idêntica sem correção. `run_command` aceita apenas node, npm ou git nos formatos restritos; outros executáveis exigem um ID já fornecido para `run_authorized_command`. Se o acesso necessário estiver fora desses meios, peça ao supervisor a ampliação exata e justificada em `NEEDS_SUPERVISOR`, sem executá-la por conta própria.
 - Não delegue a MCPs/agentes sem autorização explícita.
 - Não assuma decisões reservadas ao supervisor.
 
@@ -431,14 +436,14 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `4904e38fa2b9e60d09a2b0231e92e8b204211568a6bb796a462553ac48d129c8` |
+| `src/localworker/AGENTS.md` | `83756c141a6ad59cf29e120d514cb675e9ebabc643aa9012efc89b7f578c06dc` |
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `263606fe58785410d0c4402e89dfcd291a7556a1ce39515b3401048e94aa1828` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
-| `src/localworker/worker-core.mjs` | `279ac44e7e091a10bc1c98e76272128bcef9dba1508bfc4f9d4796c51c0c7b57` |
+| `src/localworker/worker-core.mjs` | `61de61d9034e0517524d8831a9b4d2d4594f9e5fb300448ff4c7249dc130ce6d` |
 | `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
 | `src/localworker/delivery.mjs` | `54bc2838896065e604df8c3992f665909b1f9f9209be3e94d372c64c706ec881` |
 | `src/localworker/watchdog.mjs` | `2269620e4e43a847c1eacd894399f632fc1b66086b257b65118926049862caaf` |

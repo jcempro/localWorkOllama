@@ -337,7 +337,7 @@ async function runAuthorizedCommand(repo, commandId, authorizedCommands) {
 async function runCheckedCommand(repo, program, args) {
   const allowed = new Set(["node", "npm", "git"]);
   if (!allowed.has(program) || !Array.isArray(args) || args.some(a => typeof a !== "string")) {
-    throw new ToolRejected("Comando inválido ou não permitido");
+    throw new ToolRejected("run_command requer program exatamente node, npm ou git e args como lista de strings; use run_authorized_command com ID permitido para outro executável ou outra forma de validação");
   }
   if (args.some(a => /[\r\n]/.test(a))) throw new ToolRejected("Argumento multilinha recusado");
   if (program === "node" && !(args[0] === "--check" || args[0] === "--test")) throw new ToolRejected("node limitado a --check/--test");
@@ -366,7 +366,17 @@ async function gitChangeFingerprint(repo) {
       execFileAsync("git", ["-C", repo, "status", "--porcelain=v1", "-uall"], { windowsHide: true, maxBuffer: 4 * 1024 * 1024 }),
       execFileAsync("git", ["-C", repo, "diff", "--no-ext-diff", "--binary", "HEAD", "--"], { windowsHide: true, maxBuffer: 16 * 1024 * 1024 }),
     ]);
-    return createHash("sha256").update(status.stdout).update("\0").update(diff.stdout).digest("hex");
+    const hash = createHash("sha256").update(status.stdout).update("\0").update(diff.stdout);
+    // git diff HEAD não inclui conteúdo de arquivos ainda não rastreados.
+    for (const line of status.stdout.split(/\r?\n/)) {
+      if (!line.startsWith("?? ")) continue;
+      const relative = line.slice(3);
+      const file = await safeRepoPath(repo, relative);
+      const stat = await fs.lstat(file).catch(error => error?.code === "ENOENT" ? null : Promise.reject(error));
+      if (!stat?.isFile()) continue;
+      hash.update("\0").update(relative).update("\0").update(await sha256File(file));
+    }
+    return hash.digest("hex");
   } catch { return null; }
 }
 
@@ -1391,6 +1401,8 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   let forcedValidation = false;
   const failedValidations = new Set();
   const seenReads = new Map();
+  const rejectedCalls = new Map();
+  const blockedCalls = new Set();
   const requiredHashes = new Map();
   for (const requiredPath of requiredChangePaths) requiredHashes.set(requiredPath, await fileFingerprint(repo, requiredPath));
   const startingGitFingerprint = expectChanges ? await gitChangeFingerprint(repo) : null;
@@ -1508,8 +1520,10 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         ? `autorizado:${args.id}`
         : toolName === "run_command" && ["node", "npm"].includes(args.program)
           ? `comando:${JSON.stringify([args.program, args.args])}` : null;
+      const callSignature = JSON.stringify([toolName, args]);
 
       try {
+        if (blockedCalls.has(callSignature)) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: mesma chamada ${toolName} repetida após bloqueio determinístico; é preciso outra estratégia permitida ou autorização adicional do supervisor.`);
         if (new Set(["read_file", "list_dir", "repo_tree", "file_info", "search_text"]).has(toolName)) {
           const signature = JSON.stringify([toolName, args]);
           const count = (seenReads.get(signature) ?? 0) + 1;
@@ -1525,6 +1539,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         if (new Set(["write_file", "edit_file", "move_file", "delete_file"]).has(toolName) ||
             (beforeCommand && afterCommand && afterCommand !== beforeCommand)) successfulMutations++;
       } catch (error) {
+        if (error instanceof WorkerIncompleteError) throw error;
         outcome = error instanceof ToolRejected ? "rejected" : "error";
         if (validationId && outcome === "error") failedValidations.add(validationId);
         diagnostic = error?.telemetry ?? safeToolDiagnostic(error);
@@ -1535,6 +1550,16 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
           (toolName === "run_command" && authorizedCommands.length
             ? ` Use run_authorized_command com ID autorizado: ${authorizedCommands.map(command => command.id).join(", ")}.`
             : "");
+        if (outcome === "rejected") {
+          const count = (rejectedCalls.get(callSignature) ?? 0) + 1;
+          rejectedCalls.set(callSignature, count);
+          if (count >= 2) {
+            blockedCalls.add(callSignature);
+            await onProgress({ phase: "strategy_blocked", step: step + 1, tool: toolName,
+              reason: "mesma chamada recusada duas vezes; assinatura bloqueada neste job" });
+            result += " Esta chamada foi bloqueada após rejeição repetida. Adapte os argumentos, use alternativa permitida ou descreva em NEEDS_SUPERVISOR o acesso adicional estritamente necessário.";
+          }
+        }
       }
       await onProgress({ phase: "tool_result", step: step + 1, tool: toolName, resource, outcome, duration_ms: Date.now() - startedTool,
         diagnostic });

@@ -17,6 +17,7 @@ const marker = `localworker-proof-${randomUUID()}`;
 const same = `.${marker}-same.txt`;
 const other = `.${marker}-other.txt`;
 const required = `.${marker}-required.txt`;
+const changedContent = `${marker}-updated`;
 let scenario = "command";
 let calls = 0;
 const events = [];
@@ -31,6 +32,7 @@ const ollama = createServer(async (req, res) => {
       { function: { name: "git_status", arguments: {} } },
     ];
     if (scenario === "required") toolCalls = [{ function: { name: "write_file", arguments: { path: other, content: marker } } }];
+    if (scenario === "untracked") toolCalls = [{ function: { name: "write_file", arguments: { path: same, content: changedContent } } }];
   }
   res.setHeader("Content-Type", "application/json");
   res.end(JSON.stringify({ message: toolCalls.length
@@ -54,13 +56,17 @@ try {
   scenario = "required"; calls = 0;
   await assert.rejects(runLocalAnalysis(repo, "Teste: outro arquivo não substitui o obrigatório.", "write", event => { events.push(event); }, [], true, [required]), /WORKER_INCOMPLETE/);
   assert.ok(events.some(event => event.phase === "change_requirement" && event.missing_paths.includes(required)));
-  console.log(JSON.stringify({ status: "change-proof-ok", scenarios: 3 }));
+  scenario = "untracked"; calls = 0;
+  const result = await runLocalAnalysis(repo, "Teste: conteúdo de arquivo novo já presente muda.", "write", event => { events.push(event); }, [], true, [same]);
+  assert.match(result, /concluído/);
+  assert.equal(await fs.readFile(path.join(repo, same), "utf8"), changedContent);
+  console.log(JSON.stringify({ status: "change-proof-ok", scenarios: 4 }));
 } finally {
   ollama.close();
   for (const relative of [same, other]) {
     const target = path.join(repo, relative);
     const content = await fs.readFile(target, "utf8").catch(error => error?.code === "ENOENT" ? null : Promise.reject(error));
-    if (content === marker) await fs.rm(target);
+    if (content === marker || content === changedContent) await fs.rm(target);
     else if (content !== null) throw new Error(`Arquivo de teste divergiu; preserve ${target}`);
   }
   const after = (await execFileAsync(gitExe, ["-C", repo, "status", "--porcelain=v1", "-uall"])).stdout;

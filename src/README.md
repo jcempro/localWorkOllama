@@ -56,14 +56,14 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `4904e38fa2b9e60d09a2b0231e92e8b204211568a6bb796a462553ac48d129c8` |
+| `src/localworker/AGENTS.md` | `83756c141a6ad59cf29e120d514cb675e9ebabc643aa9012efc89b7f578c06dc` |
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `263606fe58785410d0c4402e89dfcd291a7556a1ce39515b3401048e94aa1828` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
-| `src/localworker/worker-core.mjs` | `279ac44e7e091a10bc1c98e76272128bcef9dba1508bfc4f9d4796c51c0c7b57` |
+| `src/localworker/worker-core.mjs` | `61de61d9034e0517524d8831a9b4d2d4594f9e5fb300448ff4c7249dc130ce6d` |
 | `src/localworker/worker-runner.mjs` | `cd0bb9b5f54dbd2f823064b6837b09e60dfb6242e9256929cd05d9ed99c59390` |
 | `src/localworker/delivery.mjs` | `54bc2838896065e604df8c3992f665909b1f9f9209be3e94d372c64c706ec881` |
 | `src/localworker/watchdog.mjs` | `2269620e4e43a847c1eacd894399f632fc1b66086b257b65118926049862caaf` |
