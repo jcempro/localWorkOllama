@@ -48,6 +48,8 @@ Para cada unidade logicamente indivisível:
 
 Se a tarefa exceder com segurança o contexto/capacidade do worker, **segmente antes de enviar**; NÃO envie prompt excessivo esperando que o worker faça a própria decomposição de forma confiável.
 
+Antes de delegar uma FT, compreenda seu objetivo e estado relevante e divida-a em menores unidades coerentes e verificáveis, avaliando arquivos/contexto, dependências, risco, custo e capacidade real do Worker. Delegue também partes delimitadas da exploração, análise, arquitetura ou planejamento quando isso poupar processamento pago. Defina para cada unidade fronteiras, evidência e critério de aceite. Na conclusão ou bloqueio, faça um checkpoint proporcional ao risco, corrija desvio antes da próxima unidade e preserve a responsabilidade final de engenharia. Não envie `implemente a FT` monolítica nem aguarde o fim da FT para descobrir direção errada. Checkpoint é orientado a evento, sem polling pago contínuo. O Worker deve aplicar `AGENTS.md` e os Skills, scripts, hooks e Subagents realmente ativados; forneça autorização exata para mecanismo necessário fora das ferramentas delimitadas.
+
 ## Jobs locais longos
 
 Trabalho potencialmente demorado **DEVE preferir execução persistente assíncrona quando disponível**.
@@ -154,7 +156,7 @@ A preferência pelo `localWorker` vale em toda conversa nova ou retomada no Code
 
 Se `local_analyze` ou `local_result` estiver ausente do catálogo da sessão, trate isso como falha de integração recuperável, sem pedir fallback pago. Verifique o `CODEX_HOME` efetivo e repare o registro MCP pelo `mcp-config.mjs` instalado, usando o CLI Codex com `CODEX_HOME` explícito; confirme com `codex mcp get localworker --json`. Enquanto o catálogo do Desktop não recarrega, invoque a mesma ferramenta pelo `mcp-call.mjs` instalado, com argumentos JSON UTF-8 codificados em Base64. Essa ponte usa o próprio servidor e suas validações, retorna `job_id`/resultado e preserva a entrega automática ao chat. Não passe conteúdo bruto do usuário ao shell nem use o Worker para manter a si próprio. Se a ponte também falhar, classifique a falha concreta conforme as regras abaixo antes de interromper o pedido.
 
-Para etapa de repositório adequada à inferência local — exploração extensa, análise, implementação ou verificação delegável — inicie preferencialmente **um único `local_analyze` persistente** com tarefa completa **ou, quando necessário pelo limite de contexto/capacidade, segmentos sequenciais mínimos e independentes**.
+Para etapa de repositório adequada à inferência local — exploração extensa, análise, planejamento, implementação ou verificação delegável — inicie **um `local_analyze` persistente por menor unidade coerente**, com dependências e critérios de aceite precisos. Revise o checkpoint dessa unidade antes de liberar a próxima. Uma FT extensa nunca deve ser enviada inteira em um único job.
 
 NÃO delegue tarefa trivial, sem repositório local ou dependente de capacidade ausente. Respeite instruções explícitas do usuário e segurança/autoridade do repositório.
 

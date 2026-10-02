@@ -4,6 +4,15 @@
 
 O localWorker executa tarefas delegáveis em inferência Ollama local, com jobs persistentes, resultado verificável e retomada do mesmo chat no Codex Desktop. A seleção de modelo e esforço do supervisor permanece independente. `AGENTS.md` e `agents.local.md` governam a atuação; este RCF define o produto e seus contratos.
 
+## Supervisão responsável e segmentada
+
+- O supervisor é o engenheiro responsável pela direção, arquitetura, segurança, qualidade e aceite final. O Worker é executor e apoio técnico subordinado: pode explorar, analisar, planejar, propor arquitetura, implementar e validar partes delimitadas, mas sua saída não transfere a responsabilidade do supervisor.
+- Antes de delegar uma FT, o supervisor deve compreender o objetivo e o estado relevante e decompor o trabalho em menores unidades coerentes, executáveis e verificáveis. A decisão considera complexidade, quantidade e tamanho dos arquivos, contexto necessário, dependências, risco, custo pago potencial e capacidade real do Worker. Planejamento ou implementação extensos não podem ser enviados como uma única tarefa `implemente a FT`; se uma unidade ainda exigir contexto ou mudanças excessivas, ela deve ser novamente segmentada.
+- Cada delegação define objetivo, fronteiras, dependências, artefatos esperados e critério de conclusão inequívocos. Partes custosas da própria exploração, análise, proposta de arquitetura, planejamento e implementação do supervisor devem ser segmentadas e delegadas quando compatíveis com o Worker. O supervisor conserva síntese, decisões de autoridade e revisão crítica, sem refazer processamento volumoso delegável.
+- Cada unidade entrega evidência verificável de aderência, alterações e validação. A conclusão dispara um checkpoint: o supervisor consulta o resultado uma vez, confere direção, contratos e riscos proporcionalmente e só então libera a próxima unidade. Desvio, interpretação incorreta, expansão de escopo ou risco de retrabalho exigem correção da direção antes de prosseguir. Checkpoints ocorrem por eventos de conclusão ou bloqueio relevantes; não exigem polling nem acompanhamento pago contínuo.
+- O Worker cumpre integralmente o `AGENTS.md` aplicável e sua precedência, inclusive Skills, scripts, hooks e Subagents disparados pelos respectivos gatilhos. O supervisor considera essas obrigações ao dividir e autorizar a unidade, sem duplicar instruções existentes. Mecanismo obrigatório indisponível ou fora da autoridade recebida produz diagnóstico e solicitação precisa de acesso; não é tratado como executado.
+- Minimizar tokens e processamento pago permanece obrigatório, inclusive ao delegar partes do planejamento. Essa economia não permite supervisão ausente, tarefa monolítica, aceitação acrítica nem descoberta tardia de direção errada que um checkpoint intermediário teria detectado.
+
 ## Arquitetura vigente
 
 1. O MCP `localworker` recebe `repoPath` absoluto, `thread_id` do chat atual, tarefa e modo `read-only` ou `write`; `write` exige autorização. Comandos adicionais são exatos e pré-aprovados. `expect_changes` exige alteração líquida; `required_change_paths` exige mudança em cada alvo relativo conhecido, inclusive se houver alterações preexistentes em outros arquivos.
@@ -74,5 +83,5 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |
-| `src/agents.supervisor.md` | `4e80984b0221ee269ca7c3f2f5142f6a819e244bc9c4af75c95f2eb1cdd5858e` |
+| `src/agents.supervisor.md` | `d8a0783e9ae1b04c78b3dc03eb4159dd8ab0cca903086816a4a7d6ef461b8136` |
 <!-- LOCALWORKER_GENERATED_END -->
