@@ -9,7 +9,7 @@ O localWorker executa tarefas delegáveis em inferência Ollama local, com jobs 
 1. O MCP `localworker` recebe `repoPath` absoluto, `thread_id` do chat atual, tarefa e modo `read-only` ou `write`; `write` exige autorização. Comandos adicionais são exatos e pré-aprovados. `expect_changes` exige alteração líquida; `required_change_paths` exige mudança em cada alvo relativo conhecido, inclusive se houver alterações preexistentes em outros arquivos.
 2. O servidor valida identidade do chat, diretório, escopo e bloqueio de autouso antes de criar job. Um runner persiste estado, resultado, log, Git determinístico, latência e classificação de falhas. O watchdog recupera jobs interrompidos e entregas pendentes.
 3. A conclusão é enviada por `codex queue` ao mesmo `thread_id`. O caminho do CLI é descoberto novamente na entrega. Erro comprovadamente anterior ao envio pode ser recuperado uma vez; estado ambíguo não permite duplicação automática.
-4. O Worker dispõe de leitura, busca, status/diff Git e, quando autorizado, escrita, edição, movimentação sem sobrescrita, exclusão com backup recuperável e comandos delimitados. `git_status` explicita upstream e contagens determinísticas de commits à frente/atrás; arquivo modificado no working tree não implica commit não enviado. Confinamento por caminho real e regras aplicáveis do repositório são obrigatórios.
+4. O Worker dispõe de leitura, busca, status/diff Git e, quando autorizado, escrita, edição, movimentação sem sobrescrita, exclusão com backup recuperável e comandos delimitados. Recebe `AGENTS.md` e `agents.local.md` da raiz; descobre Skills, scripts, hooks e Subagents ativados pela rota aplicável e usa os mecanismos oficiais disponíveis. `delegate_readonly_subagent` executa investigação local isolada, sem escrita, rede ou delegação recursiva, somente quando o isolamento oferecer ganho; scripts fora dos comandos delimitados exigem ID exato aprovado pelo supervisor. Capacidade obrigatória indisponível é relatada com causa e autorização necessária, nunca simulada. `git_status` explicita upstream e contagens determinísticas de commits à frente/atrás; arquivo modificado no working tree não implica commit não enviado. Confinamento por caminho real e regras aplicáveis do repositório são obrigatórios.
 5. O supervisor consulta o resultado uma vez após retomada, revisa riscos e evidência proporcionalmente e continua unidades pendentes; término da inferência não prova conclusão da solicitação.
 6. Cada delegação fornece `monitor_url` para o job e `monitor_index_url` para todos os jobs retidos; `local_monitor` e `node monitor.mjs index` redescobrem o link atual sem ID. O monitor HTTP liga somente em `127.0.0.1`, na porta primária fixa 49767 ou na fallback fixa 49768 se a primeira estiver ocupada; ambas ocupadas geram erro explícito, sem escolher porta aleatória. Ele corre em processo separado e lê telemetria persistida; abrir ou fechar a página não afeta o runner. Ele mostra fase, ferramentas, recursos acessados, tempos, contadores de progresso, uso observável de CPU/memória/GPU, erros e entrega. Não expõe raciocínio interno nem conteúdo de arquivos. `local_status` também expõe atividade derivada.
 7. `RUNNING` é estado formal, não prova de processamento ativo. Heartbeat, PID, último evento, espera por Ollama e uso observável de recursos distinguem `ACTIVE`, `WAITING_MODEL`, `WAITING`, `STALLED_SUSPECTED`, `STALLED`, `ORPHANED` e `TERMINAL_NOT_PROPAGATED`. GPU indisponível torna estagnação uma suspeita explicitada. O watchdog, o monitor independente e as consultas de estado/resultado reconciliam runner desaparecido, preservam alterações parciais, registram Git determinístico e entregam o diagnóstico sem duplicar inferência.
@@ -52,7 +52,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `956260020c1e60468300c65edce276301b2781e9c382b0872a13119d61a24df0` |
+| `src/localworker/AGENTS.md` | `444e7a9ba5345c6be31acc7696fd36cd8966edbdbf9e14495d0ff1f0326286e3` |
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -60,7 +60,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
-| `src/localworker/worker-core.mjs` | `329ed6c90a757cf47ded69e5c1da1e0bef1bb93fea2af7de8e10b98647191fcd` |
+| `src/localworker/worker-core.mjs` | `d34f43361e416a53651181a23655c497856446926fb31500f0c4a548f314d4eb` |
 | `src/localworker/worker-runner.mjs` | `73eb23cbb58c014c0c1d93b69426504bd43e446284cbb5be6aa527bee50f0e15` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |

@@ -369,7 +369,7 @@ Worker subordinado ao supervisor. Execute estritamente a tarefa recebida, soment
 
 1. Cumpra integralmente estas regras e a tarefa do supervisor.
 2. Antes de analisar/alterar repositório, localize e leia todo `AGENTS.md` aplicável aos caminhos afetados, salvo conteúdo já disponível no contexto.
-3. Regras aplicáveis do repositório são obrigatórias, inclusive arquitetura, modus operandi, práticas, restrições, proibições, estratégias, compatibilidade, testes e critérios de implementação; descubra-as diretamente, sem depender de retransmissão.
+3. Regras aplicáveis do repositório são obrigatórias, inclusive arquitetura, modus operandi, práticas, restrições, proibições, estratégias, compatibilidade, testes e critérios de implementação; descubra-as diretamente, sem depender de retransmissão. Consulte também o `agents.local.md` da raiz quando existir.
 4. Regra mais específica ao caminho prevalece sobre a geral, salvo instrução superior explícita.
 5. Conflito material entre tarefa e regra aplicável: não decida nem improvise; retorne `NEEDS_SUPERVISOR` com conflito e evidência exatos.
 
@@ -401,7 +401,7 @@ Fallback NÃO autoriza alterar requisito, escopo, semântica, arquitetura ou dec
 - Em modo de implementação, conclua uma unidade funcional autônoma menor que a FT por vez. Após validá-la, registre commit próprio com `git_commit_unit` incluindo somente arquivos dessa unidade que este job alterou. Nunca inclua alterações preexistentes; se a ferramenta recusar por conflito, informe os caminhos e peça decisão ao supervisor. O supervisor assume o push após a retomada.
 - Comando de validação que falhou deve ser corrigido e reexecutado com sucesso antes de declarar conclusão; não classifique teste falho como sucesso esperado sem contrato explícito do teste.
 - Ao receber `TOOL_REJECTED`, identifique o contrato violado, adapte argumentos ou ferramenta e não repita a chamada idêntica sem correção. `run_command` aceita apenas node, npm ou git nos formatos restritos; outros executáveis exigem um ID já fornecido para `run_authorized_command`. Se o acesso necessário estiver fora desses meios, peça ao supervisor a ampliação exata e justificada em `NEEDS_SUPERVISOR`, sem executá-la por conta própria.
-- Não delegue a MCPs/agentes sem autorização explícita.
+- Descubra e aplique Skills, scripts, hooks e Subagents ativados pelas regras do repositório. Carregue somente a rota pertinente e use o mecanismo oficial; não simule uma capacidade ausente nem execute tudo indiscriminadamente. Um Subagent local somente é apropriado para objetivo isolável, verificável e com ganho claro; `delegate_readonly_subagent` não concede escrita, rede ou acesso adicional. Comandos fora das ferramentas delimitadas exigem ID exato aprovado pelo supervisor; informe a lacuna específica quando um mecanismo obrigatório depender de comando ainda não autorizado.
 - Não assuma decisões reservadas ao supervisor.
 
 ## Estados terminais
@@ -429,7 +429,7 @@ Depois de uma atualização da fonte, use o script da etapa 4 para atualizar a i
 
 Reinicie o Codex Desktop e confirme o MCP nas configurações. Em um chat de repositório autorizado, o supervisor deve obter o `thread_id` **desse chat**, conferir o diretório da conversa e iniciar `local_analyze` uma vez. O MCP recusa um ID ausente, arquivado ou de outro diretório antes da inferência. O modo padrão é `read-only`; `write` só deve ser solicitado se o usuário autorizou alterações. Em implementação obrigatória, use `expect_changes: true`. Depois de `RUNNING`, não faça polling. Ao concluir, `codex queue` entrega uma mensagem ao chat de origem; o supervisor chama `local_result` uma única vez e revisa o resultado. O CLI e o Desktop precisam usar o mesmo `$CodexHome`. A entrega localiza novamente `codex.exe` em cada conclusão, pois o Desktop pode trocar o caminho do executável ao atualizar.
 
-Em `write`, o Worker pode criar e editar texto, consultar SHA-256 (`file_info`), mover arquivos sem sobrescrever destinos e remover arquivos com cópia em `$WorkerHome\recovery`. Essas operações são confinadas ao repositório e não atravessam links. `run_command` aceita apenas comandos delimitados de Node/npm/Git. Para um comando adicional necessário, o supervisor pode fornecer `authorized_commands` na chamada `local_analyze`: cada item contém `id`, `description`, `program` (**caminho absoluto do executável**), `args` e opcional `timeout_ms` (até 300000). O Worker escolhe apenas o `id`; programa e argumentos são os valores **exatos** aprovados na chamada, executados sem shell livre. A lista só é aceita em `mode: "write"`. Não inclua credenciais nos argumentos nem autorize comandos destrutivos sem proteção/recuperação.
+Em `write`, o Worker pode criar e editar texto, consultar SHA-256 (`file_info`), mover arquivos sem sobrescrever destinos e remover arquivos com cópia em `$WorkerHome\recovery`. Essas operações são confinadas ao repositório e não atravessam links. O Worker recebe `AGENTS.md` e `agents.local.md` da raiz; deve carregar as Skills, scripts, hooks e Subagents pertinentes às rotas aplicáveis, respeitando gatilhos e precedência. O subagente embutido (`delegate_readonly_subagent`) auxilia em investigação independente, sem escrita, rede ou nova delegação. `run_command` aceita apenas comandos delimitados de Node/npm/Git; hooks Git aplicáveis são executados pelo próprio Git no commit. Para um script ou comando adicional necessário, o supervisor pode fornecer `authorized_commands` na chamada `local_analyze`: cada item contém `id`, `description`, `program` (**caminho absoluto do executável**), `args` e opcional `timeout_ms` (até 300000). O Worker escolhe apenas o `id`; programa e argumentos são os valores **exatos** aprovados na chamada, executados sem shell livre. A lista só é aceita em `mode: "write"`. Se um mecanismo obrigatório não couber nessa autoridade, o Worker informa o comando/acesso exato ao supervisor, sem fingir cumprimento. Não inclua credenciais nos argumentos nem autorize comandos destrutivos sem proteção/recuperação.
 
 Para validar em um repositório de trabalho autorizado, anote `git -C <CAMINHO_REAL_DO_REPOSITORIO> status --short --branch` antes e depois. Preserve qualquer alteração local preexistente. Confirme o fluxo real no Desktop com uma tarefa curta e verificável; a confirmação inclui novo turno no mesmo chat e consulta única a `local_result`.
 
@@ -446,7 +446,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `956260020c1e60468300c65edce276301b2781e9c382b0872a13119d61a24df0` |
+| `src/localworker/AGENTS.md` | `444e7a9ba5345c6be31acc7696fd36cd8966edbdbf9e14495d0ff1f0326286e3` |
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -454,7 +454,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
-| `src/localworker/worker-core.mjs` | `329ed6c90a757cf47ded69e5c1da1e0bef1bb93fea2af7de8e10b98647191fcd` |
+| `src/localworker/worker-core.mjs` | `d34f43361e416a53651181a23655c497856446926fb31500f0c4a548f314d4eb` |
 | `src/localworker/worker-runner.mjs` | `73eb23cbb58c014c0c1d93b69426504bd43e446284cbb5be6aa527bee50f0e15` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |

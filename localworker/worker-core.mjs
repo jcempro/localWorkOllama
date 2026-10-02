@@ -1086,9 +1086,17 @@ const TOOL_DEFINITIONS = [
       } },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "delegate_readonly_subagent",
+      description: "Delega investigação independente e delimitada a um subagente Ollama local somente quando houver ganho claro; retorna evidências compactas. Sem escrita, rede ou nova delegação.",
+      parameters: { type: "object", required: ["task"], properties: { task: { type: "string" } } },
+    },
+  },
 ];
 
-const READ_ONLY_TOOLS = new Set(["repo_tree", "list_dir", "read_file", "search_text", "git_status", "git_diff", "file_info"]);
+const READ_ONLY_TOOLS = new Set(["repo_tree", "list_dir", "read_file", "search_text", "git_status", "git_diff", "file_info", "delegate_readonly_subagent"]);
 
 function parseArguments(value) {
   if (value && typeof value === "object") {
@@ -1338,7 +1346,10 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
 
 export class WorkerIncompleteError extends Error {}
 
-export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false, requiredChangePaths = [], requireCommits = false) {
+export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false, requiredChangePaths = [], requireCommits = false, subagentDepth = 0, stepLimit = MAX_STEPS) {
+  if (![0, 1].includes(subagentDepth) || !Number.isSafeInteger(stepLimit) || stepLimit < 1 || stepLimit > MAX_STEPS) {
+    throw new Error("Limites de subagente inválidos");
+  }
   if (!Array.isArray(authorizedCommands) || (mode !== "write" && authorizedCommands.length)) {
     throw new Error("Comandos autorizados exigem modo write e lista válida");
   }
@@ -1378,6 +1389,8 @@ export async function runLocalAnalysis(repoPath, task, mode = "read-only", onPro
   const rootAgent = rootAgentFile
     ? await fs.readFile(rootAgentFile, "utf8")
     : "";
+  const localAgentFile = path.join(repo, "agents.local.md");
+  const localAgent = await readOptional(localAgentFile);
   const preScan = [
     `Raiz: ${repo}`,
     `Entradas imediatas (${probe.length}): ${probe.slice(0, 100).join(", ")}`,
@@ -1394,6 +1407,7 @@ export async function runLocalAnalysis(repoPath, task, mode = "read-only", onPro
   if (rootAgentFile) {
     deliveredInstructions.add(rootAgentFile.toLowerCase());
   }
+  if (localAgent) deliveredInstructions.add(localAgentFile.toLowerCase());
 
   const system = `
 Você é o worker local Qwen subordinado a um supervisor OpenAI mais capaz.
@@ -1405,6 +1419,9 @@ ${workerRules || "(nenhum AGENTS.md global encontrado)"}
 
 INSTRUÇÕES RAIZ DO REPOSITÓRIO:
 ${rootAgent || "(nenhum AGENTS.md na raiz)"}
+
+ADAPTAÇÃO LOCAL DA RAIZ:
+${localAgent || "(nenhum agents.local.md na raiz)"}
 
 REGRAS OPERACIONAIS ADICIONAIS:
 
@@ -1421,6 +1438,8 @@ REGRAS OPERACIONAIS ADICIONAIS:
 - Não extrapole lacunas.
 - Antes de concluir sobre um arquivo ou módulo, leia evidência suficiente.
 - AGENTS.md aplicáveis aos caminhos acessados são entregues automaticamente pelas ferramentas e são obrigatórios.
+- Skills, scripts, hooks e Subagents previstos nas regras aplicáveis são obrigatórios quando seus gatilhos e condições forem satisfeitos. Use o mecanismo oficial e respeite sua precedência; não alegue execução sem ferramenta/evidência. Comando adicional exige ID exato autorizado pelo supervisor.
+- Subagente local disponível apenas para investigação isolada em modo read-only, sem nova delegação. Use somente quando houver ganho líquido verificável.
 - Instruções mais específicas de subdiretório prevalecem sobre as mais gerais dentro de seu escopo.
 - Não afirme que teste/comando foi executado se não foi.
 - Não execute rede.
@@ -1494,7 +1513,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
     return unchanged;
   };
 
-  for (let step = 0; step < MAX_STEPS; step++) {
+  for (let step = 0; step < stepLimit; step++) {
     await onProgress({ phase: "step", step: step + 1 });
     if (expectChanges && successfulMutations === 0 && step + 1 === WRITE_NUDGE_STEP) {
       messages.push({ role: "user", content: "Orçamento de exploração em 25%. Identifique agora o menor arquivo a modificar e faça a primeira edição autorizada; leituras adicionais somente se indispensáveis para essa edição." });
@@ -1514,6 +1533,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
     let availableTools = mode === "read-only"
       ? TOOL_DEFINITIONS.filter(tool => READ_ONLY_TOOLS.has(tool.function.name))
       : TOOL_DEFINITIONS.filter(tool => tool.function.name !== "run_authorized_command" || authorizedCommands.length);
+    if (subagentDepth > 0) availableTools = availableTools.filter(tool => tool.function.name !== "delegate_readonly_subagent");
     if (forcedInspection && toolExecutions === 0) {
       availableTools = availableTools.filter(tool => tool.function.name === "git_status");
     }
@@ -1623,7 +1643,15 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
           if (count > 2) throw new ToolRejected(`Consulta idêntica repetida ${count} vezes; use a evidência já obtida e avance para a implementação.`);
         }
         const beforeCommand = toolName === "run_authorized_command" && expectChanges ? await gitChangeFingerprint(repo) : null;
-        result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands, commitContext);
+        if (toolName === "delegate_readonly_subagent") {
+          if (subagentDepth > 0) throw new ToolRejected("Subagente não pode criar outra delegação");
+          if (typeof args.task !== "string" || !args.task.trim() || args.task.length > 1800) throw new ToolRejected("Objetivo do subagente deve ser texto não vazio de até 1800 caracteres");
+          await onProgress({ phase: "subagent_started", step: step + 1, reason: "investigação local read-only" });
+          result = await runLocalAnalysis(repo, args.task, "read-only", async event => onProgress({ ...event, phase: `subagent_${event.phase}` }), [], false, [], false, 1, Math.min(12, MAX_STEPS));
+          await onProgress({ phase: "subagent_completed", step: step + 1 });
+        } else {
+          result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands, commitContext);
+        }
         if (toolName === "git_commit_unit") commitContext.commits++;
         if (validationId) failedValidations.delete(validationId);
 
@@ -1680,5 +1708,5 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   }
 
   const missingPaths = await unchangedRequiredPaths();
-  throw new WorkerIncompleteError(`WORKER_INCOMPLETE: limite de ${MAX_STEPS} ciclos agentivos atingido; ${successfulMutations} mutação(ões) bem-sucedida(s), ${toolExecutions} ferramenta(s) executada(s); caminhos obrigatórios inalterados: ${missingPaths.join(", ") || "nenhum"}. A tarefa requer segmentação ou correção da estratégia de exploração.`);
+  throw new WorkerIncompleteError(`WORKER_INCOMPLETE: limite de ${stepLimit} ciclos agentivos atingido; ${successfulMutations} mutação(ões) bem-sucedida(s), ${toolExecutions} ferramenta(s) executada(s); caminhos obrigatórios inalterados: ${missingPaths.join(", ") || "nenhum"}. A tarefa requer segmentação ou correção da estratégia de exploração.`);
 }
