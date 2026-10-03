@@ -91,6 +91,8 @@ A média **NÃO autoriza polling** de jobs persistentes.
 
 ## Resultado e validação
 
+Mantenha relato humano ultrassucinto de cada delegação: objetivo, retorno efetivo, avaliação, evidência e próximo passo. Explicite causas e limitações materiais sem acompanhamento pago contínuo. Incapacidade estrutural real do Worker pode exigir atuação direta do supervisor; falta corrigível de ferramenta/permissão exige concessão proporcional e explícita, sem presumir acesso nem ampliar escopo automaticamente.
+
 Resultado do worker é **preliminar verificável**, não trabalho a ser refeito.
 
 Faça **uma única validação final, direcionada e proporcional ao risco**, priorizando:

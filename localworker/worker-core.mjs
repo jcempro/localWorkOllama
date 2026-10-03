@@ -10,6 +10,7 @@ import http from "node:http";
 import https from "node:https";
 import { jobDir } from "./job-store.mjs";
 import { ContextManagerC7M } from "./context-manager.mjs";
+import { ProgressGuardP6R, failureClassP6R } from "./progress-guard.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -1520,10 +1521,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   const ownedPath = value => path.relative(repo, path.resolve(repo, value)).replaceAll(path.sep, "/").toLowerCase();
   const commitContext = { failedValidations, initiallyDirty: mode === "write" ? await initiallyDirtyPaths(repo) : new Set(),
     touched: new Set(), required: new Set(requiredChangePaths.map(ownedPath)), commits: 0 };
-  const seenReads = new Map();
-  const rejectedCalls = new Map();
-  const rejectedCategories = new Map();
-  const blockedCalls = new Set();
+  const progressGuard = new ProgressGuardP6R();
   const requiredHashes = new Map();
   for (const requiredPath of requiredChangePaths) requiredHashes.set(requiredPath, await fileFingerprint(repo, requiredPath));
   const startingGitFingerprint = expectChanges ? await gitChangeFingerprint(repo) : null;
@@ -1665,16 +1663,12 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         ? `autorizado:${args.id}`
         : toolName === "run_command" && ["node", "npm"].includes(args.program)
           ? `comando:${JSON.stringify([args.program, args.args])}` : null;
-      const callSignature = JSON.stringify([toolName, args]);
+      const beforeAction = await gitChangeFingerprint(repo);
+      const blockedReason = progressGuard.before(toolName, args, beforeAction);
+      let actionError = null;
 
       try {
-        if (blockedCalls.has(callSignature)) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: mesma chamada ${toolName} repetida após bloqueio determinístico; é preciso outra estratégia permitida ou autorização adicional do supervisor.`);
-        if (new Set(["read_file", "list_dir", "repo_tree", "file_info", "search_text"]).has(toolName)) {
-          const signature = JSON.stringify([toolName, args]);
-          const count = (seenReads.get(signature) ?? 0) + 1;
-          seenReads.set(signature, count);
-          if (count > 2) throw new ToolRejected(`Consulta idêntica repetida ${count} vezes; use a evidência já obtida e avance para a implementação.`);
-        }
+        if (blockedReason) throw new ToolRejected(blockedReason);
         const beforeCommand = toolName === "run_authorized_command" && expectChanges ? await gitChangeFingerprint(repo) : null;
         if (toolName === "context_recall") {
           result = await contextManager.recall(args.checkpoint_id, args.entry_index, args.char_offset ?? 0);
@@ -1691,7 +1685,6 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         if (validationId) failedValidations.delete(validationId);
 
         toolExecutions++;
-        rejectedCategories.clear();
         const afterCommand = beforeCommand ? await gitChangeFingerprint(repo) : null;
         if (new Set(["write_file", "edit_file", "move_file", "delete_file"]).has(toolName) ||
             (beforeCommand && afterCommand && afterCommand !== beforeCommand)) successfulMutations++;
@@ -1699,6 +1692,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         if (toolName === "move_file") for (const value of [args.from, args.to]) if (typeof value === "string") commitContext.touched.add(ownedPath(value));
       } catch (error) {
         if (error instanceof WorkerIncompleteError) throw error;
+        actionError = error;
         outcome = error instanceof ToolRejected ? "rejected" : "error";
         if (validationId && outcome === "error") failedValidations.add(validationId);
         diagnostic = error?.telemetry ?? safeToolDiagnostic(error);
@@ -1709,35 +1703,25 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
           (toolName === "run_command" && authorizedCommands.length
             ? ` Use run_authorized_command com ID autorizado: ${authorizedCommands.map(command => command.id).join(", ")}.`
             : "");
-        if (outcome === "rejected") {
-          const count = (rejectedCalls.get(callSignature) ?? 0) + 1;
-          rejectedCalls.set(callSignature, count);
-          if (count >= 2) {
-            blockedCalls.add(callSignature);
-            await onProgress({ phase: "strategy_blocked", step: step + 1, tool: toolName,
-              reason: "mesma chamada recusada duas vezes; assinatura bloqueada neste job" });
-            result += " Esta chamada foi bloqueada após rejeição repetida. Adapte os argumentos, use alternativa permitida ou descreva em NEEDS_SUPERVISOR o acesso adicional estritamente necessário.";
-          }
-          const category = JSON.stringify([toolName, diagnostic]);
-          const categoryCount = (rejectedCategories.get(category) ?? 0) + 1;
-          rejectedCategories.set(category, categoryCount);
-          if (categoryCount === 3) result += " Três variantes da mesma falha foram recusadas. Mude de ferramenta/estratégia agora; se precisar de mais acesso, explique em NEEDS_SUPERVISOR.";
-          if (categoryCount >= 4) {
-            await onProgress({ phase: "strategy_blocked", step: step + 1, tool: toolName,
-              reason: "quatro recusas da mesma classe, apesar de variantes de argumentos" });
-          }
-        }
+        result += ` Classe: ${failureClassP6R(error, outcome === "rejected")}. Não repita sem mudança verificável; investigue a causa com ferramentas de leitura, corrija a pré-condição ou escolha alternativa autorizada. Sem capacidade suficiente, informe NEEDS_SUPERVISOR com o mecanismo/acesso exato.`;
       }
+      const afterAction = await gitChangeFingerprint(repo);
+      const assessment = progressGuard.record(toolName, args, beforeAction, afterAction, result,
+        actionError, outcome === "rejected", Boolean(blockedReason));
+      if (blockedReason || assessment.stop) await onProgress({ phase: "strategy_blocked", step: step + 1,
+        tool: toolName, reason: blockedReason ?? "quatro ações sem progresso verificável",
+        diagnostic: assessment.kind, sequence: assessment.sequence });
       await onProgress({ phase: "tool_result", step: step + 1, tool: toolName, resource, outcome, duration_ms: Date.now() - startedTool,
-        diagnostic });
+        diagnostic, failure_class: actionError ? assessment.kind : null, progress: assessment.progress,
+        stagnant_actions: assessment.stagnant_actions });
 
       messages.push({
         role: "tool",
         tool_name: call.function.name,
         content: compact(result),
       });
-      if (outcome === "rejected" && (rejectedCategories.get(JSON.stringify([toolName, diagnostic])) ?? 0) >= 4) {
-        throw new WorkerIncompleteError(`WORKER_INCOMPLETE: estratégia ${toolName} repetiu quatro recusas determinísticas da mesma classe (${diagnostic}). Requer alternativa legítima ou autorização específica do supervisor.`);
+      if (assessment.stop) {
+        throw new WorkerIncompleteError(`WORKER_INCOMPLETE: ausência de progresso verificável em quatro ações; última estratégia ${toolName}, classe ${assessment.kind}. ${diagnostic ?? "Evidência já obtida repetida"}. Sequência registrada em strategy_blocked; requer alternativa legítima ou autorização específica do supervisor.`);
       }
     }
   }

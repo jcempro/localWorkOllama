@@ -35,6 +35,8 @@ Esta regra aplica-se exclusivamente ao repositório que contém este arquivo, qu
 
 ## Governança local de acompanhamento e recuperação
 
+- A supervisão mantém relato humano ultrassucinto e explícito de objetivo, retorno, avaliação e próximo passo. O controle anti-loop abrange erros executados, recusas e resultados repetidos sem progresso; não basta contar TOOL_REJECTED. Alterações reais de estado/argumentos e alternativas legítimas continuam possíveis. O teto de ciclos é última defesa. A sequência de bloqueio deve permanecer auditável sem conteúdo privado de raciocínio.
+
 - O monitor é observador independente, idempotente e desacoplado do runner. Abrir, fechar, atualizar ou reiniciar sua UI não pode alterar, suspender nem finalizar jobs. O inventário deve permitir localizar todos os jobs retidos, filtrar por projeto do Desktop quando essa identidade estiver comprovadamente disponível ou por repositório Git, e ordenar por estado ou tempo em ambos os sentidos, com os mais recentes primeiro.
 - Tarefas de background do Worker, inclusive watchdog agendado, não podem criar console ou janela transitória nem roubar foco. O servidor do monitor deve escutar somente no loopback, primeiro em porta primária fixa e depois em uma única porta fallback fixa; ocupação das duas é diagnóstico, nunca autorização para porta aleatória.
 - Cada job tem diretório exclusivo derivado do `job_id` validado. Estado, pedido, telemetria, resultado, erro e entrega de um job nunca podem ser escritos no diretório de outro. Histórico deve sustentar auditoria e diagnóstico, com retenção finita e limpeza segura somente de jobs terminais cuja entrega já tenha sido resolvida; preserve jobs ativos ou com entrega pendente/ambígua.

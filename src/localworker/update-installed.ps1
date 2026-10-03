@@ -21,7 +21,7 @@ if (Test-Path -LiteralPath $activeFile) {
   if ($state.status -notin @('COMPLETED','FAILED','CANCELLED')) { throw 'Job ativo: instalação adiada.' }
 }
 $stamp = Get-Date -Format yyyyMMddHHmmss
-$files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1','package.json','package-lock.json')
+$files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1','package.json','package-lock.json')
 $existingFiles = @()
 $newFiles = @()
 foreach ($name in $files) {

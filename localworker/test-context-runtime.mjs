@@ -10,6 +10,8 @@ const repo = process.env.TEST_REPO_PATH;
 if (!repo || path.basename(path.resolve(repo)).toLowerCase() !== "jeancarloem.com.blog") throw new Error("Use somente o repositório de teste autorizado");
 const id = randomUUID();
 const directory = jobDir(id);
+const evidenceFiles = (await fs.readdir(repo, { withFileTypes: true })).filter(entry => entry.isFile()).map(entry => entry.name);
+assert.ok(evidenceFiles.length >= 8);
 await fs.mkdir(directory, { recursive: true });
 let requests = 0;
 let recalled = false;
@@ -37,7 +39,7 @@ const server = createServer(async (request, response) => {
     message = { role: "assistant", content: "RESULTADO: continuidade preservada com reidratação exata." };
   } else {
     message = { role: "assistant", content: requests <= 2 ? "DECISÃO_INTEGRA ".repeat(1100) : "Prosseguindo com evidência recente.",
-      tool_calls: [{ function: { name: "git_status", arguments: {} } }] };
+      tool_calls: [{ function: { name: "file_info", arguments: { path: evidenceFiles[requests - 1] } } }] };
   }
   response.setHeader("Content-Type", "application/json");
   response.end(JSON.stringify({ message, prompt_eval_count: 1000 + requests, eval_count: 20 }));

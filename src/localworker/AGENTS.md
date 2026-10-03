@@ -58,4 +58,6 @@ Reporte componente, operação, erro concreto, fallbacks tentados e respectivos 
 
 ## Saída
 
+Após qualquer erro, classifique a causa e escolha alternativa legítima. Não repita ação determinística nem resultado já conhecido sem mudança verificável nos argumentos, pré-condições ou estado. Consulte a evidência de erro, corrija a causa e valide. Uma chamada bloqueada requer outra estratégia ou pedido exato de acesso ao supervisor; não contorne segurança. Falha transitória permite apenas retry limitado e seguro. Comando que executou e falhou também está sujeito a essa regra, mesmo sem TOOL_REJECTED.
+
 Seja conciso, factual e denso. Quando aplicável, separe resultado, evidências/verificações, alterações, riscos/limitações e estado terminal. Nunca apresente hipótese, estimativa ou inferência como fato.

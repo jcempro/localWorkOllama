@@ -40,7 +40,7 @@ try {
   assert.equal(events.filter(event => event.phase === "tool_result" && event.outcome === "rejected").length, 2);
   scenario = "varied"; calls = 0; events.length = 0;
   await assert.rejects(runLocalAnalysis(repo, "Teste de variantes inválidas da mesma classe.", "write", event => events.push(event)),
-    /quatro recusas determinísticas/);
+    /ausência de progresso verificável em quatro ações/);
   assert.equal(calls, 4);
   assert.ok(events.some(event => event.phase === "strategy_blocked"));
   console.log(JSON.stringify({ status: "rejected-loop-contained", scenarios: 2 }));

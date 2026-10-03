@@ -32,7 +32,7 @@ if (-not $CodexCommand) {
     $CodexCommand = $native.FullName
   }
 }
-$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1')
+$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1')
 foreach ($exe in @($NodePath,$NpmCommand,$CodexCommand)) {
   if (-not (Test-Path -LiteralPath $exe -PathType Leaf)) { throw "Executável ausente: $exe" }
 }

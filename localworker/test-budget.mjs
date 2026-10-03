@@ -24,8 +24,8 @@ try {
   const { runLocalAnalysis, WorkerIncompleteError } = await import("./worker-core.mjs");
   const events = [];
   await assert.rejects(runLocalAnalysis(repo, "Teste de orçamento sem alteração.", "write", async event => events.push(event), [], true),
-    error => error instanceof WorkerIncompleteError && /0 mutação/.test(error.message));
-  assert.equal(calls, 8);
-  assert.equal(events.filter(event => event.phase === "write_budget_warning").length, 2);
-  console.log(JSON.stringify({ status: "WORKER_INCOMPLETE", cycles: calls, budget_warnings: 2 }));
+    error => error instanceof WorkerIncompleteError && /ausência de progresso/.test(error.message));
+  assert.ok(calls < 8);
+  assert.ok(events.some(event => event.phase === "strategy_blocked"));
+  console.log(JSON.stringify({ status: "WORKER_INCOMPLETE", cycles: calls, early_stop: true }));
 } finally { fake.close(); }

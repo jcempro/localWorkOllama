@@ -20,6 +20,7 @@
 | Continuidade de contexto | `LOCAL_WORKER_CONTEXT_TOKENS`/`config.json:context_tokens` (padrão 32768) define janela inicial; `LOCAL_WORKER_MIN_CONTEXT_TOKENS`/`config.json:min_context_tokens` (padrão 8192) define piso. `LOCAL_WORKER_CONTEXT_TRIGGER_FRACTION` (padrão 0.68), `LOCAL_WORKER_CONTEXT_RAM_MARGIN_BYTES` (1 GiB) e `LOCAL_WORKER_CONTEXT_VRAM_MARGIN_MIB` (512 MiB) controlam gatilhos preventivos. `context-manager.mjs` centraliza alvo de 56%, economia mínima de 512 tokens, 8 mensagens recentes, máximo de 4 checkpoints e limite de 12000 caracteres por reidratação. Checkpoints exclusivos ficam em `jobs/<job_id>/context/` e são removidos com o job. |
 | URL Ollama | `OLLAMA_URL` ou `config.json:ollama_url`; prefixo de caminho de proxy é preservado. |
 | Timeout, passos e tentativas | `LOCAL_WORKER_TIMEOUT_MS`, `LOCAL_WORKER_MAX_STEPS` (inteiro positivo; padrão 40 ciclos por job), `LOCAL_OLLAMA_ATTEMPTS` ou `config.json`. O teto de ciclos protege a janela de contexto e não é prazo total. |
+| Anti-loop | `progress-guard.mjs` centraliza `NO_PROGRESS_LIMIT_P6R=4` ações consecutivas sem progresso e `TRANSIENT_RETRIES_P6R=2` retries de leitura transitória. Não são limites de duração ou de ações produtivas. Assinaturas, estado e evidência são avaliados automaticamente; não exige configuração manual. |
 | Orçamento de CPU | `LOCAL_WORKER_CPU_THREADS` ou `config.json:cpu_threads` (`auto`); mesmo valor explícito é limitado a preservar ao menos 25% dos processadores lógicos. |
 | Reserva de RAM | 10% da RAM física ou 4 GiB, o maior. Sob pressão, o runtime espera até 120 s (`RESOURCE_WAIT_LIMIT_MS_R8N`), tenta descarregar seu modelo carregado após 30 s (`RESOURCE_RELEASE_DELAY_MS_R8N`) ou imediatamente se houver menos de 4 GiB livres, e concede nova janela de até 120 s após liberação comprovada; preserva a reserva e diagnostica o esgotamento. Limites ficam no topo de `worker-core.mjs`. |
 | Reserva de VRAM | `LOCAL_WORKER_GPU_RESERVE_BYTES` no instalador e runtime. O runtime exige pelo menos 512 MiB ou 10% da GPU NVIDIA livres antes de inferir; após pressão, descarrega o modelo e ajusta `num_gpu` para a próxima chamada. A calibração fica em `jobs/gpu-policy.json`, expira após sete dias e é ignorada se a memória disponível mudar materialmente. O instalador contabiliza pelo menos 512 MiB ou 20% da menor GPU NVIDIA em `OLLAMA_GPU_OVERHEAD` como estimativa de carga, preservando valor preexistente maior. Se Ollama já estiver em execução, reinicie-o após `ollama_restart_required_for_gpu_reserve=true`. |
@@ -59,7 +60,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `1d765bdf4c4947b9cfcebcf63f5328d6cf4edbfaf8986baf0dffb48483a6cc46` |
+| `src/localworker/AGENTS.md` | `0ae3880c5c8f82609d561ad6d788576caaa2e476807e9a80fdd02f0f34f51921` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -68,7 +69,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
 | `src/localworker/context-manager.mjs` | `561dbc4e6ed537ad710f9bf7f91433fac9a433b8e6d8ee70d54f3f5934dd05f3` |
-| `src/localworker/worker-core.mjs` | `18cdde977cb9dcb83b22a0881a3aaec8cd8fe713dc3d70775fa4a6c7eea5c4a1` |
+| `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
+| `src/localworker/worker-core.mjs` | `6c37f86de93375faa5e60b0f5272066126470c073e0b77add7c0f0d0605a21b3` |
 | `src/localworker/worker-runner.mjs` | `3a598bc851ae6b90fc6b9a9d176c8f94b94b7843003c2b427b7ab8103cb4fadd` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
@@ -77,10 +79,10 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `c70d396f0b0aae2415261dbccc942e5a3fa7114c9e77641700ac52082b32102c` |
-| `src/localworker/update-installed.ps1` | `1658aed8a746ed43e78d44e01b3f0790180ddf300526afa8635f21bc983a359d` |
+| `src/localworker/install.ps1` | `5f972481d9b66a8ef08f146306c880784683371dd337e177f0457795d9bad19c` |
+| `src/localworker/update-installed.ps1` | `17997c5b885de291c7f3c807c22eb334b53a691f95fbd10d3185e33639eaace8` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `5a85596b890b58bd7f319742d7657c30a0f2aad11f47b0cf0993117b492cae55` |
-| `src/agents.supervisor.md` | `37eeb5987af342470ed4bd6a8fe47e46c0ed7c8ec0f3a152f07786c118496e0e` |
+| `src/agents.supervisor.md` | `ccbb044bb4940ab61bdf55fe2b6292faf0bb0ee768fecdb3a6890b5d50efdf72` |
 <!-- LOCALWORKER_GENERATED_END -->
