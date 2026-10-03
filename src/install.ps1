@@ -32,6 +32,16 @@ $RULES_START_A3C = '<!-- LOCALWORKER_GLOBAL_START -->'
 $RULES_END_A3C = '<!-- LOCALWORKER_GLOBAL_END -->'
 $LEGACY_GLOBAL_SHA256_A3C = 'a8eff5e87698169d7d658758b165a27735a1272a6bebad8f35f98736b527603e'
 $MAINTENANCE_REPO_A3C = $SOURCE_ROOT_A3C
+$MAINTENANCE_MARKER_A3C = Join-Path (Split-Path -Parent $SOURCE_ROOT_A3C) '.localworker-maintenance-id'
+if (-not (Test-Path -LiteralPath $MAINTENANCE_MARKER_A3C -PathType Leaf)) {
+  $markerStream = [IO.File]::Open($MAINTENANCE_MARKER_A3C, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None)
+  try {
+    $markerBytes = [Text.UTF8Encoding]::new($false).GetBytes(([Guid]::NewGuid().ToString('D')) + "`n")
+    $markerStream.Write($markerBytes, 0, $markerBytes.Length)
+  } finally { $markerStream.Dispose() }
+}
+$MAINTENANCE_ID_A3C = [IO.File]::ReadAllText($MAINTENANCE_MARKER_A3C).Trim()
+if ($MAINTENANCE_ID_A3C -and $MAINTENANCE_ID_A3C -notmatch '^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$') { throw 'Identidade do repositório de manutenção inválida.' }
 $APP_INSTALLER_FAMILY_A3C = 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe'
 $WINGET_BOOTSTRAP_URL_A3C = 'https://aka.ms/getwinget'
 $APP_INSTALLER_STORE_URI_A3C = 'ms-windows-store://pdp/?ProductId=9NBLGGH4NNS1'
@@ -197,11 +207,11 @@ if (-not $SkipModel) {
 $WORKER_HOME_A3C = [IO.Path]::GetFullPath($WORKER_HOME_A3C)
 $CODEX_HOME_A3C = [IO.Path]::GetFullPath($CODEX_HOME_A3C)
 if (Test-Path -LiteralPath $WORKER_HOME_A3C) {
-  $updateArgs = @{ Target = $WORKER_HOME_A3C; NodePath = $NODE_EXE_A3C; CodexCommand = $CODEX_EXE_A3C; CodexConfig = $CODEX_CONFIG_A3C; MaintenanceRepo = $MAINTENANCE_REPO_A3C }
+  $updateArgs = @{ Target = $WORKER_HOME_A3C; NodePath = $NODE_EXE_A3C; CodexCommand = $CODEX_EXE_A3C; CodexConfig = $CODEX_CONFIG_A3C; MaintenanceRepo = $MAINTENANCE_REPO_A3C; MaintenanceId = $MAINTENANCE_ID_A3C }
   if ($MODEL_EXPLICIT_A3C) { $updateArgs.WorkerModel = $WorkerModel }
   & (Join-Path $WORKER_SOURCE_A3C 'update-installed.ps1') @updateArgs
 } else {
-  & (Join-Path $WORKER_SOURCE_A3C 'install.ps1') -Target $WORKER_HOME_A3C -CodexConfig $CODEX_CONFIG_A3C -NodePath $NODE_EXE_A3C -NpmCommand $NPM_EXE_A3C -CodexCommand $CODEX_EXE_A3C -WorkerModel $WorkerModel -MaintenanceRepo $MAINTENANCE_REPO_A3C
+  & (Join-Path $WORKER_SOURCE_A3C 'install.ps1') -Target $WORKER_HOME_A3C -CodexConfig $CODEX_CONFIG_A3C -NodePath $NODE_EXE_A3C -NpmCommand $NPM_EXE_A3C -CodexCommand $CODEX_EXE_A3C -WorkerModel $WorkerModel -MaintenanceRepo $MAINTENANCE_REPO_A3C -MaintenanceId $MAINTENANCE_ID_A3C
 }
 if ($LASTEXITCODE -ne 0) { throw 'Instalação ou atualização do Worker falhou.' }
 

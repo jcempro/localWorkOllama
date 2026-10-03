@@ -359,7 +359,7 @@ O Worker é independente da escolha de modelo/esforço do supervisor. Preserve s
 
 </details>
 
-No repositório **deste Worker**, preserve também a regra específica `agents.local.md` e a referência a ela no `AGENTS.md` da raiz: o Worker não pode manter, implementar ou documentar a si próprio. Esse arquivo local não é copiado para outros repositórios. O instalador posiciona as regras e scripts gerais no perfil do Worker e as regras do supervisor no Codex home efetivo; a leitura desses artefatos não exige manter a árvore de desenvolvimento acessível. Em cada outro repositório, o Worker lê somente as regras e extensões próprias daquele alvo, quando presentes. Um `AGENTS.md` global não autoriza escrita por si só.
+No repositório **deste Worker**, preserve também a regra específica `agents.local.md` e a referência a ela no `AGENTS.md` da raiz: o Worker não pode manter, implementar ou documentar a si próprio. Esse arquivo local não é copiado para outros repositórios. O instalador posiciona as regras e scripts gerais no perfil do Worker e as regras do supervisor no Codex home efetivo; a leitura desses artefatos não exige manter a árvore de desenvolvimento acessível. Ele cria ou preserva `.localworker-maintenance-id` ao lado de `src/` e registra a identidade no Worker instalado para manter o bloqueio de autouso se a pasta fonte for movida. Preserve esse marcador ao mover a fonte. Em cada outro repositório, o Worker lê somente as regras e extensões próprias daquele alvo, quando presentes. Um `AGENTS.md` global não autoriza escrita por si só.
 
 ## 6. Instruções próprias do Worker
 
@@ -461,7 +461,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `80e9d2fd7fa3b4e8c5294842ca1c03001516c9682dba9d5bb3957177cb69f9bf` |
+| `src/localworker/server.mjs` | `53f1845863d598eb4327125114406fd7e828fa0afd837b6537b0f604d77d5672` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
@@ -474,11 +474,11 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `6791f67b0c26ba2e50b96b0d176363d748b708e804bf84378cf99e724e83e97d` |
-| `src/localworker/update-installed.ps1` | `e2d7521b4c4e6b67a88731566da82c416cf22cb61941c8ad4428ba875aa9b4e4` |
+| `src/localworker/install.ps1` | `dcc72938cf62a6728d85556eb72d8bf6fe4e08a326c14d98f1b12fadbf44c51b` |
+| `src/localworker/update-installed.ps1` | `eb8cd839b920b7d213a20da99f76f91779e2992a401a68f4a2419a6b1f19a0b1` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |
+| `src/install.ps1` | `4f7212f6fdbda9dfa9fc673ba6913bc6ceecfe96fce112e8a31d5f6e1e1d0dc3` |
 | `src/agents.supervisor.md` | `37eeb5987af342470ed4bd6a8fe47e46c0ed7c8ec0f3a152f07786c118496e0e` |
 <!-- LOCALWORKER_GENERATED_END -->
 

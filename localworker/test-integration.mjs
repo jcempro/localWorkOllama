@@ -27,6 +27,7 @@ insertThread.run(thread, 0, repo);
 insertThread.run(archivedThread, 1, repo);
 codexDb.close();
 const queueLog = path.join(root, "jobs", `test-queue-${randomUUID()}.jsonl`);
+const maintenanceId = (await fs.readFile(path.join(root, "..", ".localworker-maintenance-id"), "utf8")).trim();
 const baseline = await new Promise((resolve, reject) => {
   const git = spawn("git", ["-C", repo, "status", "--porcelain=v1", "-uall"]);
   let value = "";
@@ -64,12 +65,14 @@ await new Promise(resolve => ollama.listen(0, "127.0.0.1", resolve));
 const port = ollama.address().port;
 const env = { ...process.env, OLLAMA_URL: `http://127.0.0.1:${port}`, LOCAL_MODEL: "fake-test-model",
   LOCAL_OLLAMA_ATTEMPTS: "1",
-  LOCAL_WORKER_MAINTENANCE_REPO: path.resolve(root, ".."),
+  LOCAL_WORKER_MAINTENANCE_REPO: process.env.TEST_MISSING_MAINTENANCE === "1" ? path.join(root, "missing-maintenance-root") : path.resolve(root, ".."),
+  LOCAL_WORKER_MAINTENANCE_ID: maintenanceId,
   LOCAL_CODEX_CMD: path.join(root, "missing-stale-codex.exe"), CODEX_CLI_PATH: process.execPath,
   LOCAL_CODEX_PREARGS_JSON: JSON.stringify([path.join(root, "fake-codex.mjs")]),
   LOCAL_FAKE_QUEUE_LOG: queueLog, LOCAL_DISABLE_NOTIFY: "1", LOCAL_DISABLE_MCP_REPAIR: "1",
   LOCAL_WORKER_BRIDGE_SERVER: process.env.TEST_SERVER_PATH ?? path.join(root, "server.mjs") };
 env.LOCAL_CODEX_HOME = codexHome;
+if (process.env.TEST_INSTALLED_CONFIG_ID === "1") delete env.LOCAL_WORKER_MAINTENANCE_ID;
 const server = spawn(process.execPath, [process.env.TEST_SERVER_PATH ?? path.join(root, "server.mjs")], { env, stdio: ["pipe", "pipe", "pipe"] });
 server.stderr.on("data", chunk => process.stderr.write(chunk));
 let seq = 0, buffer = "";

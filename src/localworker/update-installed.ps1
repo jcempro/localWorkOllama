@@ -1,5 +1,6 @@
-param([string]$Target, [string]$NodePath, [string]$CodexCommand, [string]$CodexConfig, [string]$MaintenanceRepo, [string]$WorkerModel)
+param([string]$Target, [string]$NodePath, [string]$CodexCommand, [string]$CodexConfig, [string]$MaintenanceRepo, [string]$MaintenanceId, [string]$WorkerModel)
 $ErrorActionPreference = 'Stop'
+if ($MaintenanceId -and $MaintenanceId -notmatch '^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$') { throw 'Identidade de manutenção inválida.' }
 $source = $PSScriptRoot
 $target = if ($Target) { $Target } else { Join-Path $env:USERPROFILE '.codex-local-worker' }
 $node = if ($NodePath) { $NodePath } else { (Get-Command node.exe -ErrorAction Stop).Source }
@@ -41,6 +42,7 @@ $config = Get-Content -LiteralPath $configFile -Raw | ConvertFrom-Json
 $config.PSObject.Properties.Remove('worker_rules')
 $maintenance = if ($MaintenanceRepo) { (Resolve-Path -LiteralPath $MaintenanceRepo).Path } elseif ($env:LOCAL_WORKER_MAINTENANCE_REPO) { (Resolve-Path -LiteralPath $env:LOCAL_WORKER_MAINTENANCE_REPO).Path } else { (Resolve-Path -LiteralPath (Join-Path $source '..')).Path }
 $config | Add-Member -NotePropertyName maintenance_repo -NotePropertyValue $maintenance -Force
+if ($MaintenanceId) { $config | Add-Member -NotePropertyName maintenance_id -NotePropertyValue $MaintenanceId -Force }
 $config | Add-Member -NotePropertyName codex_command -NotePropertyValue $CodexCommand -Force
 $codexConfigPath = if ($CodexConfig) { [IO.Path]::GetFullPath($CodexConfig) } elseif ($config.codex_config) { [IO.Path]::GetFullPath($config.codex_config) } else { Join-Path (if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $env:USERPROFILE '.codex' }) 'config.toml' }
 $config | Add-Member -NotePropertyName codex_config -NotePropertyValue $codexConfigPath -Force

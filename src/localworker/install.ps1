@@ -5,9 +5,11 @@ param(
   [string]$NpmCommand,
   [string]$CodexCommand,
   [string]$MaintenanceRepo,
+  [string]$MaintenanceId,
   [string]$WorkerModel = 'qwen3-coder-next-32k'
 )
 $ErrorActionPreference = 'Stop'
+if ($MaintenanceId -and $MaintenanceId -notmatch '^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$') { throw 'Identidade de manutenção inválida.' }
 $source = $PSScriptRoot
 $maintenanceRepo = if ($MaintenanceRepo) { (Resolve-Path -LiteralPath $MaintenanceRepo).Path } else { (Resolve-Path -LiteralPath (Join-Path $source '..')).Path }
 if (-not $Target) { $Target = Join-Path $env:USERPROFILE '.codex-local-worker' }
@@ -52,6 +54,7 @@ try {
 foreach ($name in $files) { Copy-Item -LiteralPath (Join-Path $source $name) -Destination (Join-Path $StageTarget $name) }
 $workerConfig = Get-Content -LiteralPath (Join-Path $source 'config.json') -Raw | ConvertFrom-Json
 $workerConfig | Add-Member -NotePropertyName maintenance_repo -NotePropertyValue $maintenanceRepo -Force
+if ($MaintenanceId) { $workerConfig | Add-Member -NotePropertyName maintenance_id -NotePropertyValue $MaintenanceId -Force }
 $workerConfig | Add-Member -NotePropertyName codex_command -NotePropertyValue $CodexCommand -Force
 $workerConfig | Add-Member -NotePropertyName codex_config -NotePropertyValue $CodexConfig -Force
 $workerConfig.model = $WorkerModel

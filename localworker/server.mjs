@@ -33,6 +33,22 @@ async function gitRoot(repo) {
   } catch { return repo; }
 }
 
+// Identifica a árvore de manutenção mesmo após mudança de path, incluindo seus subdiretórios.
+async function hasMaintenanceId(repo, expectedId) {
+  let current = repo;
+  while (true) {
+    const marker = path.join(current, ".localworker-maintenance-id");
+    const value = await fs.readFile(marker, "utf8").catch(error => {
+      if (error?.code === "ENOENT") return "";
+      throw error;
+    });
+    if (value.trim() === expectedId) return true;
+    const parent = path.dirname(current);
+    if (parent === current) return false;
+    current = parent;
+  }
+}
+
 function createServer() {
 const server = new McpServer({ name: "local-codex-worker", version: "3.0.0" });
 server.registerTool("local_analyze", {
@@ -68,13 +84,25 @@ server.registerTool("local_analyze", {
         throw new RequestRejected(`required_change_paths fora do repositório: ${relative}`);
       }
     }
+    const maintenanceId = process.env.LOCAL_WORKER_MAINTENANCE_ID ?? config.maintenance_id;
+    if (maintenanceId) {
+      if (!/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(maintenanceId)) throw new Error("Identidade de manutenção inválida");
+      if (await hasMaintenanceId(repo, maintenanceId)) {
+        throw new RequestRejected("Proibido usar localWorker no repositório de sua própria manutenção; execute a manutenção externamente. Testes do Worker devem usar um repositório de teste distinto.");
+      }
+    }
     const maintenanceRepo = process.env.LOCAL_WORKER_MAINTENANCE_REPO ?? config.maintenance_repo;
     if (maintenanceRepo) {
-      const maintenance = await fs.realpath(maintenanceRepo);
-      const sameTree = repo.toLowerCase() === maintenance.toLowerCase() || repo.toLowerCase().startsWith(maintenance.toLowerCase() + path.sep.toLowerCase());
-      const [repoGit, maintenanceGit] = sameTree ? [null, null] : await Promise.all([gitCommonDir(repo), gitCommonDir(maintenance)]);
-      if (sameTree || (repoGit && repoGit === maintenanceGit)) {
-        throw new RequestRejected("Proibido usar localWorker no repositório de sua própria manutenção; execute a manutenção externamente. Testes do Worker devem usar um repositório de teste distinto.");
+      const maintenance = await fs.realpath(maintenanceRepo).catch(error => {
+        if (error?.code === "ENOENT" && maintenanceId) return null;
+        throw error;
+      });
+      if (maintenance) {
+        const sameTree = repo.toLowerCase() === maintenance.toLowerCase() || repo.toLowerCase().startsWith(maintenance.toLowerCase() + path.sep.toLowerCase());
+        const [repoGit, maintenanceGit] = sameTree ? [null, null] : await Promise.all([gitCommonDir(repo), gitCommonDir(maintenance)]);
+        if (sameTree || (repoGit && repoGit === maintenanceGit)) {
+          throw new RequestRejected("Proibido usar localWorker no repositório de sua própria manutenção; execute a manutenção externamente. Testes do Worker devem usar um repositório de teste distinto.");
+        }
       }
     }
     try { assertTargetThread(thread_id, repo); }

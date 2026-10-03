@@ -18,7 +18,7 @@ O localWorker executa tarefas delegáveis em inferência Ollama local, com jobs 
 ## Arquitetura vigente
 
 1. O MCP `localworker` recebe `repoPath` absoluto, `thread_id` do chat atual, tarefa e modo `read-only` ou `write`; `write` exige autorização. Comandos adicionais são exatos e pré-aprovados. `expect_changes` exige alteração líquida; `required_change_paths` exige mudança em cada alvo relativo conhecido, inclusive se houver alterações preexistentes em outros arquivos.
-2. O servidor valida identidade do chat, diretório, escopo e bloqueio de autouso antes de criar job. Um runner persiste estado, resultado, log, Git determinístico, latência e classificação de falhas. O watchdog recupera jobs interrompidos e entregas pendentes.
+2. O servidor valida identidade do chat, diretório, escopo e bloqueio de autouso antes de criar job. A instalação persiste uma identidade estável no diretório fonte e em `config.json` instalado; o servidor recusa o repositório de manutenção e seus subdiretórios pelo marcador, mesmo após mover a fonte, e conserva a comparação por caminho e Git quando o caminho original existir. Se a fonte sumir sem identidade instalada válida, a verificação falha fechada. Um runner persiste estado, resultado, log, Git determinístico, latência e classificação de falhas. O watchdog recupera jobs interrompidos e entregas pendentes.
 3. A conclusão é enviada por `codex queue` ao mesmo `thread_id`. O caminho do CLI é descoberto novamente na entrega. Erro comprovadamente anterior ao envio pode ser recuperado uma vez; estado ambíguo não permite duplicação automática.
 4. O Worker dispõe de leitura, busca, status/diff Git e, quando autorizado, escrita, edição, movimentação sem sobrescrita, exclusão com backup recuperável e comandos delimitados. Recebe `AGENTS.md` e `agents.local.md` da raiz indicada por `repoPath`; descobre Skills, scripts, hooks e Subagents ativados pela rota aplicável e usa os mecanismos oficiais disponíveis. `delegate_readonly_subagent` executa investigação local isolada, sem escrita, rede ou delegação recursiva, somente quando o isolamento oferecer ganho; scripts fora dos comandos delimitados exigem ID exato aprovado pelo supervisor. Capacidade obrigatória indisponível é relatada com causa e autorização necessária, nunca simulada. `git_status` explicita upstream e contagens determinísticas de commits à frente/atrás; arquivo modificado no working tree não implica commit não enviado. Confinamento por caminho real e regras aplicáveis do repositório são obrigatórios.
 5. O supervisor consulta o resultado uma vez após retomada, revisa riscos e evidência proporcionalmente e continua unidades pendentes; término da inferência não prova conclusão da solicitação.
@@ -67,7 +67,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `80e9d2fd7fa3b4e8c5294842ca1c03001516c9682dba9d5bb3957177cb69f9bf` |
+| `src/localworker/server.mjs` | `53f1845863d598eb4327125114406fd7e828fa0afd837b6537b0f604d77d5672` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
@@ -80,10 +80,10 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `6791f67b0c26ba2e50b96b0d176363d748b708e804bf84378cf99e724e83e97d` |
-| `src/localworker/update-installed.ps1` | `e2d7521b4c4e6b67a88731566da82c416cf22cb61941c8ad4428ba875aa9b4e4` |
+| `src/localworker/install.ps1` | `dcc72938cf62a6728d85556eb72d8bf6fe4e08a326c14d98f1b12fadbf44c51b` |
+| `src/localworker/update-installed.ps1` | `eb8cd839b920b7d213a20da99f76f91779e2992a401a68f4a2419a6b1f19a0b1` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |
+| `src/install.ps1` | `4f7212f6fdbda9dfa9fc673ba6913bc6ceecfe96fce112e8a31d5f6e1e1d0dc3` |
 | `src/agents.supervisor.md` | `37eeb5987af342470ed4bd6a8fe47e46c0ed7c8ec0f3a152f07786c118496e0e` |
 <!-- LOCALWORKER_GENERATED_END -->
