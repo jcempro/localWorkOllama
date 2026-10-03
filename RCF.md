@@ -33,7 +33,7 @@ O teto padrão de 40 ciclos por job é configurável e não limita o tempo total
 
 ## Continuidade sob pressão de contexto e memória
 
-- No fluxo `/api/chat`, o runner envia `num_ctx` explícito e desativa truncamento/deslocamento automático. Antes de cada inferência, compara estimativa conservadora de contexto e último `prompt_eval_count` com a janela ativa; também mede RAM e, quando disponível, VRAM em relação às reservas do SO. Pressão dispara redução preventiva, sem reduzir as reservas. Limiares, número máximo de checkpoints e janela mínima são configuráveis nos limites documentados de `src/README.md`.
+- No fluxo `/api/chat`, o runner envia `num_ctx` explícito e desativa truncamento/deslocamento automático. Antes de cada inferência, compara estimativa conservadora de contexto e último `prompt_eval_count` com a janela ativa; também mede RAM e, quando disponível, VRAM em relação às reservas do SO. Pressão dispara redução preventiva, sem reduzir as reservas. Gatilhos e janela mínima são configuráveis nos limites documentados de `src/README.md`; o teto de quatro checkpoints fica centralizado no código.
 - O objetivo original e todas as normas aplicáveis permanecem literalmente nas mensagens fixas. O histórico antigo é removido do prompt somente depois de persistido e verificado em `jobs/<job_id>/context/<checkpoint_id>.json`; índice, mensagens recentes e ferramenta `context_recall` permitem reidratação exata por entrada e trecho. Arquivos alterados e estado Git continuam verificáveis no repositório. O índice nunca se apresenta como substituto fiel da evidência arquivada; decisões, restrições ou fatos omitidos devem ser reidratados antes de uso.
 - Sob pressão de RAM/VRAM, o runner pode reduzir progressivamente `num_ctx` apenas quando o prompt reduzido cabe com margem; o mecanismo existente de espera/descarga do modelo permanece. Reduções e retries são finitos. Falha de checkpoint, ausência de economia suficiente ou impossibilidade de manter a margem preservam o histórico e produzem diagnóstico explícito; não há descarte silencioso nem reinício integral do job.
 - Eventos do job registram causa, estratégia, contagem, contexto estimado antes/depois, janela ativa, RAM/VRAM antes/depois e tokens reais da inferência seguinte. O monitor expõe esses eventos e o total de compactações, sem conteúdo privado do checkpoint. Medições de RAM/VRAM são compartilhadas e não provam efeito causal exclusivo.
@@ -79,7 +79,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
-| `src/localworker/context-manager.mjs` | `45344bbec68de30b9d20f66215d25a97d9d603a0f2dfe273e1598be85e090a35` |
+| `src/localworker/context-manager.mjs` | `561dbc4e6ed537ad710f9bf7f91433fac9a433b8e6d8ee70d54f3f5934dd05f3` |
 | `src/localworker/worker-core.mjs` | `18cdde977cb9dcb83b22a0881a3aaec8cd8fe713dc3d70775fa4a6c7eea5c4a1` |
 | `src/localworker/worker-runner.mjs` | `3a598bc851ae6b90fc6b9a9d176c8f94b94b7843003c2b427b7ab8103cb4fadd` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |

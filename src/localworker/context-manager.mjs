@@ -68,6 +68,7 @@ export class ContextManagerC7M {
     this.lastPromptTokens = null;
     this.pendingEffect = null;
     this.lastUnavailable = null;
+    this.checkpointUnavailable = false;
   }
 
   async observed(tokens, resources = null, emit = async () => {}) {
@@ -100,7 +101,7 @@ export class ContextManagerC7M {
     let proposed = null;
     let after = before;
     let checkpoint = null;
-    if (this.count < CONTEXT_MAX_COMPACTIONS_C7M && cut > 2 && this.directory) {
+    if (!this.checkpointUnavailable && this.count < CONTEXT_MAX_COMPACTIONS_C7M && cut > 2 && this.directory) {
       const removed = messages.slice(2, cut);
       const id = `c${String(this.count + 1).padStart(4, "0")}`;
       const previous = this.checkpoints.map(item => item.id).join(", ") || "nenhum";
@@ -113,6 +114,39 @@ export class ContextManagerC7M {
       if (before - after < CONTEXT_MIN_SAVING_TOKENS_C7M || after > this.contextTokens * CONTEXT_TARGET_FRACTION_C7M) proposed = null;
       else checkpoint = { schema: "localworker-context-checkpoint/v1", id, created_at: new Date().toISOString(),
         entries: removed, before_estimated_tokens: before, after_estimated_tokens: after };
+    }
+    if (checkpoint) {
+      const folder = path.join(this.directory, "context");
+      const body = JSON.stringify(checkpoint);
+      const hash = createHash("sha256").update(body).digest("hex");
+      const file = path.join(folder, `${checkpoint.id}.json`);
+      const temporary = `${file}.${process.pid}.tmp`;
+      try {
+        await fs.mkdir(folder, { recursive: true });
+        await fs.writeFile(temporary, body, { flag: "wx" });
+        const readBack = await fs.readFile(temporary, "utf8");
+        if (createHash("sha256").update(readBack).digest("hex") !== hash) throw new Error("Checkpoint de contexto não verificável; histórico ativo preservado");
+        for (let attempt = 0; ; attempt++) {
+          try { await fs.rename(temporary, file); break; }
+          catch (error) {
+            if (process.platform !== "win32" || !["EPERM", "EACCES", "EBUSY"].includes(error?.code) || attempt >= 3) throw error;
+            await new Promise(resolve => setTimeout(resolve, 50 * (attempt + 1)));
+          }
+        }
+        messages.splice(0, messages.length, ...proposed);
+        this.checkpoints.push({ id: checkpoint.id, sha256: hash, entries: checkpoint.entries.length });
+        this.count++;
+      } catch (error) {
+        this.checkpointUnavailable = true;
+        proposed = null;
+        checkpoint = null;
+        after = before;
+        await emit({ phase: "context_compaction_failed", reason, strategy: "checkpoint recusado; histórico ativo íntegro",
+          context_before_tokens: before, context_after_tokens: before, context_limit_tokens: this.contextTokens,
+          ram_before_bytes: ram?.ramAvailable ?? null, vram_before_mib: gpu?.freeMiB ?? null,
+          compaction_count: this.count, error: String(error?.message ?? error).slice(0, 240),
+          summary: "Falha ao verificar/persistir checkpoint; histórico original mantido e nova tentativa de arquivo desativada neste job." });
+      } finally { await fs.rm(temporary, { force: true }).catch(() => {}); }
     }
     const activeEstimate = proposed ? after : before;
     const reducedContext = (ramPressure || vramPressure) ? lowerContext(this.contextTokens, this.minimumTokens, activeEstimate) : this.contextTokens;
@@ -127,23 +161,6 @@ export class ContextManagerC7M {
           summary: "Nenhuma redução segura comprovada; histórico preservado. Ollama recebe truncate:false." });
       }
       return false;
-    }
-    if (checkpoint) {
-      const folder = path.join(this.directory, "context");
-      await fs.mkdir(folder, { recursive: true });
-      const body = JSON.stringify(checkpoint);
-      const hash = createHash("sha256").update(body).digest("hex");
-      const file = path.join(folder, `${checkpoint.id}.json`);
-      const temporary = `${file}.${process.pid}.tmp`;
-      try {
-        await fs.writeFile(temporary, body, { flag: "wx" });
-        const readBack = await fs.readFile(temporary, "utf8");
-        if (createHash("sha256").update(readBack).digest("hex") !== hash) throw new Error("Checkpoint de contexto não verificável; histórico ativo preservado");
-        await fs.rename(temporary, file);
-      } finally { await fs.rm(temporary, { force: true }).catch(() => {}); }
-      messages.splice(0, messages.length, ...proposed);
-      this.checkpoints.push({ id: checkpoint.id, sha256: hash, entries: checkpoint.entries.length });
-      this.count++;
     }
     this.contextTokens = reducedContext;
     this.lastPromptTokens = null;

@@ -47,6 +47,16 @@ try {
   const full = structuredClone(original);
   assert.equal(await unavailable.prepare(full, [], { ram: { ramAvailable: 4.1 * 1024 ** 3, ramReserve: 4 * 1024 ** 3 } }), false);
   assert.deepEqual(full, original);
+  const blocked = path.join(directory, "blocked-file");
+  await fs.writeFile(blocked, "impede criar subdiretório");
+  const failed = new ContextManagerC7M(blocked, 32768);
+  const failedMessages = structuredClone(original);
+  const failureEvents = [];
+  await failed.prepare(failedMessages, [], { ram: { ramAvailable: 5 * 1024 ** 3, ramReserve: 4.5 * 1024 ** 3 } }, event => failureEvents.push(event));
+  assert.deepEqual(failedMessages, original);
+  assert.equal(failed.count, 0);
+  assert.ok(failureEvents.some(event => event.phase === "context_compaction_failed"));
+  assert.ok(!failureEvents.some(event => event.phase === "context_compacted"));
   assert.equal(new ContextManagerC7M(null, 4096).minimumTokens, 4096);
   assert.match(PAGE_M7Q, /context_compactions/);
   assert.match(PAGE_M7Q, /function contextDiagnostic/);
