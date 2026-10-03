@@ -61,7 +61,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `0ae3880c5c8f82609d561ad6d788576caaa2e476807e9a80fdd02f0f34f51921` |
+| `src/localworker/AGENTS.md` | `d72f65179178560dd8551ec4b10d468ee6cce85348b102b69405a33378497f7d` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -73,7 +73,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `9eef701685c50f75c11aa3a1de7aaeabecddaa3abb9f6665ee19774fcfb42a56` |
 | `src/localworker/worker-runner.mjs` | `15dc255e4b93ffd99b37f9ed767db68ce3d275a4b36811f61f8cbb60e0e96bf5` |
-| `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
+| `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
 | `src/localworker/monitor-page.mjs` | `c9f7b66a1afc7134a406bb3670e3c0e1a7832af57edd493d9234523f3c88ac8f` |
@@ -85,5 +85,5 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
-| `src/agents.supervisor.md` | `0b3a1b218ef1fe877451a6846d27d2d4a9e50967e36316ef8de5db759d71c295` |
+| `src/agents.supervisor.md` | `19f7fe4bbbf224dc1380e19b5209fe46f0fb9aad3235b48414cfe2a40d603f37` |
 <!-- LOCALWORKER_GENERATED_END -->

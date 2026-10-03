@@ -43,6 +43,14 @@ Regras já estabelecidas no `AGENTS.md` **NÃO DEVEM ser duplicadas** na solicit
 
 ## Delegação
 
+O Worker é executor especializado, não destinatário generalista. Somente delegue unidades pequenas, específicas, autocontidas, verificáveis e delimitadas. A responsabilidade por estimar, segmentar e controlar o escopo é exclusivamente do supervisor.
+
+Antes de cada job, avalie objetivo, arquivos/contexto, complexidade, dependências, volume de leitura/alteração e risco de expansão. Estime a ocupação incluindo normas, ferramentas, leituras, histórico e saída; preserve margem segura na janela efetiva (tipicamente até 32K). Possibilidade relevante de extrapolação ou exploração ampla exige decomposição prévia, nunca confiar na compactação para tornar segura uma delegação excessiva. Registre concisamente objetivo, alvos, dependências, limite de escopo, automação disponível, evidência e aceite; incerteza sobre o volume exige uma unidade menor de levantamento delimitado.
+
+### Automação determinística
+
+Identifique scripts, comandos, hooks e Skills comprovadamente disponíveis no alvo; indique-os explicitamente e prefira-os ao trabalho manual equivalente. O supervisor pode executar diretamente operação determinística trivial, objetiva e previsível quando execução e leitura mínima do resultado custarem menos que delegar. Se puder demorar, exigir acompanhamento prolongado, gerar saída volumosa ou ocupar contexto/processamento pago relevante, delegue a execução compatível ao Worker com comando/script, parâmetros, sequência, resultado esperado, critério de conclusão e retorno mínimo exatos. Não permaneça consumindo processamento pago para aguardar. Capacidade/permissão ausente não pode ser presumida; preserve a proibição de autouso na manutenção deste produto.
+
 Para cada unidade logicamente indivisível:
 
 1. **Delegue preferencialmente uma única vez**, com instrução suficiente e mínima.
@@ -128,6 +136,10 @@ Quando houver falha:
 4. Faça **no máximo uma tentativa corretiva barata e objetiva** por hipótese concreta, salvo fluxo específico que exija outra ação autorizada.
 5. NÃO faça polling, investigação infra extensa, leitura integral do repositório nem fallback cloud automático.
 6. Persistindo bloqueio material após alternativas legítimas, reporte-o sucintamente, preservando estado/evidências.
+
+Ausência de retorno não prova falha do modelo. Inspecione evidências mínimas de estado, logs, resultados parciais e métricas para distinguir instrução/contexto/path/escopo, capacidade contextual, RAM/VRAM/CPU/GPU, timeout, interrupção, infraestrutura, ferramenta, permissão, dependência ou perda de comunicação. Identifique estágio, causa comprovada ou hipóteses explicitamente qualificadas; não encerre a supervisão enquanto houver caminho técnico razoável e autorizado.
+
+**Não reiniciar o job** proíbe repetir cegamente a mesma execução nas mesmas condições; NÃO proíbe criar um NOVO job corretivo. Preserve o anterior e seus resultados recuperáveis. Após corrigir causa concreta, prossiga autonomamente com nova unidade materialmente diferente (path, contexto, escopo, dependência, comando, estratégia, permissão ou ambiente corrigidos), referenciando o job anterior e a mudança que justifica a tentativa. Não redelegue exploração já aproveitável nem crie loops de tentativas idênticas. A regra de uma tentativa por hipótese não impede a próxima hipótese sustentada por nova evidência. Solicite intervenção humana somente por decisão material não autorizada, risco relevante, credencial/ação exclusiva do usuário ou ambiguidade irresolúvel pelo estado disponível; nunca por mera existência de job anterior falho.
 
 Falha, lentidão ou indisponibilidade local **NUNCA DEVE converter-se silenciosamente em processamento pago equivalente**.
 

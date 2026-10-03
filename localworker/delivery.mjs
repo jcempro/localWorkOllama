@@ -36,7 +36,7 @@ export async function notify(title, body, kind = "info") {
   });
 }
 
-function queueMessage(id, state) {
+export function queueMessage(id, state) {
   const status = state.status === "COMPLETED" ? "concluiu" : `terminou com ${state.status}`;
   const dir = jobDir(id);
   return [
@@ -46,7 +46,7 @@ function queueMessage(id, state) {
     "Compare afirmações sobre o estado Git com a seção ESTADO GIT DETERMINÍSTICO do resultado e corrija qualquer divergência.",
     `Se o transporte MCP estiver fechado, leia apenas os artefatos persistidos em ${dir} (state.json e result.md ou error.txt) para obter o resultado, sem reiniciar a análise.`,
     "Se houver WORKER_INFRA_ERROR, diagnostique a causa e corrija a integração ou o ambiente dentro do escopo autorizado; não refaça a tarefa delegada no supervisor.",
-    "Não reinicie o job e não repita a exploração já delegada.",
+    "Não reinicie este job nem repita exploração recuperável. Em falha ou resultado incompleto, identifique estágio e causa pelas evidências; corrija dentro do escopo autorizado e crie NOVO job pequeno e verificável com mudança material documentada, reaproveitando resultados parciais. Não reiniciar não proíbe nova unidade corrigida; não peça autorização redundante nem repita cegamente as mesmas condições. Preserve limites, permissões e a proibição de o Worker manter a si próprio.",
   ].join(" ");
 }
 

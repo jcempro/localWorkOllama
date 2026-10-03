@@ -186,6 +186,8 @@ O script aceita uma tarefa já existente quando ela aponta ao mesmo destino. Par
 
 ## 5. Instruções globais do supervisor
 
+Cada job recebe uma unidade especializada que caiba com margem no contexto: objetivo, alvos, dependências, automação e aceite. Comandos triviais baratos podem ser executados diretamente; execuções demoradas/volumosas compatíveis são delegadas explicitamente. Após falha, o supervisor diagnostica evidências e pode criar novo job com correção material e vínculo ao anterior, sem autorização redundante. O job antigo permanece preservado; repetir as mesmas condições é proibido. A instalação abaixo distribui essas regras e a mensagem de retomada correspondente; o cumprimento semântico pelo modelo continua sujeito à validação do supervisor.
+
 O instalador grava as regras com marcadores próprios e backup no arquivo global efetivo: `$CodexHome\AGENTS.override.md` se ele já existir; caso contrário, `$CodexHome\AGENTS.md`. O Codex lê o override primeiro, portanto gravar apenas no arquivo base quando houver override deixaria a preferência invisível. Na execução manual, escolha essa mesma regra e mescle o conteúdo abaixo em UTF-8 sem apagar instruções existentes. O bloco é espelhado automaticamente de `src/agents.supervisor.md` ([descoberta oficial de AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)):
 Uma cópia global legada idêntica à versão anterior, sem marcadores, é removida somente quando seu SHA-256 exato é reconhecido; outras instruções são preservadas.
 
@@ -237,6 +239,14 @@ Regras já estabelecidas no `AGENTS.md` **NÃO DEVEM ser duplicadas** na solicit
 - houver evidência de descumprimento/necessidade concreta de reforço.
 
 ## Delegação
+
+O Worker é executor especializado, não destinatário generalista. Somente delegue unidades pequenas, específicas, autocontidas, verificáveis e delimitadas. A responsabilidade por estimar, segmentar e controlar o escopo é exclusivamente do supervisor.
+
+Antes de cada job, avalie objetivo, arquivos/contexto, complexidade, dependências, volume de leitura/alteração e risco de expansão. Estime a ocupação incluindo normas, ferramentas, leituras, histórico e saída; preserve margem segura na janela efetiva (tipicamente até 32K). Possibilidade relevante de extrapolação ou exploração ampla exige decomposição prévia, nunca confiar na compactação para tornar segura uma delegação excessiva. Registre concisamente objetivo, alvos, dependências, limite de escopo, automação disponível, evidência e aceite; incerteza sobre o volume exige uma unidade menor de levantamento delimitado.
+
+### Automação determinística
+
+Identifique scripts, comandos, hooks e Skills comprovadamente disponíveis no alvo; indique-os explicitamente e prefira-os ao trabalho manual equivalente. O supervisor pode executar diretamente operação determinística trivial, objetiva e previsível quando execução e leitura mínima do resultado custarem menos que delegar. Se puder demorar, exigir acompanhamento prolongado, gerar saída volumosa ou ocupar contexto/processamento pago relevante, delegue a execução compatível ao Worker com comando/script, parâmetros, sequência, resultado esperado, critério de conclusão e retorno mínimo exatos. Não permaneça consumindo processamento pago para aguardar. Capacidade/permissão ausente não pode ser presumida; preserve a proibição de autouso na manutenção deste produto.
 
 Para cada unidade logicamente indivisível:
 
@@ -324,6 +334,10 @@ Quando houver falha:
 5. NÃO faça polling, investigação infra extensa, leitura integral do repositório nem fallback cloud automático.
 6. Persistindo bloqueio material após alternativas legítimas, reporte-o sucintamente, preservando estado/evidências.
 
+Ausência de retorno não prova falha do modelo. Inspecione evidências mínimas de estado, logs, resultados parciais e métricas para distinguir instrução/contexto/path/escopo, capacidade contextual, RAM/VRAM/CPU/GPU, timeout, interrupção, infraestrutura, ferramenta, permissão, dependência ou perda de comunicação. Identifique estágio, causa comprovada ou hipóteses explicitamente qualificadas; não encerre a supervisão enquanto houver caminho técnico razoável e autorizado.
+
+**Não reiniciar o job** proíbe repetir cegamente a mesma execução nas mesmas condições; NÃO proíbe criar um NOVO job corretivo. Preserve o anterior e seus resultados recuperáveis. Após corrigir causa concreta, prossiga autonomamente com nova unidade materialmente diferente (path, contexto, escopo, dependência, comando, estratégia, permissão ou ambiente corrigidos), referenciando o job anterior e a mudança que justifica a tentativa. Não redelegue exploração já aproveitável nem crie loops de tentativas idênticas. A regra de uma tentativa por hipótese não impede a próxima hipótese sustentada por nova evidência. Solicite intervenção humana somente por decisão material não autorizada, risco relevante, credencial/ação exclusiva do usuário ou ambiguidade irresolúvel pelo estado disponível; nunca por mera existência de job anterior falho.
+
 Falha, lentidão ou indisponibilidade local **NUNCA DEVE converter-se silenciosamente em processamento pago equivalente**.
 
 Fallback integral pago somente com **autorização explícita do usuário** ou quando indispensável para evitar **perda/corrupção de trabalho já iniciado**.
@@ -389,6 +403,8 @@ O instalador copia `src/localworker/AGENTS.md` para `$WorkerHome\AGENTS.md`. O a
 # Worker local
 
 Worker subordinado ao supervisor. Execute estritamente a tarefa recebida, somente dentro de sua alçada.
+
+Você é executor especializado de uma unidade pequena, autocontida e verificável; não amplie uma unidade para a FT inteira. Estimativa, segmentação e controle de escopo cabem ao supervisor. Se evidências mostrarem contexto/escopo incompatível, preserve resultados parciais, indique a fronteira encontrada e o próximo passo delimitado; não explore indefinidamente. Prefira automação determinística existente e autorizada à execução manual equivalente; cumpra comando, parâmetros, sequência e aceite recebidos, diagnosticando incompatibilidade antes de improvisar.
 
 ## Autoridade e escopo
 
@@ -476,7 +492,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `0ae3880c5c8f82609d561ad6d788576caaa2e476807e9a80fdd02f0f34f51921` |
+| `src/localworker/AGENTS.md` | `d72f65179178560dd8551ec4b10d468ee6cce85348b102b69405a33378497f7d` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -488,7 +504,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `9eef701685c50f75c11aa3a1de7aaeabecddaa3abb9f6665ee19774fcfb42a56` |
 | `src/localworker/worker-runner.mjs` | `15dc255e4b93ffd99b37f9ed767db68ce3d275a4b36811f61f8cbb60e0e96bf5` |
-| `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
+| `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
 | `src/localworker/monitor-page.mjs` | `c9f7b66a1afc7134a406bb3670e3c0e1a7832af57edd493d9234523f3c88ac8f` |
@@ -500,7 +516,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
-| `src/agents.supervisor.md` | `0b3a1b218ef1fe877451a6846d27d2d4a9e50967e36316ef8de5db759d71c295` |
+| `src/agents.supervisor.md` | `19f7fe4bbbf224dc1380e19b5209fe46f0fb9aad3235b48414cfe2a40d603f37` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

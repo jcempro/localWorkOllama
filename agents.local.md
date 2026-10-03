@@ -35,6 +35,8 @@ Esta regra aplica-se exclusivamente ao repositório que contém este arquivo, qu
 
 ## Governança local de acompanhamento e recuperação
 
+- Manutenção deve preservar o contrato de delegação especializada e recuperação do RCF nas instruções distribuídas e na mensagem de retomada: avaliação prévia com margem contextual, automação determinística econômica, diagnóstico concreto e NOVO job materialmente corrigido dentro da autorização, sem confundir proibição de reiniciar com abandono. Nunca delegar a manutenção do próprio Worker para cumprir esse contrato.
+
 - A timeline mostra eventos mais recentes primeiro, sem reordenar persistência. O inventário mostra uma única visão de CPU/GPU/RAM/VRAM global do PC, independente do número de jobs e sem somar métricas individuais. Atualização automática, medições reais, indisponibilidade explícita e diferenciação de escopos são obrigatórias.
 
 - A supervisão mantém relato humano ultrassucinto e explícito de objetivo, retorno, avaliação e próximo passo. O controle anti-loop abrange erros executados, recusas e resultados repetidos sem progresso; não basta contar TOOL_REJECTED. Alterações reais de estado/argumentos e alternativas legítimas continuam possíveis. O teto de ciclos é última defesa. A sequência de bloqueio deve permanecer auditável sem conteúdo privado de raciocínio.
