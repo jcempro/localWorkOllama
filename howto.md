@@ -215,7 +215,7 @@ Quando necessário e **somente se ainda não estiver disponível no contexto**, 
 
 Cada repositório tem seu próprio `agents.local.md`. Para cada delegação, supervisor e Worker DEVEM usar somente o arquivo local do `repoPath` alvo, quando existir, sem transportar conteúdo ou permissões de outro repositório. Hooks, Skills, Subagents, scripts, especializações e configurações locais só podem ser considerados disponíveis após comprovação no alvo ou em sua governança aplicável. Somente o núcleo upstream/original de `AGENTS.md` pode ser comum, quando efetivamente presente. A ausência de extensão local não autoriza presumir uma equivalente.
 
-Regras, scripts e recursos necessários à operação geral do supervisor ou Worker DEVEM estar instalados em paths acessíveis aos respectivos processos. Uma delegação a outro repositório não pode depender da presença da árvore de desenvolvimento do localWorker. Recursos exclusivos do alvo são descobertos nesse alvo; mecanismo obrigatório ausente gera diagnóstico e correção de instalação/autorização antes do uso.
+Regras, scripts e recursos necessários à operação geral do supervisor ou Worker DEVEM estar instalados em paths acessíveis aos respectivos processos. A leitura e o uso desses artefatos por uma delegação a outro repositório não podem depender da presença da árvore de desenvolvimento do localWorker. Recursos exclusivos do alvo são descobertos nesse alvo; mecanismo obrigatório ausente gera diagnóstico e correção de instalação/autorização antes do uso.
 
 Regras já estabelecidas no `AGENTS.md` **NÃO DEVEM ser duplicadas** na solicitação. No máximo, referencie-as sucintamente quando:
 
@@ -380,7 +380,7 @@ Worker subordinado ao supervisor. Execute estritamente a tarefa recebida, soment
 3. Regras aplicáveis do repositório são obrigatórias, inclusive arquitetura, modus operandi, práticas, restrições, proibições, estratégias, compatibilidade, testes e critérios de implementação; descubra-as diretamente, sem depender de retransmissão. Consulte também o `agents.local.md` da raiz quando existir.
 3a. Cada repositório possui governança local própria: carregue `agents.local.md` somente da raiz alvo e nunca transfira conteúdo, precedência ou permissões de outro repositório. Ausência do arquivo não implica equivalência com qualquer outro.
 3b. Hooks, Skills, Subagents, scripts, especializações, configurações e mecanismos locais só existem para a tarefa se forem comprovados na raiz alvo ou em sua governança aplicável. Apenas o núcleo upstream/original de `AGENTS.md` pode ser compartilhado, após comprovar sua presença. Não invoque extensões deste repositório em outro por analogia.
-3c. Regras e recursos necessários à operação geral devem existir na instalação acessível ao Worker. Não dependa da árvore de desenvolvimento que produziu a instalação. Recursos exclusivos da raiz alvo permanecem nessa raiz; se um mecanismo obrigatório faltar, diagnostique a ausência sem fingir execução.
+3c. Regras e recursos necessários à operação geral devem existir na instalação acessível ao Worker. Para lê-los e utilizá-los, não dependa da árvore de desenvolvimento que produziu a instalação. Recursos exclusivos da raiz alvo permanecem nessa raiz; se um mecanismo obrigatório faltar, diagnostique a ausência sem fingir execução.
 4. Regra mais específica ao caminho prevalece sobre a geral, salvo instrução superior explícita.
 5. Conflito material entre tarefa e regra aplicável: não decida nem improvise; retorne `NEEDS_SUPERVISOR` com conflito e evidência exatos.
 
@@ -457,7 +457,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `298553b7c22427590042537dee024e3e908f3b2c61ad3ce005a460d627ff53f0` |
+| `src/localworker/AGENTS.md` | `1d765bdf4c4947b9cfcebcf63f5328d6cf4edbfaf8986baf0dffb48483a6cc46` |
 | `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -479,7 +479,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `8236c3d99849796883031c16bcf86e2139efd0194ca2cbd4a4a9607d001ec670` |
-| `src/agents.supervisor.md` | `1962c40b5f1ef5ebab0c432b23098a5ae5e1d26f2f8a7051504fc69d7d97c467` |
+| `src/agents.supervisor.md` | `37eeb5987af342470ed4bd6a8fe47e46c0ed7c8ec0f3a152f07786c118496e0e` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI
