@@ -6,7 +6,6 @@ const CONTEXT_TRIGGER_FRACTION_C7M = Number(process.env.LOCAL_WORKER_CONTEXT_TRI
 const CONTEXT_TARGET_FRACTION_C7M = 0.56;
 const CONTEXT_MIN_SAVING_TOKENS_C7M = 512;
 const CONTEXT_RECENT_MESSAGES_C7M = 8;
-const CONTEXT_MAX_COMPACTIONS_C7M = 4;
 const CONTEXT_RECALL_CHARS_C7M = 12_000;
 const CONTEXT_RAM_MARGIN_BYTES_C7M = Number(process.env.LOCAL_WORKER_CONTEXT_RAM_MARGIN_BYTES ?? 1024 ** 3);
 const CONTEXT_VRAM_MARGIN_MIB_C7M = Number(process.env.LOCAL_WORKER_CONTEXT_VRAM_MARGIN_MIB ?? 512);
@@ -40,10 +39,27 @@ function overview(messages) {
   }).join("\n");
 }
 
-function cutIndex(messages) {
-  let cut = Math.max(2, messages.length - CONTEXT_RECENT_MESSAGES_C7M);
+function cutIndex(messages, recent = CONTEXT_RECENT_MESSAGES_C7M) {
+  let cut = Math.max(2, messages.length - recent);
   while (cut > 2 && messages[cut]?.role === "tool") cut--;
   return cut;
+}
+
+export class ContextOverflowC7M extends Error {}
+
+function preservedContext(messages) {
+  // Decisões textuais e instruções recebidas depois do início não podem virar só um índice.
+  return messages.flatMap(message => {
+    const text = String(message.content ?? "");
+    if (message.role === "user" && text.startsWith("CHECKPOINT DE CONTEXTO")) {
+      const marker = "\n\nESTADO E INSTRUÇÕES PRESERVADOS:\n";
+      return text.includes(marker) ? [text.slice(text.indexOf(marker) + marker.length)] : [];
+    }
+    if (message.role === "assistant" && text.trim()) return [text];
+    if (message.role === "user" && !text.startsWith("CHECKPOINT DE CONTEXTO")) return [text];
+    if (message.tool_name === "read_file" && /\.md \[linhas \d+-\d+\/\d+\]/i.test(text)) return [text];
+    return [...text.matchAll(/--- INSTRUÇÃO DO REPOSITÓRIO:[\s\S]*?--- FIM DA INSTRUÇÃO ---/g)].map(match => match[0]);
+  }).join("\n\n");
 }
 
 function lowerContext(current, minimum, estimated) {
@@ -91,17 +107,20 @@ export class ContextManagerC7M {
     const gpu = resources?.gpu ?? null;
     const ramPressure = ram && ram.ramAvailable < ram.ramReserve + CONTEXT_RAM_MARGIN_BYTES_C7M;
     const vramPressure = gpu && gpu.freeMiB < gpu.reserveMiB + CONTEXT_VRAM_MARGIN_MIB_C7M;
-    const contextPressure = before >= this.contextTokens * CONTEXT_TRIGGER_FRACTION_C7M ||
+    const contextPressure = resources?.forceCompaction || before >= this.contextTokens * CONTEXT_TRIGGER_FRACTION_C7M ||
       (this.lastPromptTokens ?? 0) >= this.contextTokens * CONTEXT_TRIGGER_FRACTION_C7M;
     if (!ramPressure && !vramPressure && !contextPressure) return false;
     const reasons = [ramPressure && "RAM próxima da reserva", vramPressure && "VRAM próxima da reserva",
       contextPressure && "janela de contexto próxima do limite"].filter(Boolean);
     const reason = reasons.join("; ");
-    const cut = cutIndex(messages);
     let proposed = null;
     let after = before;
     let checkpoint = null;
-    if (!this.checkpointUnavailable && this.count < CONTEXT_MAX_COMPACTIONS_C7M && cut > 2 && this.directory) {
+    if (!this.checkpointUnavailable && this.directory) {
+      for (const recent of resources?.forceCompaction ? [0] : [CONTEXT_RECENT_MESSAGES_C7M, 4, 2, 0]) {
+      if (recent === 0 && messages.at(-1)?.tool_name === "context_recall") continue;
+      const cut = cutIndex(messages, recent);
+      if (cut <= 2) continue;
       const removed = messages.slice(2, cut);
       const id = `c${String(this.count + 1).padStart(4, "0")}`;
       const previous = this.checkpoints.map(item => item.id).join(", ") || "nenhum";
@@ -109,11 +128,16 @@ export class ContextManagerC7M {
         `Histórico anterior persistido neste job; checkpoints anteriores: ${previous}. ` +
         `O resumo abaixo é índice, não substitui as evidências. Use context_recall com checkpoint_id e entry_index para reidratar qualquer decisão, saída ou argumento antes de depender dele. ` +
         `Estado atual de arquivos deve ser confirmado pelas ferramentas do repositório. Próximo passo: continue a tarefa original a partir das mensagens recentes, sem repetir trabalho já comprovado.\n${overview(removed)}`;
-      proposed = [...messages.slice(0, 2), { role: "user", content: summary }, ...messages.slice(cut)];
-      after = estimateContextTokensC7M(proposed, tools);
-      if (before - after < CONTEXT_MIN_SAVING_TOKENS_C7M || after > this.contextTokens * CONTEXT_TARGET_FRACTION_C7M) proposed = null;
-      else checkpoint = { schema: "localworker-context-checkpoint/v1", id, created_at: new Date().toISOString(),
+      const retained = preservedContext(removed);
+      const candidate = [...messages.slice(0, 2), { role: "user", content: summary + (retained ? `\n\nESTADO E INSTRUÇÕES PRESERVADOS:\n${retained}` : "") }, ...messages.slice(cut)];
+      const candidateSize = estimateContextTokensC7M(candidate, tools);
+      if (before - candidateSize < CONTEXT_MIN_SAVING_TOKENS_C7M || candidateSize >= after) continue;
+      proposed = candidate;
+      after = candidateSize;
+      checkpoint = { schema: "localworker-context-checkpoint/v1", id, created_at: new Date().toISOString(),
         entries: removed, before_estimated_tokens: before, after_estimated_tokens: after };
+      if (after <= this.contextTokens * CONTEXT_TARGET_FRACTION_C7M) break;
+      }
     }
     if (checkpoint) {
       const folder = path.join(this.directory, "context");

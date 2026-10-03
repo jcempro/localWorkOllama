@@ -9,7 +9,7 @@ import { createHash, randomUUID } from "node:crypto";
 import http from "node:http";
 import https from "node:https";
 import { jobDir } from "./job-store.mjs";
-import { ContextManagerC7M } from "./context-manager.mjs";
+import { ContextManagerC7M, ContextOverflowC7M } from "./context-manager.mjs";
 import { ProgressGuardP6R, failureClassP6R } from "./progress-guard.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -1349,7 +1349,7 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
       const retryable = error instanceof TypeError || error?.name === "AbortError" || TRANSIENT_OLLAMA_CODES.has(error?.code) || Number(error?.status) >= 500;
       await onProgress({ phase: "ollama_error", attempt, error: errorChain(error), retryable });
       if (error?.status === 400 && /context|token|truncate|too long/i.test(error.message)) {
-        throw new WorkerIncompleteError(`WORKER_INCOMPLETE: Ollama recusou o contexto sem truncamento; checkpoint não bastou ou instruções fixas excedem a janela. ${safeToolDiagnostic(error)}. Segmente a continuação preservando os artefatos do job.`);
+        throw new ContextOverflowC7M(`Ollama recusou o contexto sem truncamento: ${safeToolDiagnostic(error)}`, { cause: error });
       }
       if (!retryable || attempt >= OLLAMA_ATTEMPTS || deadline - Date.now() <= 0) {
         throw new Error(`Ollama /api/chat falhou após ${attempt} tentativa(s): ${errorChain(error)}`, { cause: error });
@@ -1569,7 +1569,20 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         !(forcedInspection && toolExecutions === 0)) {
       availableTools.push(TOOL_DEFINITIONS.find(tool => tool.function.name === "context_recall"));
     }
-    const response = await ollamaChat(messages, availableTools, remaining, onProgress, gpuPolicy, contextManager.contextTokens);
+    let response;
+    for (let recovery = 0; ; recovery++) {
+      try {
+        response = await ollamaChat(messages, availableTools, remaining, onProgress, gpuPolicy, contextManager.contextTokens);
+        break;
+      } catch (error) {
+        if (!(error instanceof ContextOverflowC7M)) throw error;
+        const reduced = recovery < 2 && await contextManager.prepare(messages, availableTools,
+          { forceCompaction: true }, onProgress);
+        if (!reduced) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: CONTEXT_CAPACITY: ${error.message}. Não há redução adicional segura; preserve checkpoints e segmente a continuação, sem repetir a exploração.`);
+        if (!availableTools.some(tool => tool.function.name === "context_recall")) availableTools.push(TOOL_DEFINITIONS.find(tool => tool.function.name === "context_recall"));
+        await onProgress({ phase: "context_recovery", reason: "recusa de contexto; histórico reduzido antes da nova chamada", attempt: recovery + 1 });
+      }
+    }
     await contextManager.observed(response?.prompt_eval_count,
       { ram: os.freemem(), gpu: await gpuMemoryBudgetR8N() }, onProgress);
 

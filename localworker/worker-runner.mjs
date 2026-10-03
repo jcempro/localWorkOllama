@@ -32,6 +32,17 @@ async function appendAuditK9P(event, at) {
   await atomicText(file, `${new Date().toISOString()} ${JSON.stringify({ phase: "log_compacted", reason: "Limite do log atingido; eventos recentes preservados.", prior_bytes: size })}\n${tail}`);
 }
 
+async function gitEvidenceK9P(repo) {
+  let evidence;
+  try {
+    const { stdout } = await execFileAsync("git", ["-C", repo, "status", "--short", "--branch"], { windowsHide: true, timeout: 15_000, maxBuffer: 2 * 1024 * 1024 });
+    evidence = stdout.trimEnd();
+  } catch (error) { evidence = `Indisponível: ${String(error?.message ?? error)}`; }
+  const at = new Date().toISOString();
+  await atomicText(path.join(dir, "git-status.txt"), `${at}\n${evidence}\n`);
+  return `ESTADO GIT DETERMINÍSTICO (${at}; prevalece se houver divergência):\n${evidence}\n`;
+}
+
 async function main() {
   const request = await readJson(path.join(dir, "request.json"));
   const initial = await withJobControl(id, async () => {
@@ -76,25 +87,18 @@ async function main() {
       });
       await pendingHeartbeat;
     }, request.authorized_commands ?? [], request.expect_changes ?? (request.mode === "write"), request.required_change_paths ?? [], request.mode === "write");
-    let gitEvidence;
-    try {
-      const { stdout } = await execFileAsync("git", ["-C", request.repoPath, "status", "--short", "--branch"], { windowsHide: true, maxBuffer: 2 * 1024 * 1024 });
-      gitEvidence = stdout.trimEnd();
-    } catch (error) {
-      gitEvidence = `Indisponível: ${String(error?.message ?? error)}`;
-    }
-    const checkedAt = new Date().toISOString();
-    await atomicText(path.join(dir, "git-status.txt"), `${checkedAt}\n${gitEvidence}\n`);
+    const gitEvidence = await gitEvidenceK9P(request.repoPath);
     clearInterval(heartbeat);
     await pendingHeartbeat;
-    await atomicText(path.join(dir, "result.md"), `${result}\n\nESTADO GIT DETERMINÍSTICO (${checkedAt}; prevalece se houver divergência):\n${gitEvidence}\n`);
+    await atomicText(path.join(dir, "result.md"), `${result}\n\n${gitEvidence}`);
     if ((await getState(id)).status !== "CANCELLED") await setState(id, { ...state, status: "COMPLETED", phase: "completed", completed_at: new Date().toISOString(), heartbeat_at: new Date().toISOString() });
   } catch (error) {
     clearInterval(heartbeat);
     await pendingHeartbeat.catch(() => {});
     const kind = error instanceof WorkerIncompleteError ? "WORKER_INCOMPLETE" : "WORKER_INFRA_ERROR";
     const message = `${kind}: ${String(error?.stack ?? error)}`;
-    await atomicText(path.join(dir, "error.txt"), message + "\n");
+    const evidence = await gitEvidenceK9P(request.repoPath).catch(error => `ESTADO GIT DETERMINÍSTICO indisponível: ${String(error?.message ?? error)}`);
+    await atomicText(path.join(dir, "error.txt"), `${message}\n\n${evidence}\n`);
     if ((await getState(id)).status !== "CANCELLED") await setState(id, { ...state, status: "FAILED", phase: "failed", error_kind: kind, completed_at: new Date().toISOString() });
   }
   await recordLatency((Date.now() - started) / 1000);

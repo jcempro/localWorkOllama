@@ -152,9 +152,11 @@ Em tarefas de escrita, o Worker recebe avisos de orçamento de ciclos e deixa de
 
 ### Compactação segura de contexto
 
+Em falhas, consulte `error_kind` de `local_result`, `error.txt` e `git-status.txt` no diretório do job. `CONTEXT_CAPACITY` significa que o contexto restante não pôde ser reduzido com segurança; não é evidência de defeito do hardware. O estado Git é coletado também em falhas, e qualquer indisponibilidade de coleta aparece explicitamente. Jobs anteriores à atualização conservam seus artefatos originais.
+
 O Ollama aceita histórico enviado a cada `/api/chat` e `num_ctx` por requisição. O Worker conserva literalmente regras e objetivo originais; antes de pressão crítica de contexto, RAM ou VRAM, arquiva mensagens antigas em `jobs/<job_id>/context/cNNNN.json`, verifica o SHA-256 e só então mantém no prompt um índice recuperável e as mensagens recentes. `context_recall` devolve trechos exatos desse arquivo quando o Worker precisar de decisão ou evidência anterior. O histórico arquivado integra a retenção e a exclusão do respectivo job. O pedido envia `truncate:false` e `shift:false` para impedir descarte implícito pelo Ollama. Se não houver redução segura, o job registra a limitação e preserva o histórico; contexto grande demais gera `WORKER_INCOMPLETE` explícito.
 
-Configure a janela inicial por `-ModelContextTokens` no instalador, `LOCAL_WORKER_CONTEXT_TOKENS` ou `context_tokens` no `config.json` instalado (padrão: 32768) e o piso por `LOCAL_WORKER_MIN_CONTEXT_TOKENS` ou `min_context_tokens` (padrão: 8192). A estimativa dispara em 68% da janela; ajuste o gatilho por `LOCAL_WORKER_CONTEXT_TRIGGER_FRACTION` (maior que 0,56 e até 0,8). RAM e VRAM disparam ao se aproximarem a 1 GiB e 512 MiB das reservas; configure as margens por `LOCAL_WORKER_CONTEXT_RAM_MARGIN_BYTES` e `LOCAL_WORKER_CONTEXT_VRAM_MARGIN_MIB`. O mecanismo limita checkpoints a quatro, exige redução mensurável e só reduz `num_ctx` se o prompt couber com margem. A seção de diagnóstico mostra janela ativa e contagem; a timeline mostra motivo, estimativa antes/depois, medições de memória, estratégia e tokens observados. Essas medições podem incluir outros processos e não demonstram economia exclusiva do Worker. O Ollama atual também oferece compactação na API Responses, mas ela não é intercambiável com o histórico e as ferramentas de `/api/chat`; este instalador usa checkpoints próprios verificáveis sem mudar o protocolo do agente.
+Configure a janela inicial por `-ModelContextTokens` no instalador, `LOCAL_WORKER_CONTEXT_TOKENS` ou `context_tokens` no `config.json` instalado (padrão: 32768) e o piso por `LOCAL_WORKER_MIN_CONTEXT_TOKENS` ou `min_context_tokens` (padrão: 8192). A estimativa dispara em 68% da janela; ajuste o gatilho por `LOCAL_WORKER_CONTEXT_TRIGGER_FRACTION` (maior que 0,56 e até 0,8). RAM e VRAM disparam ao se aproximarem a 1 GiB e 512 MiB das reservas; configure as margens por `LOCAL_WORKER_CONTEXT_RAM_MARGIN_BYTES` e `LOCAL_WORKER_CONTEXT_VRAM_MARGIN_MIB`. O mecanismo exige redução mínima de 512 tokens estimados por checkpoint e reduz progressivamente a quantidade de mensagens recentes quando necessário. O alvo de 56% é uma preferência, não motivo para rejeitar economia útil. Não há teto cumulativo de checkpoints produtivos. Evidência recém-reidratada permanece até a próxima inferência. Uma recusa explícita de contexto permite até duas recuperações na mesma chamada, somente após redução comprovada; base irredutível gera `WORKER_INCOMPLETE: CONTEXT_CAPACITY`. Só reduz `num_ctx` se o prompt couber com margem. A seção de diagnóstico mostra janela ativa e contagem; a timeline mostra motivo, estimativa antes/depois, medições de memória, estratégia e tokens observados. Essas medições podem incluir outros processos e não demonstram economia exclusiva do Worker. O Ollama atual também oferece compactação na API Responses, mas ela não é intercambiável com o histórico e as ferramentas de `/api/chat`; este instalador usa checkpoints próprios verificáveis sem mudar o protocolo do agente.
 
 Quando a unidade de implementação tem arquivos-alvo definidos, passe caminhos relativos em `required_change_paths` junto de `expect_changes: true`. Inclua o artefato funcional, não somente um arquivo de estado. Exemplo fictício: `required_change_paths: ["scripts/verificar.py", "scripts/testar_verificar.py"]`. O Worker só pode concluir após alterar efetivamente cada alvo; executar testes ou editar outro arquivo não substitui essa prova. Testes falhos devolvem `stdout` e `stderr` limitados ao Worker e bloqueiam `COMPLETED` até nova execução bem-sucedida do mesmo comando. O transporte do Ollama respeita o prazo configurado do job, inclusive quando a geração de resposta demora mais de cinco minutos.
 
@@ -307,6 +309,7 @@ Classifique rigorosamente:
 
 - `NEEDS_SUPERVISOR`: decisão, ambiguidade ou conflito que materialmente exige inteligência/autoridade superior.
 - `WORKER_INFRA_ERROR`: falha de worker, processo, filesystem, sandbox, Ollama, ferramenta ou ambiente.
+- `WORKER_INCOMPLETE`: unidade não concluída, conforme `error_kind` persistido. `CONTEXT_CAPACITY` exige preservar checkpoints/evidências e segmentar a continuação quando não houver redução segura; não reclassifique automaticamente como `WORKER_INFRA_ERROR`. A seção Git em resultado/erro, quando disponível, prevalece sobre afirmações textuais.
 
 `WORKER_INFRA_ERROR` **NÃO equivale a `NEEDS_SUPERVISOR`**.
 
@@ -475,14 +478,14 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `53f1845863d598eb4327125114406fd7e828fa0afd837b6537b0f604d77d5672` |
+| `src/localworker/server.mjs` | `999baec671df3bdbec83f2e326d96ca2ff8122ded85fd0fb33ef6a57bedfd4e5` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
-| `src/localworker/context-manager.mjs` | `561dbc4e6ed537ad710f9bf7f91433fac9a433b8e6d8ee70d54f3f5934dd05f3` |
+| `src/localworker/context-manager.mjs` | `8f6548ee3ed882f56761af05a952353a61e851a91f74f72720eced5fbacb464b` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `6c37f86de93375faa5e60b0f5272066126470c073e0b77add7c0f0d0605a21b3` |
-| `src/localworker/worker-runner.mjs` | `3a598bc851ae6b90fc6b9a9d176c8f94b94b7843003c2b427b7ab8103cb4fadd` |
+| `src/localworker/worker-core.mjs` | `9eef701685c50f75c11aa3a1de7aaeabecddaa3abb9f6665ee19774fcfb42a56` |
+| `src/localworker/worker-runner.mjs` | `15dc255e4b93ffd99b37f9ed767db68ce3d275a4b36811f61f8cbb60e0e96bf5` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
@@ -495,7 +498,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `5a85596b890b58bd7f319742d7657c30a0f2aad11f47b0cf0993117b492cae55` |
-| `src/agents.supervisor.md` | `ccbb044bb4940ab61bdf55fe2b6292faf0bb0ee768fecdb3a6890b5d50efdf72` |
+| `src/agents.supervisor.md` | `0b3a1b218ef1fe877451a6846d27d2d4a9e50967e36316ef8de5db759d71c295` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

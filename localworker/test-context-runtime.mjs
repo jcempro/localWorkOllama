@@ -38,8 +38,8 @@ const server = createServer(async (request, response) => {
     assert.match(payload.messages.at(-1).content, /DECISÃO_INTEGRA/);
     message = { role: "assistant", content: "RESULTADO: continuidade preservada com reidratação exata." };
   } else {
-    message = { role: "assistant", content: requests <= 2 ? "DECISÃO_INTEGRA ".repeat(1100) : "Prosseguindo com evidência recente.",
-      tool_calls: [{ function: { name: "file_info", arguments: { path: evidenceFiles[requests - 1] } } }] };
+    message = { role: "assistant", content: requests <= 2 ? "DECISÃO_INTEGRA" : "Prosseguindo com evidência recente.",
+      tool_calls: [{ function: { name: "file_info", arguments: { path: evidenceFiles[requests - 1], fixture: requests <= 2 ? "EVIDÊNCIA ".repeat(2200) : "" } } }] };
   }
   response.setHeader("Content-Type", "application/json");
   response.end(JSON.stringify({ message, prompt_eval_count: 1000 + requests, eval_count: 20 }));

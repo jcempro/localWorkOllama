@@ -169,7 +169,7 @@ server.registerTool("local_result", {
     const resultFile = state.status === "COMPLETED" ? "result.md" : "error.txt";
     const result = await fs.readFile(path.join(dir, resultFile), "utf8").catch(() => "");
     const final = await fs.readFile(path.join(dir, "supervisor-final.md"), "utf8").catch(() => "");
-    return reply({ job_id, status: state.status, delivery: delivery.status, result, supervisor_final: final });
+    return reply({ job_id, status: state.status, error_kind: state.error_kind ?? null, delivery: delivery.status, result, supervisor_final: final });
   } catch (error) { return errorReply(error); }
 });
 

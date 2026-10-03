@@ -116,6 +116,7 @@ Classifique rigorosamente:
 
 - `NEEDS_SUPERVISOR`: decisão, ambiguidade ou conflito que materialmente exige inteligência/autoridade superior.
 - `WORKER_INFRA_ERROR`: falha de worker, processo, filesystem, sandbox, Ollama, ferramenta ou ambiente.
+- `WORKER_INCOMPLETE`: unidade não concluída, conforme `error_kind` persistido. `CONTEXT_CAPACITY` exige preservar checkpoints/evidências e segmentar a continuação quando não houver redução segura; não reclassifique automaticamente como `WORKER_INFRA_ERROR`. A seção Git em resultado/erro, quando disponível, prevalece sobre afirmações textuais.
 
 `WORKER_INFRA_ERROR` **NÃO equivale a `NEEDS_SUPERVISOR`**.
 

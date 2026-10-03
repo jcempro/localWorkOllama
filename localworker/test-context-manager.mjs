@@ -58,6 +58,23 @@ try {
   assert.ok(failureEvents.some(event => event.phase === "context_compaction_failed"));
   assert.ok(!failureEvents.some(event => event.phase === "context_compacted"));
   assert.equal(new ContextManagerC7M(null, 4096).minimumTokens, 4096);
+  // Regressão: base fixa acima de 56% e retorno recente volumoso não podem impedir toda redução.
+  const adaptive = new ContextManagerC7M(path.join(directory, "adaptive"), 32768);
+  const dense = [{ role: "system", content: "norma ".repeat(6500) }, { role: "user", content: "objetivo" },
+    { role: "assistant", content: "Decisão necessária à continuidade.", tool_calls: [{ function: { name: "read_file", arguments: { path: "source.py" } } }] },
+    { role: "tool", tool_name: "read_file", content: "source.py\n" + "evidence ".repeat(4000) }];
+  assert.equal(await adaptive.prepare(dense, [], {}), true);
+  assert.match(dense[2].content, /Decisão necessária/);
+  assert.ok(estimateContextTokensC7M(dense) > 32768 * .56);
+  assert.equal(adaptive.count, 1);
+  for (let i = 0; i < 5; i++) {
+    dense.push({ role: "assistant", content: `Decisão ${i}` }, { role: "tool", content: "nova evidência ".repeat(2500) });
+    assert.equal(await adaptive.prepare(dense, [], { forceCompaction: true }), true);
+  }
+  assert.equal(adaptive.count, 6);
+  assert.match(dense[2].content, /Decisão necessária/);
+  assert.match(dense[2].content, /Decisão 0/);
+  assert.equal(await adaptive.prepare(dense, [], { forceCompaction: true }), false);
   assert.match(PAGE_M7Q, /context_compactions/);
   assert.match(PAGE_M7Q, /function contextDiagnostic/);
   for (const script of PAGE_M7Q.split("<script>").slice(1)) new vm.Script(script.split("</script>")[0]);
