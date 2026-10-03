@@ -1,5 +1,7 @@
 # localWorker no Codex Desktop (Windows 11 2025H2+)
 
+No monitor, **Todos os jobs** mostra barras de CPU, GPU, RAM e VRAM globais da máquina, atualizadas automaticamente a cada dez segundos. A primeira leitura de CPU pode aparecer indisponível até haver duas amostras. GPU/VRAM exigem a fonte NVIDIA já usada pelo runtime; ausência aparece explicitamente. Abra um job para ver suas métricas e a timeline, com eventos mais recentes no topo; o histórico original permanece intacto.
+
 O runtime instalado inclui `progress-guard.mjs`: repetições determinísticas são bloqueadas antes de executar; quatro ações sem progresso verificável encerram a unidade com diagnóstico. O log `strategy_blocked` registra classes e hashes de ações/estados. Para continuar, corrija a pré-condição, use alternativa autorizada ou conceda ao Worker somente o acesso exato necessário. Não aumente o teto de ciclos para mascarar loops. Retries transitórios seguros continuam limitados; uma falha de validação permanece pendente até passar.
 
 ## Objetivo e percurso
@@ -483,8 +485,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/worker-runner.mjs` | `3a598bc851ae6b90fc6b9a9d176c8f94b94b7843003c2b427b7ab8103cb4fadd` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
-| `src/localworker/monitor.mjs` | `2e1a6dafe425875451e09761d715377ddc3bf7acdfff064b66efdb64b49a9d08` |
-| `src/localworker/monitor-page.mjs` | `3457ea14d3d564e22fc69f0b0a6f74cd8d42601317c40d5e86cca9754459c134` |
+| `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
+| `src/localworker/monitor-page.mjs` | `c9f7b66a1afc7134a406bb3670e3c0e1a7832af57edd493d9234523f3c88ac8f` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |

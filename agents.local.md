@@ -35,6 +35,8 @@ Esta regra aplica-se exclusivamente ao repositório que contém este arquivo, qu
 
 ## Governança local de acompanhamento e recuperação
 
+- A timeline mostra eventos mais recentes primeiro, sem reordenar persistência. O inventário mostra uma única visão de CPU/GPU/RAM/VRAM global do PC, independente do número de jobs e sem somar métricas individuais. Atualização automática, medições reais, indisponibilidade explícita e diferenciação de escopos são obrigatórias.
+
 - A supervisão mantém relato humano ultrassucinto e explícito de objetivo, retorno, avaliação e próximo passo. O controle anti-loop abrange erros executados, recusas e resultados repetidos sem progresso; não basta contar TOOL_REJECTED. Alterações reais de estado/argumentos e alternativas legítimas continuam possíveis. O teto de ciclos é última defesa. A sequência de bloqueio deve permanecer auditável sem conteúdo privado de raciocínio.
 
 - O monitor é observador independente, idempotente e desacoplado do runner. Abrir, fechar, atualizar ou reiniciar sua UI não pode alterar, suspender nem finalizar jobs. O inventário deve permitir localizar todos os jobs retidos, filtrar por projeto do Desktop quando essa identidade estiver comprovadamente disponível ou por repositório Git, e ordenar por estado ou tempo em ambos os sentidos, com os mais recentes primeiro.

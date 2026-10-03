@@ -113,7 +113,12 @@ async function eventsFor(id) {
 }
 
 let resourceCache = { at: 0, cpuTimes: null, value: { ollama_cpu_seconds: null, ollama_memory_bytes: null, gpu_percent: null } };
+let resourceSampleInFlightM7Q = null;
 async function resources() {
+  if (!resourceSampleInFlightM7Q) resourceSampleInFlightM7Q = sampleResourcesM7Q().finally(() => { resourceSampleInFlightM7Q = null; });
+  return resourceSampleInFlightM7Q;
+}
+async function sampleResourcesM7Q() {
   if (Date.now() - resourceCache.at < 10_000) return resourceCache.value;
   const sampledAt = Date.now();
   const cpuSamples = os.cpus();
@@ -126,10 +131,10 @@ async function resources() {
   const totalDelta = cpuTimes.total - (resourceCache.cpuTimes?.total ?? cpuTimes.total);
   const idleDelta = cpuTimes.idle - (resourceCache.cpuTimes?.idle ?? cpuTimes.idle);
   const logicalProcessors = cpuSamples.length;
-  const value = { ollama_cpu_seconds: null, ollama_cpu_percent: null, ollama_memory_bytes: null,
+  const value = { scope: "machine", observed_at: new Date(sampledAt).toISOString(), ollama_cpu_seconds: null, ollama_cpu_percent: null, ollama_memory_bytes: null,
     cpu_percent: totalDelta > 0 && idleDelta >= 0 ? Math.max(0, Math.min(100, 100 * (1 - idleDelta / totalDelta))) : null,
     cpu_logical_processors: logicalProcessors, gpu_percent: null,
-    ram_available_bytes: os.freemem(), ram_total_bytes: os.totalmem(), gpu_used_mib: null, gpu_free_mib: null, gpu_total_mib: null };
+    ram_available_bytes: os.freemem(), ram_total_bytes: os.totalmem(), gpu_used_mib: null, gpu_free_mib: null, gpu_free_total_mib: null, gpu_total_mib: null };
   if (process.platform === "win32") {
     try {
       const script = '$p=Get-Process -Name "ollama*" -ErrorAction SilentlyContinue; [pscustomobject]@{cpu=(($p | Measure-Object CPU -Sum).Sum); memory=(($p | Measure-Object WorkingSet64 -Sum).Sum)} | ConvertTo-Json -Compress';
@@ -143,14 +148,15 @@ async function resources() {
       }
     } catch {}
     try {
-      const { stdout } = await execFileAsync("nvidia-smi", ["--query-gpu=utilization.gpu,memory.used,memory.free", "--format=csv,noheader,nounits"], { windowsHide: true, timeout: 2000 });
+      const { stdout } = await execFileAsync("nvidia-smi", ["--query-gpu=utilization.gpu,memory.used,memory.free,memory.total", "--format=csv,noheader,nounits"], { windowsHide: true, timeout: 2000 });
       const samples = stdout.trim().split(/\r?\n/).map(line => line.split(",").map(part => Number(part.trim())))
-        .filter(parts => parts.length === 3 && parts.every(Number.isFinite));
+        .filter(parts => parts.length === 4 && parts.every(Number.isFinite));
       if (samples.length) {
         value.gpu_percent = Math.max(...samples.map(parts => parts[0]));
         value.gpu_used_mib = samples.reduce((sum, parts) => sum + parts[1], 0);
         value.gpu_free_mib = Math.min(...samples.map(parts => parts[2]));
-        value.gpu_total_mib = samples.reduce((sum, parts) => sum + parts[1] + parts[2], 0);
+        value.gpu_free_total_mib = samples.reduce((sum, parts) => sum + parts[2], 0);
+        value.gpu_total_mib = samples.reduce((sum, parts) => sum + parts[3], 0);
       }
     } catch {}
   }
@@ -301,7 +307,7 @@ export async function inventorySnapshot({ repo = "", status = "", sort = "time",
     return direction === "asc" ? value : -value;
   });
   return { jobs: filtered.slice(offset, offset + limit), total: filtered.length, all_total: rows.length,
-    repositories, statuses, offset, limit, sort, direction, observed_at: new Date().toISOString() };
+    repositories, statuses, offset, limit, sort, direction, resource: await resources(), observed_at: new Date().toISOString() };
 }
 
 async function serve() {
