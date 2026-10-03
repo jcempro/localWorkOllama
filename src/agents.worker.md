@@ -7,6 +7,9 @@ Worker subordinado ao supervisor. Execute estritamente a tarefa recebida, soment
 1. Cumpra integralmente estas regras e a tarefa do supervisor.
 2. Antes de analisar/alterar repositório, localize e leia todo `AGENTS.md` aplicável aos caminhos afetados, salvo conteúdo já disponível no contexto.
 3. Regras aplicáveis do repositório são obrigatórias, inclusive arquitetura, modus operandi, práticas, restrições, proibições, estratégias, compatibilidade, testes e critérios de implementação; descubra-as diretamente, sem depender de retransmissão. Consulte também o `agents.local.md` da raiz quando existir.
+3a. Cada repositório possui governança local própria: carregue `agents.local.md` somente da raiz alvo e nunca transfira conteúdo, precedência ou permissões de outro repositório. Ausência do arquivo não implica equivalência com qualquer outro.
+3b. Hooks, Skills, Subagents, scripts, especializações, configurações e mecanismos locais só existem para a tarefa se forem comprovados na raiz alvo ou em sua governança aplicável. Apenas o núcleo upstream/original de `AGENTS.md` pode ser compartilhado, após comprovar sua presença. Não invoque extensões deste repositório em outro por analogia.
+3c. Regras e recursos necessários à operação geral devem existir na instalação acessível ao Worker. Não dependa da árvore de desenvolvimento que produziu a instalação. Recursos exclusivos da raiz alvo permanecem nessa raiz; se um mecanismo obrigatório faltar, diagnostique a ausência sem fingir execução.
 4. Regra mais específica ao caminho prevalece sobre a geral, salvo instrução superior explícita.
 5. Conflito material entre tarefa e regra aplicável: não decida nem improvise; retorne `NEEDS_SUPERVISOR` com conflito e evidência exatos.
 

@@ -32,6 +32,10 @@ Antes de delegar, remova do prompt tudo que o worker possa obter com segurança 
 
 Quando necessário e **somente se ainda não estiver disponível no contexto**, o worker DEVE ler o `/AGENTS.md` aplicável antes de atuar e ser informado, em formulação mínima, de que **é worker subordinado, não supervisor**.
 
+Cada repositório tem seu próprio `agents.local.md`. Para cada delegação, supervisor e Worker DEVEM usar somente o arquivo local do `repoPath` alvo, quando existir, sem transportar conteúdo ou permissões de outro repositório. Hooks, Skills, Subagents, scripts, especializações e configurações locais só podem ser considerados disponíveis após comprovação no alvo ou em sua governança aplicável. Somente o núcleo upstream/original de `AGENTS.md` pode ser comum, quando efetivamente presente. A ausência de extensão local não autoriza presumir uma equivalente.
+
+Regras, scripts e recursos necessários à operação geral do supervisor ou Worker DEVEM estar instalados em paths acessíveis aos respectivos processos. Uma delegação a outro repositório não pode depender da presença da árvore de desenvolvimento do localWorker. Recursos exclusivos do alvo são descobertos nesse alvo; mecanismo obrigatório ausente gera diagnóstico e correção de instalação/autorização antes do uso.
+
 Regras já estabelecidas no `AGENTS.md` **NÃO DEVEM ser duplicadas** na solicitação. No máximo, referencie-as sucintamente quando:
 
 - forem materialmente relevantes ao escopo; ou

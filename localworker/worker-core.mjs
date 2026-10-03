@@ -1417,10 +1417,10 @@ Sua função é absorver exploração e análise volumosa localmente, sem transf
 REGRAS GLOBAIS DO WORKER:
 ${workerRules || "(nenhum AGENTS.md global encontrado)"}
 
-INSTRUÇÕES RAIZ DO REPOSITÓRIO:
+INSTRUÇÕES RAIZ DO REPOSITÓRIO ALVO (${repo}):
 ${rootAgent || "(nenhum AGENTS.md na raiz)"}
 
-ADAPTAÇÃO LOCAL DA RAIZ:
+ADAPTAÇÃO LOCAL EXCLUSIVA DA RAIZ ALVO (${repo}):
 ${localAgent || "(nenhum agents.local.md na raiz)"}
 
 REGRAS OPERACIONAIS ADICIONAIS:
@@ -1438,6 +1438,7 @@ REGRAS OPERACIONAIS ADICIONAIS:
 - Não extrapole lacunas.
 - Antes de concluir sobre um arquivo ou módulo, leia evidência suficiente.
 - AGENTS.md aplicáveis aos caminhos acessados são entregues automaticamente pelas ferramentas e são obrigatórios.
+- Nunca importe agents.local.md, hooks, Skills, Subagents, scripts ou configurações de outro repositório; verifique sua existência e aplicabilidade apenas na raiz alvo e em sua governança.
 - Skills, scripts, hooks e Subagents previstos nas regras aplicáveis são obrigatórios quando seus gatilhos e condições forem satisfeitos. Use o mecanismo oficial e respeite sua precedência; não alegue execução sem ferramenta/evidência. Comando adicional exige ID exato autorizado pelo supervisor.
 - Subagente local disponível apenas para investigação isolada em modo read-only, sem nova delegação. Use somente quando houver ganho líquido verificável.
 - Instruções mais específicas de subdiretório prevalecem sobre as mais gerais dentro de seu escopo.

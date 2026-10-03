@@ -2,6 +2,10 @@
 
 Esta regra aplica-se exclusivamente ao repositório que contém este arquivo, qualquer que seja seu caminho físico, em todas as conversas e execuções futuras associadas a ele. Antes de delegar qualquer tarefa daqui ao localWorker, leia esta regra.
 
+- `agents.local.md` é individual por repositório. Ao atuar em outra raiz, supervisor e Worker devem descobrir e aplicar somente o `agents.local.md` dessa raiz, se existir; ausência não autoriza importar este arquivo nem presumir conteúdo equivalente.
+- Hooks, Skills, Subagents, scripts, especializações, configurações e outros mecanismos locais deste repositório não são capacidades de outro. Em outra raiz, considere disponível apenas o que for comprovado na governança aplicável ou no próprio repositório alvo. Somente o núcleo upstream/original de `AGENTS.md` pode ser comum, quando sua presença efetiva for verificada.
+- Toda regra ou recurso deste repositório necessário à operação geral do supervisor ou Worker deve ser representado em `src/` e instalado em local acessível ao respectivo processo. A leitura e o uso desses artefatos em outro repositório não podem depender da presença física desta árvore de desenvolvimento; extensões exclusivas desta raiz permanecem aqui e não são distribuídas como regras do alvo.
+
 - É proibido usar o próprio localWorker, direta ou indiretamente, para sua manutenção, correção, evolução, implementação, configuração ou integração. Isso inclui documentação de instalação e operação do próprio Worker quando sua redação ou correção constituir parte dessa manutenção.
 - Todo trabalho para corrigir, modificar, implementar, configurar ou integrar o localWorker deve ser executado externamente a ele.
 - O localWorker pode ser usado somente como instrumento de teste de uma solução já alterada definitivamente neste projeto ou em sua integração, na extensão necessária para validar essa alteração. O teste não pode pedir ao Worker que corrija, implemente ou modifique a si próprio.

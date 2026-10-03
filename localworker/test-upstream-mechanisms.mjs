@@ -17,8 +17,9 @@ const ollama = createServer(async (request, response) => {
   for await (const chunk of request) body += chunk;
   const parsed = JSON.parse(body);
   calls++;
-  assert.match(parsed.messages[0].content, /ADAPTAÇÃO LOCAL DA RAIZ:/);
+  assert.match(parsed.messages[0].content, /ADAPTAÇÃO LOCAL EXCLUSIVA DA RAIZ ALVO/);
   assert.match(parsed.messages[0].content, /Adaptação operacional local/);
+  assert.doesNotMatch(parsed.messages[0].content, /Regra local permanente — manutenção do localWorker/);
   const names = parsed.tools.map(item => item.function.name);
   const nested = calls === 3 || calls === 4;
   assert.equal(names.includes("delegate_readonly_subagent"), !nested);
