@@ -47,6 +47,8 @@ O teto padrão de 40 ciclos por job é configurável e não limita o tempo total
 
 ## Continuidade sob pressão de contexto e memória
 
+- Atualização durante job ativo permanece bloqueada. A opção `-WaitForIdle` do instalador permite aguardar término por evento local de filesystem, com verificação gratuita de recuperação a cada minuto, sem cancelar ou limitar duração do job nem consumir inferência. Identidade inválida ou estado ilegível impede instalação.
+
 - O alvo de ocupação de 56% é preferencial; não deve vetar uma redução útil acima dele. O histórico recente é ajustável progressivamente, preservando pares de ferramentas, decisões e instruções. Evidência recém-reidratada deve chegar à próxima inferência. Recusa explícita de contexto permite até duas recuperações da mesma chamada com economia comprovada, sem reiniciar o job. Base irredutível gera `WORKER_INCOMPLETE: CONTEXT_CAPACITY`, sem retry idêntico.
 - Encerramento com falha também persiste `git-status.txt` e a seção `ESTADO GIT DETERMINÍSTICO` em `error.txt`; ausência de leitura Git é explicitamente identificada. `local_result` expõe o `error_kind` persistido, sem converter incompletude em falha de infraestrutura.
 
@@ -111,6 +113,6 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/update-installed.ps1` | `17997c5b885de291c7f3c807c22eb334b53a691f95fbd10d3185e33639eaace8` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `5a85596b890b58bd7f319742d7657c30a0f2aad11f47b0cf0993117b492cae55` |
+| `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
 | `src/agents.supervisor.md` | `0b3a1b218ef1fe877451a6846d27d2d4a9e50967e36316ef8de5db759d71c295` |
 <!-- LOCALWORKER_GENERATED_END -->

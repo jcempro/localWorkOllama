@@ -17,6 +17,7 @@
 | Executáveis Git, Node, npm, Ollama e Codex | `-GitExe`, `-NodeExe`, `-NpmExe`, `-OllamaExe`, `-CodexExe` ou descoberta no PATH/instalação. |
 | Modelo Ollama e base | `-WorkerModel`/`LOCAL_MODEL`; `-BaseModel`/`LOCAL_BASE_MODEL`; padrões em `config.json` e no instalador. |
 | Janela do modelo | `-ModelContextTokens` no instalador; padrão 32768 tokens. |
+| Atualização com job ativo | `-WaitForIdle` em `install.ps1` aguarda término por evento local; recuperação de evento perdido a cada 60 s. Sem a opção, atualização ativa é recusada. |
 | Continuidade de contexto | `LOCAL_WORKER_CONTEXT_TOKENS`/`config.json:context_tokens` (padrão 32768) define janela inicial; `LOCAL_WORKER_MIN_CONTEXT_TOKENS`/`config.json:min_context_tokens` (padrão 8192) define piso. `LOCAL_WORKER_CONTEXT_TRIGGER_FRACTION` (padrão 0.68), `LOCAL_WORKER_CONTEXT_RAM_MARGIN_BYTES` (1 GiB) e `LOCAL_WORKER_CONTEXT_VRAM_MARGIN_MIB` (512 MiB) controlam gatilhos preventivos. `context-manager.mjs` centraliza alvo de 56%, economia mínima de 512 tokens, preferência por 8 mensagens recentes com redução progressiva até zero (sem arquivar a última reidratação antes de uso), sem teto cumulativo de checkpoints produtivos e limite de 12000 caracteres por reidratação. Checkpoints exclusivos ficam em `jobs/<job_id>/context/` e são removidos com o job. |
 | URL Ollama | `OLLAMA_URL` ou `config.json:ollama_url`; prefixo de caminho de proxy é preservado. |
 | Timeout, passos e tentativas | `LOCAL_WORKER_TIMEOUT_MS`, `LOCAL_WORKER_MAX_STEPS` (inteiro positivo; padrão 40 ciclos por job), `LOCAL_OLLAMA_ATTEMPTS` ou `config.json`. O teto de ciclos protege a janela de contexto e não é prazo total. |
@@ -83,6 +84,6 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/update-installed.ps1` | `17997c5b885de291c7f3c807c22eb334b53a691f95fbd10d3185e33639eaace8` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `5a85596b890b58bd7f319742d7657c30a0f2aad11f47b0cf0993117b492cae55` |
+| `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
 | `src/agents.supervisor.md` | `0b3a1b218ef1fe877451a6846d27d2d4a9e50967e36316ef8de5db759d71c295` |
 <!-- LOCALWORKER_GENERATED_END -->

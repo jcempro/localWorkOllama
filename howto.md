@@ -152,6 +152,8 @@ Em tarefas de escrita, o Worker recebe avisos de orçamento de ciclos e deixa de
 
 ### Compactação segura de contexto
 
+Para atualizar enquanto houver um job ativo, use `pwsh -NoProfile -File .\src\install.ps1 -SkipPrerequisites -SkipModel -WaitForIdle`. A opção aguarda eventos locais de estado e instala quando o job termina; não cancela o Worker, não usa inferência paga e não impõe prazo ao job. A verificação gratuita de recuperação de evento perdido ocorre no máximo a cada minuto. Sem a opção, a instalação continua recusando atualização durante execução.
+
 Em falhas, consulte `error_kind` de `local_result`, `error.txt` e `git-status.txt` no diretório do job. `CONTEXT_CAPACITY` significa que o contexto restante não pôde ser reduzido com segurança; não é evidência de defeito do hardware. O estado Git é coletado também em falhas, e qualquer indisponibilidade de coleta aparece explicitamente. Jobs anteriores à atualização conservam seus artefatos originais.
 
 O Ollama aceita histórico enviado a cada `/api/chat` e `num_ctx` por requisição. O Worker conserva literalmente regras e objetivo originais; antes de pressão crítica de contexto, RAM ou VRAM, arquiva mensagens antigas em `jobs/<job_id>/context/cNNNN.json`, verifica o SHA-256 e só então mantém no prompt um índice recuperável e as mensagens recentes. `context_recall` devolve trechos exatos desse arquivo quando o Worker precisar de decisão ou evidência anterior. O histórico arquivado integra a retenção e a exclusão do respectivo job. O pedido envia `truncate:false` e `shift:false` para impedir descarte implícito pelo Ollama. Se não houver redução segura, o job registra a limitação e preserva o histórico; contexto grande demais gera `WORKER_INCOMPLETE` explícito.
@@ -497,7 +499,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/update-installed.ps1` | `17997c5b885de291c7f3c807c22eb334b53a691f95fbd10d3185e33639eaace8` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `5a85596b890b58bd7f319742d7657c30a0f2aad11f47b0cf0993117b492cae55` |
+| `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
 | `src/agents.supervisor.md` | `0b3a1b218ef1fe877451a6846d27d2d4a9e50967e36316ef8de5db759d71c295` |
 <!-- LOCALWORKER_GENERATED_END -->
 

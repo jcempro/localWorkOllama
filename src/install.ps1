@@ -13,6 +13,7 @@ param(
   [ValidateRange(1,1440)][int]$WatchdogIntervalMinutes = 2,
   [switch]$SkipPrerequisites,
   [switch]$SkipModel,
+  [switch]$WaitForIdle,
   [switch]$SkipWatchdog,
   [switch]$SkipGlobalRules
 )
@@ -28,6 +29,32 @@ $CODEX_HOME_A3C = if ($CodexHome) { $CodexHome } elseif ($env:CODEX_HOME) { $env
 $CODEX_CONFIG_A3C = Join-Path $CODEX_HOME_A3C 'config.toml'
 $GLOBAL_OVERRIDE_A3C = Join-Path $CODEX_HOME_A3C 'AGENTS.override.md'
 $GLOBAL_RULES_A3C = if (Test-Path -LiteralPath $GLOBAL_OVERRIDE_A3C -PathType Leaf) { $GLOBAL_OVERRIDE_A3C } else { Join-Path $CODEX_HOME_A3C 'AGENTS.md' }
+function Wait-WorkerIdleA3C([string]$Root) {
+  if (-not (Test-Path -LiteralPath $Root -PathType Container)) { return }
+  $watcherA3C = [IO.FileSystemWatcher]::new($Root, 'state.json')
+  $watcherA3C.IncludeSubdirectories = $true
+  $watcherA3C.EnableRaisingEvents = $true
+  $reportedA3C = $null
+  try {
+    while ($true) {
+      $activeFileA3C = Join-Path $Root 'active.json'
+      if (-not (Test-Path -LiteralPath $activeFileA3C)) { return }
+      $activeA3C = Get-Content -LiteralPath $activeFileA3C -Raw | ConvertFrom-Json
+      if ($activeA3C.job_id -notmatch '^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$') { throw 'ID ativo inválido; atualização recusada.' }
+      $stateFileA3C = Join-Path (Join-Path $Root 'jobs') (Join-Path $activeA3C.job_id 'state.json')
+      $stateA3C = Get-Content -LiteralPath $stateFileA3C -Raw | ConvertFrom-Json
+      if ($stateA3C.job_id -ne $activeA3C.job_id) { throw 'Identidade do estado ativo divergente.' }
+      if ($stateA3C.status -in @('COMPLETED','FAILED','CANCELLED')) { return }
+      if ($reportedA3C -ne $activeA3C.job_id) {
+        Write-Output "Instalação aguardando término do job $($activeA3C.job_id) por evento local."
+        $reportedA3C = $activeA3C.job_id
+      }
+      # Evento é preferencial; timeout apenas recupera evento perdido, sem inferência ou rede.
+      $null = $watcherA3C.WaitForChanged([IO.WatcherChangeTypes]::All, 60000)
+    }
+  } finally { $watcherA3C.Dispose() }
+}
+if ($WaitForIdle) { Wait-WorkerIdleA3C $WORKER_HOME_A3C }
 $RULES_START_A3C = '<!-- LOCALWORKER_GLOBAL_START -->'
 $RULES_END_A3C = '<!-- LOCALWORKER_GLOBAL_END -->'
 $LEGACY_GLOBAL_SHA256_A3C = 'a8eff5e87698169d7d658758b165a27735a1272a6bebad8f35f98736b527603e'
