@@ -34,6 +34,15 @@ const page = await html.text();
 assert.match(page, /Fechar esta página não interrompe/);
 assert.match(page, /Interromper este job/);
 assert.match(page, /Excluir definitivamente este job/);
+const cardsAt = page.indexOf('<section id="detail"');
+const resourcesAt = page.indexOf('id="resourceGrid"', cardsAt);
+const requestAt = page.indexOf('id="request"', cardsAt);
+assert.ok(cardsAt >= 0 && resourcesAt > cardsAt && requestAt > resourcesAt);
+assert.doesNotMatch(page, /id="resources" class="diagnostic"/);
+for (const resource of ["CPU", "CPU Ollama", "RAM", "RAM Ollama", "GPU", "VRAM"]) {
+  assert.ok(page.includes("'" + resource + "'"));
+}
+assert.match(page, /valid==null\?'0%'/);
 for (const script of page.split("<script>").slice(1)) new vm.Script(script.split("</script>")[0]);
 const indexUrl = monitorIndexUrl(monitor);
 const index = await fetch(indexUrl);
@@ -52,6 +61,18 @@ assert.equal(snapshot.state.job_id, id);
 assert.ok(snapshot.progress.max_steps > 0);
 assert.ok(snapshot.metrics.output_tokens_observed >= 0);
 assert.ok(snapshot.duration_ms >= 0);
+for (const resource of ["cpu_percent", "ollama_cpu_percent", "ram_total_bytes", "ram_available_bytes", "ollama_memory_bytes", "gpu_percent", "gpu_used_mib", "gpu_total_mib"]) {
+  assert.ok(Object.hasOwn(snapshot.resource, resource), resource);
+}
+for (const resource of ["cpu_percent", "ollama_cpu_percent", "gpu_percent"]) {
+  const value = snapshot.resource[resource];
+  assert.ok(value === null || (Number.isFinite(value) && value >= 0 && value <= 100), resource);
+}
+assert.ok(snapshot.resource.ram_total_bytes > 0);
+assert.ok(snapshot.resource.ram_available_bytes >= 0 && snapshot.resource.ram_available_bytes <= snapshot.resource.ram_total_bytes);
+if (snapshot.resource.gpu_total_mib !== null) {
+  assert.ok(snapshot.resource.gpu_total_mib >= snapshot.resource.gpu_used_mib);
+}
 const filtered = await fetch(indexUrl.replace("/?", `/api/jobs?repo=${encodeURIComponent(path.resolve(repo))}&sort=status&direction=asc&`));
 assert.equal(filtered.status, 200);
 assert.ok((await filtered.json()).jobs.every(job => job.repo === path.resolve(repo)));

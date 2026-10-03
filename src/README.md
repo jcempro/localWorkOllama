@@ -42,6 +42,7 @@
 | Download de modelos Ollama | `OLLAMA_MODELS` conforme configuração oficial do Ollama. |
 | Remoção de notificações | `LOCAL_DISABLE_NOTIFY=1` para testes sem balão. |
 | Monitor local | `monitor_url` abre o detalhe; `monitor_index_url`, `local_monitor` ou `node monitor.mjs index` dão acesso ao inventário. Host `127.0.0.1`, porta primária `49767` e fallback `49768`, chave aleatória em `monitor.json` no destino. Não publique os links. Limites de heartbeat/espera e reconciliação de anomalias (60 s) estão no topo de `monitor.mjs`; carência de órfão (120 s) no topo de `watchdog.mjs`. A UI atualiza sem reload em 3 s no detalhe e 10 s no inventário enquanto visível. |
+| Indicadores do monitor | `monitor.mjs` amostra CPU do sistema e processos Ollama, RAM e GPU/VRAM NVIDIA; `monitor-page.mjs` exibe barras responsivas após os cards de estado. CPU/GPU usam percentual medido; RAM/VRAM usam capacidade observada. Ausência de medição deixa a barra neutra. A coleta de Ollama não separa consumo por job. |
 | Alvos obrigatórios de escrita | `required_change_paths` em `local_analyze`, lista de caminhos relativos; cada alvo deve mudar durante o job. Use com `expect_changes=true`. |
 | Descoberta de aplicativos | `PATH` e `LOCALAPPDATA`, fornecidos pelo Windows; redescobertos no momento da entrega. |
 | Origem do App Installer | URL oficial `https://aka.ms/getwinget`, família Windows `Microsoft.DesktopAppInstaller_8wekyb3d8bbwe` e produto Microsoft Store `9NBLGGH4NNS1`; definidos uma vez no topo do instalador. |
@@ -69,8 +70,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/worker-runner.mjs` | `73eb23cbb58c014c0c1d93b69426504bd43e446284cbb5be6aa527bee50f0e15` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
-| `src/localworker/monitor.mjs` | `c0708bfb84fea0a0bdc5110d3467549e642fd1833aa27c20a89c636b7b56e6be` |
-| `src/localworker/monitor-page.mjs` | `30fad505978bb67e49845d07c7cc3aeefefe237f2d52f636d3c09d9894b0933f` |
+| `src/localworker/monitor.mjs` | `52f2d0b3dc2d402877cc0e2ef3ad3225c058d1df3d4dd53fc62b7fbbe786261b` |
+| `src/localworker/monitor-page.mjs` | `7b36377c4d7ce4872e55107efe2bc5c55eb7183c8cb06fe35693432699dd6f98` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |

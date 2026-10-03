@@ -112,11 +112,24 @@ async function eventsFor(id) {
   });
 }
 
-let resourceCache = { at: 0, value: { ollama_cpu_seconds: null, ollama_memory_bytes: null, gpu_percent: null } };
+let resourceCache = { at: 0, cpuTimes: null, value: { ollama_cpu_seconds: null, ollama_memory_bytes: null, gpu_percent: null } };
 async function resources() {
   if (Date.now() - resourceCache.at < 10_000) return resourceCache.value;
-  const value = { ollama_cpu_seconds: null, ollama_memory_bytes: null, gpu_percent: null,
-    ram_available_bytes: os.freemem(), ram_total_bytes: os.totalmem(), gpu_used_mib: null, gpu_free_mib: null };
+  const sampledAt = Date.now();
+  const cpuSamples = os.cpus();
+  const cpuTimes = cpuSamples.reduce((sum, cpu) => {
+    sum.idle += cpu.times.idle;
+    sum.total += Object.values(cpu.times).reduce((total, part) => total + part, 0);
+    return sum;
+  }, { idle: 0, total: 0 });
+  const elapsedMs = sampledAt - resourceCache.at;
+  const totalDelta = cpuTimes.total - (resourceCache.cpuTimes?.total ?? cpuTimes.total);
+  const idleDelta = cpuTimes.idle - (resourceCache.cpuTimes?.idle ?? cpuTimes.idle);
+  const logicalProcessors = cpuSamples.length;
+  const value = { ollama_cpu_seconds: null, ollama_cpu_percent: null, ollama_memory_bytes: null,
+    cpu_percent: totalDelta > 0 && idleDelta >= 0 ? Math.max(0, Math.min(100, 100 * (1 - idleDelta / totalDelta))) : null,
+    cpu_logical_processors: logicalProcessors, gpu_percent: null,
+    ram_available_bytes: os.freemem(), ram_total_bytes: os.totalmem(), gpu_used_mib: null, gpu_free_mib: null, gpu_total_mib: null };
   if (process.platform === "win32") {
     try {
       const script = '$p=Get-Process -Name "ollama*" -ErrorAction SilentlyContinue; [pscustomobject]@{cpu=(($p | Measure-Object CPU -Sum).Sum); memory=(($p | Measure-Object WorkingSet64 -Sum).Sum)} | ConvertTo-Json -Compress';
@@ -124,6 +137,10 @@ async function resources() {
       const parsed = JSON.parse(stdout);
       value.ollama_cpu_seconds = Number(parsed.cpu ?? 0);
       value.ollama_memory_bytes = Number(parsed.memory ?? 0);
+      const priorCpu = resourceCache.value.ollama_cpu_seconds;
+      if (elapsedMs > 0 && logicalProcessors > 0 && Number.isFinite(priorCpu) && value.ollama_cpu_seconds >= priorCpu) {
+        value.ollama_cpu_percent = Math.max(0, Math.min(100, 100 * (value.ollama_cpu_seconds - priorCpu) * 1000 / elapsedMs / logicalProcessors));
+      }
     } catch {}
     try {
       const { stdout } = await execFileAsync("nvidia-smi", ["--query-gpu=utilization.gpu,memory.used,memory.free", "--format=csv,noheader,nounits"], { windowsHide: true, timeout: 2000 });
@@ -133,10 +150,11 @@ async function resources() {
         value.gpu_percent = Math.max(...samples.map(parts => parts[0]));
         value.gpu_used_mib = samples.reduce((sum, parts) => sum + parts[1], 0);
         value.gpu_free_mib = Math.min(...samples.map(parts => parts[2]));
+        value.gpu_total_mib = samples.reduce((sum, parts) => sum + parts[1] + parts[2], 0);
       }
     } catch {}
   }
-  resourceCache = { at: Date.now(), value };
+  resourceCache = { at: sampledAt, cpuTimes, value };
   return value;
 }
 
