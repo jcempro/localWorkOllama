@@ -8,6 +8,8 @@ import { fileURLToPath } from "node:url";
 import { createHash, randomUUID } from "node:crypto";
 import http from "node:http";
 import https from "node:https";
+import { jobDir } from "./job-store.mjs";
+import { ContextManagerC7M } from "./context-manager.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -56,6 +58,8 @@ const RESOURCE_WAIT_LIMIT_MS_R8N = 120_000;
 const RESOURCE_RELEASE_DELAY_MS_R8N = 30_000;
 const OLLAMA_KEEP_ALIVE_R8N = process.env.LOCAL_OLLAMA_KEEP_ALIVE ?? config.ollama_keep_alive ?? "2m";
 const THREAD_LIMIT_R8N = process.env.LOCAL_WORKER_CPU_THREADS ?? config.cpu_threads ?? "auto";
+const CONTEXT_TOKENS_C7M = Number(process.env.LOCAL_WORKER_CONTEXT_TOKENS ?? config.context_tokens ?? 32768);
+const MIN_CONTEXT_TOKENS_C7M = Number(process.env.LOCAL_WORKER_MIN_CONTEXT_TOKENS ?? config.min_context_tokens ?? 8192);
 const TRANSIENT_OLLAMA_CODES = new Set(["ECONNRESET", "ECONNREFUSED", "EPIPE", "ETIMEDOUT", "EHOSTUNREACH", "ENETUNREACH", "ABORT_ERR"]);
 
 export function resourceBudgetR8N(logicalCpus, totalRam, freeRam, threadLimit = THREAD_LIMIT_R8N) {
@@ -1094,9 +1098,19 @@ const TOOL_DEFINITIONS = [
       parameters: { type: "object", required: ["task"], properties: { task: { type: "string" } } },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "context_recall",
+      description: "Reidrata trecho exato de mensagem arquivada no checkpoint deste job; use antes de depender de evidência ou decisão resumida.",
+      parameters: { type: "object", required: ["checkpoint_id", "entry_index"], properties: {
+        checkpoint_id: { type: "string" }, entry_index: { type: "integer" }, char_offset: { type: "integer" },
+      } },
+    },
+  },
 ];
 
-const READ_ONLY_TOOLS = new Set(["repo_tree", "list_dir", "read_file", "search_text", "git_status", "git_diff", "file_info", "delegate_readonly_subagent"]);
+const READ_ONLY_TOOLS = new Set(["repo_tree", "list_dir", "read_file", "search_text", "git_status", "git_diff", "file_info", "delegate_readonly_subagent", "context_recall"]);
 
 function parseArguments(value) {
   if (value && typeof value === "object") {
@@ -1288,7 +1302,7 @@ export async function unloadWorkerModelR8N() {
   } finally { clearTimeout(timer); }
 }
 
-async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {}, gpuPolicy = { layers: null }) {
+async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {}, gpuPolicy = { layers: null }, contextTokens = CONTEXT_TOKENS_C7M) {
   const deadline = Number.isFinite(timeoutMs) ? Date.now() + timeoutMs : Infinity;
   for (let attempt = 1; attempt <= OLLAMA_ATTEMPTS; attempt++) {
     const budget = await awaitResourceBudgetR8N(deadline, onProgress);
@@ -1296,10 +1310,10 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
       ram_available_bytes: budget.ramAvailable, ram_reserve_bytes: budget.ramReserve,
       gpu_free_mib: budget.gpu?.freeMiB ?? null, gpu_reserve_mib: budget.gpu?.reserveMiB ?? null,
       gpu_layers: gpuPolicy.layers });
-    const options = { temperature: 0.1, num_thread: budget.threads };
+    const options = { temperature: 0.1, num_thread: budget.threads, num_ctx: contextTokens };
     if (gpuPolicy.layers !== null) options.num_gpu = gpuPolicy.layers;
     const body = JSON.stringify({
-      model: MODEL, messages, tools, stream: false, keep_alive: OLLAMA_KEEP_ALIVE_R8N,
+      model: MODEL, messages, tools, stream: false, truncate: false, shift: false, keep_alive: OLLAMA_KEEP_ALIVE_R8N,
       options,
     });
     const remaining = deadline - Date.now();
@@ -1333,6 +1347,9 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
     } catch (error) {
       const retryable = error instanceof TypeError || error?.name === "AbortError" || TRANSIENT_OLLAMA_CODES.has(error?.code) || Number(error?.status) >= 500;
       await onProgress({ phase: "ollama_error", attempt, error: errorChain(error), retryable });
+      if (error?.status === 400 && /context|token|truncate|too long/i.test(error.message)) {
+        throw new WorkerIncompleteError(`WORKER_INCOMPLETE: Ollama recusou o contexto sem truncamento; checkpoint não bastou ou instruções fixas excedem a janela. ${safeToolDiagnostic(error)}. Segmente a continuação preservando os artefatos do job.`);
+      }
       if (!retryable || attempt >= OLLAMA_ATTEMPTS || deadline - Date.now() <= 0) {
         throw new Error(`Ollama /api/chat falhou após ${attempt} tentativa(s): ${errorChain(error)}`, { cause: error });
       }
@@ -1487,6 +1504,10 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
     },
   ];
 
+  const currentJobId = process.env.LOCAL_WORKER_JOB_ID;
+  const contextDirectory = subagentDepth === 0 && currentJobId ? jobDir(currentJobId) : null;
+  const contextManager = new ContextManagerC7M(contextDirectory, CONTEXT_TOKENS_C7M, MIN_CONTEXT_TOKENS_C7M);
+
   const startedAt = Date.now();
   const gpuPolicy = { layers: await loadGpuPolicyR8N() };
   if (gpuPolicy.layers !== null) await onProgress({ phase: "gpu_policy_loaded", gpu_layers: gpuPolicy.layers });
@@ -1541,7 +1562,18 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
     if (expectChanges && successfulMutations === 0 && step + 1 >= WRITE_FOCUS_STEP) {
       availableTools = availableTools.filter(tool => !new Set(["repo_tree", "list_dir"]).has(tool.function.name));
     }
-    const response = await ollamaChat(messages, availableTools, remaining, onProgress, gpuPolicy);
+    if (!contextManager.checkpoints.length) availableTools = availableTools.filter(tool => tool.function.name !== "context_recall");
+    const ramSample = resourceBudgetR8N(os.availableParallelism(), os.totalmem(), os.freemem());
+    const gpuSample = await gpuMemoryBudgetR8N();
+    await contextManager.prepare(messages, availableTools, { ram: ramSample, gpu: gpuSample,
+      sampleRam: () => os.freemem(), sampleGpu: gpuMemoryBudgetR8N }, onProgress);
+    if (contextManager.checkpoints.length && !availableTools.some(tool => tool.function.name === "context_recall") &&
+        !(forcedInspection && toolExecutions === 0)) {
+      availableTools.push(TOOL_DEFINITIONS.find(tool => tool.function.name === "context_recall"));
+    }
+    const response = await ollamaChat(messages, availableTools, remaining, onProgress, gpuPolicy, contextManager.contextTokens);
+    await contextManager.observed(response?.prompt_eval_count,
+      { ram: os.freemem(), gpu: await gpuMemoryBudgetR8N() }, onProgress);
 
     const message = response?.message;
 
@@ -1644,7 +1676,9 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
           if (count > 2) throw new ToolRejected(`Consulta idêntica repetida ${count} vezes; use a evidência já obtida e avance para a implementação.`);
         }
         const beforeCommand = toolName === "run_authorized_command" && expectChanges ? await gitChangeFingerprint(repo) : null;
-        if (toolName === "delegate_readonly_subagent") {
+        if (toolName === "context_recall") {
+          result = await contextManager.recall(args.checkpoint_id, args.entry_index, args.char_offset ?? 0);
+        } else if (toolName === "delegate_readonly_subagent") {
           if (subagentDepth > 0) throw new ToolRejected("Subagente não pode criar outra delegação");
           if (typeof args.task !== "string" || !args.task.trim() || args.task.length > 1800) throw new ToolRejected("Objetivo do subagente deve ser texto não vazio de até 1800 caracteres");
           await onProgress({ phase: "subagent_started", step: step + 1, reason: "investigação local read-only" });

@@ -226,6 +226,8 @@ export async function monitorSnapshot(id) {
     output_tokens_observed: progress.output_tokens_observed,
     generation_ms_observed: state.generation_ms_observed ?? responses.reduce((sum, event) => sum + (Number(event.eval_duration_ms) || 0), 0),
     context_tokens_configured: Number.isSafeInteger(config.context_tokens) ? config.context_tokens : null,
+    context_tokens_active: state.context_limit_tokens ?? (Number.isSafeInteger(config.context_tokens) ? config.context_tokens : null),
+    context_compactions: state.context_compactions ?? events.filter(event => event.phase === "context_compacted" && event.checkpoint_id).length,
     api_cost: "Inferência Ollama local; custo de API zero, energia não medida." };
   const durationMs = Math.max(0, Date.parse(state.completed_at ?? new Date().toISOString()) - Date.parse(state.started_at ?? state.created_at));
   return { state, request: { repoPath: request.repoPath ?? null, task: String(request.task ?? "").slice(0, 1000),

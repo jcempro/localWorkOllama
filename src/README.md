@@ -17,6 +17,7 @@
 | Executáveis Git, Node, npm, Ollama e Codex | `-GitExe`, `-NodeExe`, `-NpmExe`, `-OllamaExe`, `-CodexExe` ou descoberta no PATH/instalação. |
 | Modelo Ollama e base | `-WorkerModel`/`LOCAL_MODEL`; `-BaseModel`/`LOCAL_BASE_MODEL`; padrões em `config.json` e no instalador. |
 | Janela do modelo | `-ModelContextTokens` no instalador; padrão 32768 tokens. |
+| Continuidade de contexto | `LOCAL_WORKER_CONTEXT_TOKENS`/`config.json:context_tokens` (padrão 32768) define janela inicial; `LOCAL_WORKER_MIN_CONTEXT_TOKENS`/`config.json:min_context_tokens` (padrão 8192) define piso. `LOCAL_WORKER_CONTEXT_TRIGGER_FRACTION` (padrão 0.68), `LOCAL_WORKER_CONTEXT_RAM_MARGIN_BYTES` (1 GiB) e `LOCAL_WORKER_CONTEXT_VRAM_MARGIN_MIB` (512 MiB) controlam gatilhos preventivos. `context-manager.mjs` centraliza alvo de 56%, economia mínima de 512 tokens, 8 mensagens recentes, máximo de 4 checkpoints e limite de 12000 caracteres por reidratação. Checkpoints exclusivos ficam em `jobs/<job_id>/context/` e são removidos com o job. |
 | URL Ollama | `OLLAMA_URL` ou `config.json:ollama_url`; prefixo de caminho de proxy é preservado. |
 | Timeout, passos e tentativas | `LOCAL_WORKER_TIMEOUT_MS`, `LOCAL_WORKER_MAX_STEPS` (inteiro positivo; padrão 40 ciclos por job), `LOCAL_OLLAMA_ATTEMPTS` ou `config.json`. O teto de ciclos protege a janela de contexto e não é prazo total. |
 | Orçamento de CPU | `LOCAL_WORKER_CPU_THREADS` ou `config.json:cpu_threads` (`auto`); mesmo valor explícito é limitado a preservar ao menos 25% dos processadores lógicos. |
@@ -59,26 +60,27 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | Artefato portável | SHA-256 |
 | --- | --- |
 | `src/localworker/AGENTS.md` | `1d765bdf4c4947b9cfcebcf63f5328d6cf4edbfaf8986baf0dffb48483a6cc46` |
-| `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
+| `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `53f1845863d598eb4327125114406fd7e828fa0afd837b6537b0f604d77d5672` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
-| `src/localworker/worker-core.mjs` | `2b5cceac23b291437ac8ec802c1a799dd40cb6b9a9d278404d8a8ec107a7d6ac` |
-| `src/localworker/worker-runner.mjs` | `73eb23cbb58c014c0c1d93b69426504bd43e446284cbb5be6aa527bee50f0e15` |
+| `src/localworker/context-manager.mjs` | `45344bbec68de30b9d20f66215d25a97d9d603a0f2dfe273e1598be85e090a35` |
+| `src/localworker/worker-core.mjs` | `18cdde977cb9dcb83b22a0881a3aaec8cd8fe713dc3d70775fa4a6c7eea5c4a1` |
+| `src/localworker/worker-runner.mjs` | `3a598bc851ae6b90fc6b9a9d176c8f94b94b7843003c2b427b7ab8103cb4fadd` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
-| `src/localworker/monitor.mjs` | `52f2d0b3dc2d402877cc0e2ef3ad3225c058d1df3d4dd53fc62b7fbbe786261b` |
-| `src/localworker/monitor-page.mjs` | `7b36377c4d7ce4872e55107efe2bc5c55eb7183c8cb06fe35693432699dd6f98` |
+| `src/localworker/monitor.mjs` | `2e1a6dafe425875451e09761d715377ddc3bf7acdfff064b66efdb64b49a9d08` |
+| `src/localworker/monitor-page.mjs` | `3457ea14d3d564e22fc69f0b0a6f74cd8d42601317c40d5e86cca9754459c134` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `dcc72938cf62a6728d85556eb72d8bf6fe4e08a326c14d98f1b12fadbf44c51b` |
-| `src/localworker/update-installed.ps1` | `eb8cd839b920b7d213a20da99f76f91779e2992a401a68f4a2419a6b1f19a0b1` |
+| `src/localworker/install.ps1` | `c70d396f0b0aae2415261dbccc942e5a3fa7114c9e77641700ac52082b32102c` |
+| `src/localworker/update-installed.ps1` | `1658aed8a746ed43e78d44e01b3f0790180ddf300526afa8635f21bc983a359d` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `4f7212f6fdbda9dfa9fc673ba6913bc6ceecfe96fce112e8a31d5f6e1e1d0dc3` |
+| `src/install.ps1` | `5a85596b890b58bd7f319742d7657c30a0f2aad11f47b0cf0993117b492cae55` |
 | `src/agents.supervisor.md` | `37eeb5987af342470ed4bd6a8fe47e46c0ed7c8ec0f3a152f07786c118496e0e` |
 <!-- LOCALWORKER_GENERATED_END -->

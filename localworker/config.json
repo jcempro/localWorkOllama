@@ -1,6 +1,8 @@
 {
   "model": "qwen3-coder-next-32k",
   "ollama_url": "http://127.0.0.1:11434",
+  "context_tokens": 32768,
+  "min_context_tokens": 8192,
   "timeout_ms": 0,
   "max_steps": 40,
   "ollama_attempts": 4

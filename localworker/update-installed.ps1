@@ -1,4 +1,4 @@
-param([string]$Target, [string]$NodePath, [string]$CodexCommand, [string]$CodexConfig, [string]$MaintenanceRepo, [string]$MaintenanceId, [string]$WorkerModel)
+param([string]$Target, [string]$NodePath, [string]$CodexCommand, [string]$CodexConfig, [string]$MaintenanceRepo, [string]$MaintenanceId, [string]$WorkerModel, [ValidateRange(4096,262144)][int]$ContextTokens)
 $ErrorActionPreference = 'Stop'
 if ($MaintenanceId -and $MaintenanceId -notmatch '^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$') { throw 'Identidade de manutenção inválida.' }
 $source = $PSScriptRoot
@@ -21,7 +21,7 @@ if (Test-Path -LiteralPath $activeFile) {
   if ($state.status -notin @('COMPLETED','FAILED','CANCELLED')) { throw 'Job ativo: instalação adiada.' }
 }
 $stamp = Get-Date -Format yyyyMMddHHmmss
-$files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1','package.json','package-lock.json')
+$files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1','package.json','package-lock.json')
 $existingFiles = @()
 $newFiles = @()
 foreach ($name in $files) {
@@ -49,6 +49,9 @@ $config | Add-Member -NotePropertyName codex_config -NotePropertyValue $codexCon
 if (-not $config.PSObject.Properties['ollama_attempts']) { $config | Add-Member -NotePropertyName ollama_attempts -NotePropertyValue 4 }
 if ($config.timeout_ms -eq 7200000) { $config.timeout_ms = 0 } # Migração do antigo padrão; demais escolhas explícitas permanecem.
 if ($WorkerModel) { $config.model = $WorkerModel }
+if (-not $config.PSObject.Properties['context_tokens']) { $config | Add-Member -NotePropertyName context_tokens -NotePropertyValue 32768 }
+if (-not $config.PSObject.Properties['min_context_tokens']) { $config | Add-Member -NotePropertyName min_context_tokens -NotePropertyValue 8192 }
+if ($PSBoundParameters.ContainsKey('ContextTokens')) { $config.context_tokens = $ContextTokens }
 Copy-Item -LiteralPath $configFile -Destination "$configFile.backup-$stamp"
 foreach ($name in $existingFiles) { Copy-Item -LiteralPath (Join-Path $target $name) -Destination "$(Join-Path $target $name).backup-$stamp" }
 try {

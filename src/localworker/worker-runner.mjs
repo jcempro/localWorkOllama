@@ -37,7 +37,7 @@ async function main() {
   const initial = await withJobControl(id, async () => {
     const current = await getState(id);
     if (current.status !== "QUEUED") return null;
-    const next = { ...current, status: "RUNNING", pid: process.pid, started_at: new Date().toISOString(), heartbeat_at: new Date().toISOString(), last_event_at: null, phase: "starting", step: 0, event_count: 0, completed_tools: 0, failed_tools: 0, prompt_tokens_observed: 0, output_tokens_observed: 0, generation_ms_observed: 0 };
+    const next = { ...current, status: "RUNNING", pid: process.pid, started_at: new Date().toISOString(), heartbeat_at: new Date().toISOString(), last_event_at: null, phase: "starting", step: 0, event_count: 0, completed_tools: 0, failed_tools: 0, prompt_tokens_observed: 0, output_tokens_observed: 0, generation_ms_observed: 0, context_compactions: 0, context_limit_tokens: null };
     await setState(id, next);
     return next;
   });
@@ -67,6 +67,8 @@ async function main() {
           event_count: state.event_count + 1,
           completed_tools: state.completed_tools + Number(event.phase === "tool_result" && event.outcome === "ok"),
           failed_tools: state.failed_tools + Number(event.phase === "tool_result" && event.outcome !== "ok"),
+          context_compactions: event.phase === "context_compacted" ? event.compaction_count : state.context_compactions,
+          context_limit_tokens: event.phase === "context_compacted" ? event.context_limit_tokens : state.context_limit_tokens,
           prompt_tokens_observed: state.prompt_tokens_observed + (event.phase === "ollama_response" ? Number(event.prompt_tokens) || 0 : 0),
           output_tokens_observed: state.output_tokens_observed + (event.phase === "ollama_response" ? Number(event.output_tokens) || 0 : 0),
           generation_ms_observed: state.generation_ms_observed + (event.phase === "ollama_response" ? Number(event.eval_duration_ms) || 0 : 0) };

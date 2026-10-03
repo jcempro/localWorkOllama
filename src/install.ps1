@@ -209,9 +209,10 @@ $CODEX_HOME_A3C = [IO.Path]::GetFullPath($CODEX_HOME_A3C)
 if (Test-Path -LiteralPath $WORKER_HOME_A3C) {
   $updateArgs = @{ Target = $WORKER_HOME_A3C; NodePath = $NODE_EXE_A3C; CodexCommand = $CODEX_EXE_A3C; CodexConfig = $CODEX_CONFIG_A3C; MaintenanceRepo = $MAINTENANCE_REPO_A3C; MaintenanceId = $MAINTENANCE_ID_A3C }
   if ($MODEL_EXPLICIT_A3C) { $updateArgs.WorkerModel = $WorkerModel }
+  if ($PSBoundParameters.ContainsKey('ModelContextTokens')) { $updateArgs.ContextTokens = $ModelContextTokens }
   & (Join-Path $WORKER_SOURCE_A3C 'update-installed.ps1') @updateArgs
 } else {
-  & (Join-Path $WORKER_SOURCE_A3C 'install.ps1') -Target $WORKER_HOME_A3C -CodexConfig $CODEX_CONFIG_A3C -NodePath $NODE_EXE_A3C -NpmCommand $NPM_EXE_A3C -CodexCommand $CODEX_EXE_A3C -WorkerModel $WorkerModel -MaintenanceRepo $MAINTENANCE_REPO_A3C -MaintenanceId $MAINTENANCE_ID_A3C
+  & (Join-Path $WORKER_SOURCE_A3C 'install.ps1') -Target $WORKER_HOME_A3C -CodexConfig $CODEX_CONFIG_A3C -NodePath $NODE_EXE_A3C -NpmCommand $NPM_EXE_A3C -CodexCommand $CODEX_EXE_A3C -WorkerModel $WorkerModel -ContextTokens $ModelContextTokens -MaintenanceRepo $MAINTENANCE_REPO_A3C -MaintenanceId $MAINTENANCE_ID_A3C
 }
 if ($LASTEXITCODE -ne 0) { throw 'Instalação ou atualização do Worker falhou.' }
 

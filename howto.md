@@ -146,6 +146,12 @@ Para conferir afirmações sobre commits, use os campos `ahead` e `behind` da se
 
 Em tarefas de escrita, o Worker recebe avisos de orçamento de ciclos e deixa de fazer listagens amplas após metade deles sem alteração. O padrão de 40 ciclos é teto técnico configurável por `LOCAL_WORKER_MAX_STEPS`, não limite de tempo; ele protege contra loops e esgotamento do contexto. Chamadas recusadas repetidamente param antes desse teto. Se uma tarefa produtiva não couber na janela, o supervisor deve segmentá-la preservando evidências, em vez de elevar o teto sem medir recursos e qualidade. A falha é `WORKER_INCOMPLETE`, acompanhada de contagens. Um limite de uso do Codex Desktop pode impedir que uma mensagem já enfileirada produza turno naquele momento: confira o estado da entrega e retome após a liberação da conta.
 
+### Compactação segura de contexto
+
+O Ollama aceita histórico enviado a cada `/api/chat` e `num_ctx` por requisição. O Worker conserva literalmente regras e objetivo originais; antes de pressão crítica de contexto, RAM ou VRAM, arquiva mensagens antigas em `jobs/<job_id>/context/cNNNN.json`, verifica o SHA-256 e só então mantém no prompt um índice recuperável e as mensagens recentes. `context_recall` devolve trechos exatos desse arquivo quando o Worker precisar de decisão ou evidência anterior. O histórico arquivado integra a retenção e a exclusão do respectivo job. O pedido envia `truncate:false` e `shift:false` para impedir descarte implícito pelo Ollama. Se não houver redução segura, o job registra a limitação e preserva o histórico; contexto grande demais gera `WORKER_INCOMPLETE` explícito.
+
+Configure a janela inicial por `-ModelContextTokens` no instalador, `LOCAL_WORKER_CONTEXT_TOKENS` ou `context_tokens` no `config.json` instalado (padrão: 32768) e o piso por `LOCAL_WORKER_MIN_CONTEXT_TOKENS` ou `min_context_tokens` (padrão: 8192). A estimativa dispara em 68% da janela; ajuste o gatilho por `LOCAL_WORKER_CONTEXT_TRIGGER_FRACTION` (maior que 0,56 e até 0,8). RAM e VRAM disparam ao se aproximarem a 1 GiB e 512 MiB das reservas; configure as margens por `LOCAL_WORKER_CONTEXT_RAM_MARGIN_BYTES` e `LOCAL_WORKER_CONTEXT_VRAM_MARGIN_MIB`. O mecanismo limita checkpoints a quatro, exige redução mensurável e só reduz `num_ctx` se o prompt couber com margem. A seção de diagnóstico mostra janela ativa e contagem; a timeline mostra motivo, estimativa antes/depois, medições de memória, estratégia e tokens observados. Essas medições podem incluir outros processos e não demonstram economia exclusiva do Worker. O Ollama atual também oferece compactação na API Responses, mas ela não é intercambiável com o histórico e as ferramentas de `/api/chat`; este instalador usa checkpoints próprios verificáveis sem mudar o protocolo do agente.
+
 Quando a unidade de implementação tem arquivos-alvo definidos, passe caminhos relativos em `required_change_paths` junto de `expect_changes: true`. Inclua o artefato funcional, não somente um arquivo de estado. Exemplo fictício: `required_change_paths: ["scripts/verificar.py", "scripts/testar_verificar.py"]`. O Worker só pode concluir após alterar efetivamente cada alvo; executar testes ou editar outro arquivo não substitui essa prova. Testes falhos devolvem `stdout` e `stderr` limitados ao Worker e bloqueiam `COMPLETED` até nova execução bem-sucedida do mesmo comando. O transporte do Ollama respeita o prazo configurado do job, inclusive quando a geração de resposta demora mais de cinco minutos.
 
 ## 4. Registrar o watchdog
@@ -458,27 +464,28 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | Artefato portável | SHA-256 |
 | --- | --- |
 | `src/localworker/AGENTS.md` | `1d765bdf4c4947b9cfcebcf63f5328d6cf4edbfaf8986baf0dffb48483a6cc46` |
-| `src/localworker/config.json` | `6147e1cfe3ef123def81c529b9d8b30f7771834ff15bf7333bbd1704ce96d1aa` |
+| `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `53f1845863d598eb4327125114406fd7e828fa0afd837b6537b0f604d77d5672` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
-| `src/localworker/worker-core.mjs` | `2b5cceac23b291437ac8ec802c1a799dd40cb6b9a9d278404d8a8ec107a7d6ac` |
-| `src/localworker/worker-runner.mjs` | `73eb23cbb58c014c0c1d93b69426504bd43e446284cbb5be6aa527bee50f0e15` |
+| `src/localworker/context-manager.mjs` | `45344bbec68de30b9d20f66215d25a97d9d603a0f2dfe273e1598be85e090a35` |
+| `src/localworker/worker-core.mjs` | `18cdde977cb9dcb83b22a0881a3aaec8cd8fe713dc3d70775fa4a6c7eea5c4a1` |
+| `src/localworker/worker-runner.mjs` | `3a598bc851ae6b90fc6b9a9d176c8f94b94b7843003c2b427b7ab8103cb4fadd` |
 | `src/localworker/delivery.mjs` | `9a75f7eea30055efcf5d1faa06f6e78dbdfc8fdef55435010890031ab45eeaf1` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
-| `src/localworker/monitor.mjs` | `52f2d0b3dc2d402877cc0e2ef3ad3225c058d1df3d4dd53fc62b7fbbe786261b` |
-| `src/localworker/monitor-page.mjs` | `7b36377c4d7ce4872e55107efe2bc5c55eb7183c8cb06fe35693432699dd6f98` |
+| `src/localworker/monitor.mjs` | `2e1a6dafe425875451e09761d715377ddc3bf7acdfff064b66efdb64b49a9d08` |
+| `src/localworker/monitor-page.mjs` | `3457ea14d3d564e22fc69f0b0a6f74cd8d42601317c40d5e86cca9754459c134` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `dcc72938cf62a6728d85556eb72d8bf6fe4e08a326c14d98f1b12fadbf44c51b` |
-| `src/localworker/update-installed.ps1` | `eb8cd839b920b7d213a20da99f76f91779e2992a401a68f4a2419a6b1f19a0b1` |
+| `src/localworker/install.ps1` | `c70d396f0b0aae2415261dbccc942e5a3fa7114c9e77641700ac52082b32102c` |
+| `src/localworker/update-installed.ps1` | `1658aed8a746ed43e78d44e01b3f0790180ddf300526afa8635f21bc983a359d` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `4f7212f6fdbda9dfa9fc673ba6913bc6ceecfe96fce112e8a31d5f6e1e1d0dc3` |
+| `src/install.ps1` | `5a85596b890b58bd7f319742d7657c30a0f2aad11f47b0cf0993117b492cae55` |
 | `src/agents.supervisor.md` | `37eeb5987af342470ed4bd6a8fe47e46c0ed7c8ec0f3a152f07786c118496e0e` |
 <!-- LOCALWORKER_GENERATED_END -->
 

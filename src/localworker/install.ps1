@@ -6,7 +6,8 @@ param(
   [string]$CodexCommand,
   [string]$MaintenanceRepo,
   [string]$MaintenanceId,
-  [string]$WorkerModel = 'qwen3-coder-next-32k'
+  [string]$WorkerModel = 'qwen3-coder-next-32k',
+  [ValidateRange(4096,262144)][int]$ContextTokens = 32768
 )
 $ErrorActionPreference = 'Stop'
 if ($MaintenanceId -and $MaintenanceId -notmatch '^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$') { throw 'Identidade de manutenção inválida.' }
@@ -31,7 +32,7 @@ if (-not $CodexCommand) {
     $CodexCommand = $native.FullName
   }
 }
-$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1')
+$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1')
 foreach ($exe in @($NodePath,$NpmCommand,$CodexCommand)) {
   if (-not (Test-Path -LiteralPath $exe -PathType Leaf)) { throw "Executável ausente: $exe" }
 }
@@ -58,6 +59,7 @@ if ($MaintenanceId) { $workerConfig | Add-Member -NotePropertyName maintenance_i
 $workerConfig | Add-Member -NotePropertyName codex_command -NotePropertyValue $CodexCommand -Force
 $workerConfig | Add-Member -NotePropertyName codex_config -NotePropertyValue $CodexConfig -Force
 $workerConfig.model = $WorkerModel
+$workerConfig.context_tokens = $ContextTokens
 [IO.File]::WriteAllText((Join-Path $StageTarget 'config.json'), ($workerConfig | ConvertTo-Json -Depth 10) + "`n", [Text.UTF8Encoding]::new($false))
 & $NpmCommand ci --ignore-scripts --prefix $StageTarget
 if ($LASTEXITCODE -ne 0) {
