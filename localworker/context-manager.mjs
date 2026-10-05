@@ -42,6 +42,13 @@ function overview(messages) {
 function cutIndex(messages, recent = CONTEXT_RECENT_MESSAGES_C7M) {
   let cut = Math.max(2, messages.length - recent);
   while (cut > 2 && messages[cut]?.role === "tool") cut--;
+  // Um retorno ainda não visto pelo modelo não é histórico descartável.
+  // Preserve todo o lote da última chamada, inclusive código (não apenas Markdown).
+  if (messages.at(-1)?.role === "tool") {
+    let pending = messages.length - 1;
+    while (pending > 2 && messages[pending]?.role === "tool") pending--;
+    cut = Math.min(cut, pending);
+  }
   return cut;
 }
 
@@ -57,6 +64,7 @@ function preservedContext(messages) {
     }
     if (message.role === "assistant" && text.trim()) return [text];
     if (message.role === "user" && !text.startsWith("CHECKPOINT DE CONTEXTO")) return [text];
+    if (["run_authorized_command", "git_commit_unit"].includes(message.tool_name)) return [text];
     if (message.tool_name === "read_file" && /\.md \[linhas \d+-\d+\/\d+\]/i.test(text)) return [text];
     return [...text.matchAll(/--- INSTRUÇÃO DO REPOSITÓRIO:[\s\S]*?--- FIM DA INSTRUÇÃO ---/g)].map(match => match[0]);
   }).join("\n\n");

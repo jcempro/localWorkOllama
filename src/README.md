@@ -69,9 +69,9 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
-| `src/localworker/context-manager.mjs` | `8f6548ee3ed882f56761af05a952353a61e851a91f74f72720eced5fbacb464b` |
+| `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `9eef701685c50f75c11aa3a1de7aaeabecddaa3abb9f6665ee19774fcfb42a56` |
+| `src/localworker/worker-core.mjs` | `0e786240c245d3bdeed9406ed829df94a0489803e9e702bfc47d7f2d9b6df228` |
 | `src/localworker/worker-runner.mjs` | `15dc255e4b93ffd99b37f9ed767db68ce3d275a4b36811f61f8cbb60e0e96bf5` |
 | `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |

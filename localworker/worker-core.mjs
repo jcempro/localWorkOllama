@@ -1554,9 +1554,6 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
       ? TOOL_DEFINITIONS.filter(tool => READ_ONLY_TOOLS.has(tool.function.name))
       : TOOL_DEFINITIONS.filter(tool => tool.function.name !== "run_authorized_command" || authorizedCommands.length);
     if (subagentDepth > 0) availableTools = availableTools.filter(tool => tool.function.name !== "delegate_readonly_subagent");
-    if (forcedInspection && toolExecutions === 0) {
-      availableTools = availableTools.filter(tool => tool.function.name === "git_status");
-    }
     if (expectChanges && successfulMutations === 0 && step + 1 >= WRITE_FOCUS_STEP) {
       availableTools = availableTools.filter(tool => !new Set(["repo_tree", "list_dir"]).has(tool.function.name));
     }
@@ -1608,7 +1605,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         messages.push({
           role: "user",
           content:
-            "Você ainda não inspecionou o repositório. A próxima resposta deve chamar a única ferramenta disponível, git_status, antes de qualquer conclusão factual.",
+            "Você ainda não obteve evidência para o objetivo. Use leitura/busca nos arquivos pertinentes ou o comando autorizado solicitado. git_status prova somente estado Git; não prova conteúdo, implementação ou revisão de arquivos.",
         });
 
         continue;

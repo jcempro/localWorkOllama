@@ -16,18 +16,18 @@ const server = createServer(async (req, res) => {
   const payload = JSON.parse(body); requests++;
   assert.equal(payload.truncate, false);
   assert.equal(payload.shift, false);
-  if (scenario === "fixed" || requests === 2) {
+  if (scenario === "fixed" || requests === 3) {
     res.writeHead(400, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "request (37494 tokens) exceeds the available context size (32768 tokens)" })); return;
   }
-  if (requests === 3) {
+  if (requests === 4) {
     assert.ok(payload.messages.some(m => m.content?.includes("CHECKPOINT DE CONTEXTO")));
     assert.ok(payload.messages.some(m => m.content?.includes("DECISÃO PRESERVADA")));
     assert.ok(payload.tools.some(t => t.function.name === "context_recall"));
   }
   res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify({ message: requests === 1 ? { role: "assistant", content: "DECISÃO PRESERVADA",
-    tool_calls: [{ function: { name: "file_info", arguments: { path: "AGENTS.md", fixture: "evidence ".repeat(400) } } }] }
+  res.end(JSON.stringify({ message: requests <= 2 ? { role: "assistant", content: "DECISÃO PRESERVADA",
+    tool_calls: [{ function: { name: "file_info", arguments: { path: requests === 1 ? "AGENTS.md" : "package.json", fixture: "evidence ".repeat(400) } } }] }
     : { role: "assistant", content: "RESULTADO: recuperação no mesmo job comprovada." } }));
 });
 await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
@@ -47,7 +47,7 @@ try {
       const state = JSON.parse(await fs.readFile(path.join(dir, "state.json"), "utf8"));
       if (scenario === "recover" && state.status !== "COMPLETED") console.log(await fs.readFile(path.join(dir, "worker.log"), "utf8"));
       assert.equal(state.status, scenario === "recover" ? "COMPLETED" : "FAILED", await fs.readFile(path.join(dir, "error.txt"), "utf8").catch(() => ""));
-      assert.equal(requests, scenario === "recover" ? 3 : 1);
+      assert.equal(requests, scenario === "recover" ? 4 : 1);
       if (scenario === "recover") assert.ok(state.context_compactions >= 1);
       else assert.equal(state.error_kind, "WORKER_INCOMPLETE");
       const result = await fs.readFile(path.join(dir, scenario === "recover" ? "result.md" : "error.txt"), "utf8");

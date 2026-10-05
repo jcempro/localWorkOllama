@@ -63,12 +63,16 @@ try {
   const dense = [{ role: "system", content: "norma ".repeat(6500) }, { role: "user", content: "objetivo" },
     { role: "assistant", content: "Decisão necessária à continuidade.", tool_calls: [{ function: { name: "read_file", arguments: { path: "source.py" } } }] },
     { role: "tool", tool_name: "read_file", content: "source.py\n" + "evidence ".repeat(4000) }];
+  const pendingDense = JSON.stringify(dense);
+  assert.equal(await adaptive.prepare(dense, [], {}), false);
+  assert.equal(JSON.stringify(dense), pendingDense, "evidência recém-lida deve chegar ao modelo");
+  dense.push({ role: "assistant", content: "Evidência examinada; decisão mantida." });
   assert.equal(await adaptive.prepare(dense, [], {}), true);
   assert.match(dense[2].content, /Decisão necessária/);
   assert.ok(estimateContextTokensC7M(dense) > 32768 * .56);
   assert.equal(adaptive.count, 1);
   for (let i = 0; i < 5; i++) {
-    dense.push({ role: "assistant", content: `Decisão ${i}` }, { role: "tool", content: "nova evidência ".repeat(2500) });
+    dense.push({ role: "assistant", content: `Decisão ${i}` }, { role: "tool", content: "nova evidência ".repeat(2500) }, {role:"assistant",content:"Evidência examinada."});
     assert.equal(await adaptive.prepare(dense, [], { forceCompaction: true }), true);
   }
   assert.equal(adaptive.count, 6);
