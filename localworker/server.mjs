@@ -60,6 +60,7 @@ server.registerTool("local_analyze", {
     expect_changes: z.boolean().optional().describe("Em implementação/edição obrigatória, exige mutação bem-sucedida e mudança líquida antes de COMPLETED; padrão true em mode=write"),
     required_change_paths: z.array(z.string().min(1)).max(32).default([]).describe("Arquivos relativos que devem apresentar alteração líquida neste job; use quando a unidade tem alvos conhecidos"),
     required_read_paths: z.array(z.string().min(1)).max(32).default([]).describe("Arquivos cujo conteúdo deve ser lido antes da conclusão; Git não substitui essa prova"),
+    provided_evidence: z.object({ source: z.string().trim().min(1).max(1024), content: z.string().trim().min(1).max(12000) }).optional().describe("Evidência verificada fornecida pelo supervisor, com origem rastreável; somente análise read-only, não dispensa requisitos explícitos"),
     required_command_ids: z.array(z.string().min(1)).max(32).default([]).describe("IDs autorizados cuja execução com código zero é requisito de conclusão"),
     command_sequence: z.array(z.string().min(1)).max(32).default([]).describe("Sequência determinística explícita: executa cada ID uma vez, sem inferência; falha interrompe sem retry de mutação"),
     commit_policy: z.enum(["worker", "supervisor"]).default("worker").describe("Responsável pelo commit da unidade: supervisor somente quando ele assumirá o commit imediato após revisar"),
@@ -75,9 +76,10 @@ server.registerTool("local_analyze", {
       timeout_ms: z.number().int().min(1000).max(300000).optional(),
     })).max(32).default([]).describe("Comandos exatos pré-aprovados; em read-only somente comandos explicitamente de leitura, sem shell livre"),
   }),
-}, async ({ repoPath, task, mode, expect_changes, required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy }) => {
+}, async ({ repoPath, task, mode, expect_changes, required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy, provided_evidence }) => {
   try {
     if (expect_changes && mode !== "write") throw new RequestRejected("expect_changes exige mode=write");
+    if (provided_evidence && mode !== "read-only") throw new RequestRejected("provided_evidence exige read-only; não comprova execução ou alteração");
     if (required_change_paths.length && (mode !== "write" || expect_changes === false)) throw new RequestRejected("required_change_paths exige mode=write e expect_changes");
     if (mode !== "write" && authorized_commands.some(c => c.mode !== "read-only")) throw new RequestRejected("Job read-only exige comandos explicitamente read-only");
     if (new Set(authorized_commands.map(command => command.id)).size !== authorized_commands.length) throw new RequestRejected("IDs de comandos autorizados duplicados");
@@ -122,7 +124,7 @@ server.registerTool("local_analyze", {
     }
     const monitor = await ensureMonitor();
     const created = await createJob({ repoPath: repo, git_root: await gitRoot(repo), task, mode,
-      expect_changes: expect_changes ?? (mode === "write"), required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy });
+      expect_changes: expect_changes ?? (mode === "write"), required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy, provided_evidence });
     if (created.busy) return reply({ status: "WORKER_BUSY", job_id: created.job_id, monitor_url: monitorUrl(monitor, created.job_id), monitor_index_url: monitorIndexUrl(monitor) });
     const runnerDiagnostic = await fs.open(path.join(jobDir(created.job_id), "runner-stderr.log"), "a");
     const child = spawn(process.execPath, [path.join(root, "worker-runner.mjs"), created.job_id], {

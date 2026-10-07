@@ -8,6 +8,8 @@ O runtime instalado inclui `progress-guard.mjs`: repetições determinísticas s
 
 ## Objetivo e percurso
 
+Para analisar evidências já verificadas sem repetir exploração, envie `provided_evidence: {"source":"origem rastreável", "content":"evidência mínima"}` em `read-only` (valores fictícios). Limites: origem de 1–1024 caracteres e conteúdo de 1–12000, sem segredos. Não dispensa leituras/comandos declarados obrigatórios e não prova execução pelo Worker. O recibo distingue a base fornecida de leituras próprias.
+
 A remoção e a retenção também abrangem checkpoints em `context/`. Links ou diretórios inesperados bloqueiam a limpeza com diagnóstico; backups recuperáveis continuam protegidos. Use a lixeira do monitor para excluir um job terminal, nunca apague pastas compartilhadas para contornar uma falha.
 
 O Worker pode usar CLIs, scripts e integrações realmente disponíveis, com comandos exatos autorizados e efeitos proporcionais ao risco. Para leitura, declare `authorized_commands[].mode='read-only'`; rede exige autorização de destinos/efeitos e `network=true`. Esses campos não são sandbox nem firewall do programa: cabe ao supervisor verificar o script/argv. `latency.json` é atualizado pelo runner, sem contagem manual duplicada. `QUEUED_TO_CHAT` significa mensagem enfileirada; um turno interrompido ou bloqueado pela cota do supervisor permanece pendente mesmo com entrega correta.
@@ -252,6 +254,8 @@ Regras já estabelecidas no `AGENTS.md` **NÃO DEVEM ser duplicadas** na solicit
 
 ## Delegação
 
+Para análise exclusivamente de evidência já obtida, use `provided_evidence={source,content}` em `read-only`, com origem rastreável e conteúdo mínimo verificado. Isso permite resposta sem nova chamada de ferramenta, não comprova execução própria e não dispensa `required_read_paths` ou `required_command_ids`. Não use essa opção para simular implementação ou validação atual.
+
 Compense a assimetria cognitiva com linguagem explícita: não presuma que nomes, comandos, siglas ou conceitos tenham a mesma semântica nos dois ambientes. Traduza para objetivo, comportamento e resultado esperado; verifique capacidades reais e elimine lacunas materiais antes de efeitos. Macro, arquitetura, dependências, sequência, risco e qualidade global são sua responsabilidade; o Worker tem autonomia técnica máxima compatível com o microescopo e pode fornecer insumos delimitados de planejamento. Não o restrinja por ser Worker: recursos nativos/extensíveis realmente disponíveis podem ser concedidos sob limites de escopo, contexto, segurança, privacidade e autoridade, inclusive externos quando autorizados. Capacidade ausente não deve ser simulada. Para operações críticas, estabeleça checkpoints antes de efeitos difíceis de reverter, supervisão mais intensa orientada a eventos, menor privilégio e recuperação/rollback; para operações não críticas, preserve autonomia local. Reavalie decisões anteriores incompatíveis de forma cirúrgica e sem regressão. Isso não autoriza autouso na manutenção deste produto.
 
 Comandos exatos cujos efeitos de somente leitura foram verificados podem declarar `authorized_commands[].mode='read-only'`, inclusive em job `read-only`. Não marque comando como leitura por seu nome nem use esse campo para permitir escrita oculta. O padrão continua `write`.
@@ -426,6 +430,8 @@ Você é executor especializado de uma unidade pequena, autocontida e verificáv
 
 ## Autoridade e escopo
 
+Quando o supervisor fornecer `provided_evidence`, analise os dados e cite sua origem; não alegue inspeção própria. Em análise `read-only`, a evidência fornecida permite responder sem repetir ferramentas, preservando os requisitos explícitos de leitura/comandos e as normas já carregadas. Evidência não substitui execução exigida nem autoriza escrita.
+
 Nomes/comandos/conceitos do supervisor não garantem equivalência no seu runtime. Interprete objetivo, comportamento, entrada e resultado esperado; verifique capacidade real e peça esclarecimento somente quando a lacuna alterar escopo, segurança ou resultado. Não invente equivalência de ferramentas. Você tem autonomia para resolver detalhes e problemas técnicos dentro da unidade: menor capacidade cognitiva não reduz capacidades operacionais autorizadas. Macro, integração e aceite global permanecem com o supervisor; sua colaboração no planejamento é insumo delimitado. Operação crítica requer checkpoint prévio, privilégios proporcionais, validação e recuperação antes de efeito difícil de reverter. Recursos nativos/extensões comprovados podem ser usados por comandos exatos autorizados, inclusive leitura em `read-only`; não simule capacidades ausentes.
 
 `required_read_paths` e `required_command_ids` definem evidências mínimas obrigatórias, não provam sozinhos a qualidade semântica. Cite somente conteúdo efetivamente obtido. Não transforme a execução de um comando em conclusões além da saída literal. Comando já bem-sucedido não deve repetir efeitos; use o recibo preservado. Nova execução segura deve estar autorizada com `repeatable=true`. `commit_policy=supervisor` reserva o commit imediato ao supervisor; não execute commit contrário à instrução da unidade.
@@ -514,17 +520,17 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `3d3caf2a969ee6c23bc12899de49f79f855ee397539000768b9bcd845ded9e04` |
+| `src/localworker/AGENTS.md` | `7935a8bcebadb35c28e21372ffdff7eb784e42ab1f1250c7c3cbbe3aa2a65cd1` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `aff0057e112b760972470760947b3875c04fbf591642e06c075c58b9865fec90` |
+| `src/localworker/server.mjs` | `4edbd4585d9380370a5d2efa25c9c000af36666c99916d90a8433077d40ebcb9` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `8dffbae13282970446959cd32ffc8e5cff06273d41d4a008ba1feecb2044b1aa` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `7aaf7f3155b3cdb94cd53e84dd6f588db5dcf13790e956d3008c7cab6f7d39ad` |
+| `src/localworker/worker-core.mjs` | `2248776fa3327816af4eb1635e89438f5720a765881d76c5e4bf35654a48511e` |
 | `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
 | `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
@@ -538,7 +544,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
-| `src/agents.supervisor.md` | `e23b7c7c9c1d7ef2fe5af2452469e3bb8a732d9013f23e4787ce862f623fde58` |
+| `src/agents.supervisor.md` | `ae6212aa882bfbef2dea1d6d0ae377292eb9030b5e2ebdb35c76979fb2774dc3` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

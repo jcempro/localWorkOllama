@@ -14,7 +14,7 @@ const server=createServer(async(req,res)=>{
   if(req.url==='/api/ps'){res.end('{"models":[]}');return;}
   calls++;
   let fn=null;
-  if(calls===1) fn=scenario==='read'?{name:'read_file',arguments:{path:'package.json',startLine:1,endLine:5}}:
+  if(calls===1 && scenario!=='supplied') fn=scenario==='read'?{name:'read_file',arguments:{path:'package.json',startLine:1,endLine:5}}:
     scenario==='repeat'?{name:'run_authorized_command',arguments:{id:'once'}}:{name:'git_status',arguments:{}};
   if(scenario==='repeat'&&calls===2)fn={name:'run_authorized_command',arguments:{id:'once'}};
   res.end(JSON.stringify({message:{role:'assistant',content:fn?'':'RESULTADO: resposta candidata.',...(fn?{tool_calls:[{function:fn}]}:{})}}));
@@ -28,6 +28,17 @@ await fs.mkdir(dir,{recursive:true});
 const {runLocalAnalysis,committedUnitSince}=await import('./worker-core.mjs');
 const run=(commands,contract,mode='write')=>runLocalAnalysis(repo,'Teste de contrato; nenhuma alteração funcional.',mode,()=>{},commands,false,[],false,0,12,contract);
 try {
+  scenario='supplied';calls=0;
+  const supplied={provided_evidence:{source:'checkpoint verificado pelo supervisor',content:'O teste X retornou exit_code=0.'}};
+  assert.match(await run([],supplied,'read-only'),/Base fornecida pelo supervisor: "checkpoint/);
+  assert.equal(calls,1);
+  await assert.rejects(run([],supplied),/provided_evidence inválida/);
+  await assert.rejects(run([],{provided_evidence:{source:'',content:'x'}},'read-only'),/provided_evidence inválida/);
+  calls=0;
+  await assert.rejects(run([],{...supplied,required_read_paths:['package.json']},'read-only'),/CONTRACT_UNFULFILLED/);
+  calls=0;
+  await assert.rejects(run([],{},'read-only'),/sem inspeção/);
+  scenario='missing';calls=0;
   await assert.rejects(run([],{required_read_paths:['package.json']},'read-only'),/CONTRACT_UNFULFILLED/);
   scenario='read';calls=0;
   assert.match(await run([],{required_read_paths:['package.json']},'read-only'),/resposta candidata/);

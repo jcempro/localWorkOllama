@@ -8,6 +8,8 @@
 
 ## Valores substituíveis
 
+Contrato por job: `provided_evidence={source,content}` opcional somente em `read-only`; origem até 1024 caracteres e conteúdo até 12000, ambos não vazios. Permite análise sem nova ferramenta; requisitos explícitos de leitura/comando continuam obrigatórios. Não é configuração global nem autorização de escrita.
+
 | Valor | Origem e configuração |
 | --- | --- |
 | Pasta da distribuição | Localização deste `src/`; descoberta pelo instalador. |
@@ -68,17 +70,17 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `3d3caf2a969ee6c23bc12899de49f79f855ee397539000768b9bcd845ded9e04` |
+| `src/localworker/AGENTS.md` | `7935a8bcebadb35c28e21372ffdff7eb784e42ab1f1250c7c3cbbe3aa2a65cd1` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `aff0057e112b760972470760947b3875c04fbf591642e06c075c58b9865fec90` |
+| `src/localworker/server.mjs` | `4edbd4585d9380370a5d2efa25c9c000af36666c99916d90a8433077d40ebcb9` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `8dffbae13282970446959cd32ffc8e5cff06273d41d4a008ba1feecb2044b1aa` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `7aaf7f3155b3cdb94cd53e84dd6f588db5dcf13790e956d3008c7cab6f7d39ad` |
+| `src/localworker/worker-core.mjs` | `2248776fa3327816af4eb1635e89438f5720a765881d76c5e4bf35654a48511e` |
 | `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
 | `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
@@ -92,5 +94,5 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
-| `src/agents.supervisor.md` | `e23b7c7c9c1d7ef2fe5af2452469e3bb8a732d9013f23e4787ce862f623fde58` |
+| `src/agents.supervisor.md` | `ae6212aa882bfbef2dea1d6d0ae377292eb9030b5e2ebdb35c76979fb2774dc3` |
 <!-- LOCALWORKER_GENERATED_END -->
