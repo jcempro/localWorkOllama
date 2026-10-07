@@ -1558,7 +1558,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
   const contextManager = new ContextManagerC7M(contextDirectory, CONTEXT_TOKENS_C7M, MIN_CONTEXT_TOKENS_C7M);
 
   const startedAt = Date.now();
-  const gpuPolicy = { layers: await loadGpuPolicyR8N() };
+  const gpuPolicy = { layers: commandSequence.length ? null : await loadGpuPolicyR8N() };
   if (gpuPolicy.layers !== null) await onProgress({ phase: "gpu_policy_loaded", gpu_layers: gpuPolicy.layers });
   let toolExecutions = 0;
   let forcedInspection = false;
@@ -1585,7 +1585,8 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
     return unchanged;
   };
 
-  for (let step = 0; step < stepLimit; step++) {
+  const executionSteps = commandSequence.length ? commandSequence.length + 1 : stepLimit;
+  for (let step = 0; step < executionSteps; step++) {
     await onProgress({ phase: "step", step: step + 1 });
     if (expectChanges && successfulMutations === 0 && step + 1 === WRITE_NUDGE_STEP) {
       messages.push({ role: "user", content: "Orçamento de exploração em 25%. Identifique agora o menor arquivo a modificar e faça a primeira edição autorizada; leituras adicionais somente se indispensáveis para essa edição." });
@@ -1610,10 +1611,12 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
       availableTools = availableTools.filter(tool => !new Set(["repo_tree", "list_dir"]).has(tool.function.name));
     }
     if (!contextManager.checkpoints.length) availableTools = availableTools.filter(tool => tool.function.name !== "context_recall");
-    const ramSample = resourceBudgetR8N(os.availableParallelism(), os.totalmem(), os.freemem());
-    const gpuSample = await gpuMemoryBudgetR8N();
-    await contextManager.prepare(messages, availableTools, { ram: ramSample, gpu: gpuSample,
-      sampleRam: () => os.freemem(), sampleGpu: gpuMemoryBudgetR8N }, onProgress);
+    if (!commandSequence.length) {
+      const ramSample = resourceBudgetR8N(os.availableParallelism(), os.totalmem(), os.freemem());
+      const gpuSample = await gpuMemoryBudgetR8N();
+      await contextManager.prepare(messages, availableTools, { ram: ramSample, gpu: gpuSample,
+        sampleRam: () => os.freemem(), sampleGpu: gpuMemoryBudgetR8N }, onProgress);
+    }
     if (contextManager.checkpoints.length && !availableTools.some(tool => tool.function.name === "context_recall") &&
         !(forcedInspection && toolExecutions === 0)) {
       availableTools.push(TOOL_DEFINITIONS.find(tool => tool.function.name === "context_recall"));
@@ -1638,7 +1641,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
         await onProgress({ phase: "context_recovery", reason: "recusa de contexto; histórico reduzido antes da nova chamada", attempt: recovery + 1 });
       }
     }
-    await contextManager.observed(response?.prompt_eval_count,
+    if (!commandSequence.length) await contextManager.observed(response?.prompt_eval_count,
       { ram: os.freemem(), gpu: await gpuMemoryBudgetR8N() }, onProgress);
 
     const message = response?.message;

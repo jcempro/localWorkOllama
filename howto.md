@@ -8,6 +8,8 @@ O runtime instalado inclui `progress-guard.mjs`: repetições determinísticas s
 
 ## Objetivo e percurso
 
+`command_sequence` não carrega política GPU nem prepara/compacta contexto: não depende do Ollama ou do teto de ciclos de inferência. Cada comando mantém seu timeout técnico, autorização, evidência e validação; a sequência tem no máximo 32 IDs distintos e para no primeiro erro. Recursos consumidos pelo executável autorizado ainda precisam ser avaliados pelo supervisor antes da delegação.
+
 Para analisar evidências já verificadas sem repetir exploração, envie `provided_evidence: {"source":"origem rastreável", "content":"evidência mínima"}` em `read-only` (valores fictícios). Limites: origem de 1–1024 caracteres e conteúdo de 1–12000, sem segredos. Não dispensa leituras/comandos declarados obrigatórios e não prova execução pelo Worker. O recibo distingue a base fornecida de leituras próprias.
 
 A remoção e a retenção também abrangem checkpoints em `context/`. Links ou diretórios inesperados bloqueiam a limpeza com diagnóstico; backups recuperáveis continuam protegidos. Use a lixeira do monitor para excluir um job terminal, nunca apague pastas compartilhadas para contornar uma falha.
@@ -530,7 +532,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `2248776fa3327816af4eb1635e89438f5720a765881d76c5e4bf35654a48511e` |
+| `src/localworker/worker-core.mjs` | `2904d9b79f99769e1c40a59614530dc3e4a9bf6906f96844f36b2c6001ee6729` |
 | `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
 | `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |

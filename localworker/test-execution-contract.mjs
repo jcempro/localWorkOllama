@@ -47,6 +47,11 @@ try {
     {id:'two',program:process.execPath,args:['-e','console.log("TWO")']}];
   const result=await run(commands,{command_sequence:['one','two'],required_command_ids:['one','two']});
   assert.match(result,/ONE/);assert.match(result,/NEWLINE_OK/);assert.match(result,/TWO/);assert.equal(calls,0);
+  const deterministicEvents=[];
+  const bounded=await runLocalAnalysis(repo,'Sequência governada.', 'read-only',e=>deterministicEvents.push(e),commands.map(c=>({...c,mode:'read-only'})),false,[],false,0,1,{command_sequence:['one','two']});
+  assert.match(bounded,/TWO/);
+  assert.equal(calls,0,'Sequência não pode chamar Ollama');
+  assert.ok(!deterministicEvents.some(e=>e.phase.startsWith('context_')||e.phase==='gpu_policy_loaded'),'Sequência não depende de contexto ou camadas do modelo');
   assert.match(await run(commands.map(c=>({...c,mode:'read-only'})),{command_sequence:['one']},'read-only'),/NEWLINE_OK/);
   await assert.rejects(run(commands,{command_sequence:['one']},'read-only'),/efeitos compatíveis/);
   await assert.rejects(run([{id:'fail',program:process.execPath,args:['-e','process.exit(2)']}],{command_sequence:['fail']}),/execução suspensa sem repetir/);

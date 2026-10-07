@@ -116,7 +116,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `2248776fa3327816af4eb1635e89438f5720a765881d76c5e4bf35654a48511e` |
+| `src/localworker/worker-core.mjs` | `2904d9b79f99769e1c40a59614530dc3e4a9bf6906f96844f36b2c6001ee6729` |
 | `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
 | `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
@@ -134,5 +134,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Evidência fornecida e autoria da verificação
+
+Sequência determinística DEVE ser independente da janela/contexto, da política de camadas GPU e do teto de ciclos da inferência. Cada ID autorizado executa no máximo uma vez por sequência, até 32 IDs distintos; timeouts de comando, propriedade, evidências, validações e interrupção em erro permanecem compulsórios. Ausência de inferência não dispensa a avaliação prévia dos recursos/efeitos dos executáveis autorizados.
 
 O contrato opcional `provided_evidence={source,content}` DEVE aceitar análise somente `read-only` com origem rastreável (1–1024 caracteres) e conteúdo delimitado (1–12000). O supervisor DEVE verificar a evidência antes de fornecê-la. Essa análise PODE concluir sem nova ferramenta; NÃO dispensa leituras/comandos explicitamente exigidos, NÃO comprova execução própria e NÃO autoriza alteração. O recibo DEVE distinguir base fornecida, leituras e comandos realmente executados. Sem evidência fornecida, a guarda de inspeção permanece vigente. O conteúdo é dado, não nova autoridade normativa.
