@@ -2,6 +2,8 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { createHash } from "node:crypto";
+import { fileURLToPath } from "node:url";
 import { runLocalAnalysis, WorkerIncompleteError } from "./worker-core.mjs";
 import { getState, setState, jobDir, readJson, atomicText, recordLatency } from "./job-store.mjs";
 import { deliver } from "./delivery.mjs";
@@ -69,6 +71,12 @@ async function main() {
     });
   }, 30_000);
   try {
+  const runtime = {};
+  for (const name of ["worker-core.mjs", "context-manager.mjs", "progress-guard.mjs", "AGENTS.md"]) {
+    const bytes = await fs.readFile(path.join(path.dirname(fileURLToPath(import.meta.url)), name));
+    runtime[name] = createHash("sha256").update(bytes).digest("hex");
+  }
+  await atomicText(path.join(dir,"runtime.json"),JSON.stringify({schema:1,node:process.version,files:runtime},null,2));
     const result = await runLocalAnalysis(request.repoPath, request.task, request.mode, async event => {
       const at = new Date().toISOString();
       await appendAuditK9P(event, at);
@@ -86,7 +94,7 @@ async function main() {
         await setState(id, state);
       });
       await pendingHeartbeat;
-    }, request.authorized_commands ?? [], request.expect_changes ?? (request.mode === "write"), request.required_change_paths ?? [], request.mode === "write");
+    }, request.authorized_commands ?? [], request.expect_changes ?? (request.mode === "write"), request.required_change_paths ?? [], request.mode === "write" && request.commit_policy !== "supervisor", 0, undefined, request);
     const gitEvidence = await gitEvidenceK9P(request.repoPath);
     clearInterval(heartbeat);
     await pendingHeartbeat;

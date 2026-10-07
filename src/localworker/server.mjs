@@ -59,25 +59,35 @@ server.registerTool("local_analyze", {
     mode: z.enum(["read-only", "write"]).default("read-only"),
     expect_changes: z.boolean().optional().describe("Em implementação/edição obrigatória, exige mutação bem-sucedida e mudança líquida antes de COMPLETED; padrão true em mode=write"),
     required_change_paths: z.array(z.string().min(1)).max(32).default([]).describe("Arquivos relativos que devem apresentar alteração líquida neste job; use quando a unidade tem alvos conhecidos"),
+    required_read_paths: z.array(z.string().min(1)).max(32).default([]).describe("Arquivos cujo conteúdo deve ser lido antes da conclusão; Git não substitui essa prova"),
+    required_command_ids: z.array(z.string().min(1)).max(32).default([]).describe("IDs autorizados cuja execução com código zero é requisito de conclusão"),
+    command_sequence: z.array(z.string().min(1)).max(32).default([]).describe("Sequência determinística explícita: executa cada ID uma vez, sem inferência; falha interrompe sem retry de mutação"),
+    commit_policy: z.enum(["worker", "supervisor"]).default("worker").describe("Responsável pelo commit da unidade: supervisor somente quando ele assumirá o commit imediato após revisar"),
     thread_id: z.string().regex(/^[0-9a-f]{8}-[0-9a-f-]{27}$/i).describe("ID da conversa Codex atual, não de outro chat nem do projeto"),
     authorized_commands: z.array(z.object({
       id: z.string().regex(/^[a-z0-9][a-z0-9_-]{0,63}$/i),
       description: z.string().min(1).max(240),
       program: z.string().min(1).refine(value => path.isAbsolute(value) && !/[\r\n]/.test(value), "program deve ser caminho absoluto de executável"),
       args: z.array(z.string()).max(40),
+      mode: z.enum(["read-only", "write"]).default("write").describe("Efeitos autorizados deste comando; leitura exige garantia do supervisor sobre executável/script exato"),
+      network: z.boolean().default(false).describe("Rede explicitamente autorizada para os destinos/efeitos deste comando exato; não concede rede livre"),
+      repeatable: z.boolean().default(false).describe("Permite repetir comando após sucesso, por exemplo validação após nova edição; mutação fica false"),
       timeout_ms: z.number().int().min(1000).max(300000).optional(),
-    })).max(32).default([]).describe("Comandos exatos pré-aprovados pelo supervisor, só em mode=write; sem shell livre"),
+    })).max(32).default([]).describe("Comandos exatos pré-aprovados; em read-only somente comandos explicitamente de leitura, sem shell livre"),
   }),
-}, async ({ repoPath, task, mode, expect_changes, required_change_paths, thread_id, authorized_commands }) => {
+}, async ({ repoPath, task, mode, expect_changes, required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy }) => {
   try {
     if (expect_changes && mode !== "write") throw new RequestRejected("expect_changes exige mode=write");
     if (required_change_paths.length && (mode !== "write" || expect_changes === false)) throw new RequestRejected("required_change_paths exige mode=write e expect_changes");
-    if (mode !== "write" && authorized_commands.length) throw new RequestRejected("authorized_commands exige mode=write");
+    if (mode !== "write" && authorized_commands.some(c => c.mode !== "read-only")) throw new RequestRejected("Job read-only exige comandos explicitamente read-only");
     if (new Set(authorized_commands.map(command => command.id)).size !== authorized_commands.length) throw new RequestRejected("IDs de comandos autorizados duplicados");
+    for (const values of [required_read_paths, required_command_ids, command_sequence]) if(new Set(values).size !== values.length) throw new RequestRejected("Contrato contém duplicações");
+    if ([...required_command_ids, ...command_sequence].some(id => !authorized_commands.some(c => c.id === id))) throw new RequestRejected("Contrato referencia comando não autorizado");
+    if (command_sequence.length && required_read_paths.length) throw new RequestRejected("Sequência determinística não lê arquivos pelo modelo; use os comandos autorizados para validação");
     if (!path.isAbsolute(repoPath)) throw new RequestRejected("repoPath deve ser absoluto");
     const repo = await fs.realpath(repoPath).catch(error => { if (error?.code === "ENOENT") throw new RequestRejected("repoPath não existe"); throw error; });
     if (!(await fs.stat(repo)).isDirectory()) throw new RequestRejected("repoPath não é diretório");
-    for (const relative of required_change_paths) {
+    for (const relative of [...required_change_paths, ...required_read_paths]) {
       const resolved = path.resolve(repo, relative);
       const inside = path.relative(repo, resolved);
       if (path.isAbsolute(relative) || !inside || inside === ".." || inside.startsWith(`..${path.sep}`) || path.isAbsolute(inside)) {
@@ -112,7 +122,7 @@ server.registerTool("local_analyze", {
     }
     const monitor = await ensureMonitor();
     const created = await createJob({ repoPath: repo, git_root: await gitRoot(repo), task, mode,
-      expect_changes: expect_changes ?? (mode === "write"), required_change_paths, thread_id, authorized_commands });
+      expect_changes: expect_changes ?? (mode === "write"), required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy });
     if (created.busy) return reply({ status: "WORKER_BUSY", job_id: created.job_id, monitor_url: monitorUrl(monitor, created.job_id), monitor_index_url: monitorIndexUrl(monitor) });
     const runnerDiagnostic = await fs.open(path.join(jobDir(created.job_id), "runner-stderr.log"), "a");
     const child = spawn(process.execPath, [path.join(root, "worker-runner.mjs"), created.job_id], {

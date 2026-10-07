@@ -47,6 +47,13 @@
 | Monitor local | `monitor_url` abre o detalhe; `monitor_index_url`, `local_monitor` ou `node monitor.mjs index` dão acesso ao inventário. Host `127.0.0.1`, porta primária `49767` e fallback `49768`, chave aleatória em `monitor.json` no destino. Não publique os links. Limites de heartbeat/espera e reconciliação de anomalias (60 s) estão no topo de `monitor.mjs`; carência de órfão (120 s) no topo de `watchdog.mjs`. A UI atualiza sem reload em 3 s no detalhe e 10 s no inventário enquanto visível. |
 | Indicadores do monitor | `monitor.mjs` amostra CPU do sistema e processos Ollama, RAM e GPU/VRAM NVIDIA; `monitor-page.mjs` exibe barras responsivas após os cards de estado. CPU/GPU usam percentual medido; RAM/VRAM usam capacidade observada. Ausência de medição deixa a barra neutra. A coleta de Ollama não separa consumo por job. |
 | Alvos obrigatórios de escrita | `required_change_paths` em `local_analyze`, lista de caminhos relativos; cada alvo deve mudar durante o job. Use com `expect_changes=true`. |
+| Evidência obrigatória | `required_read_paths`: até 32 arquivos relativos a ler; `required_command_ids`: até 32 IDs autorizados que devem concluir com código zero. Padrão listas vazias para compatibilidade; supervisor deve preenchê-las conforme o aceite. |
+| Sequência determinística | `command_sequence`: até 32 IDs distintos de `authorized_commands`, na ordem de execução, sem inferência nem retry automático. Não combinar com `required_read_paths`: a sequência valida por comandos. |
+| Repetição de comando | `authorized_commands[].repeatable`, padrão `false`; `true` somente para repetição segura necessária. Argumentos multiline são suportados como argv literal. |
+| Efeito do comando | `authorized_commands[].mode`: `write` por padrão; `read-only` permite comando exato em job somente leitura, após verificação dos efeitos pelo supervisor. Não é sandbox do executável. |
+| Rede por comando | `authorized_commands[].network`: `false` por padrão; `true` declara autorização restrita aos destinos/efeitos do argv/script revisado (por exemplo CLI GitHub já instalado). Não é firewall nem acesso livre; o supervisor valida a capacidade e a autorização. |
+| Commit da unidade | `commit_policy`: `worker` (padrão) ou `supervisor` (commit imediato após revisão, preservando propriedade de alterações herdadas). |
+| Evidência persistida | `jobs/<id>/evidence.jsonl`, máximo técnico de 16 MiB; resultados de ferramentas, argumentos e hashes, privado do job, nunca conteúdo público do monitor. |
 | Descoberta de aplicativos | `PATH` e `LOCALAPPDATA`, fornecidos pelo Windows; redescobertos no momento da entrega. |
 | Origem do App Installer | URL oficial `https://aka.ms/getwinget`, família Windows `Microsoft.DesktopAppInstaller_8wekyb3d8bbwe` e produto Microsoft Store `9NBLGGH4NNS1`; definidos uma vez no topo do instalador. |
 | Pacotes WinGet | `Git.Git`, `OpenJS.NodeJS.LTS`, `Ollama.Ollama` e produto Desktop `9PLM9XGG6VKS`; definidos uma vez no topo do instalador. |
@@ -61,18 +68,18 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `d72f65179178560dd8551ec4b10d468ee6cce85348b102b69405a33378497f7d` |
+| `src/localworker/AGENTS.md` | `3d3caf2a969ee6c23bc12899de49f79f855ee397539000768b9bcd845ded9e04` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `999baec671df3bdbec83f2e326d96ca2ff8122ded85fd0fb33ef6a57bedfd4e5` |
+| `src/localworker/server.mjs` | `aff0057e112b760972470760947b3875c04fbf591642e06c075c58b9865fec90` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `0e786240c245d3bdeed9406ed829df94a0489803e9e702bfc47d7f2d9b6df228` |
-| `src/localworker/worker-runner.mjs` | `15dc255e4b93ffd99b37f9ed767db68ce3d275a4b36811f61f8cbb60e0e96bf5` |
+| `src/localworker/worker-core.mjs` | `7aaf7f3155b3cdb94cd53e84dd6f588db5dcf13790e956d3008c7cab6f7d39ad` |
+| `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
 | `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
@@ -85,5 +92,5 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
-| `src/agents.supervisor.md` | `19f7fe4bbbf224dc1380e19b5209fe46f0fb9aad3235b48414cfe2a40d603f37` |
+| `src/agents.supervisor.md` | `e23b7c7c9c1d7ef2fe5af2452469e3bb8a732d9013f23e4787ce862f623fde58` |
 <!-- LOCALWORKER_GENERATED_END -->

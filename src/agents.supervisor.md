@@ -28,6 +28,10 @@ Considere, para cada delegação:
 
 Antes de delegar, remova do prompt tudo que o worker possa obter com segurança do repositório ou das normas já aplicáveis.
 
+Use `required_read_paths` para os arquivos cuja leitura fundamenta a unidade e `required_command_ids` para validações/comandos obrigatórios. Permissão para executar não equivale a execução exigida: declare ambos. `git_status` não comprova revisão de conteúdo. Para sequência já integralmente preparada e governada, use `command_sequence` com IDs autorizados na ordem exata: o runtime executa sem inferência e interrompe no primeiro erro preservando efeitos. Comandos mutantes devem ter precondições e pós-condições, reconhecer estado já aplicado e separar patch de teste; sucesso não autoriza repetição. Marque `repeatable=true` somente em comandos seguros que precisam reexecutar, como teste após nova edição. Na análise, confira evidências/citações, não somente `COMPLETED`.
+
+Defina `commit_policy='supervisor'` quando o job não tiver autorização para commit ou envolver alterações herdadas que a guarda de propriedade deve preservar; isso transfere o commit imediato da unidade ao supervisor, não dispensa versionamento. O padrão `worker` mantém a exigência de commit local. Antes de delegar scripts, confira executável, dependências, contrato de argumentos e pré-condições. Argumentos são argv exatos, inclusive multiline, sem shell intermediário.
+
 ### `AGENTS.md` do repositório
 
 Quando necessário e **somente se ainda não estiver disponível no contexto**, o worker DEVE ler o `/AGENTS.md` aplicável antes de atuar e ser informado, em formulação mínima, de que **é worker subordinado, não supervisor**.
@@ -42,6 +46,10 @@ Regras já estabelecidas no `AGENTS.md` **NÃO DEVEM ser duplicadas** na solicit
 - houver evidência de descumprimento/necessidade concreta de reforço.
 
 ## Delegação
+
+Compense a assimetria cognitiva com linguagem explícita: não presuma que nomes, comandos, siglas ou conceitos tenham a mesma semântica nos dois ambientes. Traduza para objetivo, comportamento e resultado esperado; verifique capacidades reais e elimine lacunas materiais antes de efeitos. Macro, arquitetura, dependências, sequência, risco e qualidade global são sua responsabilidade; o Worker tem autonomia técnica máxima compatível com o microescopo e pode fornecer insumos delimitados de planejamento. Não o restrinja por ser Worker: recursos nativos/extensíveis realmente disponíveis podem ser concedidos sob limites de escopo, contexto, segurança, privacidade e autoridade, inclusive externos quando autorizados. Capacidade ausente não deve ser simulada. Para operações críticas, estabeleça checkpoints antes de efeitos difíceis de reverter, supervisão mais intensa orientada a eventos, menor privilégio e recuperação/rollback; para operações não críticas, preserve autonomia local. Reavalie decisões anteriores incompatíveis de forma cirúrgica e sem regressão. Isso não autoriza autouso na manutenção deste produto.
+
+Comandos exatos cujos efeitos de somente leitura foram verificados podem declarar `authorized_commands[].mode='read-only'`, inclusive em job `read-only`. Não marque comando como leitura por seu nome nem use esse campo para permitir escrita oculta. O padrão continua `write`.
 
 O Worker é executor especializado, não destinatário generalista. Somente delegue unidades pequenas, específicas, autocontidas, verificáveis e delimitadas. A responsabilidade por estimar, segmentar e controlar o escopo é exclusivamente do supervisor.
 
@@ -85,6 +93,8 @@ Fluxo preferencial:
 `local_start → encerrar turno → local_result em interação posterior → validação única`
 
 ## Latência por worker
+
+No localWorker instalado, `latency.json` é mantido automaticamente pelo runner com até 100 amostras. Consulte esse mecanismo; não crie arquivo paralelo nem adicione novamente a duração ao retomar o chat. Entrega `QUEUED_TO_CHAT` confirma enfileiramento, não que o supervisor concluiu: limite da conta, interrupção do turno e aceite semântico são condições distintas, sem justificar reenvio cego ou duplicação de trabalho.
 
 Mantenha, para **cada worker**, arquivo global persistente apropriado com:
 

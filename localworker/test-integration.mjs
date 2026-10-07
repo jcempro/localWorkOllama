@@ -118,7 +118,7 @@ try {
   const unsafeMode = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: repo, task: "Não executar", mode: "read-only", thread_id: thread,
     authorized_commands: [{ id: "git-status", description: "Status", program: process.execPath, args: ["--version"] }] } });
   assert.match(unsafeMode.result.content[0].text, /WORKER_REQUEST_REJECTED/);
-  assert.match(unsafeMode.result.content[0].text, /authorized_commands exige mode=write/);
+  assert.match(unsafeMode.result.content[0].text, /comandos explicitamente read-only/);
   const unsafePath = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: repo, task: "Não executar", mode: "write", expect_changes: true,
     required_change_paths: ["../fora-do-repo.txt"], thread_id: thread } });
   assert.match(unsafePath.result.content[0].text, /WORKER_REQUEST_REJECTED/);
@@ -202,6 +202,10 @@ try {
     git.on("exit", code => code === 0 ? resolve(value) : reject(new Error("git status final falhou")));
   });
   assert.equal(after, baseline);
+  for (const testId of [id, failedId, orphanId]) {
+    const removed = await rpc("tools/call", { name: "local_delete", arguments: { job_id: testId } });
+    assert.equal(JSON.parse(removed.result.content[0].text).confirmed, true);
+  }
   console.log(JSON.stringify({ job_id: id, status: "COMPLETED", delivery: "QUEUED_TO_CHAT", failed_job: failedId, failure: "WORKER_INFRA_ERROR", queue_calls: queued.length, ollama_calls: requests, git_preserved: true }));
 } finally {
   server.kill();

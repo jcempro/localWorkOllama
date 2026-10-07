@@ -332,7 +332,7 @@ async function runAuthorizedCommand(repo, commandId, authorizedCommands) {
       cwd: repo, windowsHide: true, timeout: command.timeout_ms ?? 300_000,
       maxBuffer: 4 * 1024 * 1024, env: { ...process.env, CI: "1" },
     });
-    return compact(`stdout:\n${stdout}\nstderr:\n${stderr}`);
+    return compact(`Comando ${commandId}; exit_code=0\nstdout:\n${stdout}\nstderr:\n${stderr}`);
   } catch (error) {
     const stdout = String(error?.stdout ?? "");
     const stderr = String(error?.stderr ?? "");
@@ -402,6 +402,22 @@ export async function initiallyDirtyPaths(repo) {
     if (/[RC]/.test(entry.slice(0, 2)) && values[index + 1]) dirty.add(values[++index].toLowerCase());
   }
   return dirty;
+}
+
+export async function committedUnitSince(repo, beforeHead, context) {
+  const git = async args => (await execFileAsync("git", ["-C", repo, ...args], {windowsHide:true,timeout:15000,maxBuffer:2*1024*1024})).stdout.trim();
+  const afterHead = await git(["rev-parse", "HEAD"]);
+  if (afterHead === beforeHead) return [];
+  await git(["merge-base", "--is-ancestor", beforeHead, afterHead]);
+  const commits = (await git(["rev-list", "--reverse", `${beforeHead}..${afterHead}`])).split(/\s+/);
+  for (const sha of commits) {
+    const files = (await git(["diff-tree", "--no-commit-id", "--name-only", "-r", "-z", sha])).split("\0").filter(Boolean);
+    if (!files.length || files.some(file => context.initiallyDirty.has(file.toLowerCase()) ||
+        !context.required.has(file.toLowerCase()) && !context.touched.has(file.toLowerCase()))) {
+      throw new ToolRejected("Commit durante comando contém arquivos sem propriedade comprovada desta unidade; revisão do supervisor necessária.");
+    }
+  }
+  return commits;
 }
 
 export async function gitCommitUnit(repo, message, paths, context) {
@@ -681,9 +697,12 @@ async function readTextFile(
 
   const lines = text.split(/\r?\n/);
 
-  const start = Math.max(1, Number(startLine ?? 1));
+  const start = Number(startLine ?? 1);
 
   const requestedEnd = Number(endLine ?? start + 299);
+  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(requestedEnd) || start < 1 || requestedEnd < start || start > lines.length) {
+    throw new ToolRejected(`Intervalo de leitura inválido; arquivo tem ${lines.length} linhas. Use inteiros positivos dentro do arquivo.`);
+  }
 
   const end = Math.min(
     lines.length,
@@ -1132,7 +1151,7 @@ function parseArguments(value) {
 async function executeTool(repo, call, deliveredInstructions, mode, authorizedCommands, commitContext) {
   const name = call?.function?.name;
   const args = parseArguments(call?.function?.arguments);
-  if (mode === "read-only" && !READ_ONLY_TOOLS.has(name)) {
+  if (mode === "read-only" && !READ_ONLY_TOOLS.has(name) && !(name === "run_authorized_command" && authorizedCommands.some(c => c.id === args.id && c.mode === "read-only"))) {
     throw new ToolRejected(`Ferramenta recusada em modo read-only: ${name}`);
   }
 
@@ -1215,6 +1234,21 @@ function errorChain(error) {
 function safeToolDiagnostic(error) {
   return String(error?.message ?? error).replace(/\b(token|secret|password|authorization)\s*[:=]\s*\S+/gi, "$1=[redacted]")
     .replace(/\s+/g, " ").slice(0, 360);
+}
+
+async function missingPathHint(repo, relative) {
+  // Sugere somente entradas reais dentro da raiz, sem corrigir/abrir alvo por aproximação.
+  let target;
+  try { target = await safeRepoPath(repo, relative); } catch { return ""; }
+  for (let parent = path.dirname(target); ; parent = path.dirname(parent)) {
+    try {
+      await safeRepoPath(repo, path.relative(repo, parent));
+      const entries = await fs.readdir(parent, {withFileTypes:true});
+      const names = entries.filter(e => !e.isSymbolicLink()).slice(0,40).map(e=>e.name);
+      return ` Diretório existente ${path.relative(repo,parent)||"."}: ${JSON.stringify(names)}. Copie nomes literalmente; não altere separadores/pontos nem presuma arquivo ausente como existente.`;
+    } catch (error) { if(error.code!=="ENOENT"&&error.code!=="ENOTDIR") return ""; }
+    if (parent === repo || path.dirname(parent) === parent) return "";
+  }
 }
 
 function ollamaPostJson(body, signal, route = "api/chat", method = "POST") {
@@ -1364,12 +1398,12 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
 
 export class WorkerIncompleteError extends Error {}
 
-export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false, requiredChangePaths = [], requireCommits = false, subagentDepth = 0, stepLimit = MAX_STEPS) {
+export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false, requiredChangePaths = [], requireCommits = false, subagentDepth = 0, stepLimit = MAX_STEPS, contract = {}) {
   if (![0, 1].includes(subagentDepth) || !Number.isSafeInteger(stepLimit) || stepLimit < 1 || stepLimit > MAX_STEPS) {
     throw new Error("Limites de subagente inválidos");
   }
-  if (!Array.isArray(authorizedCommands) || (mode !== "write" && authorizedCommands.length)) {
-    throw new Error("Comandos autorizados exigem modo write e lista válida");
+  if (!Array.isArray(authorizedCommands) || (mode !== "write" && authorizedCommands.some(c => c?.mode !== "read-only"))) {
+    throw new Error("Comandos autorizados exigem lista válida e efeitos compatíveis com o modo do job");
   }
   if (!Array.isArray(requiredChangePaths) || (mode !== "write" && requiredChangePaths.length) ||
       requiredChangePaths.some(value => typeof value !== "string" || !value || path.isAbsolute(value)) ||
@@ -1380,12 +1414,20 @@ export async function runLocalAnalysis(repoPath, task, mode = "read-only", onPro
   for (const command of authorizedCommands) {
     if (!/^[a-z0-9][a-z0-9_-]{0,63}$/i.test(command?.id ?? "") || commandIds.has(command.id) ||
         typeof command.program !== "string" || !path.isAbsolute(command.program) || /[\r\n]/.test(command.program) ||
-        !Array.isArray(command.args) || command.args.some(arg => typeof arg !== "string" || /[\r\n]/.test(arg))) {
+        !Array.isArray(command.args) || command.args.some(arg => typeof arg !== "string")) {
       throw new Error("Especificação de comando autorizado inválida ou duplicada");
     }
     commandIds.add(command.id);
   }
   const repo = path.resolve(repoPath);
+  const requiredReads = contract.required_read_paths ?? [];
+  const requiredCommands = contract.required_command_ids ?? [];
+  const commandSequence = contract.command_sequence ?? [];
+  for (const values of [requiredReads, requiredCommands, commandSequence]) {
+    if (!Array.isArray(values) || values.length > 32 || values.some(v => typeof v !== "string" || !v.trim()) || new Set(values).size !== values.length) throw new Error("Contrato de execução inválido");
+  }
+  if ([...requiredCommands, ...commandSequence].some(id => !commandIds.has(id)) || (mode !== "write" && authorizedCommands.some(c => c.mode !== "read-only"))) throw new Error("Contrato referencia comando não autorizado");
+  for (const relative of requiredReads) await safeRepoPath(repo, relative);
 
   const stat = await fs.stat(repo);
 
@@ -1430,7 +1472,7 @@ export async function runLocalAnalysis(repoPath, task, mode = "read-only", onPro
   const system = `
 Você é o worker local Qwen subordinado a um supervisor OpenAI mais capaz.
 
-Sua função é absorver exploração e análise volumosa localmente, sem transferir trabalho desnecessário ao supervisor.
+Sua função é executar a unidade delimitada pelo supervisor, com autonomia técnica local e evidências, sem assumir planejamento global nem inventar capacidades.
 
 REGRAS GLOBAIS DO WORKER:
 ${workerRules || "(nenhum AGENTS.md global encontrado)"}
@@ -1444,10 +1486,11 @@ ${localAgent || "(nenhum agents.local.md na raiz)"}
 REGRAS OPERACIONAIS ADICIONAIS:
 
 - Responda integralmente em português do Brasil.
-- Modo da tarefa: ${mode}. Em read-only, nenhuma ferramenta de escrita ou comando é disponibilizada.
+- Modo da tarefa: ${mode}. Em read-only, escrita é proibida; somente comandos exatos explicitamente autorizados como read-only são disponibilizados.
 - Alterações obrigatórias neste job: ${expectChanges ? "sim; implemente antes da resposta final" : "não especificado"}.
 - Arquivos que precisam de mudança líquida neste job: ${requiredChangePaths.length ? requiredChangePaths.join(", ") : "nenhum alvo declarado"}.
-- Comandos exatos autorizados para este job: ${authorizedCommands.length ? JSON.stringify(authorizedCommands.map(({ id, description }) => ({ id, description }))) : "nenhum"}. Use somente run_authorized_command com um ID listado; não invente argumentos.
+- Leituras obrigatórias comprováveis: ${JSON.stringify(requiredReads)}. Comandos obrigatórios: ${JSON.stringify(requiredCommands)}.
+- Comandos exatos autorizados para este job: ${authorizedCommands.length ? JSON.stringify(authorizedCommands.map(({ id, description, mode, network }) => ({ id, description, mode: mode ?? "write", network: Boolean(network) }))) : "nenhum"}. Use somente run_authorized_command com um ID listado; não invente argumentos.
 - Alterações só são permitidas quando a tarefa recebida as autorizar; preserve arquivos pessoais e dados existentes.
 - Use obrigatoriamente as ferramentas fornecidas para estabelecer fatos sobre o repositório.
 - Não confie em conhecimento prévio, nomes de projeto ou suposições.
@@ -1461,10 +1504,10 @@ REGRAS OPERACIONAIS ADICIONAIS:
 - Subagente local disponível apenas para investigação isolada em modo read-only, sem nova delegação. Use somente quando houver ganho líquido verificável.
 - Instruções mais específicas de subdiretório prevalecem sobre as mais gerais dentro de seu escopo.
 - Não afirme que teste/comando foi executado se não foi.
-- Não execute rede.
+- Rede somente por comando exato autorizado que declare network=true e destino/efeito aprovados pelo supervisor; não improvise acesso externo.
 - Não peça ao supervisor conteúdo que pode ser obtido pelas ferramentas.
 - NEEDS_SUPERVISOR serve apenas para ambiguidade, conflito ou decisão intelectual/material que exija autoridade do supervisor.
-- Falha de ferramenta, filesystem, Ollama ou ambiente é WORKER_INFRA_ERROR, nunca NEEDS_SUPERVISOR.
+- Erro de argumento/path/estratégia é TOOL_ERROR/TOOL_REJECTED recuperável dentro da alçada. Falha real de processo, filesystem, Ollama ou ambiente é WORKER_INFRA_ERROR. Acesso adicional/ambiguidade material exige NEEDS_SUPERVISOR com pedido exato, sem ampliar autoridade.
 - Seja econômico na leitura: comece por árvore, manifestos, configurações e buscas direcionadas.
 - Ao finalizar, seja conciso e forneça caminhos/linhas quando disponíveis.
 
@@ -1518,10 +1561,14 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
   let forcedImplementation = false;
   let forcedValidation = false;
   const failedValidations = new Set();
+  const completedReads = new Set(), completedCommands = new Set(), commandReceipts = [];
+  const successfulCommandCache = new Map();
+  let contractReminder = false;
   const ownedPath = value => path.relative(repo, path.resolve(repo, value)).replaceAll(path.sep, "/").toLowerCase();
   const commitContext = { failedValidations, initiallyDirty: mode === "write" ? await initiallyDirtyPaths(repo) : new Set(),
     touched: new Set(), required: new Set(requiredChangePaths.map(ownedPath)), commits: 0 };
   const progressGuard = new ProgressGuardP6R();
+  let evidenceBytes = 0;
   const requiredHashes = new Map();
   for (const requiredPath of requiredChangePaths) requiredHashes.set(requiredPath, await fileFingerprint(repo, requiredPath));
   const startingGitFingerprint = expectChanges ? await gitChangeFingerprint(repo) : null;
@@ -1551,7 +1598,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
     }
 
     let availableTools = mode === "read-only"
-      ? TOOL_DEFINITIONS.filter(tool => READ_ONLY_TOOLS.has(tool.function.name))
+      ? TOOL_DEFINITIONS.filter(tool => READ_ONLY_TOOLS.has(tool.function.name) || tool.function.name === "run_authorized_command" && authorizedCommands.some(c => c.mode === "read-only"))
       : TOOL_DEFINITIONS.filter(tool => tool.function.name !== "run_authorized_command" || authorizedCommands.length);
     if (subagentDepth > 0) availableTools = availableTools.filter(tool => tool.function.name !== "delegate_readonly_subagent");
     if (expectChanges && successfulMutations === 0 && step + 1 >= WRITE_FOCUS_STEP) {
@@ -1567,7 +1614,13 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
       availableTools.push(TOOL_DEFINITIONS.find(tool => tool.function.name === "context_recall"));
     }
     let response;
-    for (let recovery = 0; ; recovery++) {
+    const nextCommand = commandSequence.find(id => !completedCommands.has(id));
+    if (commandSequence.length) {
+      response = { message: nextCommand
+        ? { role: "assistant", content: "", tool_calls: [{function:{name:"run_authorized_command",arguments:{id:nextCommand}}}] }
+        : { role: "assistant", content: `RESULTADO DETERMINÍSTICO\n${commandReceipts.join("\n\n")}` } };
+    }
+    for (let recovery = 0; !response; recovery++) {
       try {
         response = await ollamaChat(messages, availableTools, remaining, onProgress, gpuPolicy, contextManager.contextTokens);
         break;
@@ -1617,6 +1670,16 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         );
       }
 
+      const missingReads = requiredReads.filter(p => !completedReads.has(ownedPath(p)));
+      const missingCommands = requiredCommands.filter(id => !completedCommands.has(id));
+      if (missingReads.length || missingCommands.length) {
+        const reason = `CONTRACT_UNFULFILLED: leituras pendentes=${JSON.stringify(missingReads)}; comandos pendentes=${JSON.stringify(missingCommands)}`;
+        if (contractReminder || commandSequence.length) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: ${reason}`);
+        contractReminder = true;
+        messages.push(message, {role:"user",content:`Conclusão recusada: ${reason}. Execute somente o que falta; Git/metadados não substituem leitura de conteúdo.`});
+        await onProgress({phase:"completion_blocked", reason});
+        continue;
+      }
       const missingPaths = expectChanges ? await unchangedRequiredPaths() : [];
       const noNetGitChange = expectChanges && startingGitFingerprint &&
         await gitChangeFingerprint(repo) === startingGitFingerprint;
@@ -1653,7 +1716,10 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         }
       }
 
-      return compact(finalText, MAX_FINAL_CHARS);
+      await onProgress({phase:"completion_verified",reads:[...completedReads],commands:[...completedCommands],
+        mutations:successfulMutations,commits:commitContext.commits,commit_policy:requireCommits?"worker":"supervisor",
+        verification:"Evidência operacional; qualidade semântica sujeita ao aceite do supervisor."});
+      return compact(finalText, MAX_FINAL_CHARS) + `\n\nEXECUÇÃO COMPROVADA PELO RUNTIME\nLeituras: ${JSON.stringify([...completedReads])}\nComandos com exit_code=0: ${JSON.stringify([...completedCommands])}\nCommits verificados: ${commitContext.commits}. Qualidade semântica sujeita ao aceite do supervisor.`;
     }
 
     messages.push(message);
@@ -1678,7 +1744,12 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
       let actionError = null;
 
       try {
+        if (toolName === "run_authorized_command" && successfulCommandCache.has(args.id) && !authorizedCommands.find(c => c.id === args.id)?.repeatable) {
+          throw new ToolRejected(`Comando ${args.id} já executado com sucesso; recibo preservado. Não repita efeitos. Próximo passo: validação/commit/conclusão conforme contrato.`);
+        }
         if (blockedReason) throw new ToolRejected(blockedReason);
+        const beforeHead = toolName === "run_authorized_command" && requireCommits && expectChanges
+          ? (await execFileAsync("git", ["-C", repo, "rev-parse", "HEAD"], {windowsHide:true,timeout:5000})).stdout.trim() : null;
         const beforeCommand = toolName === "run_authorized_command" && expectChanges ? await gitChangeFingerprint(repo) : null;
         if (toolName === "context_recall") {
           result = await contextManager.recall(args.checkpoint_id, args.entry_index, args.char_offset ?? 0);
@@ -1691,8 +1762,19 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         } else {
           result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands, commitContext);
         }
+        if (beforeHead) {
+          const commits = await committedUnitSince(repo, beforeHead, commitContext);
+          commitContext.commits += commits.length;
+          if (commits.length) await onProgress({phase:"command_commits_verified",commits});
+        }
         if (toolName === "git_commit_unit") commitContext.commits++;
         if (validationId) failedValidations.delete(validationId);
+        if (toolName === "read_file") completedReads.add(ownedPath(args.path));
+        if (toolName === "run_authorized_command") {
+          successfulCommandCache.set(args.id, String(result));
+          completedCommands.add(args.id);
+          commandReceipts.push(String(result));
+        }
 
         toolExecutions++;
         const afterCommand = beforeCommand ? await gitChangeFingerprint(repo) : null;
@@ -1707,15 +1789,24 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         if (validationId && outcome === "error") failedValidations.add(validationId);
         diagnostic = error?.telemetry ?? safeToolDiagnostic(error);
         result =
-          `${error instanceof ToolRejected ? "TOOL_REJECTED" : "WORKER_INFRA_ERROR"} na ferramenta ` +
+          `${error instanceof ToolRejected ? "TOOL_REJECTED" : ["infrastructure", "transient"].includes(failureClassP6R(error)) ? "WORKER_INFRA_ERROR" : "TOOL_ERROR"} na ferramenta ` +
           `${call?.function?.name ?? "desconhecida"}: ` +
           `${String(error?.message ?? error)}` +
           (toolName === "run_command" && authorizedCommands.length
             ? ` Use run_authorized_command com ID autorizado: ${authorizedCommands.map(command => command.id).join(", ")}.`
             : "");
+        if (error?.code === "ENOENT" && typeof args.path === "string") result += await missingPathHint(repo,args.path);
         result += ` Classe: ${failureClassP6R(error, outcome === "rejected")}. Não repita sem mudança verificável; investigue a causa com ferramentas de leitura, corrija a pré-condição ou escolha alternativa autorizada. Sem capacidade suficiente, informe NEEDS_SUPERVISOR com o mecanismo/acesso exato.`;
       }
       const afterAction = await gitChangeFingerprint(repo);
+      if (contextDirectory) {
+        // Evidência operacional privada do job, nunca chain-of-thought nem payload do monitor.
+        const evidence = JSON.stringify({at:new Date().toISOString(),step:step+1,tool:toolName,args,
+          outcome,result:String(result),state_before:beforeAction,state_after:afterAction}) + "\n";
+        evidenceBytes += Buffer.byteLength(evidence);
+        if (evidenceBytes > 16 * 1024 * 1024) throw new WorkerIncompleteError("WORKER_INCOMPLETE: limite técnico de evidências atingido; preserve job e segmente a continuação.");
+        await fs.appendFile(path.join(contextDirectory, "evidence.jsonl"), evidence, {encoding:"utf8",mode:0o600});
+      }
       const assessment = progressGuard.record(toolName, args, beforeAction, afterAction, result,
         actionError, outcome === "rejected", Boolean(blockedReason));
       if (blockedReason || assessment.stop) await onProgress({ phase: "strategy_blocked", step: step + 1,
@@ -1730,6 +1821,7 @@ Inspecione de fato o repositório com as ferramentas antes de responder.
         tool_name: call.function.name,
         content: compact(result),
       });
+      if (commandSequence.length && actionError) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: comando determinístico ${args.id} falhou; execução suspensa sem repetir efeitos. ${String(actionError.message)}`);
       if (assessment.stop) {
         throw new WorkerIncompleteError(`WORKER_INCOMPLETE: ausência de progresso verificável em quatro ações; última estratégia ${toolName}, classe ${assessment.kind}. ${diagnostic ?? "Evidência já obtida repetida"}. Sequência registrada em strategy_blocked; requer alternativa legítima ou autorização específica do supervisor.`);
       }

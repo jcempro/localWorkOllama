@@ -8,6 +8,10 @@ O runtime instalado inclui `progress-guard.mjs`: repetições determinísticas s
 
 ## Objetivo e percurso
 
+O Worker pode usar CLIs, scripts e integrações realmente disponíveis, com comandos exatos autorizados e efeitos proporcionais ao risco. Para leitura, declare `authorized_commands[].mode='read-only'`; rede exige autorização de destinos/efeitos e `network=true`. Esses campos não são sandbox nem firewall do programa: cabe ao supervisor verificar o script/argv. `latency.json` é atualizado pelo runner, sem contagem manual duplicada. `QUEUED_TO_CHAT` significa mensagem enfileirada; um turno interrompido ou bloqueado pela cota do supervisor permanece pendente mesmo com entrega correta.
+
+Para delegar com aceite verificável, informe `required_read_paths` (arquivos relativos de evidência) e `required_command_ids` (IDs cuja execução deve passar). Para uma sequência totalmente preparada, use `command_sequence: ["preparar", "validar"]`, com ambos os comandos em `authorized_commands`: não há inferência nesse fluxo, e erro interrompe a sequência sem retry de mutação. Os nomes são exemplos fictícios. Autorize apenas comandos que respeitem a governança do alvo; confira dependências antes de enviar. `repeatable` é `false` por padrão; use `true` somente para reexecução segura necessária, como testes após edição. `commit_policy` é `worker` por padrão; `supervisor` significa que o supervisor fará o commit imediato após revisão, inclusive quando houver alterações herdadas. Não significa dispensar commit. O resultado contém recibos e cada job guarda `evidence.jsonl` privado (até 16 MiB) para auditoria.
+
 Este guia reproduz a instalação do `localWorker` em um Windows 11 2025H2 ou posterior **limpo**. O Worker usa Ollama para tarefas extensas em um repositório, persiste cada job e devolve o resultado ao **mesmo chat** do Codex Desktop. O supervisor decide e revisa; o usuário continua escolhendo o GPT e seu esforço de raciocínio normalmente.
 
 Ao receber uma FT ampla, o supervisor identifica as menores unidades funcionais e pode delegar ao Worker também levantamentos ou partes do planejamento. Cada job tem objetivo e aceite delimitados; a conclusão oferece um checkpoint para conferir direção e qualidade antes do próximo. Essa supervisão por eventos evita tanto processamento pago contínuo quanto horas de execução em uma direção incorreta. O contrato permanente está em `RCF.md`, seção “Supervisão responsável e segmentada”.
@@ -227,6 +231,10 @@ Considere, para cada delegação:
 
 Antes de delegar, remova do prompt tudo que o worker possa obter com segurança do repositório ou das normas já aplicáveis.
 
+Use `required_read_paths` para os arquivos cuja leitura fundamenta a unidade e `required_command_ids` para validações/comandos obrigatórios. Permissão para executar não equivale a execução exigida: declare ambos. `git_status` não comprova revisão de conteúdo. Para sequência já integralmente preparada e governada, use `command_sequence` com IDs autorizados na ordem exata: o runtime executa sem inferência e interrompe no primeiro erro preservando efeitos. Comandos mutantes devem ter precondições e pós-condições, reconhecer estado já aplicado e separar patch de teste; sucesso não autoriza repetição. Marque `repeatable=true` somente em comandos seguros que precisam reexecutar, como teste após nova edição. Na análise, confira evidências/citações, não somente `COMPLETED`.
+
+Defina `commit_policy='supervisor'` quando o job não tiver autorização para commit ou envolver alterações herdadas que a guarda de propriedade deve preservar; isso transfere o commit imediato da unidade ao supervisor, não dispensa versionamento. O padrão `worker` mantém a exigência de commit local. Antes de delegar scripts, confira executável, dependências, contrato de argumentos e pré-condições. Argumentos são argv exatos, inclusive multiline, sem shell intermediário.
+
 ### `AGENTS.md` do repositório
 
 Quando necessário e **somente se ainda não estiver disponível no contexto**, o worker DEVE ler o `/AGENTS.md` aplicável antes de atuar e ser informado, em formulação mínima, de que **é worker subordinado, não supervisor**.
@@ -241,6 +249,10 @@ Regras já estabelecidas no `AGENTS.md` **NÃO DEVEM ser duplicadas** na solicit
 - houver evidência de descumprimento/necessidade concreta de reforço.
 
 ## Delegação
+
+Compense a assimetria cognitiva com linguagem explícita: não presuma que nomes, comandos, siglas ou conceitos tenham a mesma semântica nos dois ambientes. Traduza para objetivo, comportamento e resultado esperado; verifique capacidades reais e elimine lacunas materiais antes de efeitos. Macro, arquitetura, dependências, sequência, risco e qualidade global são sua responsabilidade; o Worker tem autonomia técnica máxima compatível com o microescopo e pode fornecer insumos delimitados de planejamento. Não o restrinja por ser Worker: recursos nativos/extensíveis realmente disponíveis podem ser concedidos sob limites de escopo, contexto, segurança, privacidade e autoridade, inclusive externos quando autorizados. Capacidade ausente não deve ser simulada. Para operações críticas, estabeleça checkpoints antes de efeitos difíceis de reverter, supervisão mais intensa orientada a eventos, menor privilégio e recuperação/rollback; para operações não críticas, preserve autonomia local. Reavalie decisões anteriores incompatíveis de forma cirúrgica e sem regressão. Isso não autoriza autouso na manutenção deste produto.
+
+Comandos exatos cujos efeitos de somente leitura foram verificados podem declarar `authorized_commands[].mode='read-only'`, inclusive em job `read-only`. Não marque comando como leitura por seu nome nem use esse campo para permitir escrita oculta. O padrão continua `write`.
 
 O Worker é executor especializado, não destinatário generalista. Somente delegue unidades pequenas, específicas, autocontidas, verificáveis e delimitadas. A responsabilidade por estimar, segmentar e controlar o escopo é exclusivamente do supervisor.
 
@@ -284,6 +296,8 @@ Fluxo preferencial:
 `local_start → encerrar turno → local_result em interação posterior → validação única`
 
 ## Latência por worker
+
+No localWorker instalado, `latency.json` é mantido automaticamente pelo runner com até 100 amostras. Consulte esse mecanismo; não crie arquivo paralelo nem adicione novamente a duração ao retomar o chat. Entrega `QUEUED_TO_CHAT` confirma enfileiramento, não que o supervisor concluiu: limite da conta, interrupção do turno e aceite semântico são condições distintas, sem justificar reenvio cego ou duplicação de trabalho.
 
 Mantenha, para **cada worker**, arquivo global persistente apropriado com:
 
@@ -410,6 +424,10 @@ Você é executor especializado de uma unidade pequena, autocontida e verificáv
 
 ## Autoridade e escopo
 
+Nomes/comandos/conceitos do supervisor não garantem equivalência no seu runtime. Interprete objetivo, comportamento, entrada e resultado esperado; verifique capacidade real e peça esclarecimento somente quando a lacuna alterar escopo, segurança ou resultado. Não invente equivalência de ferramentas. Você tem autonomia para resolver detalhes e problemas técnicos dentro da unidade: menor capacidade cognitiva não reduz capacidades operacionais autorizadas. Macro, integração e aceite global permanecem com o supervisor; sua colaboração no planejamento é insumo delimitado. Operação crítica requer checkpoint prévio, privilégios proporcionais, validação e recuperação antes de efeito difícil de reverter. Recursos nativos/extensões comprovados podem ser usados por comandos exatos autorizados, inclusive leitura em `read-only`; não simule capacidades ausentes.
+
+`required_read_paths` e `required_command_ids` definem evidências mínimas obrigatórias, não provam sozinhos a qualidade semântica. Cite somente conteúdo efetivamente obtido. Não transforme a execução de um comando em conclusões além da saída literal. Comando já bem-sucedido não deve repetir efeitos; use o recibo preservado. Nova execução segura deve estar autorizada com `repeatable=true`. `commit_policy=supervisor` reserva o commit imediato ao supervisor; não execute commit contrário à instrução da unidade.
+
 1. Cumpra integralmente estas regras e a tarefa do supervisor.
 2. Antes de analisar/alterar repositório, localize e leia todo `AGENTS.md` aplicável aos caminhos afetados, salvo conteúdo já disponível no contexto.
 3. Regras aplicáveis do repositório são obrigatórias, inclusive arquitetura, modus operandi, práticas, restrições, proibições, estratégias, compatibilidade, testes e critérios de implementação; descubra-as diretamente, sem depender de retransmissão. Consulte também o `agents.local.md` da raiz quando existir.
@@ -494,18 +512,18 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `d72f65179178560dd8551ec4b10d468ee6cce85348b102b69405a33378497f7d` |
+| `src/localworker/AGENTS.md` | `3d3caf2a969ee6c23bc12899de49f79f855ee397539000768b9bcd845ded9e04` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `999baec671df3bdbec83f2e326d96ca2ff8122ded85fd0fb33ef6a57bedfd4e5` |
+| `src/localworker/server.mjs` | `aff0057e112b760972470760947b3875c04fbf591642e06c075c58b9865fec90` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `0e786240c245d3bdeed9406ed829df94a0489803e9e702bfc47d7f2d9b6df228` |
-| `src/localworker/worker-runner.mjs` | `15dc255e4b93ffd99b37f9ed767db68ce3d275a4b36811f61f8cbb60e0e96bf5` |
+| `src/localworker/worker-core.mjs` | `7aaf7f3155b3cdb94cd53e84dd6f588db5dcf13790e956d3008c7cab6f7d39ad` |
+| `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
 | `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
@@ -518,7 +536,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
-| `src/agents.supervisor.md` | `19f7fe4bbbf224dc1380e19b5209fe46f0fb9aad3235b48414cfe2a40d603f37` |
+| `src/agents.supervisor.md` | `e23b7c7c9c1d7ef2fe5af2452469e3bb8a732d9013f23e4787ce862f623fde58` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

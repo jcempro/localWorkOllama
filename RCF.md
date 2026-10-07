@@ -6,6 +6,14 @@ O localWorker executa tarefas delegáveis em inferência Ollama local, com jobs 
 
 ## Supervisão responsável e segmentada
 
+- Comunicação supervisor↔Worker exige equivalência de significado comprovada: traduzir nomes/comandos/abstrações para objetivo, comportamento e resultado, sem presumir compartilhamento de ferramentas ou semântica. Macro, decomposição, risco, direção, integração e qualidade global são responsabilidade do supervisor; microimplementação, investigação delimitada e alternativas técnicas são autonomia do Worker, que pode contribuir com insumos para planejamento sem assumir engenharia global. Menor capacidade cognitiva exige contexto/aceite explícitos, não limitação operacional arbitrária.
+- Recursos nativos ou extensíveis já disponíveis podem ser usados com capacidades e efeitos comprovados, inclusive fora do repositório quando a autorização abranger esse objetivo, preservando fronteiras, SO, privacidade e dados. Não há obrigação de inventar ferramentas ausentes. Operações críticas seguem supervisão proporcionalmente mais intensa, checkpoints prévios ao dano, menor privilégio, validação e rollback quando aplicável; tarefas não críticas mantêm autonomia técnica no microescopo. Acompanhamento ocorre nos checkpoints/eventos pertinentes ao risco, sem polling pago por mera demora. Revisões retroativas corrigem premissas inadequadas sem remover comportamentos válidos.
+- Comando pré-aprovado pode declarar `mode=read-only` e operar em job somente leitura quando o supervisor tiver verificado seus efeitos. O runtime conserva argv exatos sem shell e não infere segurança pelo nome do programa. O padrão do comando é `write`; comandos sem garantia explícita de leitura continuam recusados em job read-only.
+
+- O contrato de aceite pode exigir `required_read_paths` e `required_command_ids`: sucesso em Git/metadados não substitui leitura de conteúdo e autorização não prova execução. Ausência de requisito observado bloqueia a conclusão com diagnóstico e uma oportunidade de correção. O supervisor deve preencher esses requisitos para as evidências conhecidas e revisar adequação semântica; leitura comprovada não valida automaticamente todas as afirmações do modelo.
+- `command_sequence` é execução determinística explícita de IDs já autorizados, em ordem, sem inferência. Não amplia permissões, executa uma vez cada comando e interrompe no primeiro erro sem reaplicar mutações. Comandos bem-sucedidos não repetem por padrão; `repeatable=true` permite repetição deliberada segura. O envio e o runner aceitam igualmente argumentos multiline passados por argv sem shell. `commit_policy=supervisor` transfere o commit imediato para revisão pelo supervisor quando este detém autoridade/propriedade; padrão `worker` mantém a exigência. Commits feitos por comando autorizado contam somente com ancestralidade e arquivos da unidade comprovados, nunca apenas mudança de HEAD.
+- `evidence.jsonl` guarda argumentos, resultados e hashes de estado por job, privadamente, sem raciocínio interno; limite técnico de 16 MiB produz checkpoint/diagnóstico, não perda silenciosa. O monitor não publica esse conteúdo. Caminho ausente pode receber nomes reais do ancestral interno mais próximo, sem substituição aproximada ou abertura automática de outro alvo.
+
 - O Worker é executor especializado de unidades pequenas, específicas, autocontidas e verificáveis. Antes de cada delegação, somente o supervisor responde pela estimativa de objetivo, arquivos/contexto, complexidade, dependências, volume de leitura/alteração e risco de expansão, incluindo normas, histórico, ferramentas e saída na margem da janela efetiva. Risco razoável de exceder aproximadamente 32K exige segmentação prévia; compactação não substitui delimitação.
 - Falha/ausência de retorno exige diagnóstico evidenciado de estágio e causas possíveis: instrução, path, contexto, escopo, recursos, timeout, processo, infraestrutura, comunicação, ferramenta, permissão e dependência. Não reiniciar significa não repetir cegamente condições, não proibir NOVO job materialmente corrigido. Preserve job anterior/resultados parciais; registre vínculo e correção; prossiga autonomamente dentro da autorização. Intervenção humana somente por decisão não autorizada, risco relevante, credencial/ação exclusiva ou ambiguidade irresolúvel. É proibido encerrar enquanto existir caminho técnico razoável autorizado ou repetir tentativas sem mudança/evidência.
 - Automação determinística comprovada tem preferência: supervisor executa diretamente operação trivial com custo líquido menor; execução potencialmente demorada, volumosa ou onerosa em contexto/acompanhamento deve ser explicitamente delegada quando compatível, com comando, parâmetros, sequência, retorno mínimo e aceite. Isso não autoriza autouso, novas permissões, polling pago nem repetição do trabalho delegado. Instruções instaladas e gatilho de conclusão devem preservar esse contrato.
@@ -96,18 +104,18 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/localworker/AGENTS.md` | `d72f65179178560dd8551ec4b10d468ee6cce85348b102b69405a33378497f7d` |
+| `src/localworker/AGENTS.md` | `3d3caf2a969ee6c23bc12899de49f79f855ee397539000768b9bcd845ded9e04` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `999baec671df3bdbec83f2e326d96ca2ff8122ded85fd0fb33ef6a57bedfd4e5` |
+| `src/localworker/server.mjs` | `aff0057e112b760972470760947b3875c04fbf591642e06c075c58b9865fec90` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
 | `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `0e786240c245d3bdeed9406ed829df94a0489803e9e702bfc47d7f2d9b6df228` |
-| `src/localworker/worker-runner.mjs` | `15dc255e4b93ffd99b37f9ed767db68ce3d275a4b36811f61f8cbb60e0e96bf5` |
+| `src/localworker/worker-core.mjs` | `7aaf7f3155b3cdb94cd53e84dd6f588db5dcf13790e956d3008c7cab6f7d39ad` |
+| `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
 | `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
 | `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
@@ -120,5 +128,5 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
-| `src/agents.supervisor.md` | `19f7fe4bbbf224dc1380e19b5209fe46f0fb9aad3235b48414cfe2a40d603f37` |
+| `src/agents.supervisor.md` | `e23b7c7c9c1d7ef2fe5af2452469e3bb8a732d9013f23e4787ce862f623fde58` |
 <!-- LOCALWORKER_GENERATED_END -->
