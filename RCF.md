@@ -73,6 +73,8 @@ O teto padrão de 40 ciclos por job é configurável e não limita o tempo total
 
 ## Inventário, telemetria, retenção e retomada
 
+- Retenção e exclusão incluem `context/` e seus checkpoints regulares, além de evidências/recibos/versionamento na raiz do job. Links, junctions e diretórios inesperados continuam recusados. A mesma validação de árvore atende ambas as operações; a compactação não pode tornar um job impossível de remover. Backups recuperáveis e dados externos permanecem protegidos pelas guardas existentes.
+
 - O monitor é serviço local idempotente e independente do runner. Sua disponibilidade, navegação, abertura, fechamento e atualização não governam a vida do job. O inventário abrange jobs ativos e terminais retidos, permite filtro por projeto Codex Desktop se essa identidade estiver comprovadamente disponível, senão por raiz Git, e ordena por estado ou criação, ascendente/descendente; o padrão é mais recente primeiro. O detalhe oferece link de volta ao inventário, status, duração, atividade derivada, entrega, timeline cronológica de eventos, erros e bloqueios, tokens de entrada/saída, contexto e custo quando fornecidos pelo runtime. Campo não medido é identificado como indisponível, jamais estimado como fato.
 - No detalhe, os indicadores de recursos ficam imediatamente após os cards de estado e antes da solicitação/diagnóstico. CPU e GPU mostram utilização percentual amostrada; RAM e VRAM mostram uso e capacidade medida, inclusive a parcela observada dos processos Ollama quando disponível. CPU Ollama deriva de delta do tempo acumulado entre amostras, não trata segundos acumulados como porcentagem. Valores indisponíveis mantêm barra neutra, sem total ou progresso inventado. Medições de sistema/Ollama podem refletir outros jobs e aplicativos; a UI explicita essa abrangência e atualiza com a telemetria do monitor.
 - A telemetria registra apenas eventos operacionais e resumos de raciocínio oficialmente expostos, se houver; nunca depende nem expõe chain-of-thought privado. UI e API atualizam dados sem recarregar a página, limitam volume de resposta, exigem token local e escapam texto não confiável. Preferência por padrões ou componentes open-source maduros é condicional a benefício líquido comprovado frente à solução nativa, sem dependência externa em tempo de execução, vazamento ou consumo material de recursos.
@@ -110,8 +112,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `aff0057e112b760972470760947b3875c04fbf591642e06c075c58b9865fec90` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `45654c33a7955d24fa38cc083c7691f01c1af48a6116a581ceb1108287fc4672` |
-| `src/localworker/job-control.mjs` | `cdd652655c67d09684bfdff38b5bb9e3876967f2da8efaed354f34f506494910` |
+| `src/localworker/job-store.mjs` | `8dffbae13282970446959cd32ffc8e5cff06273d41d4a008ba1feecb2044b1aa` |
+| `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `7aaf7f3155b3cdb94cd53e84dd6f588db5dcf13790e956d3008c7cab6f7d39ad` |

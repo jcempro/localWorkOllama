@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import path from "node:path";
-import { JOBS, ROOT, TERMINAL, alive, atomicJson, getState, jobDir, readJson, setState } from "./job-store.mjs";
+import { JOBS, ROOT, TERMINAL, alive, atomicJson, getState, jobDir, readJson, setState, safeJobBytesJ4R } from "./job-store.mjs";
 
 const execFileAsync = promisify(execFile);
 const LOCK_WAIT_MS_Q7B = 15_000;
@@ -120,11 +120,7 @@ export async function cancelJob(id) {
 }
 
 async function safeJobDirectory(dir) {
-  const stat = await fs.lstat(dir);
-  if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error("Job não é diretório regular.");
-  for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
-    if (!entry.isFile() || entry.isSymbolicLink()) throw new Error(`Entrada não regular no job: ${entry.name}`);
-  }
+  await safeJobBytesJ4R(dir);
 }
 
 export async function deleteJob(id) {

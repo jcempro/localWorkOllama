@@ -119,12 +119,16 @@ export async function listJobs() {
   catch (error) { if (error?.code === "ENOENT") return []; throw error; }
 }
 
-async function safeJobBytesJ4R(dir) {
+export async function safeJobBytesJ4R(dir, context = false) {
   const info = await fs.lstat(dir);
   if (!info.isDirectory() || info.isSymbolicLink()) throw new Error("job não é diretório regular");
   let bytes = 0;
   for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
-    if (!entry.isFile() || entry.isSymbolicLink()) throw new Error("job contém entrada não regular");
+    if (!context && entry.name === "context" && entry.isDirectory() && !entry.isSymbolicLink()) {
+      bytes += await safeJobBytesJ4R(path.join(dir, entry.name), true);
+      continue;
+    }
+    if (!entry.isFile() || entry.isSymbolicLink()) throw new Error("Entrada não regular no job");
     bytes += (await fs.stat(path.join(dir, entry.name))).size;
   }
   return bytes;

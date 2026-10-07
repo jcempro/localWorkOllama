@@ -25,6 +25,8 @@ try {
   }
   const queued = await add("QUEUED");
   const neighbor = await add("COMPLETED");
+  await fs.mkdir(path.join(store.jobDir(queued), "context"));
+  await fs.writeFile(path.join(store.jobDir(queued), "context", "c0001.json"), '{"entries":[]}');
   await store.atomicJson(path.join(fixture, "active.json"), { job_id: queued });
   const stopped = await cancelJob(queued);
   assert.deepEqual([stopped.status, stopped.confirmed], ["CANCELLED", true]);

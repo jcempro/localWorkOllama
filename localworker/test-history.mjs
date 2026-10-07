@@ -32,6 +32,8 @@ try {
     return id;
   }
   const expired = await add(100, "COMPLETED", "QUEUED_TO_CHAT");
+  await fs.mkdir(path.join(store.jobDir(expired), "context"));
+  await fs.writeFile(path.join(store.jobDir(expired), "context", "c0001.json"), '{"entries":[]}');
   const older = await add(2, "COMPLETED", "QUEUED_TO_CHAT");
   const newest = await add(1, "COMPLETED", "QUEUED_TO_CHAT");
   const active = await add(100, "RUNNING", "PENDING");
