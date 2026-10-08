@@ -2,7 +2,7 @@
 
 [Diagnóstico, causas e correções](audit-causes.md) · [Manifesto de evidências](audit-manifest.json)
 
-Captura: 2026-10-07T13:58:41.961Z. **146 jobs examinados**, 1 cancelado(s) excluído(s). Estados originais: 93 FAILED, 53 COMPLETED. 37 operacionais e 109 fixtures. Não confundir estes estados com o aceite da entrega.
+Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) excluído(s). Estados originais: 93 FAILED, 54 COMPLETED. 38 operacionais e 109 fixtures. Não confundir estes estados com o aceite da entrega.
 
 ## Jobs operacionais
 
@@ -329,6 +329,15 @@ Captura: 2026-10-07T13:58:41.961Z. **146 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Leitura preparada tratada como entrega inteira; sucesso repetido sem progressão para artefato.
 - **Correções generalizadas:** C2,C3,C5 (tabela do relatório de causas).
 - **Evidência:** 78 eventos; 6 checkpoints; run_authorized_command=4, read_file=6. Manifesto 0278f5926060.
+
+### fa74c6a7-2147-43b0-aec8-95945467920b
+
+- **Estado persistido:** COMPLETED; entrega: TEST_SUPPRESSED.
+- **Unidade delegada:** Teste real instalado: criar fixture exclusivo com conteúdo literal e restaurar baseline.
+- **Execução, retorno e avaliação:** COMPLETED com uma write_file, zero erros e conteúdo exato. Harness confirmou remoção segura e Git/arquivos não rastreados preservados; test-verification.json registra ok.
+- **Causa/impacto:** Nenhuma falha observada nesta unidade. A seção Git do resultado registra o fixture antes da limpeza; o recibo posterior comprova restauração. TEST_SUPPRESSED delimita este teste de escrita, sem teste de retomada.
+- **Correções generalizadas:** C4,C6 (tabela do relatório de causas).
+- **Evidência:** 15 eventos; 0 checkpoints; write_file=1. Manifesto 3f3acb59c1a0.
 
 ### fad92f07-e0c6-4b38-916c-de6f5f3def67
 
