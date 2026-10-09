@@ -5,7 +5,8 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { connect } from './rpc.mts';
-import { detect, advance, digest } from './core.mts';
+import { planCycles, advance, digest } from './core.mts';
+import { observeQueue, parseQueueReceipt, persistedTurn } from './receipts.mts';
 
 const ROOT_S8R = path.dirname(fileURLToPath(import.meta.url));
 const readJson = async (p: string) => JSON.parse((await fs.readFile(p, 'utf8')).replace(/^\uFEFF/, ''));
@@ -89,6 +90,9 @@ async function main() {
         if(event){
           for(const turn of response.data){
             if(event.baselineTurns.includes(turn.id)||turn.startedAt*1000<event.sendStartedAt-1000)continue;
+            // A projecao persistida preserva inProgress: app-server separado pode apresentar interrupted.
+            const persisted=persistedTurn(config,turn.id);
+            if(persisted){Object.assign(turn,persisted);continue;}
             // Somente bordas do turno: solicitacao recebida e resposta final; sem carregar tools/raciocinio.
             const first=await rpc.read('thread/items/list',{threadId:config.threadId,turnId:turn.id,limit:2,sortDirection:'asc'});
             const last=await rpc.read('thread/items/list',{threadId:config.threadId,turnId:turn.id,limit:2,sortDirection:'desc'});
@@ -98,26 +102,42 @@ async function main() {
         return response.data;
       },
       send:async(_t: any,text: string)=>{
+        const observer=observeQueue(config);
         try {
           const output=await command(config.codex,['queue','-C',config.repoPath,'--thread',config.threadId,'--message',text],config);
           // Só aceitar ID explícito do recibo, nunca UUID do próprio thread.
           let receipt: any;try{receipt=JSON.parse(output);}catch{}
-          return {messageId:receipt?.messageId ?? receipt?.clientUserMessageId ?? null,acknowledgement:output.slice(0,500)};
-        }catch(error: any){if(error.code==='ENOENT')error.code='SEND_NOT_STARTED';throw error;}
+          const queueId=parseQueueReceipt(output,config.threadId);
+          return {messageId:receipt?.messageId??null,messageClientId:receipt?.clientUserMessageId??(queueId?observer.messageClientId(queueId):null),queueId,acknowledgement:output.slice(0,500)};
+        }catch(error: any){if(error.code==='ENOENT')error.code='SEND_NOT_STARTED';throw error;}finally{observer.close();}
       },
     };
     if(process.argv.includes('--probe')){await io.ready();console.log(JSON.stringify({status:'READY',threadId:config.threadId,auth:'chatgpt',worker:'MCP_AND_MODEL_READY'}));return;}
     const now=Date.now();
     let discoveryError: string | null=null;
     let detected: any[]=[];
-    try { detected=detect(await io.quota(),target,now); } catch(error: any) { discoveryError=String(error.message).slice(0,300); }
-    if(process.argv.includes('--test-event')) detected.push({schema:1,id:digest([target,'installation-test']),target,window:{test:true},dueAt:now+60_000,detectedAt:now,status:'SCHEDULED',attempts:0});
+    const priorNames=(await fs.readdir(path.join(ROOT_S8R,'events'))).filter(n=>/^[a-f0-9]{64}\.json$/.test(n));
+    const existing=await Promise.all(priorNames.map(async n=>{
+      const file=path.join(ROOT_S8R,'events',n);const stat=await fs.lstat(file);
+      if(!stat.isFile()||stat.isSymbolicLink()||stat.nlink!==1)throw new Error('UNSAFE_EVENT');
+      return readJson(file);
+    }));
+    const ledgerPath=path.join(ROOT_S8R,'cycles.json');
+    const ledger=await readJson(ledgerPath).catch((error: any)=>{if(error.code==='ENOENT')return {schema:1,windows:{}};throw error;});
+    try { detected=planCycles(await io.quota(),target,ledger,existing,now); } catch(error: any) { discoveryError=String(error.message).slice(0,300); }
+    if(process.argv.includes('--test-event')) {
+      const testId=process.argv.find(v=>v.startsWith('--test-id='))?.slice(10)??'installation-test';
+      if(!/^[a-z0-9-]{1,64}$/.test(testId))throw new Error('INVALID_TEST_ID');
+      detected.push({schema:1,id:digest([target,testId]),target,window:{test:true,testId},dueAt:Math.ceil(now/1000)*1000+60_000,detectedAt:now,status:'SCHEDULED',attempts:0});
+    }
     const eventNames=await fs.readdir(path.join(ROOT_S8R,'events'));
     if(eventNames.filter(n=>/^[a-f0-9]{64}\.json$/.test(n)).length>=512){detected=[];discoveryError='EVENT_RETENTION_CAP_REQUIRES_REVIEW';}
     for(const event of detected){
       const file=path.join(ROOT_S8R,'events',`${event.id}.json`);
-      if(!await fs.stat(file).catch(()=>null))await io.save(event);
+      const previous=existing.find(e=>e.id===event.id);
+      if(!previous||(!previous.sendStartedAt&&event.dueAt!==previous.dueAt))await io.save(event);
     }
+    await atomic(ledgerPath,ledger); // Evento existe antes da referencia persistida.
     const summary=[];
     for(const name of await fs.readdir(path.join(ROOT_S8R,'events'))){
       if(!/^[a-f0-9]{64}\.json$/.test(name))continue;

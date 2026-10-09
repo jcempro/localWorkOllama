@@ -10,12 +10,16 @@
 - PowerShell: parser dos scripts aprovado; tarefas usam Windows Script Host oculto, token interativo limitado, IgnoreNew, mutex entre instalação/execução, logon, StartWhenAvailable e WakeToRun. Registro e parâmetros verificados na máquina.
 - Falhas reais do instalador identificadas e corrigidas: inventário de recuperação pressupunha script não instalado; comparação de diretório não normalizava prefixo Windows de caminho longo. Reinstalação preservou estado e concluiu.
 
-## Teste assíncrono em andamento
+## Execução real e defeitos encontrados
 
-Foi solicitado um evento de teste explícito (sem simular telemetria da conta), com disparo previsto 60 segundos depois da criação. A tarefa deve registrar o envio de exatamente `continue` ao mesmo chat. A resposta só poderá ser verificada depois que esse novo turno ocorrer. Não se declara esse fluxo concluído antecipadamente.
+O evento explícito enviou exatamente `continue` e abriu novo turno nesta conversa. Disparo do SO cerca de 1s depois do horário configurado; envio concluído cerca de 13s depois do prazo lógico, incluindo prontidão. Recibo CLI real: ID da fila distinto do ID/clientId da mensagem recebida; a primeira implementação somente entendia recibo JSON. O app-server separado também apresentava turno ativo como interrompido, ao contrário da projeção persistida e da UI.
+
+Durante a validação a cota realmente se esgotou e a revisão automática recusou instalação externa. O componente já instalado detectou saldo <=10% e agendou para o reset oficial +60s; após a restauração natural, retomou o chat. Contudo, a telemetria refinou resetsAt em 1s e a versão instalada criou DOIS eventos/envios para o mesmo ciclo. Isso reprova o aceite de unicidade daquela versão; os recibos históricos foram preservados.
+
+Correções: identidade persistente de episódio em cycles.json, refinamento do horário sem nova identidade, validação de nova janela; parser estrito do recibo textual e observação somente leitura da fila para correlacionar clientId; estado/primeira mensagem/resposta final lidos na projeção persistida por thread/turn. Testes dirigidos incluem refinamento de timestamp antes/depois do envio, ciclo subsequente, ID de fila diferente do clientId, resposta real e projeção inProgress. Nenhum envio histórico foi repetido para corrigir metadados. Confirmação ponta a ponta da versão corrigida permanece pendente até novo teste delimitado.
 
 ## Limites de evidência
 
-Os cenários de quota, sessão expirada, indisponibilidade, reboot lógico e falha parcial foram injetados na máquina de estados. Não houve reboot físico, encerramento forçado do Desktop, remoção do Worker ativo nem expiração deliberada de autenticação neste computador. Injeção não comprova recuperação integral desses incidentes reais. A restauração natural de quota também não foi antecipada nem consumida artificialmente.
+Sessão expirada, indisponibilidade, reboot lógico e falha parcial foram injetados na máquina de estados. Não houve reboot físico, encerramento forçado do Desktop, remoção do Worker ativo nem expiração deliberada de autenticação neste computador. Injeção não comprova recuperação integral desses incidentes reais. A restauração natural de quota foi observada; não foi antecipada nem consumida artificialmente.
 
 O transporte `codex queue` não anuncia opção de chave idempotente. Sem ID de mensagem verificável no recibo, coincidência temporal de `continue` e resposta final fica em RESPONSE_OBSERVED_UNCORRELATED; o contrato proíbe promover isso a COMPLETED. Computador desligado, ausência de logon/rede, renovação que exija ação humana e atraso do Agendador impedem promessa temporal absoluta. Melhor alternativa implementada: agenda persistente exata, recuperação gratuita após disponibilidade, isolamento, diagnóstico e nenhum reenvio cego.

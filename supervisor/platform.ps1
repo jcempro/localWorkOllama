@@ -2,6 +2,7 @@ param(
   [Parameter(Mandatory=$true)][ValidateSet('Tick','TestEvent','Register','Schedule','Unschedule','Desktop','Ollama','WorkerDependencies')][string]$Action,
   [Parameter(Mandatory=$true)][string]$Config,
   [string]$EventId,
+  [ValidatePattern('^[a-z0-9-]{1,64}$')][string]$TestId='installation-test',
   [long]$DueAt
 )
 $ErrorActionPreference = 'Stop'
@@ -33,7 +34,7 @@ if ($Action -in @('Tick','TestEvent')) {
     if (-not $ownedS8R) { exit 0 }
     $env:SUPERVISOR_MUTEX_S8R = $cfgS8R.mutexName
     $argsS8R = @((Join-Path $rootS8R 'run.mjs'))
-    if ($Action -eq 'TestEvent') { $argsS8R += '--test-event' }
+    if ($Action -eq 'TestEvent') { $argsS8R += @('--test-event',('--test-id='+$TestId)) }
     & $cfgS8R.node @argsS8R
     exit $LASTEXITCODE
   } finally { if($ownedS8R){$mutexS8R.ReleaseMutex()};$mutexS8R.Dispose() }

@@ -81,7 +81,7 @@ async function walk(relative) {
 
 const inventory = [];
 // Manifesto positivo do componente opcional; nunca copiar configuração privada.
-for (const name of ['core.mts', 'rpc.mts', 'run.mts', 'platform.ps1', 'install.ps1', 'README.md']) {
+for (const name of ['core.mts', 'rpc.mts', 'receipts.mts', 'run.mts', 'platform.ps1', 'install.ps1', 'README.md']) {
   const bytes = await fs.readFile(path.join(ROOT_A3C, 'supervisor', name));
   const target = `src/supervisor/${name}`;
   await putOrCompare(target, bytes);

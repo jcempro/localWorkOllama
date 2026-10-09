@@ -46,7 +46,7 @@ try{
   try{$ownsS8R=$installMutexS8R.WaitOne(0)}catch [Threading.AbandonedMutexException]{$ownsS8R=$true}
   if(-not $ownsS8R){throw 'Runtime ativo; instalacao pode ser repetida depois sem interrupcao.'}
   [IO.File]::WriteAllText((Join-Path $Target 'install-owner.json'),(@{threadId=$ThreadId;repoPath=[IO.Path]::GetFullPath($RepoPath)}|ConvertTo-Json),$utfS8R)
-$filesS8R=@('core.mjs','core.mts','rpc.mjs','rpc.mts','run.mjs','run.mts','platform.ps1','install.ps1')
+$filesS8R=@('core.mjs','core.mts','rpc.mjs','rpc.mts','receipts.mjs','receipts.mts','run.mjs','run.mts','platform.ps1','install.ps1')
 foreach($nameS8R in $filesS8R){
   if(-not(Test-Path -LiteralPath (Join-Path $PSScriptRoot $nameS8R) -PathType Leaf)){throw 'Fonte incompleta.'}
   if($nameS8R.EndsWith('.mjs')){& $NodeExe --check (Join-Path $PSScriptRoot $nameS8R);if($LASTEXITCODE -ne 0){throw 'Fonte JS invalida.'}}

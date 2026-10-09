@@ -11,10 +11,44 @@ export function windows(snapshot: any) {
     for (const name of ['primary', 'secondary']) {
       const w = bucket?.[name];
       if (!w || !Number.isFinite(w.usedPercent) || w.usedPercent < 0 || w.usedPercent > 100) continue;
-      out.push({ bucketId, name, usedPercent: w.usedPercent, resetsAt: w.resetsAt });
+      out.push({ bucketId, name, usedPercent: w.usedPercent, resetsAt: w.resetsAt, windowDurationMins:w.windowDurationMins??null });
     }
   }
   return out;
+}
+
+// Um episodio de escassez tem identidade persistente; resetsAt pode ser refinado
+// pelo servidor e nao pode, por si so, produzir outra mensagem.
+export function planCycles(snapshot: any, target: any, ledger: any, existing: any[], now: number) {
+  const result: any[]=[];
+  ledger.schema=1;ledger.windows??={};
+  for(const w of windows(snapshot)) {
+    const key=digest([target.accountKey,target.threadId,target.repoPath,w.bucketId,w.name]);
+    let episode=ledger.windows[key];
+    if(w.usedPercent<POLICY_S8R.threshold){if(episode)episode.recoveryObserved=true;continue;}
+    if(!Number.isFinite(w.resetsAt)||w.resetsAt<=0)throw new Error('RESET_TIME_UNAVAILABLE');
+    if(w.resetsAt*1000+POLICY_S8R.delayMs<now-POLICY_S8R.delayMs)throw new Error('STALE_RESET_TELEMETRY');
+    // Migracao conservadora dos ciclos antigos, sem repetir enviados.
+    if(!episode){
+      const prior=existing.filter(e=>!e.window.test&&e.window.bucketId===w.bucketId&&e.window.name===w.name&&e.target.accountKey===target.accountKey&&e.target.threadId===target.threadId).sort((a,b)=>b.detectedAt-a.detectedAt)[0];
+      if(prior)episode=ledger.windows[key]={eventId:prior.id,resetAt:prior.window.resetsAt,recoveryObserved:false};
+    }
+    const priorExpired=episode && now>episode.resetAt*1000+POLICY_S8R.delayMs && w.resetsAt*1000>now;
+    const newWindowObserved=episode?.recoveryObserved && Number.isFinite(w.windowDurationMins) &&
+      w.resetsAt>episode.resetAt+w.windowDurationMins*30;
+    if(!episode||priorExpired||newWindowObserved){
+      const event=detect({rateLimits:{limitId:w.bucketId,[w.name]:w}},target,now)[0];
+      // detect conserva a chave da janela para ciclos simultaneos equivalentes.
+      episode=ledger.windows[key]={eventId:event.id,resetAt:w.resetsAt,recoveryObserved:false};
+      result.push(event);
+    }else{
+      const prior=existing.find(e=>e.id===episode.eventId);
+      if(prior&&!prior.sendStartedAt&&prior.status!=='COMPLETED')result.push({...prior,window:w,dueAt:w.resetsAt*1000+POLICY_S8R.delayMs});
+      if(!prior)result.push({...detect({rateLimits:{limitId:w.bucketId,[w.name]:w}},target,now)[0],id:episode.eventId});
+      episode.resetAt=w.resetsAt;
+    }
+  }
+  return result;
 }
 
 export function detect(snapshot: any, target: any, now: number) {
@@ -38,7 +72,8 @@ export function responseEvidence(event: any, turns: any[]) {
   if (turn.error || ['failed', 'interrupted'].includes(turn.status)) return { status: 'RESPONSE_ERROR', turnId: turn.id };
   const final = turn.items.find((i: any) => i.type === 'agentMessage' && i.phase === 'final' && i.text?.trim() && i.text.trim() !== 'continue');
   if (turn.status !== 'completed' || !final) return { status: 'RECEIVED', turnId: turn.id };
-  const matchingReceipt = event.messageId && turn.items.some((i: any) => i.type === 'userMessage' && i.id === event.messageId);
+  const matchingReceipt = turn.items.some((i: any) => i.type === 'userMessage' &&
+    ((event.messageId && i.id === event.messageId) || (event.messageClientId && i.clientId === event.messageClientId)));
   return { status: matchingReceipt ? 'COMPLETED' : 'RESPONSE_OBSERVED_UNCORRELATED', turnId: turn.id, responseId: final.id, responseHash: digest(final.text), reason: matchingReceipt ? null : 'TRANSPORT_HAS_NO_VERIFIABLE_MESSAGE_RECEIPT' };
 }
 
@@ -71,7 +106,8 @@ export async function advance(event: any, io: any, now: number) {
     const baselineTurns = (await io.turns(event.target)).map((t: any) => t.id);
     await save({ status: 'SENDING', baselineTurns, dispatchObservedAt: now, sendStartedAt: io.now(), attempts: event.attempts + 1 });
     const receipt = await io.send(event.target, 'continue');
-    await save({ status: 'SENT', sentAt: io.now(), messageId: receipt.messageId ?? null, acknowledgement: receipt.acknowledgement ?? null, nextAttemptAt: now + 60_000 });
+    await save({ status: 'SENT', sentAt: io.now(), messageId: receipt.messageId ?? null, messageClientId:receipt.messageClientId??null,
+      queueId:receipt.queueId??null, acknowledgement: receipt.acknowledgement ?? null, nextAttemptAt: now + 60_000 });
   } catch (error: any) {
     // Só ENOENT de spawn prova ausência de envio; erros de rede/exit são ambíguos.
     const noSend = error.code === 'SEND_NOT_STARTED';
