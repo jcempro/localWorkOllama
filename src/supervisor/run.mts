@@ -5,8 +5,8 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { connect } from './rpc.mts';
-import { planCycles, advance, digest } from './core.mts';
-import { observeQueue, parseQueueReceipt, persistedTurn } from './receipts.mts';
+import { planCycles, advance, digest, responseEvidence } from './core.mts';
+import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn } from './receipts.mts';
 
 const ROOT_S8R = path.dirname(fileURLToPath(import.meta.url));
 const readJson = async (p: string) => JSON.parse((await fs.readFile(p, 'utf8')).replace(/^\uFEFF/, ''));
@@ -72,6 +72,21 @@ async function main() {
   if (!process.argv.includes('--probe') && process.env.SUPERVISOR_MUTEX_S8R !== config.mutexName) throw new Error('USE_CANONICAL_MUTEX_LAUNCHER');
   await safeRoot(ROOT_S8R); await safeRoot(config.repoPath); assertThread(config);
   await fs.mkdir(path.join(ROOT_S8R,'events'),{recursive:true}); await safeRoot(path.join(ROOT_S8R,'events'));
+  // Confirmacao local independe da API/rede e do backoff de recuperacao.
+  // Nao existe efeito de envio neste caminho; prova exige clientId exato.
+  if(!process.argv.includes('--probe'))for(const name of await fs.readdir(path.join(ROOT_S8R,'events'))){
+    if(!/^[a-f0-9]{64}\.json$/.test(name))continue;
+    const file=path.join(ROOT_S8R,'events',name);const stat=await fs.lstat(file);
+    if(!stat.isFile()||stat.isSymbolicLink()||stat.nlink!==1)throw new Error('UNSAFE_EVENT');
+    const event=await readJson(file);
+    if(event.status==='COMPLETED'||!event.messageClientId)continue;
+    if(event.id!==name.slice(0,-5)||event.target.threadId!==config.threadId||event.target.repoPath!==config.repoPath||event.target.accountKey!==config.accountKey)throw new Error('EVENT_TARGET_MISMATCH');
+    const turn=correlatedTurn(config,event.messageClientId);
+    if(turn){
+      const evidence=responseEvidence(event,[turn]);
+      if(['RECEIVED','COMPLETED'].includes(evidence.status))await atomic(file,{...event,...evidence,updatedAt:Date.now(),confirmationSource:'persisted-client-id'});
+    }
+  }
   const rpc = await connect(config);
   try {
     const account = await rpc.read('account/read',{refreshToken:true});

@@ -20,6 +20,8 @@ Correções: identidade persistente de episódio em cycles.json, refinamento do 
 
 A fila real ainda retinha a segunda mensagem residual. Foi confirmado seu schema `UserInput.client_id`, utilizado pelo `clientId` recebido no histórico. A recuperação desse recibo usa somente leitura e o ID exato da fila já registrado; não cria novo teste nem terceiro envio. A versão corrigida foi instalada e recuperou/persistiu queueId e messageClientId desse evento, mantendo attempts=1 e AWAITING_RESPONSE. A confirmação distinguirá outro `continue` manual/concorrente pela identidade do cliente. O envio residual existente será aproveitado para validar a próxima resposta; não se afirma confirmação antes de sua conclusão. Instalação concorrente com execução do monitor é recusada pelo mutex e pode ser retomada, sem interromper o processo.
 
+O envio residual abriu o turno seguinte. A confirmação foi desacoplada de rede/autenticação, do backoff e da janela dos últimos 20 turnos: leitura local por thread+clientId, primeira mensagem e resposta final canônicas. Os testes comprovam isolamento entre threads, identidade diferente na fila/recepção, mensagem concorrente distinta, status inProgress e final completed. A passagem local não envia mensagens nem declara conclusão antes do final persistido.
+
 ## Limites de evidência
 
 Sessão expirada, indisponibilidade, reboot lógico e falha parcial foram injetados na máquina de estados. Não houve reboot físico, encerramento forçado do Desktop, remoção do Worker ativo nem expiração deliberada de autenticação neste computador. Injeção não comprova recuperação integral desses incidentes reais. A restauração natural de quota foi observada; não foi antecipada nem consumida artificialmente.

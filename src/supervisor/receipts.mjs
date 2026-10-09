@@ -50,12 +50,24 @@ export function observeQueue(config     ) {
 export function persistedTurn(config     , turnId        ) {
   const db=new DatabaseSync(path.join(config.codexHome,'thread_history_1.sqlite'),{readOnly:true});
   try{
-    const row    =db.prepare('SELECT status,error_json,first_user_item_id,final_agent_item_id FROM thread_turns WHERE thread_id=? AND turn_id=?').get(config.threadId,turnId);
+    const row    =db.prepare('SELECT status,error_json,started_at,first_user_item_id,final_agent_item_id FROM thread_turns WHERE thread_id=? AND turn_id=?').get(config.threadId,turnId);
     if(!row)return null;
     const query=db.prepare('SELECT item_json FROM thread_items WHERE thread_id=? AND turn_id=? AND item_id=?');
     const items=[row.first_user_item_id,row.final_agent_item_id].filter(Boolean).map(id=>{
       const value    =query.get(config.threadId,turnId,id);return value?JSON.parse(value.item_json):null;
     }).filter(Boolean);
-    return {status:row.status,error:row.error_json?JSON.parse(row.error_json):null,items};
+    return {id:turnId,startedAt:row.started_at,status:row.status,error:row.error_json?JSON.parse(row.error_json):null,items};
   }finally{db.close();}
+}
+
+export function correlatedTurn(config     , messageClientId        ) {
+  if(!UUID_R8S.test(messageClientId))throw new Error('INVALID_MESSAGE_CLIENT_ID');
+  const db=new DatabaseSync(path.join(config.codexHome,'thread_history_1.sqlite'),{readOnly:true});
+  let turnId                 ;
+  try{
+    const rows      =db.prepare("SELECT turn_id FROM thread_items WHERE thread_id=? AND item_type='userMessage' AND json_extract(item_json,'$.clientId')=? LIMIT 2").all(config.threadId,messageClientId);
+    if(rows.length>1)throw new Error('AMBIGUOUS_CLIENT_ID');
+    turnId=rows[0]?.turn_id;
+  }finally{db.close();}
+  return turnId?persistedTurn(config,turnId):null;
 }
