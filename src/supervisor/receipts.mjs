@@ -79,3 +79,12 @@ export function correlatedTurn(config     , messageClientId        ) {
   }finally{db.close();}
   return turnId?persistedTurn(config,turnId):null;
 }
+
+// Somente metadados do ultimo turno: nao ler ferramentas, pedidos ou raciocinio.
+export function latestTurn(config     ) {
+  const db=new DatabaseSync(path.join(config.codexHome,'thread_history_1.sqlite'),{readOnly:true});
+  try {
+    const row    =db.prepare('SELECT turn_id,status,error_json,started_at,completed_at FROM thread_turns WHERE thread_id=? ORDER BY started_at DESC,rollout_ordinal DESC LIMIT 1').get(config.threadId);
+    return row?{id:row.turn_id,status:row.status,error:row.error_json?JSON.parse(row.error_json):null,startedAt:row.started_at,completedAt:row.completed_at}:null;
+  }finally{db.close();}
+}

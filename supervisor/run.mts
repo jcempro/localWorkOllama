@@ -5,8 +5,8 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { connect } from './rpc.mts';
-import { planCycles, advance, digest, responseEvidence } from './core.mts';
-import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn } from './receipts.mts';
+import { planCycles, planQuotaFailure, advance, digest, responseEvidence } from './core.mts';
+import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn, latestTurn } from './receipts.mts';
 
 const ROOT_S8R = path.dirname(fileURLToPath(import.meta.url));
 const readJson = async (p: string) => JSON.parse((await fs.readFile(p, 'utf8')).replace(/^\uFEFF/, ''));
@@ -98,6 +98,7 @@ async function main() {
       now:Date.now, save: (e: any)=>atomic(path.join(ROOT_S8R,'events',`${e.id}.json`),e),
       identity:async(t: any)=>{if(JSON.stringify(t)!==JSON.stringify(target))throw new Error('TARGET_CHANGED');assertThread(config);},
       quota:()=>rpc.read('account/rateLimits/read'),
+      incidentCurrent:async(id: string)=>latestTurn(config)?.id===id,
       reconcileReceipt:async(event: any)=>{
         const queueId=event.queueId??parseQueueReceipt(event.acknowledgement??'',config.threadId);
         if(!queueId)return null;
@@ -146,7 +147,14 @@ async function main() {
     }));
     const ledgerPath=path.join(ROOT_S8R,'cycles.json');
     const ledger=await readJson(ledgerPath).catch((error: any)=>{if(error.code==='ENOENT')return {schema:1,windows:{}};throw error;});
-    try { detected=planCycles(await io.quota(),target,ledger,existing,now); } catch(error: any) { discoveryError=String(error.message).slice(0,300); }
+    try {
+      const snapshot=await io.quota();
+      detected=planCycles(snapshot,target,ledger,existing,now);
+      const merged=[...existing.filter(e=>!detected.some(d=>d.id===e.id)),...detected];
+      for(const recovery of planQuotaFailure(snapshot,target,latestTurn(config),merged,now)){
+        detected=detected.filter(e=>e.id!==recovery.id);detected.push(recovery);
+      }
+    } catch(error: any) { discoveryError=String(error.message).slice(0,300); }
     if(process.argv.includes('--test-event')) {
       const testId=process.argv.find(v=>v.startsWith('--test-id='))?.slice(10)??'installation-test';
       if(!/^[a-z0-9-]{1,64}$/.test(testId))throw new Error('INVALID_TEST_ID');
@@ -157,7 +165,7 @@ async function main() {
     for(const event of detected){
       const file=path.join(ROOT_S8R,'events',`${event.id}.json`);
       const previous=existing.find(e=>e.id===event.id);
-      if(!previous||(!previous.sendStartedAt&&event.dueAt!==previous.dueAt))await io.save(event);
+      if(!previous||(!previous.sendStartedAt&&(event.dueAt!==previous.dueAt||event.interruptedTurnId!==previous.interruptedTurnId)))await io.save(event);
     }
     await atomic(ledgerPath,ledger); // Evento existe antes da referencia persistida.
     const summary=[];
@@ -168,7 +176,7 @@ async function main() {
       const event=await readJson(file); if(name!==`${event.id}.json`)throw new Error('EVENT_ID_MISMATCH');
       await advance(event,io,now);
       summary.push({id:event.id,status:event.status,dueAt:event.dueAt,nextAttemptAt:event.nextAttemptAt??null});
-      if(event.status!=='COMPLETED')await platform(config,'Schedule',['-EventId',event.id,'-DueAt',String(Math.max(event.dueAt,event.nextAttemptAt??0))]);
+      if(!['COMPLETED','RESOLVED_EXTERNALLY'].includes(event.status))await platform(config,'Schedule',['-EventId',event.id,'-DueAt',String(Math.max(event.dueAt,event.nextAttemptAt??0))]);
       else {
         await platform(config,'Unschedule',['-EventId',event.id]);
         if(now-(event.updatedAt??event.dueAt)>90*86400_000)await fs.unlink(file);

@@ -63,6 +63,22 @@ export function detect(snapshot     , target     , now        ) {
 }
 
 const userText = (item     ) => (item.content ?? []).map((c     ) => c.type === 'text' ? c.text : '').join('');
+// Catch-up de instalacao/reparo apos o incidente. Nunca inferir cota de texto livre.
+export function planQuotaFailure(snapshot     ,target     ,turn     ,existing       ,now        ) {
+  if(turn?.status!=='failed'||turn.error?.codexErrorInfo!=='usageLimitExceeded'||!Number.isFinite(turn.completedAt))return [];
+  if(existing.some(e=>e.interruptedTurnId===turn.id))return [];
+  const available=windows(snapshot);if(!available.length)throw new Error('QUOTA_UNAVAILABLE');
+  const limited=available.filter(w=>w.usedPercent>=POLICY_S8R.threshold);
+  if(limited.some(w=>!Number.isFinite(w.resetsAt)||w.resetsAt*1000<=now))throw new Error('RESET_TIME_UNAVAILABLE');
+  const dueAt=limited.length?Math.max(...limited.map(w=>w.resetsAt*1000+POLICY_S8R.delayMs)):now;
+  // Um envio posterior ao incidente ja cobre a retomada: nao criar outro.
+  if(existing.some(e=>e.sendStartedAt>=turn.completedAt*1000))return [];
+  const pending=existing.filter(e=>!e.sendStartedAt&&!['COMPLETED','RESOLVED_EXTERNALLY'].includes(e.status)&&e.dueAt<=dueAt).sort((a,b)=>a.dueAt-b.dueAt)[0];
+  if(pending)return [{...pending,interruptedTurnId:turn.id}];
+  return [{schema:1,id:digest([target,'usage-limit-failure',turn.id]),target,window:{quotaFailure:true},
+    interruptedTurnId:turn.id,incidentCompletedAt:turn.completedAt*1000,dueAt,detectedAt:now,
+    status:'SCHEDULED',attempts:0,scheduleReason:limited.length?'VERIFIED_RESET_PLUS_60':'RECOVERED_QUOTA_CATCH_UP'}];
+}
 export function responseEvidence(event     , turns       ) {
   const candidates = turns.filter(t => !event.baselineTurns.includes(t.id) && t.startedAt * 1000 >= event.sendStartedAt - 1000 &&
     t.items?.some((i     ) => i.type === 'userMessage' && userText(i) === 'continue' &&
@@ -80,7 +96,7 @@ export function responseEvidence(event     , turns       ) {
 
 // Todas as mutações passam por save antes de efeitos não idempotentes.
 export async function advance(event     , io     , now        ) {
-  if (event.status === 'COMPLETED') return event;
+  if (['COMPLETED','RESOLVED_EXTERNALLY'].includes(event.status)) return event;
   const save = async (patch     ) => { Object.assign(event, patch, { updatedAt: now }); await io.save(event); };
   // Recuperar recibo enquanto a fila ainda retém a mensagem, mesmo durante backoff.
   if(event.sendStartedAt&&!event.messageClientId&&io.reconcileReceipt){
@@ -98,6 +114,9 @@ export async function advance(event     , io     , now        ) {
       await save({ ...evidence, nextAttemptAt: now + (evidence.status === 'RECEIVED' ? 60_000 : POLICY_S8R.maxRetryMs) });
       return event; // Nunca repetir envio sem recibo idempotente.
     }
+    if(event.interruptedTurnId && !await io.incidentCurrent(event.interruptedTurnId)){
+      await save({status:'RESOLVED_EXTERNALLY',diagnostic:'NEWER_TURN_SUPERSEDES_QUOTA_FAILURE'});return event;
+    }
     const quota = await io.quota();
     if (!windows(quota).length) throw new Error('QUOTA_UNAVAILABLE');
     const blocked = windows(quota).filter(w => w.usedPercent >= 100);
@@ -107,11 +126,15 @@ export async function advance(event     , io     , now        ) {
       return event;
     }
     const original = windows(quota).find(w => w.bucketId === event.window.bucketId && w.name === event.window.name);
-    if (!event.window.test && (!original || (original.resetsAt === event.window.resetsAt && original.usedPercent >= POLICY_S8R.threshold))) {
+    if (!event.window.test && !event.window.quotaFailure && (!original || (original.resetsAt === event.window.resetsAt && original.usedPercent >= POLICY_S8R.threshold))) {
       await save({status:'WAITING_QUOTA',nextAttemptAt:now+POLICY_S8R.retryMs,diagnostic:'RESET_NOT_YET_OBSERVED'});
       return event;
     }
     await io.ready(event.target);
+    // Prontidao pode demorar: revalidar antes do unico efeito de envio.
+    if(event.interruptedTurnId && !await io.incidentCurrent(event.interruptedTurnId)){
+      await save({status:'RESOLVED_EXTERNALLY',diagnostic:'NEWER_TURN_SUPERSEDES_QUOTA_FAILURE'});return event;
+    }
     const baselineTurns = (await io.turns(event.target)).map((t     ) => t.id);
     stage='send';
     await save({ status: 'SENDING', baselineTurns, dispatchObservedAt: now, sendStartedAt: io.now(),

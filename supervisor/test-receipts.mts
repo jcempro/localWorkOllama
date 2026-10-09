@@ -3,7 +3,7 @@ import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { parseQueueReceipt, clientIds, observeQueue, persistedTurn, correlatedTurn } from './receipts.mts';
+import { parseQueueReceipt, clientIds, observeQueue, persistedTurn, correlatedTurn, latestTurn } from './receipts.mts';
 import { responseEvidence } from './core.mts';
 const thread='11111111-1111-4111-8111-111111111111';
 const queue='22222222-2222-4222-8222-222222222222';
@@ -40,6 +40,12 @@ try{
   assert.equal(responseEvidence({...event,messageClientId:queue},[turn]).status,'AWAITING_RESPONSE');
   assert.equal(correlatedTurn({codexHome:root,threadId:thread},client)?.id,'turn');
   assert.equal(correlatedTurn({codexHome:root,threadId:queue},client),null);
+  db.exec('ALTER TABLE thread_turns ADD COLUMN completed_at INTEGER; ALTER TABLE thread_turns ADD COLUMN rollout_ordinal INTEGER');
+  db.prepare('UPDATE thread_turns SET completed_at=?,rollout_ordinal=?').run(2,1);
+  assert.equal(latestTurn({codexHome:root,threadId:thread})?.id,'turn');
+  assert.equal(latestTurn({codexHome:root,threadId:queue}),null);
+  db.prepare('INSERT INTO thread_turns(thread_id,turn_id,status,error_json,started_at,completed_at,rollout_ordinal) VALUES(?,?,?,?,?,?,?)').run(thread,'quota-turn','failed',JSON.stringify({codexErrorInfo:'usageLimitExceeded'}),3,4,2);
+  assert.equal(latestTurn({codexHome:root,threadId:thread})?.error.codexErrorInfo,'usageLimitExceeded');
   console.log('PASS: recibo da fila != ID recebido; correlacao clientId, schema ausente, projecao real, resposta e isolamento');
 }finally{
   observer?.close();db?.close();

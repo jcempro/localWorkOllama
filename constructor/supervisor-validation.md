@@ -32,6 +32,16 @@ Isso comprova o caminho real de retomada e confirmação recuperada. Não apaga 
 
 ## Limites de evidência
 
+## Incidente de cobertura e recuperação tardia — 09/10/2026
+
+A conversa `3º - Continue FTs` (`01a11930-a51b-7051-af8d-cf47a7548f53`) não possuía instalação/tarefa SR-001; somente o chat de manutenção estava registrado. Seu último turno `01a120d3-2c2d-7d00-86f5-87af718d6d45` encerrou com `failed`, código estruturado `usageLimitExceeded`, antes de iniciar a próxima chamada local_analyze (duração zero). Trata-se de falha de cobertura do supervisor, não falha de inferência do Worker. A cota atual já estava restaurada, portanto aguardar nova queda para detectar esse incidente manteria o pedido parado.
+
+Foi acrescentado catch-up idempotente pelo ID do último turno com esse código exato: telemetria atual, reaproveitamento de agenda existente quando aplicável, reset+60s se limitado e recuperação identificada como tardia se já restaurado. Continuação manual anterior ao envio invalida a pendência. Testes cobrem essas condições, rejeição de erro textual/arbitrário, isolamento de conversa e prevenção de segundo envio. A representação generalista/documentação explicita que o registro é individual por conversa, não automático para toda a conta.
+
+A instalação da conversa indicada validou autenticação, destino e MCP/modelo. O Agendador iniciou a tarefa autonomamente; uma passagem manual concorrente respeitou o mutex e não executou o envio. Evento `c22e4fe86f98255829c30a997051e399b9d353d57d1c2b67fdb4386014dff77e`: `RECOVERED_QUOTA_CATCH_UP`, `sendAttempts=1`, fila `01a121fe-9785-7f83-86d9-39e504cbbf47`, clientId `01a121fe-9780-7a23-80ea-f4cb089f1fe4`. Estado inicial observado SENT; somente resposta final correlacionada poderá comprovar COMPLETED. A instalação deste chat de manutenção também foi atualizada.
+
+## Limites de validação integral
+
 Sessão expirada, indisponibilidade, reboot lógico e falha parcial foram injetados na máquina de estados. Não houve reboot físico, encerramento forçado do Desktop, remoção do Worker ativo nem expiração deliberada de autenticação neste computador. Injeção não comprova recuperação integral desses incidentes reais. A restauração natural de quota foi observada; não foi antecipada nem consumida artificialmente.
 
 O transporte `codex queue` não anuncia opção de chave idempotente. Sem ID de mensagem verificável no recibo, coincidência temporal de `continue` e resposta final fica em RESPONSE_OBSERVED_UNCORRELATED; o contrato proíbe promover isso a COMPLETED. Computador desligado, ausência de logon/rede, renovação que exija ação humana e atraso do Agendador impedem promessa temporal absoluta. Melhor alternativa implementada: agenda persistente exata, recuperação gratuita após disponibilidade, isolamento, diagnóstico e nenhum reenvio cego.

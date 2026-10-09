@@ -92,4 +92,5 @@ if($LASTEXITCODE -ne 0){throw 'Prontidao nao comprovada; tarefa nao registrada.'
 & $psS8R -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $Target 'platform.ps1') -Action Register -Config (Join-Path $Target 'config.json')
 if($LASTEXITCODE -ne 0){throw 'Registro de tarefa falhou.'}
 Write-Output "Instalado: $Target; tarefa: $prefixS8R; intervalo gratuito: $ScanMinutes min."
+Write-Output "Cobertura exclusiva: conversa $ThreadId, repositorio $RepoPath. Outras conversas requerem registro proprio."
 }finally{if($ownsS8R){$installMutexS8R.ReleaseMutex()};$installMutexS8R.Dispose()}
