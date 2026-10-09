@@ -4,6 +4,14 @@
 
 O localWorker executa tarefas delegáveis em inferência Ollama local, com jobs persistentes, resultado verificável e retomada do mesmo chat no Codex Desktop. A seleção de modelo e esforço do supervisor permanece independente. `AGENTS.md` e `agents.local.md` governam a atuação; este RCF define o produto e seus contratos.
 
+## Componente opcional de continuidade do supervisor — SR-001
+
+Componente independente do Worker, ativado por conversa mediante autorização. Consulta somente telemetria oficial verificável, sem inferência, e detecta `usedPercent >= 90`. Agenda tarefa persistente do Windows para `resetsAt * 1000 + 60000`, identifica conta/conversa/diretório/ciclo e valida prontidão antes de enviar exatamente `continue`. Não consome créditos de reset, troca modelo/esforço nem contorna limites ou login.
+
+Persistência antecede efeitos. Envio não é sucesso: `COMPLETED` exige turno novo, mensagem recebida e resposta final não vazia, sem erro. Falha parcial mantém evidência e recuperação com backoff; envio ambíguo nunca recebe retry cego. Concorrência deve ser serializada por mutex do SO. Recuperação deve iniciar Desktop/serviços instalados, reparar componentes a partir de cópia íntegra quando possível e diagnosticar sessão expirada/componente não recuperável. Nenhuma recuperação pode reiniciar jobs ou apagar dados pessoais.
+
+O agendamento é exato na configuração; execução pontual não é garantida por um SO não determinístico, computador desligado, falta de logon/rede ou autenticação que exija interação. Ausência de identificador idempotente no transporte pode impedir prova inequívoca/reenvio seguro. Essas condições mantêm diagnóstico explícito sem `COMPLETED` falso. Fonte, limites, parâmetros, instalação, testes e cobertura real devem permanecer documentados e espelhados, sem impor este componente como requisito do Worker.
+
 ## Supervisão responsável e segmentada
 
 - Comunicação supervisor↔Worker exige equivalência de significado comprovada: traduzir nomes/comandos/abstrações para objetivo, comportamento e resultado, sem presumir compartilhamento de ferramentas ou semântica. Macro, decomposição, risco, direção, integração e qualidade global são responsabilidade do supervisor; microimplementação, investigação delimitada e alternativas técnicas são autonomia do Worker, que pode contribuir com insumos para planejamento sem assumir engenharia global. Menor capacidade cognitiva exige contexto/aceite explícitos, não limitação operacional arbitrária.
