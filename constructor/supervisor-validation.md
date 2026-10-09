@@ -30,8 +30,6 @@ A confirmação revelou diferença real de schema: SQLite guarda `phase=final_an
 
 Isso comprova o caminho real de retomada e confirmação recuperada. Não apaga a duplicidade histórica do ciclo original nem substitui um novo ciclo natural de quota para validar a deduplicação corrigida em produção; esse comportamento foi validado por testes determinísticos com refinamento de timestamp. Não foi enviado novo `continue` para completar esta verificação.
 
-## Limites de evidência
-
 ## Incidente de cobertura e recuperação tardia — 09/10/2026
 
 A conversa `3º - Continue FTs` (`01a11930-a51b-7051-af8d-cf47a7548f53`) não possuía instalação/tarefa SR-001; somente o chat de manutenção estava registrado. Seu último turno `01a120d3-2c2d-7d00-86f5-87af718d6d45` encerrou com `failed`, código estruturado `usageLimitExceeded`, antes de iniciar a próxima chamada local_analyze (duração zero). Trata-se de falha de cobertura do supervisor, não falha de inferência do Worker. A cota atual já estava restaurada, portanto aguardar nova queda para detectar esse incidente manteria o pedido parado.
@@ -41,6 +39,8 @@ Foi acrescentado catch-up idempotente pelo ID do último turno com esse código 
 A instalação da conversa indicada validou autenticação, destino e MCP/modelo. O Agendador iniciou a tarefa autonomamente; uma passagem manual concorrente respeitou o mutex e não executou o envio. Evento `c22e4fe86f98255829c30a997051e399b9d353d57d1c2b67fdb4386014dff77e`: `RECOVERED_QUOTA_CATCH_UP`, `sendAttempts=1`, fila `01a121fe-9785-7f83-86d9-39e504cbbf47`, clientId `01a121fe-9780-7a23-80ea-f4cb089f1fe4`. Estado inicial observado SENT; somente resposta final correlacionada poderá comprovar COMPLETED. A instalação deste chat de manutenção também foi atualizada.
 
 ## Limites de validação integral
+
+A recuperação desse incidente foi **COMPLETED**, `sendAttempts=1`, confirmação `persisted-client-id`, turno `01a121fe-b3d0-7562-a33e-8b43966b66ad`, resposta `msg_0a0d970cb8f03f80016ac937507904819184f9960003a132e7`, SHA-256 `c25b2b7173df0bad62795e5faeec30024b59427651a58777903f9579781b5bef`. O novo turno terminou sem erro e iniciou o job `698aee2b-a18f-40a1-935a-1cd1fd118da8` para o trabalho pendente no projeto. A tarefa Windows retornou `LastTaskResult=0`; reconciliação direcionada ao evento de conclusão confirmou a resposta sem reenvio. Isso comprova a recuperação tardia na conversa antes desprotegida, não um disparo retroativo em reset+60s nem a conclusão das FTs daquele projeto.
 
 Sessão expirada, indisponibilidade, reboot lógico e falha parcial foram injetados na máquina de estados. Não houve reboot físico, encerramento forçado do Desktop, remoção do Worker ativo nem expiração deliberada de autenticação neste computador. Injeção não comprova recuperação integral desses incidentes reais. A restauração natural de quota foi observada; não foi antecipada nem consumida artificialmente.
 
