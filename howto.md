@@ -522,6 +522,10 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
+| `src/supervisor/core.mts` | `370d6df2f9a4e8a100ae0c6f23502cac744a7bcba1d8e2a62d9edd1cc7bdd424` |
+| `src/supervisor/core.mjs` | `b47dd041dc5d2a0f23737d3d9c35285c82b41bc5345193df5e4025f41cfbb43a` |
+| `src/supervisor/rpc.mts` | `bc749f5e14ec30850834c4a17456a744bb304cc01637c09252f8ef61d4799a7b` |
+| `src/supervisor/rpc.mjs` | `239e222631cdc5ca861cd35fcdb5edf1e27d82576f060fce9b1cb747339baa4f` |
 | `src/localworker/AGENTS.md` | `7935a8bcebadb35c28e21372ffdff7eb784e42ab1f1250c7c3cbbe3aa2a65cd1` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |

@@ -1,0 +1,78 @@
+import { createHash } from 'node:crypto';
+
+export const POLICY_S8R = Object.freeze({ threshold: 90, delayMs: 60_000, retryMs: 30_000, maxRetryMs: 900_000 });
+export const digest = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+
+// SSOT da seleção: null/ausência não significa saldo zero.
+export function windows(snapshot: any) {
+  const buckets = snapshot.rateLimitsByLimitId ?? (snapshot.rateLimits ? { [snapshot.rateLimits.limitId ?? 'codex']: snapshot.rateLimits } : {});
+  const out: any[] = [];
+  for (const [bucketId, bucket] of Object.entries(buckets) as any) {
+    for (const name of ['primary', 'secondary']) {
+      const w = bucket?.[name];
+      if (!w || !Number.isFinite(w.usedPercent) || w.usedPercent < 0 || w.usedPercent > 100) continue;
+      out.push({ bucketId, name, usedPercent: w.usedPercent, resetsAt: w.resetsAt });
+    }
+  }
+  return out;
+}
+
+export function detect(snapshot: any, target: any, now: number) {
+  return windows(snapshot).filter(w => w.usedPercent >= POLICY_S8R.threshold).map(w => {
+    if (!Number.isFinite(w.resetsAt) || w.resetsAt <= 0) throw new Error('RESET_TIME_UNAVAILABLE');
+    const dueAt = w.resetsAt * 1000 + POLICY_S8R.delayMs;
+    if (dueAt < now - POLICY_S8R.delayMs) throw new Error('STALE_RESET_TELEMETRY');
+    const id = digest([target.accountKey, target.threadId, target.repoPath, w.bucketId, w.name, w.resetsAt]);
+    return { schema: 1, id, target, window: w, dueAt, detectedAt: now, status: 'SCHEDULED', attempts: 0 };
+  });
+}
+
+const userText = (item: any) => (item.content ?? []).map((c: any) => c.type === 'text' ? c.text : '').join('');
+export function responseEvidence(event: any, turns: any[]) {
+  const candidates = turns.filter(t => !event.baselineTurns.includes(t.id) && t.startedAt * 1000 >= event.sendStartedAt - 1000 &&
+    t.items?.some((i: any) => i.type === 'userMessage' && userText(i) === 'continue'));
+  if (candidates.length > 1) return { status: 'AMBIGUOUS_RESPONSE', reason: 'MULTIPLE_CONTINUE_TURNS' };
+  const turn = candidates[0];
+  if (!turn) return { status: 'AWAITING_RESPONSE' };
+  if (turn.error || ['failed', 'interrupted'].includes(turn.status)) return { status: 'RESPONSE_ERROR', turnId: turn.id };
+  const final = turn.items.find((i: any) => i.type === 'agentMessage' && i.phase === 'final' && i.text?.trim() && i.text.trim() !== 'continue');
+  if (turn.status !== 'completed' || !final) return { status: 'RECEIVED', turnId: turn.id };
+  const matchingReceipt = event.messageId && turn.items.some((i: any) => i.type === 'userMessage' && i.id === event.messageId);
+  return { status: matchingReceipt ? 'COMPLETED' : 'RESPONSE_OBSERVED_UNCORRELATED', turnId: turn.id, responseId: final.id, responseHash: digest(final.text), reason: matchingReceipt ? null : 'TRANSPORT_HAS_NO_VERIFIABLE_MESSAGE_RECEIPT' };
+}
+
+// Todas as mutações passam por save antes de efeitos não idempotentes.
+export async function advance(event: any, io: any, now: number) {
+  if (event.status === 'COMPLETED' || now < Math.max(event.dueAt, event.nextAttemptAt ?? 0)) return event;
+  const save = async (patch: any) => { Object.assign(event, patch, { updatedAt: now }); await io.save(event); };
+  try {
+    await io.identity(event.target);
+    if (event.sendStartedAt) {
+      await io.recoverDesktop();
+      const evidence = responseEvidence(event, await io.turns(event.target));
+      await save({ ...evidence, nextAttemptAt: now + (evidence.status === 'RECEIVED' ? 60_000 : POLICY_S8R.maxRetryMs) });
+      return event; // Nunca repetir envio sem recibo idempotente.
+    }
+    const quota = await io.quota();
+    if (!windows(quota).length) throw new Error('QUOTA_UNAVAILABLE');
+    const blocked = windows(quota).filter(w => w.usedPercent >= 100);
+    if (blocked.length) {
+      if (blocked.some(w => !Number.isFinite(w.resetsAt))) throw new Error('RESET_TIME_UNAVAILABLE');
+      await save({ status: 'WAITING_QUOTA', nextAttemptAt: Math.max(now + POLICY_S8R.retryMs, ...blocked.map(w => w.resetsAt * 1000 + POLICY_S8R.delayMs)), diagnostic: 'QUOTA_NOT_RESTORED' });
+      return event;
+    }
+    await io.ready(event.target);
+    const baselineTurns = (await io.turns(event.target)).map((t: any) => t.id);
+    await save({ status: 'SENDING', baselineTurns, sendStartedAt: now, attempts: event.attempts + 1 });
+    const receipt = await io.send(event.target, 'continue');
+    await save({ status: 'SENT', sentAt: io.now(), messageId: receipt.messageId ?? null, nextAttemptAt: now + 60_000 });
+  } catch (error: any) {
+    // Só ENOENT de spawn prova ausência de envio; erros de rede/exit são ambíguos.
+    const noSend = error.code === 'SEND_NOT_STARTED';
+    if (noSend) delete event.sendStartedAt;
+    const attempts = event.attempts + 1;
+    await save({ status: event.sendStartedAt ? 'SEND_AMBIGUOUS' : 'RETRY', attempts,
+      diagnostic: String(error.message).slice(0, 500), nextAttemptAt: now + Math.min(POLICY_S8R.maxRetryMs, POLICY_S8R.retryMs * 2 ** Math.min(attempts, 5)) });
+  }
+  return event;
+}

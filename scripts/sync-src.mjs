@@ -1,6 +1,7 @@
 import { promises as fs } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { stripTypeScriptTypes } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -79,6 +80,17 @@ async function walk(relative) {
 }
 
 const inventory = [];
+// Manifesto positivo do componente opcional; nunca copiar configuração privada.
+for (const name of ['core.mts', 'rpc.mts']) {
+  const bytes = await fs.readFile(path.join(ROOT_A3C, 'supervisor', name));
+  const target = `src/supervisor/${name}`;
+  await putOrCompare(target, bytes);
+  inventory.push({ target, sha256: createHash('sha256').update(canonical(bytes)).digest('hex') });
+  const compiled = stripTypeScriptTypes(bytes.toString('utf8'), { mode: 'strip' }).replaceAll(".mts'", ".mjs'");
+  const output = target.replace(/\.mts$/, '.mjs');
+  await putOrCompare(output, Buffer.from(compiled));
+  inventory.push({ target: output, sha256: createHash('sha256').update(canonical(Buffer.from(compiled))).digest('hex') });
+}
 for (const name of RUNTIME_A3C) {
   const source = path.join(ROOT_A3C, 'localworker', name);
   const bytes = await fs.readFile(source);
