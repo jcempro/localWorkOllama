@@ -114,17 +114,17 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/supervisor/core.mts` | `11210f9ac730b5ec3e14304eb0e6e6ae6ad4c8e04cadf021dc9c4059f281ebfd` |
-| `src/supervisor/core.mjs` | `1cc593d655cac51bbfe8fac8f86f43fc6a2ba17ee7b0ce97be1681b2eb24fa21` |
+| `src/supervisor/core.mts` | `018455d118dbcbc0d03713dde37b7a2f40621eac8115181390d8a2bcacd5e830` |
+| `src/supervisor/core.mjs` | `0d113d4b05d43a0f365e94733388815c710c1339dbade056c5d9c4becd1f8e34` |
 | `src/supervisor/rpc.mts` | `e7e8d4059de66f33f12ae4deae75185e44e1dff305613b56ca0e437950a1e626` |
 | `src/supervisor/rpc.mjs` | `c05b14787e4a4bad257295ca9f1c3afd2b3c96e971d6896ea3b343aa580c21f2` |
-| `src/supervisor/receipts.mts` | `e2bd677b84e21aff3bb9e1fba6b784d357f4ed83e5e210e39979802dc525b238` |
-| `src/supervisor/receipts.mjs` | `4cee31116e691a153e98c7b7e39a14c192579c985e9a9000593878009a941f35` |
-| `src/supervisor/run.mts` | `101f2fa679ddc78de2a57cc959be25b96b865c39e00b4dfa1989edd933a5170d` |
-| `src/supervisor/run.mjs` | `2cc175c7489bdd430cd663f50b73473a2f5c7b23aed170f767cbe393b0e36ff4` |
+| `src/supervisor/receipts.mts` | `860d9e543ade12b8db0f6a7b491594a25afe1e85df7ade55c9902d20910dabc2` |
+| `src/supervisor/receipts.mjs` | `55889d1861a678aa5c13faa228384b55adc7054699238c0ce99767420aa4c355` |
+| `src/supervisor/run.mts` | `22a53db8d336bd53774192c31407404c46c944a22c5a4aa0ea7ea4520a682f03` |
+| `src/supervisor/run.mjs` | `9266cbb388f6dd5ae4d014e099af636f62cab2b9e34d07a94a6a4df984d18f0f` |
 | `src/supervisor/platform.ps1` | `0a247a3cc20bcc4fae011053f6b485f17b508110da4d5b71bdea4942c0fc4538` |
 | `src/supervisor/install.ps1` | `3924b0287b72db98f8edb1511e47319312ca11c44aa9f118c2e9590885cffdf2` |
-| `src/supervisor/README.md` | `f8b9eba0e4a2ddc74e46ab397565ce76098cf35aa0fbe66d14c0f74cff90cd95` |
+| `src/supervisor/README.md` | `ba336eb887d57201b007da22c31517c4ef865247777e0463c80a44734cc046e7` |
 | `src/localworker/AGENTS.md` | `7935a8bcebadb35c28e21372ffdff7eb784e42ab1f1250c7c3cbbe3aa2a65cd1` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |

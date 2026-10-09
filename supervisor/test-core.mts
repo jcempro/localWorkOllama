@@ -50,4 +50,6 @@ e = await advance(structuredClone(seed), {...io,quota:async()=>quota(90)},seed.d
 assert.equal(e.status,'WAITING_QUOTA'); assert.equal(e.diagnostic,'RESET_NOT_YET_OBSERVED');
 e = await advance(structuredClone(seed), {...io,send:async()=>{throw Object.assign(new Error('ENOENT'),{code:'SEND_NOT_STARTED'});}},seed.dueAt);
 assert.equal(e.status,'RETRY'); assert.equal(e.sendStartedAt,undefined);
+e=await advance({...seed,sendStartedAt:seed.dueAt,baselineTurns:[]}, {...io,turns:async()=>{throw new Error('HISTORY_TEMPORARILY_UNAVAILABLE');}},seed.dueAt);
+assert.equal(e.status,'CONFIRMATION_RETRY');assert.equal(e.errorStage,'confirmation');assert.equal(sent,1);
 console.log('PASS: limiar, horario, isolamento, persistencia, reboot logico, prontidao, quota, sessao, rede, envio ambiguo, resposta/eco/erro e idempotencia');

@@ -54,7 +54,15 @@ export function persistedTurn(config     , turnId        ) {
     if(!row)return null;
     const query=db.prepare('SELECT item_json FROM thread_items WHERE thread_id=? AND turn_id=? AND item_id=?');
     const items=[row.first_user_item_id,row.final_agent_item_id].filter(Boolean).map(id=>{
-      const value    =query.get(config.threadId,turnId,id);return value?JSON.parse(value.item_json):null;
+      const value    =query.get(config.threadId,turnId,id);
+      if(!value)return null;
+      const item=JSON.parse(value.item_json);
+      // A projecao SQLite usa o enum interno; a API publica normaliza para final.
+      // Somente o item final explicitamente apontado pelo turno recebe a traducao.
+      if(item.id===row.final_agent_item_id&&item.type==='agentMessage'&&item.phase==='final_answer'){
+        item.sourcePhase=item.phase;item.phase='final';
+      }
+      return item;
     }).filter(Boolean);
     return {id:turnId,startedAt:row.started_at,status:row.status,error:row.error_json?JSON.parse(row.error_json):null,items};
   }finally{db.close();}

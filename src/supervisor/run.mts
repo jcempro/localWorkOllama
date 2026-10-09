@@ -107,6 +107,7 @@ async function main() {
       recoverDesktop:()=>platform(config,'Desktop'),
       ready:async()=>{await platform(config,'Desktop');await repairWorker(config);},
       turns:async(_target: any,event?: any)=>{
+        if(event?.messageClientId){const turn=correlatedTurn(config,event.messageClientId);return turn?[turn]:[];}
         const response=await rpc.read('thread/turns/list',{threadId:config.threadId,limit:20,sortDirection:'desc',itemsView:'notLoaded'});
         if(event){
           for(const turn of response.data){

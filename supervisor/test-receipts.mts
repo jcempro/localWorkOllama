@@ -24,13 +24,15 @@ try{
   db=new DatabaseSync(path.join(root,'thread_history_1.sqlite'));
   db.exec('CREATE TABLE thread_turns(thread_id TEXT,turn_id TEXT,status TEXT,error_json TEXT,started_at INTEGER,first_user_item_id TEXT,final_agent_item_id TEXT); CREATE TABLE thread_items(thread_id TEXT,turn_id TEXT,item_id TEXT,item_json TEXT,item_type TEXT)');
   const user={id:'server-user-id',clientId:client,type:'userMessage',content:[{type:'text',text:'continue'}]};
-  const final={id:'answer-id',type:'agentMessage',phase:'final',text:'Retomada real confirmada.'};
+  const final={id:'answer-id',type:'agentMessage',phase:'final_answer',text:'Retomada real confirmada.'};
   db.prepare('INSERT INTO thread_turns VALUES(?,?,?,?,?,?,?)').run(thread,'turn','inProgress',null,1,user.id,null);
   db.prepare('INSERT INTO thread_items VALUES(?,?,?,?,?)').run(thread,'turn',user.id,JSON.stringify(user),'userMessage');
   assert.equal(persistedTurn({codexHome:root,threadId:thread},'turn')?.status,'inProgress');
   db.prepare('UPDATE thread_turns SET status=?,final_agent_item_id=?').run('completed',final.id);
   db.prepare('INSERT INTO thread_items VALUES(?,?,?,?,?)').run(thread,'turn',final.id,JSON.stringify(final),'agentMessage');
   const turn={...persistedTurn({codexHome:root,threadId:thread},'turn'),id:'turn',startedAt:1};
+  assert.equal(turn.items?.find(i=>i.id===final.id)?.phase,'final');
+  assert.equal(turn.items?.find(i=>i.id===final.id)?.sourcePhase,'final_answer');
   const event={baselineTurns:[],sendStartedAt:1000,messageClientId:client};
   assert.equal(responseEvidence(event,[turn]).status,'COMPLETED');
   const manual={...turn,id:'manual',items:[{...user,clientId:thread},final]};

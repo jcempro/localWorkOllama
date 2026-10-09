@@ -88,9 +88,11 @@ export async function advance(event     , io     , now        ) {
     if(receipt?.messageClientId)await save(receipt);
   }
   if (now < Math.max(event.dueAt, event.nextAttemptAt ?? 0)) return event;
+  let stage='preflight';
   try {
     await io.identity(event.target);
     if (event.sendStartedAt) {
+      stage='confirmation';
       await io.recoverDesktop();
       const evidence = responseEvidence(event, await io.turns(event.target, event));
       await save({ ...evidence, nextAttemptAt: now + (evidence.status === 'RECEIVED' ? 60_000 : POLICY_S8R.maxRetryMs) });
@@ -111,7 +113,9 @@ export async function advance(event     , io     , now        ) {
     }
     await io.ready(event.target);
     const baselineTurns = (await io.turns(event.target)).map((t     ) => t.id);
-    await save({ status: 'SENDING', baselineTurns, dispatchObservedAt: now, sendStartedAt: io.now(), attempts: event.attempts + 1 });
+    stage='send';
+    await save({ status: 'SENDING', baselineTurns, dispatchObservedAt: now, sendStartedAt: io.now(),
+      attempts: event.attempts + 1,sendAttempts:(event.sendAttempts??0)+1 });
     const receipt = await io.send(event.target, 'continue');
     await save({ status: 'SENT', sentAt: io.now(), messageId: receipt.messageId ?? null, messageClientId:receipt.messageClientId??null,
       queueId:receipt.queueId??null, acknowledgement: receipt.acknowledgement ?? null, nextAttemptAt: now + 60_000 });
@@ -120,7 +124,8 @@ export async function advance(event     , io     , now        ) {
     const noSend = error.code === 'SEND_NOT_STARTED';
     if (noSend) delete event.sendStartedAt;
     const attempts = event.attempts + 1;
-    await save({ status: event.sendStartedAt ? 'SEND_AMBIGUOUS' : 'RETRY', attempts,
+    await save({ status: stage==='confirmation'?'CONFIRMATION_RETRY':event.sendStartedAt ? 'SEND_AMBIGUOUS' : 'RETRY', attempts,
+      recoveryAttempts:(event.recoveryAttempts??0)+1,errorStage:stage,
       diagnostic: String(error.message).slice(0, 500), nextAttemptAt: now + Math.min(POLICY_S8R.maxRetryMs, POLICY_S8R.retryMs * 2 ** Math.min(attempts, 5)) });
   }
   return event;
