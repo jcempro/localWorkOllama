@@ -22,7 +22,8 @@ export function detect(snapshot     , target     , now        ) {
     if (!Number.isFinite(w.resetsAt) || w.resetsAt <= 0) throw new Error('RESET_TIME_UNAVAILABLE');
     const dueAt = w.resetsAt * 1000 + POLICY_S8R.delayMs;
     if (dueAt < now - POLICY_S8R.delayMs) throw new Error('STALE_RESET_TELEMETRY');
-    const id = digest([target.accountKey, target.threadId, target.repoPath, w.bucketId, w.name, w.resetsAt]);
+    // Janelas do mesmo bucket restauradas no mesmo instante formam um unico ciclo.
+    const id = digest([target.accountKey, target.threadId, target.repoPath, w.bucketId, w.resetsAt]);
     return { schema: 1, id, target, window: w, dueAt, detectedAt: now, status: 'SCHEDULED', attempts: 0 };
   });
 }
@@ -49,7 +50,7 @@ export async function advance(event     , io     , now        ) {
     await io.identity(event.target);
     if (event.sendStartedAt) {
       await io.recoverDesktop();
-      const evidence = responseEvidence(event, await io.turns(event.target));
+      const evidence = responseEvidence(event, await io.turns(event.target, event));
       await save({ ...evidence, nextAttemptAt: now + (evidence.status === 'RECEIVED' ? 60_000 : POLICY_S8R.maxRetryMs) });
       return event; // Nunca repetir envio sem recibo idempotente.
     }
@@ -61,11 +62,16 @@ export async function advance(event     , io     , now        ) {
       await save({ status: 'WAITING_QUOTA', nextAttemptAt: Math.max(now + POLICY_S8R.retryMs, ...blocked.map(w => w.resetsAt * 1000 + POLICY_S8R.delayMs)), diagnostic: 'QUOTA_NOT_RESTORED' });
       return event;
     }
+    const original = windows(quota).find(w => w.bucketId === event.window.bucketId && w.name === event.window.name);
+    if (!event.window.test && (!original || (original.resetsAt === event.window.resetsAt && original.usedPercent >= POLICY_S8R.threshold))) {
+      await save({status:'WAITING_QUOTA',nextAttemptAt:now+POLICY_S8R.retryMs,diagnostic:'RESET_NOT_YET_OBSERVED'});
+      return event;
+    }
     await io.ready(event.target);
     const baselineTurns = (await io.turns(event.target)).map((t     ) => t.id);
-    await save({ status: 'SENDING', baselineTurns, sendStartedAt: now, attempts: event.attempts + 1 });
+    await save({ status: 'SENDING', baselineTurns, dispatchObservedAt: now, sendStartedAt: io.now(), attempts: event.attempts + 1 });
     const receipt = await io.send(event.target, 'continue');
-    await save({ status: 'SENT', sentAt: io.now(), messageId: receipt.messageId ?? null, nextAttemptAt: now + 60_000 });
+    await save({ status: 'SENT', sentAt: io.now(), messageId: receipt.messageId ?? null, acknowledgement: receipt.acknowledgement ?? null, nextAttemptAt: now + 60_000 });
   } catch (error     ) {
     // Só ENOENT de spawn prova ausência de envio; erros de rede/exit são ambíguos.
     const noSend = error.code === 'SEND_NOT_STARTED';

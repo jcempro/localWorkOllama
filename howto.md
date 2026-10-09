@@ -1,5 +1,23 @@
 # localWorker no Codex Desktop (Windows 11 2025H2+)
 
+## Opcional: continuar o supervisor depois da restauração da cota
+
+Após concluir a instalação e autenticação descritas neste artigo, o componente separado `src/supervisor/` pode acompanhar uma conversa autorizada sem inferência. Fluxo: **telemetria oficial → saldo ≤10% → tarefa em reset+60s → prontidão → `continue` único → confirmação**. Ele não altera o Worker nem o modelo/esforço do chat.
+
+No PowerShell, a partir da raiz obtida deste repositório:
+
+```powershell
+$ConversaS8R = Read-Host 'ID confirmado da conversa original no Codex Desktop'
+$RepositorioS8R = Read-Host 'Caminho absoluto do projeto associado a essa conversa'
+& ./src/supervisor/install.ps1 -ThreadId $ConversaS8R -RepoPath $RepositorioS8R
+```
+
+O ID deve ser obtido e confirmado pelas ferramentas do Desktop, junto ao diretório; não use exemplo ou ID de outro chat. O instalador verifica a identidade na API. `-Target`, `-CodexHome`, `-WorkerHome`, `-NodeExe`, `-CodexExe`, `-OllamaExe` e `-ScanMinutes` permitem caminhos/intervalo específicos. A instalação normal usa descoberta de executáveis e `CODEX_HOME`/`LOCAL_WORKER_HOME` quando definidos. Autentique-se no próprio Desktop antes de instalar; não cole tokens em arquivos.
+
+A tarefa de detecção executa a cada 2 minutos e no logon; ao atingir o limiar cria tarefa exclusiva no timestamp oficial de restauração +60s. `status.json` e `events/` no destino informado pelo instalador registram operação, impedimentos e confirmação. Verifique uma vez a prontidão com `node <destino>/run.mjs --probe`, substituindo `<destino>` pelo path real instalado. Scripts e configurações canônicos estão integralmente em [src/supervisor](src/supervisor/README.md), incluindo interfaces e comandos de diagnóstico/teste.
+
+Não há garantia de pontualidade de um Windows desligado, sem logon ou sem rede. Login que exige pessoa permanece bloqueio explícito. Um recibo sem identidade de mensagem não permite atribuir inequivocamente a resposta ao envio: o estado será `RESPONSE_OBSERVED_UNCORRELATED`, nunca `COMPLETED` presumido. O script não repete envio ambíguo. Tarefas de outros componentes e arquivos pessoais são preservados. Remoção/desativação, retenção e recuperação estão no contrato vinculado; o Worker continua independente deste componente.
+
 A compactação preserva o último lote de respostas de ferramentas até o modelo examiná-lo, incluindo código. Recibos de execução e commits permanecem no estado preservado; um retorno que não caiba com segurança exige segmentação, sem descarte silencioso. O Git comprova estado/versionamento, mas não substitui leitura dos arquivos necessários à análise.
 
 No monitor, **Todos os jobs** mostra barras de CPU, GPU, RAM e VRAM globais da máquina, atualizadas automaticamente a cada dez segundos. A primeira leitura de CPU pode aparecer indisponível até haver duas amostras. GPU/VRAM exigem a fonte NVIDIA já usada pelo runtime; ausência aparece explicitamente. Abra um job para ver suas métricas e a timeline, com eventos mais recentes no topo; o histórico original permanece intacto.
@@ -522,10 +540,15 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/supervisor/core.mts` | `370d6df2f9a4e8a100ae0c6f23502cac744a7bcba1d8e2a62d9edd1cc7bdd424` |
-| `src/supervisor/core.mjs` | `b47dd041dc5d2a0f23737d3d9c35285c82b41bc5345193df5e4025f41cfbb43a` |
-| `src/supervisor/rpc.mts` | `bc749f5e14ec30850834c4a17456a744bb304cc01637c09252f8ef61d4799a7b` |
-| `src/supervisor/rpc.mjs` | `239e222631cdc5ca861cd35fcdb5edf1e27d82576f060fce9b1cb747339baa4f` |
+| `src/supervisor/core.mts` | `a1d4109b413d480795ac501fda3fbf3cc55409d68488ae8a403551a840600714` |
+| `src/supervisor/core.mjs` | `387ef167f5af804b1959449d37f23604fd5ad0afa163d8e6cf103b67d1ca484e` |
+| `src/supervisor/rpc.mts` | `e7e8d4059de66f33f12ae4deae75185e44e1dff305613b56ca0e437950a1e626` |
+| `src/supervisor/rpc.mjs` | `c05b14787e4a4bad257295ca9f1c3afd2b3c96e971d6896ea3b343aa580c21f2` |
+| `src/supervisor/run.mts` | `2a9c7cc1f0f9b315b23b80adb95f51c85d1f8c790c103a11bd57f002b6002e5c` |
+| `src/supervisor/run.mjs` | `059b813c83320eaf2e60c0e5b1eddbdd9f77aa88fe5b25c6bf2ad222caf7dc53` |
+| `src/supervisor/platform.ps1` | `6383c53934199938a4ad3d3f335572f95392be369be3813894f7fba6d230c12d` |
+| `src/supervisor/install.ps1` | `3dc9b48dfca0191fdaaf0e1d736fadec72617547395f8d3b2b26809c8fe77b9d` |
+| `src/supervisor/README.md` | `08e3a7689e5e905b713286c4b63f17d8eb5e66bd8c9f281bf901b883aa6dd93f` |
 | `src/localworker/AGENTS.md` | `7935a8bcebadb35c28e21372ffdff7eb784e42ab1f1250c7c3cbbe3aa2a65cd1` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |

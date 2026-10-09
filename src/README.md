@@ -1,5 +1,7 @@
 # Artefatos portáveis
 
+`supervisor/` é componente opcional e independente de retomada do chat após restauração de cota. `supervisor/install.ps1` recebe `ThreadId` e `RepoPath`; demais paths são descobertos/parametrizados. O [contrato e todos os parâmetros](supervisor/README.md) descreve conta, runtime, tarefas, mutex, limiar, relógio, backoff e limitações. Nenhum ID de chat, path de desenvolvimento ou segredo é distribuído.
+
 `install.ps1` é a entrada para Windows 11 2025H2+. `localworker/` contém os arquivos que serão instalados no perfil escolhido. `agents.supervisor.md` define o bloco global do Codex; `agents.worker.md` espelha as regras instaladas do Worker. O runtime testado reside em `../localworker/`; `../scripts/sync-src.mjs` gera os espelhos e verifica sua equivalência antes de cada commit.
 
 `localworker/mcp-config.mjs` registra e revalida o MCP pelo CLI do Codex, com backup. O instalador e o atualizador o executam; o watchdog agendado restaura um registro perdido. `codex_config` no `config.json` instalado aponta para o arquivo efetivo, descoberto a partir de `-CodexHome`/`CODEX_HOME`.
@@ -70,10 +72,15 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/supervisor/core.mts` | `370d6df2f9a4e8a100ae0c6f23502cac744a7bcba1d8e2a62d9edd1cc7bdd424` |
-| `src/supervisor/core.mjs` | `b47dd041dc5d2a0f23737d3d9c35285c82b41bc5345193df5e4025f41cfbb43a` |
-| `src/supervisor/rpc.mts` | `bc749f5e14ec30850834c4a17456a744bb304cc01637c09252f8ef61d4799a7b` |
-| `src/supervisor/rpc.mjs` | `239e222631cdc5ca861cd35fcdb5edf1e27d82576f060fce9b1cb747339baa4f` |
+| `src/supervisor/core.mts` | `a1d4109b413d480795ac501fda3fbf3cc55409d68488ae8a403551a840600714` |
+| `src/supervisor/core.mjs` | `387ef167f5af804b1959449d37f23604fd5ad0afa163d8e6cf103b67d1ca484e` |
+| `src/supervisor/rpc.mts` | `e7e8d4059de66f33f12ae4deae75185e44e1dff305613b56ca0e437950a1e626` |
+| `src/supervisor/rpc.mjs` | `c05b14787e4a4bad257295ca9f1c3afd2b3c96e971d6896ea3b343aa580c21f2` |
+| `src/supervisor/run.mts` | `2a9c7cc1f0f9b315b23b80adb95f51c85d1f8c790c103a11bd57f002b6002e5c` |
+| `src/supervisor/run.mjs` | `059b813c83320eaf2e60c0e5b1eddbdd9f77aa88fe5b25c6bf2ad222caf7dc53` |
+| `src/supervisor/platform.ps1` | `6383c53934199938a4ad3d3f335572f95392be369be3813894f7fba6d230c12d` |
+| `src/supervisor/install.ps1` | `3dc9b48dfca0191fdaaf0e1d736fadec72617547395f8d3b2b26809c8fe77b9d` |
+| `src/supervisor/README.md` | `08e3a7689e5e905b713286c4b63f17d8eb5e66bd8c9f281bf901b883aa6dd93f` |
 | `src/localworker/AGENTS.md` | `7935a8bcebadb35c28e21372ffdff7eb784e42ab1f1250c7c3cbbe3aa2a65cd1` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |

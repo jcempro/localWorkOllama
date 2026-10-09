@@ -81,11 +81,12 @@ async function walk(relative) {
 
 const inventory = [];
 // Manifesto positivo do componente opcional; nunca copiar configuração privada.
-for (const name of ['core.mts', 'rpc.mts']) {
+for (const name of ['core.mts', 'rpc.mts', 'run.mts', 'platform.ps1', 'install.ps1', 'README.md']) {
   const bytes = await fs.readFile(path.join(ROOT_A3C, 'supervisor', name));
   const target = `src/supervisor/${name}`;
   await putOrCompare(target, bytes);
   inventory.push({ target, sha256: createHash('sha256').update(canonical(bytes)).digest('hex') });
+  if (!name.endsWith('.mts')) continue;
   const compiled = stripTypeScriptTypes(bytes.toString('utf8'), { mode: 'strip' }).replaceAll(".mts'", ".mjs'");
   const output = target.replace(/\.mts$/, '.mjs');
   await putOrCompare(output, Buffer.from(compiled));

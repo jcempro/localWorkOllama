@@ -7,6 +7,8 @@ assert.equal(detect(quota(89), target, now).length, 0);
 const seed = detect(quota(), target, now)[0];
 assert.equal(seed.dueAt, now + 160_000);
 assert.equal(seed.id, detect(quota(), target, now)[0].id);
+const dual=quota();dual.rateLimitsByLimitId.codex.secondary={...dual.rateLimitsByLimitId.codex.primary};
+assert.equal(detect(dual,target,now)[0].id,detect(dual,target,now)[1].id);
 assert.notEqual(seed.id, detect(quota(), { ...target, threadId: 'thread-b' }, now)[0].id);
 assert.throws(() => detect(quota(90, null), target, now), /RESET_TIME/);
 assert.equal(detect({ rateLimits: { primary: null } }, target, now).length, 0);
@@ -35,6 +37,8 @@ assert.equal(e.status,'SEND_AMBIGUOUS'); turns = [];
 await advance(e,io,e.nextAttemptAt); assert.equal(sent,1); // Restart/crash cannot resend.
 e = await advance(structuredClone(seed), {...io,quota:async()=>quota(100)}, seed.dueAt);
 assert.equal(e.status,'WAITING_QUOTA'); assert.equal(sent,1);
+e = await advance(structuredClone(seed), {...io,quota:async()=>quota(90)},seed.dueAt);
+assert.equal(e.status,'WAITING_QUOTA'); assert.equal(e.diagnostic,'RESET_NOT_YET_OBSERVED');
 e = await advance(structuredClone(seed), {...io,send:async()=>{throw Object.assign(new Error('ENOENT'),{code:'SEND_NOT_STARTED'});}},seed.dueAt);
 assert.equal(e.status,'RETRY'); assert.equal(e.sendStartedAt,undefined);
 console.log('PASS: limiar, horario, isolamento, persistencia, reboot logico, prontidao, quota, sessao, rede, envio ambiguo, resposta/eco/erro e idempotencia');

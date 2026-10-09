@@ -24,7 +24,7 @@ export async function connect(config     ) {
     else item.resolve(value.result);
   });
   const read = (method        , params      = {}) => new Promise     ((resolve, reject) => {
-    if (!['initialize', 'account/read', 'account/rateLimits/read', 'thread/read', 'thread/turns/list'].includes(method)) return reject(new Error('READ_ONLY_RPC'));
+    if (!['initialize', 'account/read', 'account/rateLimits/read', 'thread/read', 'thread/turns/list', 'thread/items/list'].includes(method)) return reject(new Error('READ_ONLY_RPC'));
     const id = ++sequence;
     const timer = setTimeout(() => { pending.delete(id); reject(new Error(`RPC_TIMEOUT:${method}`)); }, config.rpcTimeoutMs ?? 30_000);
     pending.set(id, { resolve, reject, timer });
