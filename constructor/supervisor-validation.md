@@ -18,6 +18,8 @@ Durante a validação a cota realmente se esgotou e a revisão automática recus
 
 Correções: identidade persistente de episódio em cycles.json, refinamento do horário sem nova identidade, validação de nova janela; parser estrito do recibo textual e observação somente leitura da fila para correlacionar clientId; estado/primeira mensagem/resposta final lidos na projeção persistida por thread/turn. Testes dirigidos incluem refinamento de timestamp antes/depois do envio, ciclo subsequente, ID de fila diferente do clientId, resposta real e projeção inProgress. Nenhum envio histórico foi repetido para corrigir metadados. Confirmação ponta a ponta da versão corrigida permanece pendente até novo teste delimitado.
 
+A fila real ainda retinha a segunda mensagem residual. Foi confirmado seu schema `UserInput.client_id`, que corresponde ao `clientId` recebido no histórico. A recuperação desse recibo usa somente leitura e o ID exato da fila já registrado; não cria novo teste nem terceiro envio. A confirmação distingue outro `continue` manual/concorrente pela identidade do cliente. Instalação concorrente com execução do monitor é recusada pelo mutex e pode ser retomada, sem interromper o processo.
+
 ## Limites de evidência
 
 Sessão expirada, indisponibilidade, reboot lógico e falha parcial foram injetados na máquina de estados. Não houve reboot físico, encerramento forçado do Desktop, remoção do Worker ativo nem expiração deliberada de autenticação neste computador. Injeção não comprova recuperação integral desses incidentes reais. A restauração natural de quota foi observada; não foi antecipada nem consumida artificialmente.

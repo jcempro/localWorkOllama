@@ -83,6 +83,12 @@ async function main() {
       now:Date.now, save: (e     )=>atomic(path.join(ROOT_S8R,'events',`${e.id}.json`),e),
       identity:async(t     )=>{if(JSON.stringify(t)!==JSON.stringify(target))throw new Error('TARGET_CHANGED');assertThread(config);},
       quota:()=>rpc.read('account/rateLimits/read'),
+      reconcileReceipt:async(event     )=>{
+        const queueId=event.queueId??parseQueueReceipt(event.acknowledgement??'',config.threadId);
+        if(!queueId)return null;
+        const observer=observeQueue(config);
+        try{return {queueId,messageClientId:observer.messageClientId(queueId)};}finally{observer.close();}
+      },
       recoverDesktop:()=>platform(config,'Desktop'),
       ready:async()=>{await platform(config,'Desktop');await repairWorker(config);},
       turns:async(_target     ,event      )=>{

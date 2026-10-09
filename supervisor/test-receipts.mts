@@ -33,7 +33,9 @@ try{
   const turn={...persistedTurn({codexHome:root,threadId:thread},'turn'),id:'turn',startedAt:1};
   const event={baselineTurns:[],sendStartedAt:1000,messageClientId:client};
   assert.equal(responseEvidence(event,[turn]).status,'COMPLETED');
-  assert.equal(responseEvidence({...event,messageClientId:queue},[turn]).status,'RESPONSE_OBSERVED_UNCORRELATED');
+  const manual={...turn,id:'manual',items:[{...user,clientId:thread},final]};
+  assert.equal(responseEvidence(event,[manual,turn]).status,'COMPLETED');
+  assert.equal(responseEvidence({...event,messageClientId:queue},[turn]).status,'AWAITING_RESPONSE');
   console.log('PASS: recibo da fila != ID recebido; correlacao clientId, schema ausente, projecao real, resposta e isolamento');
 }finally{
   observer?.close();db?.close();

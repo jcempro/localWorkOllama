@@ -65,7 +65,8 @@ export function detect(snapshot     , target     , now        ) {
 const userText = (item     ) => (item.content ?? []).map((c     ) => c.type === 'text' ? c.text : '').join('');
 export function responseEvidence(event     , turns       ) {
   const candidates = turns.filter(t => !event.baselineTurns.includes(t.id) && t.startedAt * 1000 >= event.sendStartedAt - 1000 &&
-    t.items?.some((i     ) => i.type === 'userMessage' && userText(i) === 'continue'));
+    t.items?.some((i     ) => i.type === 'userMessage' && userText(i) === 'continue' &&
+      (!event.messageClientId || i.clientId===event.messageClientId)));
   if (candidates.length > 1) return { status: 'AMBIGUOUS_RESPONSE', reason: 'MULTIPLE_CONTINUE_TURNS' };
   const turn = candidates[0];
   if (!turn) return { status: 'AWAITING_RESPONSE' };
@@ -79,8 +80,14 @@ export function responseEvidence(event     , turns       ) {
 
 // Todas as mutações passam por save antes de efeitos não idempotentes.
 export async function advance(event     , io     , now        ) {
-  if (event.status === 'COMPLETED' || now < Math.max(event.dueAt, event.nextAttemptAt ?? 0)) return event;
+  if (event.status === 'COMPLETED') return event;
   const save = async (patch     ) => { Object.assign(event, patch, { updatedAt: now }); await io.save(event); };
+  // Recuperar recibo enquanto a fila ainda retém a mensagem, mesmo durante backoff.
+  if(event.sendStartedAt&&!event.messageClientId&&io.reconcileReceipt){
+    const receipt=await io.reconcileReceipt(event);
+    if(receipt?.messageClientId)await save(receipt);
+  }
+  if (now < Math.max(event.dueAt, event.nextAttemptAt ?? 0)) return event;
   try {
     await io.identity(event.target);
     if (event.sendStartedAt) {

@@ -114,14 +114,14 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/supervisor/core.mts` | `235fdae0122e958e8e9a972fc8f90651161e164cf56a04002f73ddd65d12536b` |
-| `src/supervisor/core.mjs` | `cff79d06b64400114a3dfe594b041f21347649b5e4ddbf63f3a1fdba75fa2864` |
+| `src/supervisor/core.mts` | `11210f9ac730b5ec3e14304eb0e6e6ae6ad4c8e04cadf021dc9c4059f281ebfd` |
+| `src/supervisor/core.mjs` | `1cc593d655cac51bbfe8fac8f86f43fc6a2ba17ee7b0ce97be1681b2eb24fa21` |
 | `src/supervisor/rpc.mts` | `e7e8d4059de66f33f12ae4deae75185e44e1dff305613b56ca0e437950a1e626` |
 | `src/supervisor/rpc.mjs` | `c05b14787e4a4bad257295ca9f1c3afd2b3c96e971d6896ea3b343aa580c21f2` |
 | `src/supervisor/receipts.mts` | `82312df9344a26bcd59101d10e2b9a65ff91460b325e2259c223f609116e5c90` |
 | `src/supervisor/receipts.mjs` | `4f9aee796eff4cc9f4b9e2246c72e92ac31de562fc55a23013ca9c321246754d` |
-| `src/supervisor/run.mts` | `ef0b645555812b7f07f7cd702c266aeb935374436d3a0e767e0263347c668bac` |
-| `src/supervisor/run.mjs` | `e6c53cb1ff41b9538cc298d9a772b901e24f1abafcd46827e4332fbf9d9d805d` |
+| `src/supervisor/run.mts` | `cdf9fed456658c8bc125c48c006661d7de23951480a0862ad3dda70578a0d313` |
+| `src/supervisor/run.mjs` | `6b2cd3dea95f3d1bf9044666c612d8ba996cdb3e8268084de8fe54ee639069c3` |
 | `src/supervisor/platform.ps1` | `0a247a3cc20bcc4fae011053f6b485f17b508110da4d5b71bdea4942c0fc4538` |
 | `src/supervisor/install.ps1` | `3924b0287b72db98f8edb1511e47319312ca11c44aa9f118c2e9590885cffdf2` |
 | `src/supervisor/README.md` | `fb346ec3c79c77eff36f914bbcf789710d57d78ae4e29f8e59c216de835fd62e` |
