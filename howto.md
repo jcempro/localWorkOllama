@@ -2,6 +2,8 @@
 
 ## Opcional: continuar o supervisor depois da restauração da cota
 
+Após reinício inesperado, o runtime reconstrói um índice ativo corrompido a partir dos estados íntegros e preserva o original com hash. Se o recibo de envio estiver corrompido, o job fica com entrega `AMBIGUOUS`: conferir o chat de origem é obrigatório antes de qualquer reenvio. Os arquivos críticos são sincronizados antes da substituição atômica; isso reduz perda por interrupção, sem garantir a integridade de hardware ou energia.
+
 Após concluir a instalação e autenticação descritas neste artigo, o componente separado `src/supervisor/` pode acompanhar uma conversa autorizada sem inferência. Fluxo: **telemetria oficial → saldo ≤10% → tarefa em reset+60s → prontidão → `continue` único → confirmação**. Ele não altera o Worker nem o modelo/esforço do chat.
 
 No PowerShell, a partir da raiz obtida deste repositório:
@@ -563,14 +565,14 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `4edbd4585d9380370a5d2efa25c9c000af36666c99916d90a8433077d40ebcb9` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `8dffbae13282970446959cd32ffc8e5cff06273d41d4a008ba1feecb2044b1aa` |
+| `src/localworker/job-store.mjs` | `f6f1feeeb3590925178122456d4eab92db5501b6ac9d9d2d128c7f97328ed590` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `2904d9b79f99769e1c40a59614530dc3e4a9bf6906f96844f36b2c6001ee6729` |
 | `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
-| `src/localworker/delivery.mjs` | `46e0fdcb03012d41f986f2ae74427bb191064a3a2adcdf47f3ce9ebdbac9dd20` |
-| `src/localworker/watchdog.mjs` | `9f9ccd116a57149c50342fcb3e7a6a703afdbc0d0557a021450283c4c98bb9e2` |
+| `src/localworker/delivery.mjs` | `c45dace916fca7de5dc17d6c7089c23bc36ed3ba0422121bfcf63d7c67f25920` |
+| `src/localworker/watchdog.mjs` | `208d32ac905bbceb57dca6a06fb4af93790c8393b9f40f9d59dc6e2374dcd984` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
 | `src/localworker/monitor-page.mjs` | `c9f7b66a1afc7134a406bb3670e3c0e1a7832af57edd493d9234523f3c88ac8f` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |

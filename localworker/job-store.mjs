@@ -1,7 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHash } from "node:crypto";
 
 export const ROOT = path.dirname(fileURLToPath(import.meta.url));
 export const JOBS = path.join(ROOT, "jobs");
@@ -36,7 +36,9 @@ export async function atomicJson(file, value) {
   await fs.mkdir(path.dirname(file), { recursive: true });
   const tmp = `${file}.${process.pid}.${randomUUID()}.tmp`;
   try {
-    await fs.writeFile(tmp, JSON.stringify(value, null, 2) + "\n", { flag: "wx" });
+    const handle = await fs.open(tmp, "wx");
+    try { await handle.writeFile(JSON.stringify(value, null, 2) + "\n"); await handle.sync(); }
+    finally { await handle.close(); }
     await replaceFile(tmp, file);
   } finally {
     await fs.rm(tmp, { force: true });
@@ -47,7 +49,9 @@ export async function atomicText(file, value) {
   await fs.mkdir(path.dirname(file), { recursive: true });
   const tmp = `${file}.${process.pid}.${randomUUID()}.tmp`;
   try {
-    await fs.writeFile(tmp, String(value), { flag: "wx" });
+    const handle = await fs.open(tmp, "wx");
+    try { await handle.writeFile(String(value)); await handle.sync(); }
+    finally { await handle.close(); }
     await replaceFile(tmp, file);
   } finally {
     await fs.rm(tmp, { force: true });
@@ -56,6 +60,28 @@ export async function atomicText(file, value) {
 
 export async function getState(id) {
   return readJson(path.join(jobDir(id), "state.json"));
+}
+
+// Perda/corrupcao de recibo nunca prova que uma mensagem nao foi enviada.
+export async function readDelivery(id) {
+  const file=path.join(jobDir(id),"delivery.json");
+  try {
+    const delivery=await readJson(file);
+    if(typeof delivery?.status!=="string")throw new SyntaxError("delivery schema invalid");
+    return delivery;
+  }catch(error){
+    if(!(error instanceof SyntaxError))throw error;
+    const bytes=await fs.readFile(file);
+    const hash=createHash("sha256").update(bytes).digest("hex");
+    const preserved=path.join(jobDir(id),`delivery.corrupt-${hash}.bin`);
+    try{const h=await fs.open(preserved,"wx");try{await h.writeFile(bytes);await h.sync();}finally{await h.close();}}
+    catch(e){if(e.code!=="EEXIST")throw e;if(!bytes.equals(await fs.readFile(preserved)))throw new Error("Corrupt delivery backup mismatch");}
+    const recovered={status:"AMBIGUOUS",reason:"DELIVERY_ARTIFACT_CORRUPTED; envio historico desconhecido; sem retry automatico",
+      recovered_at:new Date().toISOString(),artifact_sha256:hash,preserved_artifact:path.basename(preserved)};
+    await atomicJson(file,recovered);
+    await atomicText(path.join(jobDir(id),"delivery-error.txt"),`${recovered.reason}\nEvidencia: ${recovered.preserved_artifact}\n`);
+    return recovered;
+  }
 }
 
 export async function setState(id, state) {
@@ -71,10 +97,30 @@ const activeFile = path.join(ROOT, "active.json");
 export async function activeJob() {
   try {
     const active = await readJson(activeFile);
+    if(active.job_id===null)return null;
+    if(!JOB_ID_J4R.test(active.job_id??''))throw new SyntaxError('active schema invalid');
     const state = await getState(active.job_id);
     return TERMINAL.has(state.status) ? null : active.job_id;
   } catch (error) {
     if (error?.code === "ENOENT") return null;
+    if(error instanceof SyntaxError){
+      // Indice reconstruivel; estados de jobs sao a autoridade, nunca replay.
+      const bytes=await fs.readFile(activeFile);
+      const hash=createHash('sha256').update(bytes).digest('hex');
+      const backup=path.join(ROOT,`active.corrupt-${hash}.bin`);
+      try{const h=await fs.open(backup,'wx');try{await h.writeFile(bytes);await h.sync();}finally{await h.close();}}
+      catch(e){if(e.code!=='EEXIST')throw e;if(!bytes.equals(await fs.readFile(backup)))throw Error('Active backup mismatch');}
+      const candidates=[];
+      for(const id of await listJobs()){
+        const state=await getState(id);
+        if(state.job_id!==id||!['QUEUED','RUNNING',...TERMINAL].includes(state.status))throw Error(`WORKER_INFRA_ERROR: estado invalido em ${id}; indice nao reconstruido`);
+        if(!TERMINAL.has(state.status))candidates.push(id);
+      }
+      if(candidates.length>1)throw Error('WORKER_INFRA_ERROR: multiplos jobs ativos; indice nao reconstruido');
+      const id=candidates[0]??null;
+      await atomicJson(activeFile,{job_id:id,recovered_at:new Date().toISOString(),prior_sha256:hash,preserved_artifact:path.basename(backup)});
+      return id;
+    }
     throw error;
   }
 }

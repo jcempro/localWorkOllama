@@ -3,7 +3,7 @@ import { spawn } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { jobDir, getState, readJson, atomicJson, atomicText } from "./job-store.mjs";
+import { jobDir, getState, readJson, readDelivery, atomicJson, atomicText } from "./job-store.mjs";
 import { withJobControl } from "./job-control.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
@@ -86,7 +86,8 @@ async function deliverLocked(id) {
   catch (error) { if (error?.code === "EEXIST") return { status: "LOCKED" }; throw error; }
   try {
     await lock.writeFile(JSON.stringify({ pid: process.pid }));
-    const current = await readJson(deliveryFile);
+    await lock.sync();
+    const current = await readDelivery(id);
     if (current.status !== "PENDING") return current;
     const request = await readJson(path.join(dir, "request.json"));
     if (!/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(request.thread_id ?? "")) {

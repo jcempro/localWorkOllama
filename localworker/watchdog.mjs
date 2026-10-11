@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { listJobs, jobDir, getState, setState, alive, readJson, atomicText, atomicJson, pruneJobHistory } from "./job-store.mjs";
+import { listJobs, jobDir, getState, setState, alive, readJson, readDelivery, atomicText, atomicJson, pruneJobHistory } from "./job-store.mjs";
 import { deliver, notify } from "./delivery.mjs";
 import { ensureMonitor } from "./monitor.mjs";
 import { ensureMcpRegistration } from "./mcp-config.mjs";
@@ -68,7 +68,7 @@ export async function reconcileJob(id) {
         await setState(id, { ...state, status: "FAILED", phase: "failed", error_kind: "WORKER_INFRA_ERROR", completed_at: new Date().toISOString(), recovered_from: "runner-orphaned" });
       } else return { status: state.status, reconciled: false };
     }
-    const delivery = await readJson(path.join(dir, "delivery.json"));
+    const delivery = await readDelivery(id);
     if (delivery.status === "STARTED" && !alive(delivery.pid)) {
       await atomicText(path.join(dir, "delivery-error.txt"), "Envio ao chat iniciado; processo de entrega ausente. Estado ambíguo: sem retry automático.\n");
       await atomicJson(path.join(dir, "delivery.json"), { status: "AMBIGUOUS", reason: "entrega interrompida após início do envio ao chat" });
