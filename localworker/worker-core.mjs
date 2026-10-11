@@ -1830,6 +1830,11 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
         tool_name: call.function.name,
         content: compact(result),
       });
+      if(assessment.stagnant_actions===2){
+        const pendingCommands=requiredCommands.filter(id=>!completedCommands.has(id));
+        messages.push({role:"user",content:`ADAPTACAO OPERACIONAL: duas ações sem progresso verificável. Abandone a estratégia atual e reutilize evidências já lidas. ${mode==="write"&&!successfulMutations?"O pedido exige implementação: use write_file para arquivo novo ou edit_file para alteração existente, nos alvos autorizados; teste não cria a implementação.":"Escolha alternativa autorizada que produza evidência nova ou conclua a análise já fundamentada."} Comandos obrigatórios pendentes (IDs de run_authorized_command): ${JSON.stringify(pendingCommands)}. Se falta capacidade, retorne NEEDS_SUPERVISOR com mecanismo/acesso exato e motivo. Não repita chamadas bloqueadas nem amplie o escopo.`});
+        await onProgress({phase:"strategy_adaptation",step:step+1,reason:"duas ações sem progresso; orientação antes do bloqueio",pending_command_ids:pendingCommands});
+      }
       if (commandSequence.length && actionError) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: comando determinístico ${args.id} falhou; execução suspensa sem repetir efeitos. ${String(actionError.message)}`);
       if (assessment.stop) {
         throw new WorkerIncompleteError(`WORKER_INCOMPLETE: ausência de progresso verificável em quatro ações; última estratégia ${toolName}, classe ${assessment.kind}. ${diagnostic ?? "Evidência já obtida repetida"}. Sequência registrada em strategy_blocked; requer alternativa legítima ou autorização específica do supervisor.`);

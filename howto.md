@@ -6,6 +6,8 @@ Após reinício inesperado, o runtime reconstrói um índice ativo corrompido a 
 
 O atualizador usa a mesma recuperação com raiz destino explícita antes de verificar jobs ativos. Assim, pode atualizar uma instalação antiga cujo `active.json` esteja corrompido; estados inválidos ou múltiplos jobs ativos impedem a atualização com diagnóstico, preservando os originais.
 
+No monitor, o evento `strategy_adaptation` indica duas ações sem progresso: o runtime orientou uma alternativa legítima e informou comandos obrigatórios pendentes. A guarda continua interrompendo quatro ações improdutivas; a orientação não concede acesso adicional nem transforma testes em implementação.
+
 Após concluir a instalação e autenticação descritas neste artigo, o componente separado `src/supervisor/` pode acompanhar uma conversa autorizada sem inferência. Fluxo: **telemetria oficial → saldo ≤10% → tarefa em reset+60s → prontidão → `continue` único → confirmação**. Ele não altera o Worker nem o modelo/esforço do chat.
 
 No PowerShell, a partir da raiz obtida deste repositório:
@@ -571,7 +573,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `2904d9b79f99769e1c40a59614530dc3e4a9bf6906f96844f36b2c6001ee6729` |
+| `src/localworker/worker-core.mjs` | `e1221ecd8ee2a6190c16db47c5cd01d5b11b4949b0fdf48c3c92ab48b67abee0` |
 | `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
 | `src/localworker/delivery.mjs` | `c45dace916fca7de5dc17d6c7089c23bc36ed3ba0422121bfcf63d7c67f25920` |
 | `src/localworker/watchdog.mjs` | `208d32ac905bbceb57dca6a06fb4af93790c8393b9f40f9d59dc6e2374dcd984` |

@@ -20,6 +20,8 @@ O agendamento é exato na configuração; execução pontual não é garantida p
 
 ## Supervisão responsável e segmentada
 
+Após duas ações sem progresso verificável, o runtime DEVE orientar adaptação com evidências já obtidas, distinção entre implementar e validar e IDs obrigatórios ainda pendentes. A orientação precede o bloqueio e não amplia permissões, zera o contador de estagnação ou autoriza repetir estratégia bloqueada. Persistência de quatro ações sem progresso mantém a interrupção auditável.
+
 - Comunicação supervisor↔Worker exige equivalência de significado comprovada: traduzir nomes/comandos/abstrações para objetivo, comportamento e resultado, sem presumir compartilhamento de ferramentas ou semântica. Macro, decomposição, risco, direção, integração e qualidade global são responsabilidade do supervisor; microimplementação, investigação delimitada e alternativas técnicas são autonomia do Worker, que pode contribuir com insumos para planejamento sem assumir engenharia global. Menor capacidade cognitiva exige contexto/aceite explícitos, não limitação operacional arbitrária.
 - Recursos nativos ou extensíveis já disponíveis podem ser usados com capacidades e efeitos comprovados, inclusive fora do repositório quando a autorização abranger esse objetivo, preservando fronteiras, SO, privacidade e dados. Não há obrigação de inventar ferramentas ausentes. Operações críticas seguem supervisão proporcionalmente mais intensa, checkpoints prévios ao dano, menor privilégio, validação e rollback quando aplicável; tarefas não críticas mantêm autonomia técnica no microescopo. Acompanhamento ocorre nos checkpoints/eventos pertinentes ao risco, sem polling pago por mera demora. Revisões retroativas corrigem premissas inadequadas sem remover comportamentos válidos.
 - Comando pré-aprovado pode declarar `mode=read-only` e operar em job somente leitura quando o supervisor tiver verificado seus efeitos. O runtime conserva argv exatos sem shell e não infere segurança pelo nome do programa. O padrão do comando é `write`; comandos sem garantia explícita de leitura continuam recusados em job read-only.
@@ -141,7 +143,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `2904d9b79f99769e1c40a59614530dc3e4a9bf6906f96844f36b2c6001ee6729` |
+| `src/localworker/worker-core.mjs` | `e1221ecd8ee2a6190c16db47c5cd01d5b11b4949b0fdf48c3c92ab48b67abee0` |
 | `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
 | `src/localworker/delivery.mjs` | `c45dace916fca7de5dc17d6c7089c23bc36ed3ba0422121bfcf63d7c67f25920` |
 | `src/localworker/watchdog.mjs` | `208d32ac905bbceb57dca6a06fb4af93790c8393b9f40f9d59dc6e2374dcd984` |
