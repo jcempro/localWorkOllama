@@ -40,6 +40,8 @@ A instalação da conversa indicada validou autenticação, destino e MCP/modelo
 
 ## Limites de validação integral
 
+11/10/2026: ambas as tarefas encontravam-se RECOVERY_PENDING com ENOENT do CLI em pasta versionada removida pela atualização do Desktop. `rpc.mts` e instalador passaram a reutilizar descoberta do Worker instalado ou da cópia de recuperação, preservando configuração explícita válida. Testes dirigidos cobriram executável existente/removido, Worker ausente, esgotamento de alternativas e recusa de path relativo. Reinstalação das duas conversas concluiu com READY, autenticação e MCP/modelo verificados usando o CLI atual, sem novo envio de teste.
+
 A recuperação desse incidente foi **COMPLETED**, `sendAttempts=1`, confirmação `persisted-client-id`, turno `01a121fe-b3d0-7562-a33e-8b43966b66ad`, resposta `msg_0a0d970cb8f03f80016ac937507904819184f9960003a132e7`, SHA-256 `c25b2b7173df0bad62795e5faeec30024b59427651a58777903f9579781b5bef`. O novo turno terminou sem erro e iniciou o job `698aee2b-a18f-40a1-935a-1cd1fd118da8` para o trabalho pendente no projeto. A tarefa Windows retornou `LastTaskResult=0`; reconciliação direcionada ao evento de conclusão confirmou a resposta sem reenvio. Isso comprova a recuperação tardia na conversa antes desprotegida, não um disparo retroativo em reset+60s nem a conclusão das FTs daquele projeto.
 
 Sessão expirada, indisponibilidade, reboot lógico e falha parcial foram injetados na máquina de estados. Não houve reboot físico, encerramento forçado do Desktop, remoção do Worker ativo nem expiração deliberada de autenticação neste computador. Injeção não comprova recuperação integral desses incidentes reais. A restauração natural de quota foi observada; não foi antecipada nem consumida artificialmente.

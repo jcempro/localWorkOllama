@@ -17,6 +17,16 @@ if(-not $WorkerHome){$WorkerHome=if($env:LOCAL_WORKER_HOME){$env:LOCAL_WORKER_HO
 if(-not $NodeExe){$NodeExe=(Get-Command node.exe -ErrorAction Stop).Source}
 $workerConfigS8R=Get-Content -LiteralPath (Join-Path $WorkerHome 'config.json') -Raw | ConvertFrom-Json
 if(-not $CodexExe){$CodexExe=$workerConfigS8R.codex_command}
+if(-not $CodexExe -or -not(Test-Path -LiteralPath $CodexExe -PathType Leaf)){
+  # Mesma descoberta do runtime, antes da validacao de paths e sem shell de CLI.
+  $env:SUPERVISOR_DISCOVER_S8R=(@{workerHome=[IO.Path]::GetFullPath($WorkerHome);codex=$CodexExe}|ConvertTo-Json -Compress)
+  Push-Location $PSScriptRoot
+  try{
+    $foundS8R=& $NodeExe --input-type=module -e 'import {resolveCodex} from "./rpc.mjs"; console.log(await resolveCodex(JSON.parse(process.env.SUPERVISOR_DISCOVER_S8R)));'
+    if($LASTEXITCODE -ne 0){throw 'CODEX_CLI_UNAVAILABLE'}
+    $CodexExe=($foundS8R|Select-Object -Last 1).Trim()
+  }finally{Pop-Location;Remove-Item Env:SUPERVISOR_DISCOVER_S8R}
+}
 if(-not $OllamaExe){$OllamaExe=(Get-Command ollama.exe -ErrorAction Stop).Source}
 $npmS8R=(Get-Command npm.cmd -ErrorAction Stop).Source
 $psS8R=Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'

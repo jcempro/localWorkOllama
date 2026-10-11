@@ -1,8 +1,29 @@
 // Cliente somente de leitura do protocolo oficial; não inicia inferência.
 import { spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+// Reutiliza a descoberta do runtime instalado; a copia de recuperacao permite
+// resolver o CLI mesmo quando o Worker ainda precisa ser restaurado.
+export async function resolveCodex(config: any, load: any = async (file: string) => import(pathToFileURL(file).href)) {
+  const usable=async(file: any)=>{
+    if(typeof file!=='string'||!path.isAbsolute(file))return false;
+    try{const stat=await fs.lstat(file);return stat.isFile()&&!stat.isSymbolicLink();}catch(error: any){if(error.code==='ENOENT')return false;throw error;}
+  };
+  if(await usable(config.codex))return config.codex;
+  const sources=[path.join(config.workerHome,'delivery.mjs'),path.join(path.dirname(fileURLToPath(import.meta.url)),'worker-recovery','delivery.mjs')];
+  const failures=[];
+  for(const source of sources){
+    try{const resolved=await (await load(source)).codexCommand();if(await usable(resolved))return resolved;failures.push('UNUSABLE_CLI');}
+    catch(error: any){failures.push(error.code??'RESOLVER_UNAVAILABLE');}
+  }
+  throw new Error(`CODEX_CLI_UNAVAILABLE:${failures.join(',')}`);
+}
 
 export async function connect(config: any) {
+  config.codex=await resolveCodex(config);
   const child = spawn(config.codex, ['app-server', '--stdio'], {
     windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'],
     env: { ...process.env, CODEX_HOME: config.codexHome },

@@ -8,6 +8,8 @@ No PowerShell, a partir da raiz obtida deste repositório:
 
 **A cobertura é por conversa.** Execute a instalação para cada chat autorizado; instalar somente um chat não protege os demais, mesmo no mesmo projeto ou conta. Os destinos e tarefas ficam separados pelo ID. A disponibilidade do Worker não instala automaticamente este componente.
 
+Atualizações do Desktop podem mudar o caminho versionado de `codex.exe`: a instalação e cada passagem recuperam automaticamente um CLI disponível pelos mecanismos de descoberta já instalados. Não edite manualmente o hash da pasta. Se nenhuma alternativa válida existir, o estado registra `CODEX_CLI_UNAVAILABLE` e preserva os eventos para recuperação posterior.
+
 Se o último turno já falhou com o código verificável `usageLimitExceeded`, a instalação também cobre esse incidente: aguarda reset+60s se a cota continuar limitada, ou retoma na próxima passagem se a restauração já ocorreu. Essa recuperação tardia fica identificada no evento e não é apresentada como disparo pontual no passado. Um turno novo iniciado manualmente antes do envio resolve a pendência sem outro `continue`.
 
 ```powershell
@@ -546,15 +548,15 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | --- | --- |
 | `src/supervisor/core.mts` | `15d61b81fd608bc7657184fb06db96342025759df8c2215f2c9f12aeb90f2198` |
 | `src/supervisor/core.mjs` | `8b5d85e31d0343f5a33cf669a020d13d6b1dc9acee82529dcc9159e27b25b1e2` |
-| `src/supervisor/rpc.mts` | `e7e8d4059de66f33f12ae4deae75185e44e1dff305613b56ca0e437950a1e626` |
-| `src/supervisor/rpc.mjs` | `c05b14787e4a4bad257295ca9f1c3afd2b3c96e971d6896ea3b343aa580c21f2` |
+| `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
+| `src/supervisor/rpc.mjs` | `6745f678c8c2c629c9cc27f42f0a162ad26b7608310a84a7676924d6dbe23fe0` |
 | `src/supervisor/receipts.mts` | `6bcf4cb1e6fcf9a94117b2ceffaa2c7000b9cf4de4daebe329a8d46d72ff98bc` |
 | `src/supervisor/receipts.mjs` | `0fd44b64a489d5a5fa2e48e07c20e666c083f300e54cfefbc6b13c0b0132bcc5` |
 | `src/supervisor/run.mts` | `273f56b63cc0ac80aae48975512b9f135d1480026f9c5b74183f81f9e6cf8f11` |
 | `src/supervisor/run.mjs` | `e9e122ecc8c4e18943ff6dfc92abe0137f33427f051cdb56d29ee586324a588e` |
 | `src/supervisor/platform.ps1` | `0a247a3cc20bcc4fae011053f6b485f17b508110da4d5b71bdea4942c0fc4538` |
-| `src/supervisor/install.ps1` | `9f073fbe4eadbf44988cc5011b5c614d6d48c2bd50dd9e1e2f80ee1f70776b7e` |
-| `src/supervisor/README.md` | `70ef889389d32fec20c8a989669217a36fad95855981be76bc7fe6bb8404adc8` |
+| `src/supervisor/install.ps1` | `33143c0dcea6428666b225d4b6581d02606cc5316abd70096bd2a67b8fc12555` |
+| `src/supervisor/README.md` | `ed9139a37fae3aea481a6e324510cbb122eb7f10dd399e08851b54aadc0cdb39` |
 | `src/localworker/AGENTS.md` | `7935a8bcebadb35c28e21372ffdff7eb784e42ab1f1250c7c3cbbe3aa2a65cd1` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
