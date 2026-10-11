@@ -93,13 +93,16 @@ export function alive(pid) {
   try { process.kill(pid, 0); return true; } catch { return false; }
 }
 
-const activeFile = path.join(ROOT, "active.json");
-export async function activeJob() {
+export async function activeJob(runtimeRoot = ROOT) {
+  const actual=await fs.realpath(runtimeRoot);
+  if(path.resolve(actual).toLowerCase()!==path.resolve(runtimeRoot).toLowerCase()||(await fs.lstat(runtimeRoot)).isSymbolicLink())throw Error('Raiz de recuperacao redirecionada');
+  const activeFile=path.join(runtimeRoot,'active.json');
+  const jobsDir=path.join(runtimeRoot,'jobs');
   try {
     const active = await readJson(activeFile);
     if(active.job_id===null)return null;
     if(!JOB_ID_J4R.test(active.job_id??''))throw new SyntaxError('active schema invalid');
-    const state = await getState(active.job_id);
+    const state = await readJson(path.join(jobsDir,active.job_id,'state.json'));
     return TERMINAL.has(state.status) ? null : active.job_id;
   } catch (error) {
     if (error?.code === "ENOENT") return null;
@@ -107,12 +110,12 @@ export async function activeJob() {
       // Indice reconstruivel; estados de jobs sao a autoridade, nunca replay.
       const bytes=await fs.readFile(activeFile);
       const hash=createHash('sha256').update(bytes).digest('hex');
-      const backup=path.join(ROOT,`active.corrupt-${hash}.bin`);
+      const backup=path.join(runtimeRoot,`active.corrupt-${hash}.bin`);
       try{const h=await fs.open(backup,'wx');try{await h.writeFile(bytes);await h.sync();}finally{await h.close();}}
       catch(e){if(e.code!=='EEXIST')throw e;if(!bytes.equals(await fs.readFile(backup)))throw Error('Active backup mismatch');}
       const candidates=[];
-      for(const id of await listJobs()){
-        const state=await getState(id);
+      for(const id of (await fs.readdir(jobsDir)).filter(id=>JOB_ID_J4R.test(id))){
+        const state=await readJson(path.join(jobsDir,id,'state.json'));
         if(state.job_id!==id||!['QUEUED','RUNNING',...TERMINAL].includes(state.status))throw Error(`WORKER_INFRA_ERROR: estado invalido em ${id}; indice nao reconstruido`);
         if(!TERMINAL.has(state.status))candidates.push(id);
       }
@@ -152,7 +155,7 @@ export async function createJob(request) {
     await atomicJson(path.join(dir, "request.json"), request);
     await setState(job_id, { job_id, status: "QUEUED", created_at: new Date().toISOString(), pid: null, heartbeat_at: null });
     await atomicJson(path.join(dir, "delivery.json"), { status: "PENDING" });
-    await atomicJson(activeFile, { job_id });
+    await atomicJson(path.join(ROOT, "active.json"), { job_id });
     return { busy: false, job_id };
   } finally {
     await handle.close();

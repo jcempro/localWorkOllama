@@ -15,10 +15,13 @@ if (-not $targetItem.PSIsContainer -or ($targetItem.Attributes -band [IO.FileAtt
 if (Test-Path -LiteralPath (Join-Path $target 'create.lock')) { throw 'Criação de job em andamento.' }
 $activeFile = Join-Path $target 'active.json'
 if (Test-Path -LiteralPath $activeFile) {
-  $active = Get-Content -LiteralPath $activeFile -Raw | ConvertFrom-Json
-  $stateFile = Join-Path (Join-Path $target 'jobs') (Join-Path $active.job_id 'state.json')
-  $state = Get-Content -LiteralPath $stateFile -Raw | ConvertFrom-Json
-  if ($state.status -notin @('COMPLETED','FAILED','CANCELLED')) { throw 'Job ativo: instalação adiada.' }
+  $env:LOCAL_WORKER_UPDATE_ROOT_R8Q=$target
+  Push-Location $source
+  try {
+    $activeId=& $node --input-type=module -e 'import {activeJob} from "./job-store.mjs"; console.log((await activeJob(process.env.LOCAL_WORKER_UPDATE_ROOT_R8Q))??"");'
+    if($LASTEXITCODE -ne 0){throw 'Indice ativo nao recuperavel: instalacao adiada com evidencia preservada.'}
+    if(($activeId|Select-Object -Last 1)){throw 'Job ativo: instalação adiada.'}
+  }finally{Pop-Location;Remove-Item Env:LOCAL_WORKER_UPDATE_ROOT_R8Q}
 }
 $stamp = Get-Date -Format yyyyMMddHHmmss
 $files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1','package.json','package-lock.json')

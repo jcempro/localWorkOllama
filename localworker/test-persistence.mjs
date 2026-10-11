@@ -14,6 +14,7 @@ try{
   await store.setState(id,{job_id:id,status:'FAILED'});
   await fs.writeFile(path.join(root,'active.json'),Buffer.alloc(75));
   assert.equal(await store.activeJob(),null);
+  assert.equal(await store.activeJob(root),null);
   assert.equal((await store.readJson(path.join(root,'active.json'))).job_id,null);
   await fs.writeFile(path.join(dir,'delivery.json'),Buffer.alloc(26));
   const delivery=await store.readDelivery(id);
