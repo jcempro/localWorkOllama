@@ -9,6 +9,7 @@ Escopo: somente política de manutenção própria; outras capacidades/contratos
 - `TEST_REPO_PATH=<alvo autorizado> node constructor/test-hybrid-mcp.mts`: schema MCP real/defaults/hash; C≤5 júnior e C=7 júnior/estagiário passam a avaliação até a guarda posterior de chat arquivado; C>7/exclusivo/incerteza/escopo alterado/avaliação ausente rejeitados; nenhum job criado.
 - `node localworker/test-integration.mjs` com alvo autorizado e permissão necessária: COMPLETED/QUEUED_TO_CHAT simulado, falha HTTP corretamente classificada, três envios na fixture previstos pelo teste, duas inferências simuladas, Git preservado e veto sem adoção. A primeira execução restrita falhou em `local_monitor` ANTES de qualquer `local_analyze`; recibo público exit1/linha110 e ausência de job reconciliados antes da tentativa em ambiente autorizado. A revisão recusou repetição incerta; nenhuma recusa foi contornada.
 - Sintaxe PowerShell do instalador/atualizador e `node scripts/sync-src.mjs --write`: 38 artefatos, fonte TypeScript/JavaScript equivalentes e sem valores privados do desenvolvimento.
+- `constructor/test-hybrid-install.ps1` em Windows PowerShell 5.1: instalação nova isolada, adoção/identidade, arquivos equivalentes e atualização sem repetir opt-in preservando política, modelo, contexto e timeout; fixture exclusiva removida. Nenhum watchdog/modelo/job adicional.
 
 ## Limites e aceite pendente
 
