@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { connect } from './rpc.mts';
 import { planCycles, planQuotaFailure, advance, digest, responseEvidence } from './core.mts';
-import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn, latestTurn } from './receipts.mts';
+import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn, latestTurn, pendingQueue } from './receipts.mts';
 
 const ROOT_S8R = path.dirname(fileURLToPath(import.meta.url));
 const readJson = async (p: string) => JSON.parse((await fs.readFile(p, 'utf8')).replace(/^\uFEFF/, ''));
@@ -106,6 +106,15 @@ async function main() {
         try{return {queueId,messageClientId:observer.messageClientId(queueId)};}finally{observer.close();}
       },
       recoverDesktop:()=>platform(config,'Desktop'),
+      restoreConversation:async(event: any)=>{
+        if(!pendingQueue(config,event))return null;
+        const desktop=JSON.parse(await platform(config,'Desktop'));
+        if(typeof desktop.desktopInstance!=='string')throw new Error('DESKTOP_INSTANCE_UNAVAILABLE');
+        if(event.conversationActivation?.desktopInstance===desktop.desktopInstance)return null;
+        await platform(config,'Thread');
+        return {desktopInstance:desktop.desktopInstance,at:Date.now(),mechanism:'registered-codex-protocol',
+          count:(event.conversationActivation?.count??0)+1};
+      },
       ready:async()=>{await platform(config,'Desktop');await repairWorker(config);},
       turns:async(_target: any,event?: any)=>{
         if(event?.messageClientId){const turn=correlatedTurn(config,event.messageClientId);return turn?[turn]:[];}

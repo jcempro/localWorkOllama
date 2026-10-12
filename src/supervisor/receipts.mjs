@@ -20,6 +20,18 @@ export function clientIds(payload         )           {
   visit(payload,0);return [...found];
 }
 
+// Ativar UI so para a mensagem exata ainda pendente, nunca por texto/horario.
+export function pendingQueue(config     , event     ) {
+  if(!UUID_R8S.test(event.queueId??'')||!UUID_R8S.test(event.messageClientId??''))return false;
+  const db=new DatabaseSync(path.join(config.codexHome,'queue_1.sqlite'),{readOnly:true});
+  try{
+    const row    =db.prepare('SELECT payload_json FROM queued_items WHERE id=? AND thread_id=?').get(event.queueId,config.threadId);
+    if(!row)return false;
+    const ids=clientIds(JSON.parse(row.payload_json));
+    return ids.length===1&&ids[0]===event.messageClientId;
+  }finally{db.close();}
+}
+
 // Observador read-only de schema efetivamente inspecionado. Ausencia/migracao
 // degrada a confirmacao, nunca altera a fila ou impede um envio autorizado.
 export function observeQueue(config     ) {

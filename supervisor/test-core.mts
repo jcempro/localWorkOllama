@@ -76,3 +76,22 @@ let checks=0;
 const raced=await advance(structuredClone(catchup),{...io,incidentCurrent:async()=>++checks===1},now);
 assert.equal(raced.status,'RESOLVED_EXTERNALLY');assert.equal(sent,beforeCatchup+1);
 console.log('PASS: falha de cota tipada, instalacao tardia, agenda existente, envio unico e continuacao manual concorrente');
+
+turns=[];let activated=0,desktopInstance='instance-a';
+const activationIo={...io,restoreConversation:async(event: any)=>{
+  if(event.conversationActivation?.desktopInstance===desktopInstance)return null;
+  activated++;return {desktopInstance,at:seed.dueAt,count:activated};
+}};
+const beforeActivation=sent;
+let pending=await advance(structuredClone(seed),activationIo,seed.dueAt);
+assert.equal(pending.status,'SENT');assert.equal(activated,1);assert.equal(sent,beforeActivation+1);
+pending=await advance(pending,activationIo,pending.nextAttemptAt);
+assert.equal(pending.status,'AWAITING_RESPONSE');assert.equal(activated,1);assert.equal(sent,beforeActivation+1);
+desktopInstance='instance-b';
+pending=await advance(pending,activationIo,pending.nextAttemptAt);
+assert.equal(activated,2);assert.equal(sent,beforeActivation+1);
+const restoreFailure={...activationIo,restoreConversation:async()=>{throw Error('DESKTOP_PROTOCOL_UNAVAILABLE');}};
+pending=await advance(structuredClone(seed),restoreFailure,seed.dueAt);
+assert.equal(pending.status,'CONFIRMATION_RETRY');assert.equal(pending.sendAttempts,1);
+await advance(pending,activationIo,pending.nextAttemptAt);assert.equal(pending.sendAttempts,1);
+console.log('PASS: conversa pendente ativada por instancia, reboot recuperado, falha rastreavel e sem reenvio');

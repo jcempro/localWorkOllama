@@ -111,7 +111,8 @@ export async function advance(event     , io     , now        ) {
       stage='confirmation';
       await io.recoverDesktop();
       const evidence = responseEvidence(event, await io.turns(event.target, event));
-      await save({ ...evidence, nextAttemptAt: now + (evidence.status === 'RECEIVED' ? 60_000 : POLICY_S8R.maxRetryMs) });
+      const activation=evidence.status==='AWAITING_RESPONSE'&&io.restoreConversation?await io.restoreConversation(event):null;
+      await save({ ...evidence,...(activation?{conversationActivation:activation}:{}), nextAttemptAt: now + (evidence.status === 'RECEIVED' ? 60_000 : POLICY_S8R.maxRetryMs) });
       return event; // Nunca repetir envio sem recibo idempotente.
     }
     if(event.interruptedTurnId && !await io.incidentCurrent(event.interruptedTurnId)){
@@ -142,6 +143,9 @@ export async function advance(event     , io     , now        ) {
     const receipt = await io.send(event.target, 'continue');
     await save({ status: 'SENT', sentAt: io.now(), messageId: receipt.messageId ?? null, messageClientId:receipt.messageClientId??null,
       queueId:receipt.queueId??null, acknowledgement: receipt.acknowledgement ?? null, nextAttemptAt: now + 60_000 });
+    stage='confirmation';
+    const activation=io.restoreConversation?await io.restoreConversation(event):null;
+    if(activation)await save({conversationActivation:activation});
   } catch (error     ) {
     // Só ENOENT de spawn prova ausência de envio; erros de rede/exit são ambíguos.
     const noSend = error.code === 'SEND_NOT_STARTED';

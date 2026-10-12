@@ -1,5 +1,5 @@
 param(
-  [Parameter(Mandatory=$true)][ValidateSet('Tick','TestEvent','Register','Schedule','Unschedule','Desktop','Ollama','WorkerDependencies')][string]$Action,
+  [Parameter(Mandatory=$true)][ValidateSet('Tick','TestEvent','Register','Schedule','Unschedule','Desktop','Thread','Ollama','WorkerDependencies')][string]$Action,
   [Parameter(Mandatory=$true)][string]$Config,
   [string]$EventId,
   [ValidatePattern('^[a-z0-9-]{1,64}$')][string]$TestId='installation-test',
@@ -73,6 +73,17 @@ if ($Action -eq 'Register') {
     }
     if(-not $runningS8R){throw 'DESKTOP_START_PENDING'}
   }
+  $ownerS8R=$runningS8R|Sort-Object StartTime|Select-Object -First 1
+  @{desktopInstance=([string]$ownerS8R.Id+'-'+$ownerS8R.StartTime.ToUniversalTime().Ticks)}|ConvertTo-Json -Compress
+} elseif ($Action -eq 'Thread') {
+  if($cfgS8R.threadId -notmatch '^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$'){throw 'THREAD_ID_INVALID'}
+  $familyS8R=([string]$cfgS8R.desktopAppId).Split('!')[0]
+  $packageS8R=@(Get-AppxPackage|Where-Object PackageFamilyName -EQ $familyS8R)
+  if($packageS8R.Count -ne 1){throw 'DESKTOP_PROTOCOL_PACKAGE_UNAVAILABLE'}
+  [xml]$manifestS8R=Get-Content -LiteralPath (Join-Path $packageS8R[0].InstallLocation 'AppxManifest.xml') -Raw
+  if(-not $manifestS8R.SelectNodes("//*[local-name()='Protocol' and @Name='codex']").Count){throw 'DESKTOP_THREAD_PROTOCOL_UNAVAILABLE'}
+  # Somente navega; sem prompt, novo chat ou novo envio. Rota comprovada no Desktop.
+  Start-Process -FilePath ('codex://threads/'+$cfgS8R.threadId) -WindowStyle Hidden
 } elseif ($Action -eq 'Ollama') {
   try { $null = Invoke-RestMethod -Uri $cfgS8R.ollamaUrl -TimeoutSec 3; return } catch {}
   if (-not (Test-Path -LiteralPath $cfgS8R.ollama -PathType Leaf)) { throw 'OLLAMA_NOT_INSTALLED' }
