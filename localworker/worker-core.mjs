@@ -11,6 +11,7 @@ import https from "node:https";
 import { jobDir } from "./job-store.mjs";
 import { ContextManagerC7M, ContextOverflowC7M } from "./context-manager.mjs";
 import { ProgressGuardP6R, failureClassP6R } from "./progress-guard.mjs";
+import { authorizeMaintenanceS4W, checkActionS4W, MaintenancePolicyError } from "./delegation-policy.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -1397,8 +1398,9 @@ async function ollamaChat(messages, tools, timeoutMs, onProgress = async () => {
 }
 
 export class WorkerIncompleteError extends Error {}
+export class SupervisorCheckpointError extends WorkerIncompleteError {}
 
-export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false, requiredChangePaths = [], requireCommits = false, subagentDepth = 0, stepLimit = MAX_STEPS, contract = {}) {
+export async function runLocalAnalysis(repoPath, task, mode = "read-only", onProgress = async () => {}, authorizedCommands = [], expectChanges = false, requiredChangePaths = [], requireCommits = false, subagentDepth = 0, stepLimit = MAX_STEPS, contract = {}, inheritedSupervision = null) {
   if (![0, 1].includes(subagentDepth) || !Number.isSafeInteger(stepLimit) || stepLimit < 1 || stepLimit > MAX_STEPS) {
     throw new Error("Limites de subagente inválidos");
   }
@@ -1420,6 +1422,19 @@ export async function runLocalAnalysis(repoPath, task, mode = "read-only", onPro
     commandIds.add(command.id);
   }
   const repo = path.resolve(repoPath);
+  // Revalida mesmo no runner/chamada direta; subagente interno herda somente contexto factual read-only.
+  let supervision;
+  try {
+    if (inheritedSupervision && (subagentDepth !== 1 || mode !== 'read-only')) throw new MaintenancePolicyError('Herança somente para subagente factual read-only');
+    supervision = inheritedSupervision ?? await authorizeMaintenanceS4W({...contract,repoPath:repo,task,mode,
+      authorized_commands:authorizedCommands,expect_changes:expectChanges,required_change_paths:requiredChangePaths},config);
+  } catch(error) {
+    if (!(error instanceof MaintenancePolicyError)) throw error;
+    await onProgress({phase:'supervisor_checkpoint',reason:error.message});
+    throw new SupervisorCheckpointError(`NEEDS_SUPERVISOR: ${error.message}`);
+  }
+  if (supervision) await onProgress({phase:'supervision_verified',regime:supervision.regime,scope_sha256:supervision.scope_sha256,
+    verification:'Decisão fornecida pelo supervisor; runtime não avalia risco.'});
   const requiredReads = contract.required_read_paths ?? [];
   const requiredCommands = contract.required_command_ids ?? [];
   const commandSequence = contract.command_sequence ?? [];
@@ -1479,6 +1494,8 @@ Você é o worker local Qwen subordinado a um supervisor OpenAI mais capaz.
 
 Sua função é executar a unidade delimitada pelo supervisor, com autonomia técnica local e evidências, sem assumir planejamento global nem inventar capacidades.
 
+${supervision ? `MANUTENÇÃO SW-HYBRID: patente ${supervision.regime}, mesmo modelo/runtime. Não participar de QUALQUER avaliação, triagem, ponderação ou recomendação de risco/criticidade/consequências/regime; apenas fatos objetivos estritamente pedidos. Paths de alteração: ${JSON.stringify(supervision.scope_paths)}. ${supervision.regime==='intern' ? `Estagiário: ${supervision.approved_action ? 'único efeito aprovado '+JSON.stringify(supervision.approved_action) : 'unidade exclusivamente factual read-only'}. Antes de outro efeito, checkpoint para revisão; não reinicie/reaplique efeitos anteriores.` : 'Autonomia técnica no microescopo; aceite independente do supervisor.'} Dúvida/conflito/necessidade fora da autorização: preserve evidências e NEEDS_SUPERVISOR, sem autoelevação.` : ''}
+
 REGRAS GLOBAIS DO WORKER:
 ${workerRules || "(nenhum AGENTS.md global encontrado)"}
 
@@ -1524,7 +1541,7 @@ RESULTADO
 EVIDÊNCIAS
 ...
 
-RISCOS/LIMITAÇÕES
+${supervision ? 'BLOQUEIOS/LIMITAÇÕES FACTUAIS (sem avaliação de risco)' : 'RISCOS/LIMITAÇÕES'}
 ...
 
 NEEDS_SUPERVISOR
@@ -1563,6 +1580,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
   let toolExecutions = 0;
   let forcedInspection = false;
   let successfulMutations = 0;
+  let supervisedEffectAttempts = 0;
   let forcedImplementation = false;
   let forcedValidation = false;
   const failedValidations = new Set();
@@ -1607,6 +1625,8 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
       ? TOOL_DEFINITIONS.filter(tool => READ_ONLY_TOOLS.has(tool.function.name) || tool.function.name === "run_authorized_command" && authorizedCommands.some(c => c.mode === "read-only"))
       : TOOL_DEFINITIONS.filter(tool => tool.function.name !== "run_authorized_command" || authorizedCommands.length);
     if (subagentDepth > 0) availableTools = availableTools.filter(tool => tool.function.name !== "delegate_readonly_subagent");
+    if (supervision) availableTools = availableTools.filter(tool => tool.function.name !== 'run_command' &&
+      !(supervision.regime==='intern' && ['git_commit_unit','delegate_readonly_subagent'].includes(tool.function.name)));
     if (expectChanges && successfulMutations === 0 && step + 1 >= WRITE_FOCUS_STEP) {
       availableTools = availableTools.filter(tool => !new Set(["repo_tree", "list_dir"]).has(tool.function.name));
     }
@@ -1753,6 +1773,14 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
       let actionError = null;
 
       try {
+        if (supervision) {
+          try { if(checkActionS4W(supervision,toolName,args,authorizedCommands,supervisedEffectAttempts)) supervisedEffectAttempts++; }
+          catch(error) {
+            if (!(error instanceof MaintenancePolicyError)) throw error;
+            await onProgress({phase:'supervisor_checkpoint',step:step+1,tool:toolName,reason:error.message,effect_attempts:supervisedEffectAttempts});
+            throw new SupervisorCheckpointError(error.message);
+          }
+        }
         if (toolName === "run_authorized_command" && successfulCommandCache.has(args.id) && !authorizedCommands.find(c => c.id === args.id)?.repeatable) {
           throw new ToolRejected(`Comando ${args.id} já executado com sucesso; recibo preservado. Não repita efeitos. Próximo passo: validação/commit/conclusão conforme contrato.`);
         }
@@ -1766,7 +1794,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
           if (subagentDepth > 0) throw new ToolRejected("Subagente não pode criar outra delegação");
           if (typeof args.task !== "string" || !args.task.trim() || args.task.length > 1800) throw new ToolRejected("Objetivo do subagente deve ser texto não vazio de até 1800 caracteres");
           await onProgress({ phase: "subagent_started", step: step + 1, reason: "investigação local read-only" });
-          result = await runLocalAnalysis(repo, args.task, "read-only", async event => onProgress({ ...event, phase: `subagent_${event.phase}` }), [], false, [], false, 1, Math.min(12, MAX_STEPS));
+          result = await runLocalAnalysis(repo, args.task, "read-only", async event => onProgress({ ...event, phase: `subagent_${event.phase}` }), [], false, [], false, 1, Math.min(12, MAX_STEPS), {}, supervision);
           await onProgress({ phase: "subagent_completed", step: step + 1 });
         } else {
           result = await executeTool(repo, call, deliveredInstructions, mode, authorizedCommands, commitContext);

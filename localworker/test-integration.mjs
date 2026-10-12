@@ -112,9 +112,9 @@ try {
   assert.equal((await fetch(monitorIndexUrl)).status, 200);
   const selfUse = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: path.resolve(root, ".."), task: "Não executar", mode: "read-only", thread_id: thread } });
   assert.match(selfUse.result.content[0].text, /WORKER_REQUEST_REJECTED/);
-  assert.match(selfUse.result.content[0].text, /Proibido usar localWorker/);
+  assert.match(selfUse.result.content[0].text, /Manutenção própria proibida/);
   const nestedSelfUse = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: root, task: "Não executar", mode: "read-only", thread_id: thread } });
-  assert.match(nestedSelfUse.result.content[0].text, /Proibido usar localWorker/);
+  assert.match(nestedSelfUse.result.content[0].text, /Manutenção própria proibida/);
   const unsafeMode = await rpc("tools/call", { name: "local_analyze", arguments: { repoPath: repo, task: "Não executar", mode: "read-only", thread_id: thread,
     authorized_commands: [{ id: "git-status", description: "Status", program: process.execPath, args: ["--version"] }] } });
   assert.match(unsafeMode.result.content[0].text, /WORKER_REQUEST_REJECTED/);

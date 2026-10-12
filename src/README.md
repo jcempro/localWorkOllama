@@ -10,6 +10,18 @@
 
 ## Valores substituíveis
 
+### Manutenção própria: SW-HYBRID v1
+
+`install.ps1 -EnableHybridMaintenance` adota explicitamente `config.json:maintenance_hybrid_version=1`; sem adoção, o veto anterior permanece. Atualização sem a opção preserva a escolha existente. Incompatível com `GlobalRulesOnly`. Identidade/path/Git continuam delimitando manutenção própria, incluindo árvore movida; não aplicar contrato a outro repositório.
+
+`localworker/delegation-policy.mts` é a fonte; `.mjs` é gerado/instalado e funciona em Node 22.21+ já utilizado (sem exigir upgrade para habilitar o recurso). CLI `node <WorkerHome>/delegation-policy.mjs --hash-base64 <JSON UTF-8 Base64>` devolve SHA-256, sem escrita/rede/inferência; `--help`; exit0 sucesso/2 entrada inválida. Não reclassifica riscos. Limites centralizados: versão1, até32 paths exatos de alteração, rationale/evidence12–2000 caracteres; JSON Base64 CLI≤100000 caracteres. Hash não é assinatura/autenticação/inviolabilidade.
+
+`maintenance_supervision`: `{version:1,criticality:C,regime:'junior'|'intern'|'exclusive',uncertainty_resolved:true,rationale,evidence,scope_paths,scope_sha256,approved_action?}`. C é decidido SOMENTE pelo supervisor. C≤5 júnior, 5<C≤7 escolha fundamentada, C>7/exclusive não delegam. Scripts/Skills triviais/determinísticos seguros e previamente verificados são preferidos em toda criticidade, pelo supervisor exclusivo se C>7. `scope_paths` contém arquivos relativos exatos (não diretórios), sem traversal; requisitos de leitura são separados. `scope_sha256` é calculado depois de todos os campos/avaliação e antes do envio; defaults de modo, alterações, commit e comandos são normalizados. Qualquer mudança nessa projeção exige recalcular após REAVALIAÇÃO, não apenas obter outro hash mecanicamente.
+
+Estagiário em `write` exige `commit_policy='supervisor'` e `approved_action={tool,args}` exata (`write_file`, `edit_file`, `move_file`, `delete_file`, `run_authorized_command`). Uma tentativa com efeito consome aprovação mesmo se parcialmente falha; antes de outro efeito, runner persiste `NEEDS_SUPERVISOR` e entrega checkpoint no fluxo existente, sem replay. Em `read-only`, não forneça approved_action; ferramentas continuam impedindo escrita. Validações exatas read-only podem ocorrer após o efeito. Júnior preserva ferramentas/subagente factual e autonomia no escopo; `run_command` na manutenção exige substituição por comando exato aprovado, sem retirar a capacidade via `run_authorized_command`. Todos os efeitos de executáveis/argv devem ser previamente verificados: essa autorização não cria sandbox/firewall.
+
+MCP e core/runner revalidam antes de efeitos. Eventos `supervision_verified` e `supervisor_checkpoint`, recibos/evidências e Git seguem os diretórios exclusivos existentes. Checkpoint usa estado terminal FAILED com `error_kind=NEEDS_SUPERVISOR`, distinguindo pausa para revisão de falha de infraestrutura; não é sucesso nem autorização para repetir. Após review/commit da menor unidade, supervisor concede nova unidade materialmente delimitada. Modelo/esforço e demais projetos permanecem intactos. O validador não prova que a avaliação humana está correta nem impede um administrador de modificar código; não prometer garantia superior à autoridade/controles reais.
+
 Contrato por job: `provided_evidence={source,content}` opcional somente em `read-only`; origem até 1024 caracteres e conteúdo até 12000, ambos não vazios. Permite análise sem nova ferramenta; requisitos explícitos de leitura/comando continuam obrigatórios. Não é configuração global nem autorização de escrita.
 
 | Valor | Origem e configuração |
@@ -88,16 +100,16 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `4edbd4585d9380370a5d2efa25c9c000af36666c99916d90a8433077d40ebcb9` |
-| `src/localworker/delegation-policy.mts` | `1c306d1587562046f4b1df73b0d3d07b48310c2d91ca83ea02c708c32c1c72d3` |
-| `src/localworker/delegation-policy.mjs` | `1e7bb9dfa444de3ae078bba06b7c972b5d5ded667f963876f57010cd7f02efd2` |
+| `src/localworker/server.mjs` | `f1fb0dbc0c9db58ac98dcd59a47642856403a6304ca1bee7a9acd86d1cb25384` |
+| `src/localworker/delegation-policy.mts` | `c4954d25b0e7e2d3542a33a30c7881544091fd4cf2b30499f4e906d2955f8993` |
+| `src/localworker/delegation-policy.mjs` | `b0e99d7a88d51f8df32d99d3b686b82521062515ee684d37f9a3eac9f98f9e4f` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `12d3218db2187b1b8e50c599d523692151e9e0c48b646f294ce09ff86ef9dba9` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `e1221ecd8ee2a6190c16db47c5cd01d5b11b4949b0fdf48c3c92ab48b67abee0` |
-| `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
+| `src/localworker/worker-core.mjs` | `55785153652cfb3f10208b4627e210fa088256fdad9085c807b610fba6663174` |
+| `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `c45dace916fca7de5dc17d6c7089c23bc36ed3ba0422121bfcf63d7c67f25920` |
 | `src/localworker/watchdog.mjs` | `208d32ac905bbceb57dca6a06fb4af93790c8393b9f40f9d59dc6e2374dcd984` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
@@ -105,10 +117,10 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `5f972481d9b66a8ef08f146306c880784683371dd337e177f0457795d9bad19c` |
-| `src/localworker/update-installed.ps1` | `f664c2dcb290a3d429461e17dea5d90978568d8eea674a0aa97d983507e3405e` |
+| `src/localworker/install.ps1` | `c87f4ac83c56dcd8e9e70b6d2cb1b9235037acbbaf695a37a4ed8972524ff60a` |
+| `src/localworker/update-installed.ps1` | `4e147ad658ed26a9e56a2604c9c5317bcb4025e5464c57cce1f5bf12efe43795` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `5ee5296bf04b9706abf6855e3a5576fcc47c6cb179c49a84f039b828c73ac1c1` |
+| `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
 | `src/agents.supervisor.md` | `17f0813d4858efdb7d54fceff5e356d5a1c4426e86fc3433c69732714be90087` |
 <!-- LOCALWORKER_GENERATED_END -->

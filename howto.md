@@ -40,6 +40,31 @@ No monitor, **Todos os jobs** mostra barras de CPU, GPU, RAM e VRAM globais da m
 
 O runtime instalado inclui `progress-guard.mjs`: repetições determinísticas são bloqueadas antes de executar; quatro ações sem progresso verificável encerram a unidade com diagnóstico. O log `strategy_blocked` registra classes e hashes de ações/estados. Para continuar, corrija a pré-condição, use alternativa autorizada ou conceda ao Worker somente o acesso exato necessário. Não aumente o teto de ciclos para mascarar loops. Retries transitórios seguros continuam limitados; uma falha de validação permanece pendente até passar.
 
+## Manutenção do próprio Worker
+
+O modo híbrido é exclusivo do próprio produto; outros repositórios conservam seu regime. O supervisor avalia risco e decide: C≤5 usa o mesmo Worker como júnior; 5<C≤7 permite escolha fundamentada entre supervisor exclusivo, júnior ou estagiário; C>7 exige supervisor exclusivo. Scripts/Skills inequivocamente triviais, determinísticos e seguros, com procedência, imutabilidade/integridade e proteção previamente comprovadas, são preferidos em qualquer criticidade; acima de7 são executados pelo supervisor. Nome/hash isolado não comprova segurança. Incerteza material impede delegação até esclarecimento.
+
+Após adotar essa governança no repositório do produto, acrescente `-EnableHybridMaintenance` à instalação completa descrita abaixo (também funciona na atualização). Sem essa opção na primeira adoção, mantém-se o veto anterior; atualizações seguintes preservam a escolha. Não combine com `-GlobalRulesOnly`. Preserve o marcador de identidade; mudar caminhos não dispensa a guarda.
+
+Prepare um JSON de `local_analyze` com raiz/conversa confirmadas e a menor unidade já avaliada pelo supervisor. Acrescente `maintenance_supervision` conforme [todos os campos e limites](src/README.md#manutenção-própria-sw-hybrid-v1). Nenhum campo pode ser preenchido pelo Worker. Antes do envio, calcule o vínculo sobre o pedido completo, substituindo somente `scope_sha256` pelo resultado:
+
+```powershell
+$PedidoS4W = Read-Host 'Path do JSON da unidade avaliada pelo supervisor'
+$InstalacaoS4W = Read-Host 'Path real da instalação do Worker'
+$ObjetoS4W = Get-Content -LiteralPath $PedidoS4W -Raw | ConvertFrom-Json
+$ObjetoS4W.maintenance_supervision.scope_sha256 = ''
+$Base64S4W = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($ObjetoS4W | ConvertTo-Json -Depth 30 -Compress)))
+$HashS4W = & node (Join-Path $InstalacaoS4W 'delegation-policy.mjs') --hash-base64 $Base64S4W
+if ($LASTEXITCODE -ne 0 -or $HashS4W -notmatch '^[a-f0-9]{64}$') { throw 'Vínculo não calculado; não envie o job.' }
+$ObjetoS4W.maintenance_supervision.scope_sha256 = [string]$HashS4W
+$Base64S4W = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($ObjetoS4W | ConvertTo-Json -Depth 30 -Compress)))
+# Somente se o catálogo nativo estiver desatualizado: mesma ponte, guardas e entrega.
+& node (Join-Path $InstalacaoS4W 'mcp-call.mjs') local_analyze $Base64S4W
+if ($LASTEXITCODE -ne 0) { throw 'Pedido não confirmado; reconcilie os efeitos antes de tentar novamente.' }
+```
+
+No catálogo nativo, envie o mesmo objeto com o hash conferido. Modificar tarefa, comandos, paths, requisitos ou avaliação invalida o vínculo; reavalie antes de recalcular. O hash confere consistência, não autentica nem certifica a nota. Estagiário em escrita tem uma ação com efeito exatamente aprovada e commit pelo supervisor. Outra tentativa exige checkpoint: efeito anterior é preservado, classificação `NEEDS_SUPERVISOR`, retomada por evento e revisão antes da próxima unidade. Leitura/validação autorizada continua possível. Não há troca de modelo, polling pago ou replay de efeitos.
+
 ## Objetivo e percurso
 
 `command_sequence` não carrega política GPU nem prepara/compacta contexto: não depende do Ollama ou do teto de ciclos de inferência. Cada comando mantém seu timeout técnico, autorização, evidência e validação; a sequência tem no máximo 32 IDs distintos e para no primeiro erro. Recursos consumidos pelo executável autorizado ainda precisam ser avaliados pelo supervisor antes da delegação.
@@ -176,7 +201,7 @@ $encoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($request | 
 & $NodeExe (Join-Path $WorkerHome 'mcp-call.mjs') local_analyze $encoded
 ```
 
-Para consultar um job já concluído, substitua `$request` por `@{ job_id = $JobId }` e `local_analyze` por `local_result`. Em escrita autorizada, use `mode='write'`, `expect_changes=$true` e, se conhecidos, `required_change_paths`. O resultado JSON e o `job_id` são os mesmos da ferramenta MCP; ao terminar, o runner envia a retomada ao chat validado. A ponte recebe Base64 para que texto do pedido nunca seja interpolado como comando de shell. Ela não serve para contornar o bloqueio de autouso neste repositório.
+Para consultar um job já concluído, substitua `$request` por `@{ job_id = $JobId }` e `local_analyze` por `local_result`. Em escrita autorizada, use `mode='write'`, `expect_changes=$true` e, se conhecidos, `required_change_paths`. O resultado JSON e o `job_id` são os mesmos da ferramenta MCP; ao terminar, o runner envia a retomada ao chat validado. A ponte recebe Base64 para que texto do pedido nunca seja interpolado como comando de shell. Ela não contorna a política de manutenção própria ou qualquer guarda.
 
 ### Acompanhamento e diagnóstico
 
@@ -462,7 +487,7 @@ O Worker é independente da escolha de modelo/esforço do supervisor. Preserve s
 
 </details>
 
-No repositório **deste Worker**, preserve também a regra específica `agents.local.md` e a referência a ela no `AGENTS.md` da raiz: o Worker não pode manter, implementar ou documentar a si próprio. Esse arquivo local não é copiado para outros repositórios. O instalador posiciona as regras e scripts gerais no perfil do Worker e as regras do supervisor no Codex home efetivo; a leitura desses artefatos não exige manter a árvore de desenvolvimento acessível. Ele cria ou preserva `.localworker-maintenance-id` ao lado de `src/` e registra a identidade no Worker instalado para manter o bloqueio de autouso se a pasta fonte for movida. Preserve esse marcador ao mover a fonte. Em cada outro repositório, o Worker lê somente as regras e extensões próprias daquele alvo, quando presentes. Um `AGENTS.md` global não autoriza escrita por si só.
+No repositório **deste Worker**, preserve a regra específica `agents.local.md` e sua referência no `AGENTS.md`: manutenção segue SW-HYBRID somente após adoção explícita, com contrato válido; sem adoção, permanece o veto anterior. Esse arquivo local não é copiado para outros repositórios. O instalador posiciona regras/scripts gerais no perfil do Worker e regras do supervisor no Codex home efetivo; leitura não depende da árvore de desenvolvimento. Ele preserva `.localworker-maintenance-id` ao lado de `src/` e registra a identidade instalada, mantendo identificação/guarda se a fonte mudar de path. Preserve o marcador. Em cada outro repositório, o Worker lê somente regras/extensões daquele alvo quando presentes. `AGENTS.md` global não autoriza escrita por si só.
 
 ## 6. Instruções próprias do Worker
 
@@ -587,16 +612,16 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `4edbd4585d9380370a5d2efa25c9c000af36666c99916d90a8433077d40ebcb9` |
-| `src/localworker/delegation-policy.mts` | `1c306d1587562046f4b1df73b0d3d07b48310c2d91ca83ea02c708c32c1c72d3` |
-| `src/localworker/delegation-policy.mjs` | `1e7bb9dfa444de3ae078bba06b7c972b5d5ded667f963876f57010cd7f02efd2` |
+| `src/localworker/server.mjs` | `f1fb0dbc0c9db58ac98dcd59a47642856403a6304ca1bee7a9acd86d1cb25384` |
+| `src/localworker/delegation-policy.mts` | `c4954d25b0e7e2d3542a33a30c7881544091fd4cf2b30499f4e906d2955f8993` |
+| `src/localworker/delegation-policy.mjs` | `b0e99d7a88d51f8df32d99d3b686b82521062515ee684d37f9a3eac9f98f9e4f` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `12d3218db2187b1b8e50c599d523692151e9e0c48b646f294ce09ff86ef9dba9` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `e1221ecd8ee2a6190c16db47c5cd01d5b11b4949b0fdf48c3c92ab48b67abee0` |
-| `src/localworker/worker-runner.mjs` | `44488224b9bcbfe4bd1135f471e45b40bb158ba6c0c12e4e4dc0f1576a350707` |
+| `src/localworker/worker-core.mjs` | `55785153652cfb3f10208b4627e210fa088256fdad9085c807b610fba6663174` |
+| `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `c45dace916fca7de5dc17d6c7089c23bc36ed3ba0422121bfcf63d7c67f25920` |
 | `src/localworker/watchdog.mjs` | `208d32ac905bbceb57dca6a06fb4af93790c8393b9f40f9d59dc6e2374dcd984` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
@@ -604,11 +629,11 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `5f972481d9b66a8ef08f146306c880784683371dd337e177f0457795d9bad19c` |
-| `src/localworker/update-installed.ps1` | `f664c2dcb290a3d429461e17dea5d90978568d8eea674a0aa97d983507e3405e` |
+| `src/localworker/install.ps1` | `c87f4ac83c56dcd8e9e70b6d2cb1b9235037acbbaf695a37a4ed8972524ff60a` |
+| `src/localworker/update-installed.ps1` | `4e147ad658ed26a9e56a2604c9c5317bcb4025e5464c57cce1f5bf12efe43795` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `5ee5296bf04b9706abf6855e3a5576fcc47c6cb179c49a84f039b828c73ac1c1` |
+| `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
 | `src/agents.supervisor.md` | `17f0813d4858efdb7d54fceff5e356d5a1c4426e86fc3433c69732714be90087` |
 <!-- LOCALWORKER_GENERATED_END -->
 

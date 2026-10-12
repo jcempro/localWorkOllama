@@ -16,7 +16,8 @@ param(
   [switch]$WaitForIdle,
   [switch]$SkipWatchdog,
   [switch]$SkipGlobalRules,
-  [switch]$GlobalRulesOnly
+  [switch]$GlobalRulesOnly,
+  [switch]$EnableHybridMaintenance
 )
 $ErrorActionPreference = 'Stop'
 $MODEL_EXPLICIT_A3C = $PSBoundParameters.ContainsKey('WorkerModel') -or -not [string]::IsNullOrWhiteSpace($env:LOCAL_MODEL)
@@ -90,6 +91,7 @@ function Install-GlobalRulesA3C {
   }
 }
 if ($GlobalRulesOnly) {
+  if ($EnableHybridMaintenance) { throw 'EnableHybridMaintenance exige instalação completa, não GlobalRulesOnly.' }
   if ($SkipGlobalRules) { throw 'GlobalRulesOnly e SkipGlobalRules sao mutuamente exclusivos.' }
   Install-GlobalRulesA3C
   [pscustomobject]@{status='GLOBAL_RULES_INSTALLED';path=$GLOBAL_RULES_A3C} | ConvertTo-Json
@@ -275,9 +277,10 @@ if (Test-Path -LiteralPath $WORKER_HOME_A3C) {
   $updateArgs = @{ Target = $WORKER_HOME_A3C; NodePath = $NODE_EXE_A3C; CodexCommand = $CODEX_EXE_A3C; CodexConfig = $CODEX_CONFIG_A3C; MaintenanceRepo = $MAINTENANCE_REPO_A3C; MaintenanceId = $MAINTENANCE_ID_A3C }
   if ($MODEL_EXPLICIT_A3C) { $updateArgs.WorkerModel = $WorkerModel }
   if ($PSBoundParameters.ContainsKey('ModelContextTokens')) { $updateArgs.ContextTokens = $ModelContextTokens }
+  if ($EnableHybridMaintenance) { $updateArgs.EnableHybridMaintenance = $true }
   & (Join-Path $WORKER_SOURCE_A3C 'update-installed.ps1') @updateArgs
 } else {
-  & (Join-Path $WORKER_SOURCE_A3C 'install.ps1') -Target $WORKER_HOME_A3C -CodexConfig $CODEX_CONFIG_A3C -NodePath $NODE_EXE_A3C -NpmCommand $NPM_EXE_A3C -CodexCommand $CODEX_EXE_A3C -WorkerModel $WorkerModel -ContextTokens $ModelContextTokens -MaintenanceRepo $MAINTENANCE_REPO_A3C -MaintenanceId $MAINTENANCE_ID_A3C
+  & (Join-Path $WORKER_SOURCE_A3C 'install.ps1') -Target $WORKER_HOME_A3C -CodexConfig $CODEX_CONFIG_A3C -NodePath $NODE_EXE_A3C -NpmCommand $NPM_EXE_A3C -CodexCommand $CODEX_EXE_A3C -WorkerModel $WorkerModel -ContextTokens $ModelContextTokens -MaintenanceRepo $MAINTENANCE_REPO_A3C -MaintenanceId $MAINTENANCE_ID_A3C -EnableHybridMaintenance:$EnableHybridMaintenance
 }
 if ($LASTEXITCODE -ne 0) { throw 'Instalação ou atualização do Worker falhou.' }
 

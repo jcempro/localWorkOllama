@@ -4,7 +4,7 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { runLocalAnalysis, WorkerIncompleteError } from "./worker-core.mjs";
+import { runLocalAnalysis, WorkerIncompleteError, SupervisorCheckpointError } from "./worker-core.mjs";
 import { getState, setState, jobDir, readJson, atomicText, recordLatency } from "./job-store.mjs";
 import { deliver } from "./delivery.mjs";
 import { withJobControl } from "./job-control.mjs";
@@ -72,7 +72,7 @@ async function main() {
   }, 30_000);
   try {
   const runtime = {};
-  for (const name of ["worker-core.mjs", "context-manager.mjs", "progress-guard.mjs", "AGENTS.md"]) {
+  for (const name of ["worker-core.mjs", "delegation-policy.mjs", "context-manager.mjs", "progress-guard.mjs", "AGENTS.md"]) {
     const bytes = await fs.readFile(path.join(path.dirname(fileURLToPath(import.meta.url)), name));
     runtime[name] = createHash("sha256").update(bytes).digest("hex");
   }
@@ -103,7 +103,7 @@ async function main() {
   } catch (error) {
     clearInterval(heartbeat);
     await pendingHeartbeat.catch(() => {});
-    const kind = error instanceof WorkerIncompleteError ? "WORKER_INCOMPLETE" : "WORKER_INFRA_ERROR";
+    const kind = error instanceof SupervisorCheckpointError ? 'NEEDS_SUPERVISOR' : error instanceof WorkerIncompleteError ? "WORKER_INCOMPLETE" : "WORKER_INFRA_ERROR";
     const message = `${kind}: ${String(error?.stack ?? error)}`;
     const evidence = await gitEvidenceK9P(request.repoPath).catch(error => `ESTADO GIT DETERMINÍSTICO indisponível: ${String(error?.message ?? error)}`);
     await atomicText(path.join(dir, "error.txt"), `${message}\n\n${evidence}\n`);

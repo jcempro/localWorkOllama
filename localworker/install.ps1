@@ -7,7 +7,8 @@ param(
   [string]$MaintenanceRepo,
   [string]$MaintenanceId,
   [string]$WorkerModel = 'qwen3-coder-next-32k',
-  [ValidateRange(4096,262144)][int]$ContextTokens = 32768
+  [ValidateRange(4096,262144)][int]$ContextTokens = 32768,
+  [switch]$EnableHybridMaintenance
 )
 $ErrorActionPreference = 'Stop'
 if ($MaintenanceId -and $MaintenanceId -notmatch '^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$') { throw 'Identidade de manutenção inválida.' }
@@ -32,7 +33,7 @@ if (-not $CodexCommand) {
     $CodexCommand = $native.FullName
   }
 }
-$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1')
+$files = @('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','delegation-policy.mts','delegation-policy.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1')
 foreach ($exe in @($NodePath,$NpmCommand,$CodexCommand)) {
   if (-not (Test-Path -LiteralPath $exe -PathType Leaf)) { throw "Executável ausente: $exe" }
 }
@@ -56,6 +57,10 @@ foreach ($name in $files) { Copy-Item -LiteralPath (Join-Path $source $name) -De
 $workerConfig = Get-Content -LiteralPath (Join-Path $source 'config.json') -Raw | ConvertFrom-Json
 $workerConfig | Add-Member -NotePropertyName maintenance_repo -NotePropertyValue $maintenanceRepo -Force
 if ($MaintenanceId) { $workerConfig | Add-Member -NotePropertyName maintenance_id -NotePropertyValue $MaintenanceId -Force }
+if ($EnableHybridMaintenance) {
+  if (-not $MaintenanceId) { throw 'Adoção híbrida exige identidade de manutenção preservada.' }
+  $workerConfig | Add-Member -NotePropertyName maintenance_hybrid_version -NotePropertyValue 1 -Force
+}
 $workerConfig | Add-Member -NotePropertyName codex_command -NotePropertyValue $CodexCommand -Force
 $workerConfig | Add-Member -NotePropertyName codex_config -NotePropertyValue $CodexConfig -Force
 $workerConfig.model = $WorkerModel

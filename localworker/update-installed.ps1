@@ -1,4 +1,4 @@
-param([string]$Target, [string]$NodePath, [string]$CodexCommand, [string]$CodexConfig, [string]$MaintenanceRepo, [string]$MaintenanceId, [string]$WorkerModel, [ValidateRange(4096,262144)][int]$ContextTokens)
+param([string]$Target, [string]$NodePath, [string]$CodexCommand, [string]$CodexConfig, [string]$MaintenanceRepo, [string]$MaintenanceId, [string]$WorkerModel, [ValidateRange(4096,262144)][int]$ContextTokens, [switch]$EnableHybridMaintenance)
 $ErrorActionPreference = 'Stop'
 if ($MaintenanceId -and $MaintenanceId -notmatch '^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$') { throw 'Identidade de manutenção inválida.' }
 $source = $PSScriptRoot
@@ -24,7 +24,7 @@ if (Test-Path -LiteralPath $activeFile) {
   }finally{Pop-Location;Remove-Item Env:LOCAL_WORKER_UPDATE_ROOT_R8Q}
 }
 $stamp = Get-Date -Format yyyyMMddHHmmss
-$files = @('AGENTS.md','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1','package.json','package-lock.json')
+$files = @('AGENTS.md','server.mjs','delegation-policy.mts','delegation-policy.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1','package.json','package-lock.json')
 $existingFiles = @()
 $newFiles = @()
 foreach ($name in $files) {
@@ -46,6 +46,10 @@ $config.PSObject.Properties.Remove('worker_rules')
 $maintenance = if ($MaintenanceRepo) { (Resolve-Path -LiteralPath $MaintenanceRepo).Path } elseif ($env:LOCAL_WORKER_MAINTENANCE_REPO) { (Resolve-Path -LiteralPath $env:LOCAL_WORKER_MAINTENANCE_REPO).Path } else { (Resolve-Path -LiteralPath (Join-Path $source '..')).Path }
 $config | Add-Member -NotePropertyName maintenance_repo -NotePropertyValue $maintenance -Force
 if ($MaintenanceId) { $config | Add-Member -NotePropertyName maintenance_id -NotePropertyValue $MaintenanceId -Force }
+if ($EnableHybridMaintenance) {
+  if (-not $config.maintenance_id) { throw 'Adoção híbrida exige identidade de manutenção preservada.' }
+  $config | Add-Member -NotePropertyName maintenance_hybrid_version -NotePropertyValue 1 -Force
+}
 $config | Add-Member -NotePropertyName codex_command -NotePropertyValue $CodexCommand -Force
 $codexConfigPath = if ($CodexConfig) { [IO.Path]::GetFullPath($CodexConfig) } elseif ($config.codex_config) { [IO.Path]::GetFullPath($config.codex_config) } else { Join-Path (if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $env:USERPROFILE '.codex' }) 'config.toml' }
 $config | Add-Member -NotePropertyName codex_config -NotePropertyValue $codexConfigPath -Force

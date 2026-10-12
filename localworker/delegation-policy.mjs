@@ -109,6 +109,7 @@ export async function authorizeMaintenanceS4W(request     , config     )        
     if (request.maintenance_supervision !== undefined) rejectS4W('maintenance_supervision exclusiva do próprio produto; não altera outros repositórios');
     return null;
   }
+  if (!ID_PATTERN_S4W.test(process.env.LOCAL_WORKER_MAINTENANCE_ID ?? config.maintenance_id ?? '')) rejectS4W('Identidade de manutenção ausente: adoção recusada');
   return validateSupervisionS4W({ ...request, repoPath: repo }, config.maintenance_hybrid_version === POLICY_VERSION_S4W);
 }
 // CLI determinística: somente hash; dados via argv Base64, sem shell ou escrita/risco inferido.

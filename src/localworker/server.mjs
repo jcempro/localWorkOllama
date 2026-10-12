@@ -11,6 +11,7 @@ import { assertTargetThread } from "./thread-check.mjs";
 import { ensureMonitor, monitorUrl, monitorIndexUrl, monitorSnapshot, inventorySnapshot } from "./monitor.mjs";
 import { reconcileJob } from "./watchdog.mjs";
 import { cancelJob, deleteJob } from "./job-control.mjs";
+import { authorizeMaintenanceS4W, MaintenancePolicyError } from "./delegation-policy.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await fs.readFile(path.join(root, "config.json"), "utf8"));
@@ -19,34 +20,11 @@ class RequestRejected extends Error {}
 const errorReply = error => ({ isError: true, content: [{ type: "text", text: `${error instanceof RequestRejected ? "WORKER_REQUEST_REJECTED" : "WORKER_INFRA_ERROR"}: ${String(error?.message ?? error)}` }] });
 const execFileAsync = promisify(execFile);
 
-async function gitCommonDir(repo) {
-  try {
-    const { stdout } = await execFileAsync("git", ["-C", repo, "rev-parse", "--path-format=absolute", "--git-common-dir"], { windowsHide: true, timeout: 5000 });
-    return (await fs.realpath(stdout.trim())).toLowerCase();
-  } catch { return null; }
-}
-
 async function gitRoot(repo) {
   try {
     const { stdout } = await execFileAsync("git", ["-C", repo, "rev-parse", "--show-toplevel"], { windowsHide: true, timeout: 5000 });
     return await fs.realpath(stdout.trim());
   } catch { return repo; }
-}
-
-// Identifica a árvore de manutenção mesmo após mudança de path, incluindo seus subdiretórios.
-async function hasMaintenanceId(repo, expectedId) {
-  let current = repo;
-  while (true) {
-    const marker = path.join(current, ".localworker-maintenance-id");
-    const value = await fs.readFile(marker, "utf8").catch(error => {
-      if (error?.code === "ENOENT") return "";
-      throw error;
-    });
-    if (value.trim() === expectedId) return true;
-    const parent = path.dirname(current);
-    if (parent === current) return false;
-    current = parent;
-  }
 }
 
 function createServer() {
@@ -64,6 +42,12 @@ server.registerTool("local_analyze", {
     required_command_ids: z.array(z.string().min(1)).max(32).default([]).describe("IDs autorizados cuja execução com código zero é requisito de conclusão"),
     command_sequence: z.array(z.string().min(1)).max(32).default([]).describe("Sequência determinística explícita: executa cada ID uma vez, sem inferência; falha interrompe sem retry de mutação"),
     commit_policy: z.enum(["worker", "supervisor"]).default("worker").describe("Responsável pelo commit da unidade: supervisor somente quando ele assumirá o commit imediato após revisar"),
+    maintenance_supervision: z.object({
+      version: z.literal(1), criticality: z.number().min(0).max(10), regime: z.enum(['junior','intern','exclusive']),
+      uncertainty_resolved: z.boolean(), rationale: z.string().min(12).max(2000), evidence: z.string().min(12).max(2000),
+      scope_paths: z.array(z.string().min(1)).min(1).max(32), scope_sha256: z.string().regex(/^[a-f0-9]{64}$/),
+      approved_action: z.object({tool:z.enum(['write_file','edit_file','move_file','delete_file','run_authorized_command']),args:z.record(z.string(),z.unknown())}).strict().optional(),
+    }).strict().optional().describe('Somente manutenção própria: avaliação EXCLUSIVA do supervisor; C>7/exclusivo não cria job. Estagiário exige aprovação exata e checkpoint. Hash pelo delegation-policy.mjs instalado.'),
     thread_id: z.string().regex(/^[0-9a-f]{8}-[0-9a-f-]{27}$/i).describe("ID da conversa Codex atual, não de outro chat nem do projeto"),
     authorized_commands: z.array(z.object({
       id: z.string().regex(/^[a-z0-9][a-z0-9_-]{0,63}$/i),
@@ -76,7 +60,7 @@ server.registerTool("local_analyze", {
       timeout_ms: z.number().int().min(1000).max(300000).optional(),
     })).max(32).default([]).describe("Comandos exatos pré-aprovados; em read-only somente comandos explicitamente de leitura, sem shell livre"),
   }),
-}, async ({ repoPath, task, mode, expect_changes, required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy, provided_evidence }) => {
+}, async ({ repoPath, task, mode, expect_changes, required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy, provided_evidence, maintenance_supervision }) => {
   try {
     if (expect_changes && mode !== "write") throw new RequestRejected("expect_changes exige mode=write");
     if (provided_evidence && mode !== "read-only") throw new RequestRejected("provided_evidence exige read-only; não comprova execução ou alteração");
@@ -96,35 +80,17 @@ server.registerTool("local_analyze", {
         throw new RequestRejected(`required_change_paths fora do repositório: ${relative}`);
       }
     }
-    const maintenanceId = process.env.LOCAL_WORKER_MAINTENANCE_ID ?? config.maintenance_id;
-    if (maintenanceId) {
-      if (!/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(maintenanceId)) throw new Error("Identidade de manutenção inválida");
-      if (await hasMaintenanceId(repo, maintenanceId)) {
-        throw new RequestRejected("Proibido usar localWorker no repositório de sua própria manutenção; execute a manutenção externamente. Testes do Worker devem usar um repositório de teste distinto.");
-      }
-    }
-    const maintenanceRepo = process.env.LOCAL_WORKER_MAINTENANCE_REPO ?? config.maintenance_repo;
-    if (maintenanceRepo) {
-      const maintenance = await fs.realpath(maintenanceRepo).catch(error => {
-        if (error?.code === "ENOENT" && maintenanceId) return null;
-        throw error;
-      });
-      if (maintenance) {
-        const sameTree = repo.toLowerCase() === maintenance.toLowerCase() || repo.toLowerCase().startsWith(maintenance.toLowerCase() + path.sep.toLowerCase());
-        const [repoGit, maintenanceGit] = sameTree ? [null, null] : await Promise.all([gitCommonDir(repo), gitCommonDir(maintenance)]);
-        if (sameTree || (repoGit && repoGit === maintenanceGit)) {
-          throw new RequestRejected("Proibido usar localWorker no repositório de sua própria manutenção; execute a manutenção externamente. Testes do Worker devem usar um repositório de teste distinto.");
-        }
-      }
-    }
+    const intent = {repoPath:repo,task,mode,expect_changes:expect_changes ?? (mode==='write'),required_change_paths,thread_id,
+      authorized_commands,required_read_paths,required_command_ids,command_sequence,commit_policy,provided_evidence,maintenance_supervision};
+    try { await authorizeMaintenanceS4W(intent,config); }
+    catch(error) { if(error instanceof MaintenancePolicyError) throw new RequestRejected(error.message); throw error; }
     try { assertTargetThread(thread_id, repo); }
     catch (error) {
       if (/^thread_id /.test(String(error?.message ?? ""))) throw new RequestRejected(error.message);
       throw error;
     }
     const monitor = await ensureMonitor();
-    const created = await createJob({ repoPath: repo, git_root: await gitRoot(repo), task, mode,
-      expect_changes: expect_changes ?? (mode === "write"), required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy, provided_evidence });
+    const created = await createJob({ ...intent, git_root: await gitRoot(repo) });
     if (created.busy) return reply({ status: "WORKER_BUSY", job_id: created.job_id, monitor_url: monitorUrl(monitor, created.job_id), monitor_index_url: monitorIndexUrl(monitor) });
     const runnerDiagnostic = await fs.open(path.join(jobDir(created.job_id), "runner-stderr.log"), "a");
     const child = spawn(process.execPath, [path.join(root, "worker-runner.mjs"), created.job_id], {
