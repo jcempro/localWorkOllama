@@ -2,7 +2,7 @@
 
 [Diagnóstico, causas e correções](audit-causes.md) · [Manifesto de evidências](audit-manifest.json)
 
-Captura: 2026-10-11T19:20:14.940Z. **196 jobs examinados**, 1 cancelado(s) excluído(s). Estados originais: 113 FAILED, 83 COMPLETED. 87 operacionais e 109 fixtures. Não confundir estes estados com o aceite da entrega.
+Captura: 2026-10-12T01:26:14.921Z. **197 jobs examinados**, 1 cancelado(s) excluído(s). Estados originais: 113 FAILED, 84 COMPLETED. 88 operacionais e 109 fixtures. Não confundir estes estados com o aceite da entrega.
 
 ## Jobs operacionais
 
@@ -26,12 +26,12 @@ Captura: 2026-10-11T19:20:14.940Z. **196 jobs examinados**, 1 cancelado(s) exclu
 
 ### 0636b4d3-dcf0-4f4f-89f3-68cb0f7bd169
 
-- **Estado persistido:** FAILED; entrega: ausente.
+- **Estado persistido:** FAILED; entrega: AMBIGUOUS.
 - **Unidade delegada:** Worker subordinado.
 - **Execução, retorno e avaliação:** FAILED; 0 ferramentas aprovadas, 0 recusas/erros; 2 comandos em sequencia. Runner desapareceu durante prepare; Kernel-Power41/6008 registram reinicio inesperado. Logs, delivery e indice ativo zerados. Efeitos do comando nao sao comprovaveis; proibido replay cego.
 - **Causa/impacto:** Runner desapareceu durante prepare; Kernel-Power41/6008 registram reinicio inesperado. Logs, delivery e indice ativo zerados. Efeitos do comando nao sao comprovaveis; proibido replay cego.
 - **Correções generalizadas:** C11 (tabela do relatório de causas).
-- **Evidência:** 1 eventos; 0 checkpoints; sem eventos de ferramenta retidos. Manifesto a3810bc86370.
+- **Evidência:** 1 eventos; 0 checkpoints; sem eventos de ferramenta retidos. Manifesto 240ccc5a1943.
 
 ### 06b4db91-c629-4971-af57-53ad1a0a333e
 
@@ -500,6 +500,15 @@ Captura: 2026-10-11T19:20:14.940Z. **196 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Detector contabilizava somente git_commit_unit, ignorando commit legítimo feito pelo comando autorizado.
 - **Correções generalizadas:** C4 (tabela do relatório de causas).
 - **Evidência:** 34 eventos; 1 checkpoints; read_file=3, run_authorized_command=1, git_commit_unit=1. Manifesto 4ab319d01dea.
+
+### 9e62c36b-cbd7-498e-bcd2-92c154a41962
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Continuidade materialmente corrigida de 0636b4d3: preflight de hashes, prepare e verify executados uma vez, tres comandos aprovados e delta nos dois alvos. Conclusao do Worker nao comprova fechamento da FT; callback encontrou cota esgotada. Ponte atualizada evitou MCP com modulo legado em memoria.
+- **Causa/impacto:** Continuidade materialmente corrigida de 0636b4d3: preflight de hashes, prepare e verify executados uma vez, tres comandos aprovados e delta nos dois alvos. Conclusao do Worker nao comprova fechamento da FT; callback encontrou cota esgotada. Ponte atualizada evitou MCP com modulo legado em memoria.
+- **Correções generalizadas:** C2,C3,C10,C11,C14 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto b02cec06c59b.
 
 ### 9eeded63-3d66-424f-973e-843fe338e167
 

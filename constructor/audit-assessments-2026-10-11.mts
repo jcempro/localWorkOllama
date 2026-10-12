@@ -1,4 +1,4 @@
-// Avaliacoes explicitas dos 49 novos jobs; nao inferir sucesso de negocio do status.
+// Avaliacoes explicitas adicionais; nao inferir sucesso de negocio do status.
 const review:Record<string,[string,string]>= {
  '05d99ac1':['Clonagem JSON: testes falharam, houve edicoes e validacoes finais aprovadas; nova revisao exigiu ajustes no job 07a35229.','C6,C12'],
  '0636b4d3':['Runner desapareceu durante prepare; Kernel-Power41/6008 registram reinicio inesperado. Logs, delivery e indice ativo zerados. Efeitos do comando nao sao comprovaveis; proibido replay cego.','C11'],
@@ -31,6 +31,7 @@ const review:Record<string,[string,string]>= {
  '93f4bffe':['Executor ficou parcial apos edicao e validacoes; 13 leituras terminaram em estagnacao, com efeitos preservados.','C1,C12'],
  '9479e1c3':['Gate oficial --check retornou erro real; wrapper ocultou detalhe de handoff, recuperado no diagnostico efe47108.','C2,C9'],
  '9eeded63':['Teste parcialmente alterado; revalidacao falhou/estagnou. Unidade 3a1648f0 corrigiu, preservando o parcial.','C3,C12'],
+ '9e62c36b':['Continuidade materialmente corrigida de 0636b4d3: preflight de hashes, prepare e verify executados uma vez, tres comandos aprovados e delta nos dois alvos. Conclusao do Worker nao comprova fechamento da FT; callback encontrou cota esgotada. Ponte atualizada evitou MCP com modulo legado em memoria.','C2,C3,C10,C11,C14'],
  'a6711cb4':['Build ESM falhou sob package.json CommonJS; supervisor havia presumido semantica da raiz. 21365a86 corrigiu formato.','C9'],
  'ab2ab50e':['Inventario de rastreabilidade apontou10 materiais/0 mapeadas e gate externo; diagnostico nao e conclusao da FT.','C2,C6'],
  'abe917cd':['Um caso PDF recuperou cdd74993 com leitura/edicao/teste delimitados.','C6'],

@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "captured_at": "2026-10-12T01:42:23.1657112Z",
+  "event_id": "5670f3d962cefdbd4422ba8ef8e326409433ddc5c39a40517da5d0831d27e429",
+  "thread_id": "01a11930-a51b-7051-af8d-cf47a7548f53",
+  "reset_at_ms": 1791761615000,
+  "scheduled_due_at_ms": 1791761675000,
+  "send_started_at_ms": 1791767514338,
+  "sent_at_ms": 1791767517081,
+  "send_attempts": 1,
+  "status": "COMPLETED",
+  "message_client_id": "01a12daa-96bc-7192-a9d4-8e66ee09fea0",
+  "turn_id": "01a12dba-78e3-7ce1-bfc5-8720fd6346a6",
+  "response_id": "msg_0e490205205fd3f7016acc3930865c819197f506da19f2eb06",
+  "response_hash": "83905e5d2bf13e5c1fb84d3b835fee69ab719dcb249400621d8934f547f11775",
+  "system_events": [
+    {
+      "provider": "EventLog",
+      "id": 6005,
+      "time_utc": "2026-10-12T01:10:06.7768189Z"
+    },
+    {
+      "provider": "EventLog",
+      "id": 6006,
+      "time_utc": "2026-10-11T20:56:42.0889430Z"
+    }
+  ],
+  "activation_test": "Navegacao nativa manual ativou conversa; protocolo PowerShell testado no mesmo destino sem novo envio. Automacao de ativacao por instancia validada por fixtures; nao se forcou outro reboot.",
+  "limitations": [
+    "SO desligado impediu disparo no segundo previsto; StartWhenAvailable recuperou atraso.",
+    "COMPLETED confirma resposta correlacionada, nao conclusao da FT."
+  ]
+}

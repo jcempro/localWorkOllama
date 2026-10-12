@@ -52,7 +52,7 @@ Limitações materiais, sem mascarar pendências:
 
 ## Revisão integral de 11/10/2026
 
-A captura atual contém 196 jobs não cancelados, 87 operacionais e 109 fixtures. As 49 novas unidades têm avaliação explícita adicional; referências por ID e todos os itens públicos dos respectivos turnos foram cruzados com o histórico, inclusive respostas finais sem ID, sem ler raciocínio privado. [Relatório de interações](audit-interactions-report.md) distingue menções manuais, candidatos a callback, resposta final oficial, cota, consultas repetidas, fixtures e aceite; a revisão individual/manifesto foi regenerada com cobertura integral.
+A captura de 11/10 contém 196 jobs não cancelados, 87 operacionais e 109 fixtures. As 49 novas unidades têm avaliação explícita adicional; referências por ID e todos os itens públicos dos respectivos turnos foram cruzados com o histórico, inclusive respostas finais sem ID, sem ler raciocínio privado. A seção seguinte atualiza a cobertura para 12/10 UTC; a captura anterior permanece preservada localmente.
 
 | Correção | Causa comprovada | Tratamento e evidência |
 | --- | --- | --- |
@@ -65,6 +65,31 @@ Nove callbacks históricos sofreram usageLimitExceeded; SR-001 separado recupera
 As 22 sequências determinísticas tiveram 18 COMPLETED, mediana descritiva de 25s; as 65 inferências operacionais, 20 COMPLETED e mediana de 455s. Isso sustenta a preferência já normativa por scripts exatos para operações mecânicas, sem representar benchmark causal ou autorizar preparo pago volumoso equivalente. Falhas de CLI, ordem, formato CommonJS, getters/clonagem e rastreabilidade do alvo foram preservadas e relacionadas às unidades corretivas; não foram reimplementadas nesta manutenção.
 
 As duas tarefas SR-001 instaladas voltaram a `READY/MCP_AND_MODEL_READY`; a cópia de recuperação também recebeu o runtime corrigido. Para 0636b4d3, foi enviada uma única orientação corretiva nova ao chat original autorizado: ler o diagnóstico, reconciliar efeitos e continuar por unidade materialmente corrigida. O recibo histórico permanece `AMBIGUOUS`, sem conversão em sucesso nem retry do callback original. O novo turno confirmou `WORKER_INFRA_ERROR`, verificou ausência do mapeamento esperado e preparou uma continuação com hashes de pré-condição e etapas separadas; isso não equivale ao aceite final da FT.
+
+## Complemento de 12/10/2026 UTC — falhas sem job e UI após reboot
+
+Captura às 01:26:14 UTC: **197 jobs não cancelados**, 88 operacionais e 109 fixtures, 113 FAILED e 84 COMPLETED. Inclui a continuação 9e62c36b: preflight por hashes, prepare e verify, três comandos aprovados, alterações líquidas nos dois alvos e nenhuma reexecução do job perdido. As 23 sequências têm 19 COMPLETED, mediana descritiva de 25s; inferências permanecem 20/65 e mediana de 455s. A captura não inclui jobs novos do negócio iniciados depois desse horário.
+
+O coletor passou a descobrir também conversas por chamadas reais ao servidor, alcançando **61 identidades**, inclusive fixtures, e **15 chamadas falhas sem retorno de job**. A avaliação apenas por diretórios de jobs omitia esses impedimentos. O [relatório completo](audit-interactions-report.md) classifica cada uma: seis entradas inválidas (um description longo e cinco comandos sem path absoluto), três recusas de revisão por cota, timeout síncrono legado, transporte fechado, teto legado classificado indevidamente como infraestrutura, índice vazio incompatível e dois JSONs com bytes nulos. Timeout/fechamento de transporte não comprovam ausência de efeitos.
+
+Há dez jobs com callback cujo turno falhou por cota e três com duas chamadas de resultado terminal. O relatório distingue tentativas, obtenção real, resposta final e aceite; repetição em outro contexto não é automaticamente prova de reanálise redundante. Os 102 registros sem callback continuam sendo fixtures. Schema desconhecido ou nova falha sem avaliação bloqueiam a geração, sem classificar silenciosamente como sucesso.
+
+| Correção | Causa comprovada | Tratamento e evidência |
+| --- | --- | --- |
+| C14 | Recuperação gravava `job_id:null`, aceito pelo módulo novo mas inválido para MCP anterior carregado em memória. A ponte atualizada funcionou enquanto o catálogo antigo falhava. | Índice vazio usa ausência de arquivo; null é normalizado, original corrompido preservado. Fixture reproduz contrato legado e confirma compatibilidade vazia/ativa. Norma exige ponte atualizada quando erro pré-job antigo estiver comprovado, sem replay incerto. Instalador aplicou a correção real. |
+| C15 | `continue` enviado após reboot permaneceu na fila de conversa não carregada; processo Desktop ativo não comprovava destino operacional. | Restauração usa rota nativa verificada e protocolo registrado, somente quando queueId/thread/clientId exatos ainda estiverem pendentes. Uma ativação por evento/instância; nova instância permite recuperar novamente. Não envia outro prompt, não cria console, não afirma sucesso antes de resposta. Testes de fila/isolamento/falha/reboot lógico passaram; rota PowerShell foi executada no destino real. |
+
+### Conversa “Corrigir tabelas Markdown e TTS”
+
+O histórico integral retido contém duas tentativas `local_analyze`, ambas com `WORKER_INFRA_ERROR`/JSON NUL, anteriores à criação de job. As demais interações confirmam que o supervisor identificou active.json corrompido, recebeu orientação para não reparar a instalação naquele repositório e tentou prosseguir diretamente; o humano reiterou a obrigação de delegar. Não houve implementação do blog entregue pelo Worker. A causa de infraestrutura é a mesma C11, já corrigida; não há evidência de falha cognitiva do Ollama nesse pedido, pois ele não o recebeu.
+
+A norma global distribuída agora explicita executável absoluto, descrição até 240 caracteres e que um pedido genérico de continuidade não autoriza fallback pago equivalente. Preserva comandos triviais permitidos e a fronteira do repositório. Esta manutenção não implementa a funcionalidade Markdown/TTS no alvo. A orientação de retomada àquela conversa depende da autorização específica solicitada ao humano; nenhum envio foi fabricado ou efetuado sem ela.
+
+### Prova de retomada e atraso real
+
+[Prova sanitizada](resume-proof-2026-10-12.json): reset às 23:33:35 UTC, tarefa configurada para 23:34:35 UTC (= reset+60s), envio único às 01:11:54 UTC após disponibilidade do ambiente. EventLog6006 às 20:56:42 UTC e 6005 às 01:10:06 UTC demonstram desligamento/inicialização abrangendo o horário previsto. Não se promete execução com o computador desligado; recuperação posterior é distinta de pontualidade.
+
+A fila permaneceu aguardando na conversa não carregada. Navegação nativa manual ativou o destino; a mesma rota registrada foi testada por PowerShell sem reenviar. O turno `01a12dba-78e3-7ce1-bfc5-8720fd6346a6` terminou sem erro, com final e clientId exatamente correlacionados: evento `COMPLETED`, `sendAttempts=1`, hash de resposta preservado. Isso comprova retomada real e o mecanismo necessário. A automatização da ativação por instância foi validada por fixtures e instalada nas duas tarefas; não se forçou outro reboot para alegar um novo ensaio integral automático.
 
 ## Reprodução da auditoria
 
