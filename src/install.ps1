@@ -15,7 +15,8 @@ param(
   [switch]$SkipModel,
   [switch]$WaitForIdle,
   [switch]$SkipWatchdog,
-  [switch]$SkipGlobalRules
+  [switch]$SkipGlobalRules,
+  [switch]$GlobalRulesOnly
 )
 $ErrorActionPreference = 'Stop'
 $MODEL_EXPLICIT_A3C = $PSBoundParameters.ContainsKey('WorkerModel') -or -not [string]::IsNullOrWhiteSpace($env:LOCAL_MODEL)
@@ -54,10 +55,47 @@ function Wait-WorkerIdleA3C([string]$Root) {
     }
   } finally { $watcherA3C.Dispose() }
 }
-if ($WaitForIdle) { Wait-WorkerIdleA3C $WORKER_HOME_A3C }
 $RULES_START_A3C = '<!-- LOCALWORKER_GLOBAL_START -->'
 $RULES_END_A3C = '<!-- LOCALWORKER_GLOBAL_END -->'
 $LEGACY_GLOBAL_SHA256_A3C = 'a8eff5e87698169d7d658758b165a27735a1272a6bebad8f35f98736b527603e'
+function Install-GlobalRulesA3C {
+  New-Item -ItemType Directory -Path $CODEX_HOME_A3C -Force | Out-Null
+  $rules = [IO.File]::ReadAllText((Join-Path $SOURCE_ROOT_A3C 'agents.supervisor.md')).TrimEnd()
+  $block = "$RULES_START_A3C`r`n" + $rules + "`r`n$RULES_END_A3C"
+  $existing = if (Test-Path -LiteralPath $GLOBAL_RULES_A3C -PathType Leaf) { [IO.File]::ReadAllText($GLOBAL_RULES_A3C) } else { '' }
+  if ($existing.Contains($RULES_START_A3C) -and $existing.Contains($RULES_END_A3C)) {
+    $begin = $existing.IndexOf($RULES_START_A3C)
+    $end = $existing.IndexOf($RULES_END_A3C) + $RULES_END_A3C.Length
+    $prefix = $existing.Substring(0,$begin)
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try { $hashBytes = $sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($prefix.Replace("`r`n","`n").Trim())) }
+    finally { $sha.Dispose() }
+    $prefixHash = ([BitConverter]::ToString($hashBytes)).Replace('-','').ToLowerInvariant()
+    if ($prefixHash -eq $LEGACY_GLOBAL_SHA256_A3C) { $prefix = '' }
+    $next = $prefix + $block + $existing.Substring($end)
+  } elseif ($existing.Contains($RULES_START_A3C) -or $existing.Contains($RULES_END_A3C)) {
+    throw 'Marcador parcial no AGENTS.md global; preservado para reparo manual.'
+  } elseif ($existing.Contains($rules)) {
+    $next = $existing
+  } else {
+    $next = $existing.TrimEnd() + "`r`n`r`n" + $block + "`r`n"
+  }
+  if ($next -ne $existing) {
+    $rulesBackup = "$GLOBAL_RULES_A3C.backup-$(Get-Date -Format yyyyMMddHHmmss)"
+    if ($existing) { Copy-Item -LiteralPath $GLOBAL_RULES_A3C -Destination $rulesBackup }
+    $temp = "$GLOBAL_RULES_A3C.$PID.tmp"
+    [IO.File]::WriteAllText($temp,$next,[Text.UTF8Encoding]::new($false))
+    if (Test-Path -LiteralPath $GLOBAL_RULES_A3C -PathType Leaf) { [IO.File]::Replace($temp,$GLOBAL_RULES_A3C,$rulesBackup) }
+    else { [IO.File]::Move($temp,$GLOBAL_RULES_A3C) }
+  }
+}
+if ($GlobalRulesOnly) {
+  if ($SkipGlobalRules) { throw 'GlobalRulesOnly e SkipGlobalRules sao mutuamente exclusivos.' }
+  Install-GlobalRulesA3C
+  [pscustomobject]@{status='GLOBAL_RULES_INSTALLED';path=$GLOBAL_RULES_A3C} | ConvertTo-Json
+  return
+}
+if ($WaitForIdle) { Wait-WorkerIdleA3C $WORKER_HOME_A3C }
 $MAINTENANCE_REPO_A3C = $SOURCE_ROOT_A3C
 $MAINTENANCE_MARKER_A3C = Join-Path (Split-Path -Parent $SOURCE_ROOT_A3C) '.localworker-maintenance-id'
 if (-not (Test-Path -LiteralPath $MAINTENANCE_MARKER_A3C -PathType Leaf)) {
@@ -244,35 +282,7 @@ if (Test-Path -LiteralPath $WORKER_HOME_A3C) {
 if ($LASTEXITCODE -ne 0) { throw 'Instalação ou atualização do Worker falhou.' }
 
 if (-not $SkipGlobalRules) {
-  New-Item -ItemType Directory -Path $CODEX_HOME_A3C -Force | Out-Null
-  $rules = [IO.File]::ReadAllText((Join-Path $SOURCE_ROOT_A3C 'agents.supervisor.md')).TrimEnd()
-  $block = "$RULES_START_A3C`r`n" + $rules + "`r`n$RULES_END_A3C"
-  $existing = if (Test-Path -LiteralPath $GLOBAL_RULES_A3C -PathType Leaf) { [IO.File]::ReadAllText($GLOBAL_RULES_A3C) } else { '' }
-  if ($existing.Contains($RULES_START_A3C) -and $existing.Contains($RULES_END_A3C)) {
-    $begin = $existing.IndexOf($RULES_START_A3C)
-    $end = $existing.IndexOf($RULES_END_A3C) + $RULES_END_A3C.Length
-    $prefix = $existing.Substring(0,$begin)
-    $sha = [Security.Cryptography.SHA256]::Create()
-    try { $hashBytes = $sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($prefix.Replace("`r`n","`n").Trim())) }
-    finally { $sha.Dispose() }
-    $prefixHash = ([BitConverter]::ToString($hashBytes)).Replace('-','').ToLowerInvariant()
-    if ($prefixHash -eq $LEGACY_GLOBAL_SHA256_A3C) { $prefix = '' }
-    $next = $prefix + $block + $existing.Substring($end)
-  } elseif ($existing.Contains($RULES_START_A3C) -or $existing.Contains($RULES_END_A3C)) {
-    throw 'Marcador parcial no AGENTS.md global; preservado para reparo manual.'
-  } elseif ($existing.Contains($rules)) {
-    $next = $existing
-  } else {
-    $next = $existing.TrimEnd() + "`r`n`r`n" + $block + "`r`n"
-  }
-  if ($next -ne $existing) {
-    $rulesBackup = "$GLOBAL_RULES_A3C.backup-$(Get-Date -Format yyyyMMddHHmmss)"
-    if ($existing) { Copy-Item -LiteralPath $GLOBAL_RULES_A3C -Destination $rulesBackup }
-    $temp = "$GLOBAL_RULES_A3C.$PID.tmp"
-    [IO.File]::WriteAllText($temp,$next,[Text.UTF8Encoding]::new($false))
-    if (Test-Path -LiteralPath $GLOBAL_RULES_A3C -PathType Leaf) { [IO.File]::Replace($temp,$GLOBAL_RULES_A3C,$rulesBackup) }
-    else { [IO.File]::Move($temp,$GLOBAL_RULES_A3C) }
-  }
+  Install-GlobalRulesA3C
 }
 if (-not $SkipWatchdog) {
   & (Join-Path $WORKER_SOURCE_A3C 'register-watchdog.ps1') -Target $WORKER_HOME_A3C -NodePath $NODE_EXE_A3C -TaskName $WatchdogTaskName -IntervalMinutes $WatchdogIntervalMinutes

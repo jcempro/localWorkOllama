@@ -46,6 +46,7 @@ Contrato por job: `provided_evidence={source,content}` opcional somente em `read
 | Configuração Codex dos scripts internos | `-CodexConfig`; padrão `CODEX_HOME/config.toml`. |
 | Destino e executáveis nos scripts internos | `-Target`, `-NodePath`, `-NpmCommand`, `-CodexCommand`; o instalador principal calcula e passa esses valores. |
 | Recursos opcionais do instalador | `-SkipPrerequisites`, `-SkipModel`, `-SkipWatchdog`, `-SkipGlobalRules`; apenas para instalação parcial/controlada. |
+| Somente norma global | `-GlobalRulesOnly`, com `-CodexHome`/`CODEX_HOME`; usa a mesma mesclagem e backup, sem runtime/dependências/tarefas nem espera do job. Conflita com `-SkipGlobalRules`; não comprova prontidão do Worker. |
 | Download de modelos Ollama | `OLLAMA_MODELS` conforme configuração oficial do Ollama. |
 | Remoção de notificações | `LOCAL_DISABLE_NOTIFY=1` para testes sem balão. |
 | Monitor local | `monitor_url` abre o detalhe; `monitor_index_url`, `local_monitor` ou `node monitor.mjs index` dão acesso ao inventário. Host `127.0.0.1`, porta primária `49767` e fallback `49768`, chave aleatória em `monitor.json` no destino. Não publique os links. Limites de heartbeat/espera e reconciliação de anomalias (60 s) estão no topo de `monitor.mjs`; carência de órfão (120 s) no topo de `watchdog.mjs`. A UI atualiza sem reload em 3 s no detalhe e 10 s no inventário enquanto visível. |
@@ -106,6 +107,6 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/update-installed.ps1` | `f664c2dcb290a3d429461e17dea5d90978568d8eea674a0aa97d983507e3405e` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
-| `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
+| `src/install.ps1` | `5ee5296bf04b9706abf6855e3a5576fcc47c6cb179c49a84f039b828c73ac1c1` |
 | `src/agents.supervisor.md` | `ae815b8f6edac6421a87ff15ec1df746cfc29b832963be431c17a1aa3cc32fc4` |
 <!-- LOCALWORKER_GENERATED_END -->

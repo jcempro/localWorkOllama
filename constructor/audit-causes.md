@@ -85,6 +85,8 @@ O histórico integral retido contém duas tentativas `local_analyze`, ambas com 
 
 A norma global distribuída agora explicita executável absoluto, descrição até 240 caracteres e que um pedido genérico de continuidade não autoriza fallback pago equivalente. Preserva comandos triviais permitidos e a fronteira do repositório. Esta manutenção não implementa a funcionalidade Markdown/TTS no alvo. A orientação de retomada àquela conversa depende da autorização específica solicitada ao humano; nenhum envio foi fabricado ou efetuado sem ela.
 
+O instalador reutiliza sua mesclagem em `GlobalRulesOnly`: novas instruções podem ser aplicadas sem reinstalar software nem esperar um job legítimo. O fluxo completo continua guardado contra atualização durante execução. Fixture em PowerShell 5.1 confirmou preservação, override, idempotência, conflito e bloco parcial sem alteração do runtime; a atualização global completa anterior também terminou por evento, com MCP OK.
+
 ### Prova de retomada e atraso real
 
 [Prova sanitizada](resume-proof-2026-10-12.json): reset às 23:33:35 UTC, tarefa configurada para 23:34:35 UTC (= reset+60s), envio único às 01:11:54 UTC após disponibilidade do ambiente. EventLog6006 às 20:56:42 UTC e 6005 às 01:10:06 UTC demonstram desligamento/inicialização abrangendo o horário previsto. Não se promete execução com o computador desligado; recuperação posterior é distinta de pontualidade.

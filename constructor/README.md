@@ -13,6 +13,7 @@ Estes arquivos apoiam a manutenção deste produto; não são necessários ao Wo
 - `audit-interactions.mts`: recebe inventário, CODEX_HOME real e destino JSON privado; descobre conversas também por chamadas comprovadas ao servidor, incluindo falhas sem job. Cruza somente tipos públicos userMessage/agentMessage/mcpToolCall, sem reasoning, por ID. Inclui todos os itens públicos dos turnos vinculados, inclusive finais sem ID. Distingue menção manual, candidato a callback, tentativa de consulta, resultado terminal obtido e resposta final oficial. SQLite é read-only; não envia mensagens.
 - `render-interactions.mts`: recebe inventário, JSON de interações e destino Markdown; verifica cobertura e gera tabela sem texto bruto.
 - `audit-assessments-2026-10-11.mts`: avaliações explícitas adicionais, preservando as anteriores e os efeitos parciais.
+- `test-global-rules.mts`: fixture do instalador em PowerShell 5.1, comprova atualização isolada, idempotência, override, prefixo/sufixo e ausência de efeitos no runtime. Execute `node constructor/test-global-rules.mts` no construtor Windows.
 
 ## Uso
 
