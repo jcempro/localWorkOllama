@@ -11,8 +11,16 @@ Escopo: somente política de manutenção própria; outras capacidades/contratos
 - Sintaxe PowerShell do instalador/atualizador e `node scripts/sync-src.mjs --write`: 38 artefatos, fonte TypeScript/JavaScript equivalentes e sem valores privados do desenvolvimento.
 - `constructor/test-hybrid-install.ps1` em Windows PowerShell 5.1: instalação nova isolada, adoção/identidade, arquivos equivalentes e atualização sem repetir opt-in preservando política, modelo, contexto e timeout; fixture exclusiva removida. Nenhum watchdog/modelo/job adicional.
 
-## Limites e aceite pendente
+## Ativação real e aceite
 
-Testes do comportamento de patentes usam Ollama simulado para forçar estratégias determinísticas/adversas; não provam obediência semântica universal do modelo real. Runtime valida a decisão declarada e o vínculo, não decide nem certifica C. Hash não autentica caller, cria sandbox/firewall ou garante inviolabilidade contra administrador/hardware. Execução de comando aprovado depende da inspeção de fonte/argv/efeitos pelo supervisor. Instalação ativa e correspondência pós-instalação ainda pendentes nesta fase.
+O instalador real terminou após o evento do job anterior, com `INSTALLED`, registro MCP OK e watchdog existente preservado. `maintenance_hybrid_version=1`; seis arquivos críticos instalados conferem byte a byte com `src/`; modelo `qwen3-coder-next-32k`, contexto32768 e timeout0 preservados. Norma global ativa atualizada com backup, inclusive a frase antiga de veto absoluto na ponte, agora condicionada a SW-HYBRID.
+
+Uma chamada pela ponte REAL instalada com C=8 retornou `WORKER_REQUEST_REJECTED: Supervisor exclusivo: delegação proibida`, antes da criação de job/inferência. O CLI corretamente encerra com exit1/stderr; a primeira expectativa do harness de receber JSON em stdout estava errada, não a guarda. O recibo foi aproveitado, SEM repetir a chamada. Prova privada em `audit-private/hybrid-installed-proof.json`. Não houve manutenção executada pelo Worker nesta migração.
+
+O apoio temporário de espera foi descartado sem lançamento/envio porque a instalação concluiu durante a conferência final; não integra runtime ou capacidade distribuída. Não houve novo `continue` nem tarefa adicional. Fonte, norma, implementação, instalação e 38 espelhos estão coerentes quanto ao regime híbrido.
+
+## Limites
+
+Testes do comportamento de patentes usam Ollama simulado para forçar estratégias determinísticas/adversas; não provam obediência semântica universal do modelo real. Runtime valida a decisão declarada e o vínculo, não decide nem certifica C. Hash não autentica caller, cria sandbox/firewall ou garante inviolabilidade contra administrador/hardware. Execução de comando aprovado depende da inspeção de fonte/argv/efeitos pelo supervisor. Processo MCP antigo já carregado pode conservar catálogo/módulos antigos: a ponte atualizada foi validada para a guarda, sem prometer reload automático do catálogo.
 
 Nenhum resultado desses testes conclui FTs de negócio de outro projeto. Job TTS anterior não foi reiniciado nem seu trabalho reproduzido. SR-001, modelo/esforço, monitor/STOP/exclusão/recursos/contexto/retomada/Git existentes não foram substituídos. Checkpoint estagiário usa o fluxo terminal existente com `error_kind=NEEDS_SUPERVISOR`, jamais WORKER_INFRA_ERROR nem sucesso inferido.

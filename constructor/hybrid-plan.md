@@ -12,7 +12,7 @@ Estado: concluída/validada. Objetivo: substituir somente o veto absoluto de man
 
 ## FT-SW-HYBRID-C1 — implementação funcional
 
-Estado: fonte/testes concluídos e validados; ativação real aguardando evento de job anterior; depende de N1. Objetivo: contrato explícito de avaliação/escopo pelo supervisor, validação fail-closed antes do job e no runner; patentes do mesmo runtime com checkpoint intermediário obrigatório no estagiário. Fases: 1/4 validador e limites; 2/4 MCP/runner e escopo/checkpoint; 3/4 instalação/espelhos/documentação; 4/4 integração. Aceite: C>7/exclusivo/incerteza não delegam; C≤5 só júnior; 5<C≤7 escolha fundamentada; avaliação ausente/inválida/vencida por mudança de escopo não libera manutenção; estagiário interrompe antes de novo efeito sem revisão e preserva evidências; raiz/identidade/Git e demais controles preservados. Sem chamada paga de acompanhamento.
+Estado: concluída/validada e instalada; depende de N1. Objetivo: contrato explícito de avaliação/escopo pelo supervisor, validação fail-closed antes do job e no runner; patentes do mesmo runtime com checkpoint intermediário obrigatório no estagiário. Fases: 1/4 validador e limites; 2/4 MCP/runner e escopo/checkpoint; 3/4 instalação/espelhos/documentação; 4/4 integração. Aceite: C>7/exclusivo/incerteza não delegam; C≤5 só júnior; 5<C≤7 escolha fundamentada; avaliação ausente/inválida/vencida por mudança de escopo não libera manutenção; estagiário interrompe antes de novo efeito sem revisão e preserva evidências; raiz/identidade/Git e demais controles preservados. Sem chamada paga de acompanhamento.
 
 ## Preservação e entrega
 
