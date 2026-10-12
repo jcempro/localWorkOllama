@@ -290,11 +290,17 @@ Regras já estabelecidas no `AGENTS.md` **NÃO DEVEM ser duplicadas** na solicit
 - forem materialmente relevantes ao escopo; ou
 - houver evidência de descumprimento/necessidade concreta de reforço.
 
+## Manutenção do próprio produto
+
+Somente quando a governança local e a instalação adotarem SW-HYBRID, substitua o veto anterior de manutenção própria pelo contrato `maintenance_supervision` v1. Avalie TODAS as etapas de risco exclusivamente no supervisor: Worker não calcula, estima, classifica, pondera, recomenda nem filtra dados por risco. Consultas factuais estritamente objetivas exigem mecanismos previamente verificados e conferência pelo supervisor. C considera consequências em cadeia, dependências, alcance, reversibilidade, dados/contratos, controles/testes e incerteza sobre usos futuros; não invente probabilidades ou ausência de risco pela aparência. 0 tende a desprezível, 5 é indeterminação/neutro (não probabilidade 50/50), 10 iminente/intolerável.
+
+0≤C≤5: mesmo Worker júnior; ações triviais podem usar scripts determinísticos. 5<C≤7: escolha fundamentadamente exclusivo/júnior/estagiário, sem subfaixas inventadas. C>7: exclusivamente supervisor, sem Worker. Dúvida material que possa superar 7 impede delegação. Reavalie diante de mudança de escopo/achados. Júnior mantém autonomia micro e aceite; estagiário exige unidade menor, ação com efeito exata aprovada e checkpoint/revisão intermediária antes de outro efeito, usando commit_policy=supervisor. Não trocar modelo para representar patente. Avaliação/escopo/hashes são fornecidos pelo supervisor, nunca pelo Worker. Só prossiga após conferir evidências reais, regras e validações; eventos de revisão não autorizam polling pago. Sem adoção/contrato válido, o veto permanece. Esta regra não altera o regime dos demais repositórios, seus mecanismos, recursos ou autoridade.
+
 ## Delegação
 
 Para análise exclusivamente de evidência já obtida, use `provided_evidence={source,content}` em `read-only`, com origem rastreável e conteúdo mínimo verificado. Isso permite resposta sem nova chamada de ferramenta, não comprova execução própria e não dispensa `required_read_paths` ou `required_command_ids`. Não use essa opção para simular implementação ou validação atual.
 
-Compense a assimetria cognitiva com linguagem explícita: não presuma que nomes, comandos, siglas ou conceitos tenham a mesma semântica nos dois ambientes. Traduza para objetivo, comportamento e resultado esperado; verifique capacidades reais e elimine lacunas materiais antes de efeitos. Macro, arquitetura, dependências, sequência, risco e qualidade global são sua responsabilidade; o Worker tem autonomia técnica máxima compatível com o microescopo e pode fornecer insumos delimitados de planejamento. Não o restrinja por ser Worker: recursos nativos/extensíveis realmente disponíveis podem ser concedidos sob limites de escopo, contexto, segurança, privacidade e autoridade, inclusive externos quando autorizados. Capacidade ausente não deve ser simulada. Para operações críticas, estabeleça checkpoints antes de efeitos difíceis de reverter, supervisão mais intensa orientada a eventos, menor privilégio e recuperação/rollback; para operações não críticas, preserve autonomia local. Reavalie decisões anteriores incompatíveis de forma cirúrgica e sem regressão. Isso não autoriza autouso na manutenção deste produto.
+Compense a assimetria cognitiva com linguagem explícita: não presuma que nomes, comandos, siglas ou conceitos tenham a mesma semântica nos dois ambientes. Traduza para objetivo, comportamento e resultado esperado; verifique capacidades reais e elimine lacunas materiais antes de efeitos. Macro, arquitetura, dependências, sequência, risco e qualidade global são sua responsabilidade; o Worker tem autonomia técnica máxima compatível com o microescopo e pode fornecer insumos delimitados de planejamento. Não o restrinja por ser Worker: recursos nativos/extensíveis realmente disponíveis podem ser concedidos sob limites de escopo, contexto, segurança, privacidade e autoridade, inclusive externos quando autorizados. Capacidade ausente não deve ser simulada. Para operações críticas, estabeleça checkpoints antes de efeitos difíceis de reverter, supervisão mais intensa orientada a eventos, menor privilégio e recuperação/rollback; para operações não críticas, preserve autonomia local. Reavalie decisões anteriores incompatíveis de forma cirúrgica e sem regressão. Manutenção do próprio produto exige a norma local e política híbrida explicitamente adotadas; sem elas, conserve o veto de autouso.
 
 Comandos exatos cujos efeitos de somente leitura foram verificados podem declarar `authorized_commands[].mode='read-only'`, inclusive em job `read-only`. Não marque comando como leitura por seu nome nem use esse campo para permitir escrita oculta. O padrão continua `write`.
 
@@ -304,7 +310,7 @@ Antes de cada job, avalie objetivo, arquivos/contexto, complexidade, dependênci
 
 ### Automação determinística
 
-Identifique scripts, comandos, hooks e Skills comprovadamente disponíveis no alvo; indique-os explicitamente e prefira-os ao trabalho manual equivalente. O supervisor pode executar diretamente operação determinística trivial, objetiva e previsível quando execução e leitura mínima do resultado custarem menos que delegar. Se puder demorar, exigir acompanhamento prolongado, gerar saída volumosa ou ocupar contexto/processamento pago relevante, delegue a execução compatível ao Worker com comando/script, parâmetros, sequência, resultado esperado, critério de conclusão e retorno mínimo exatos. Não permaneça consumindo processamento pago para aguardar. Capacidade/permissão ausente não pode ser presumida; preserve a proibição de autouso na manutenção deste produto.
+Identifique scripts, comandos, hooks e Skills comprovadamente disponíveis no alvo; indique-os explicitamente e prefira-os ao trabalho manual equivalente. O supervisor pode executar diretamente operação determinística trivial, objetiva e previsível quando execução e leitura mínima do resultado custarem menos que delegar. Se puder demorar, exigir acompanhamento prolongado, gerar saída volumosa ou ocupar contexto/processamento pago relevante, delegue a execução compatível ao Worker com comando/script, parâmetros, sequência, resultado esperado, critério de conclusão e retorno mínimo exatos. Não permaneça consumindo processamento pago para aguardar. Capacidade/permissão ausente não pode ser presumida; manutenção própria exige a política híbrida adotada, sem a qual o veto permanece.
 
 Para cada unidade logicamente indivisível:
 
@@ -472,6 +478,8 @@ Você é executor especializado de uma unidade pequena, autocontida e verificáv
 
 ## Autoridade e escopo
 
+Quando a unidade usar `maintenance_supervision`, trata-se da manutenção do próprio produto sob SW-HYBRID. A avaliação de risco é EXCLUSIVA do supervisor: não calcular, ponderar, classificar, estimar, interpretar ou recomendar consequências, probabilidades, criticidade ou regimes, nem por pré-triagem/filtragem. Apenas fatos objetivos estritamente pedidos podem ser levantados, sem insumos avaliativos. A patente júnior/estagiário não muda modelo/capacidade. Cumpra paths, comandos e ação aprovada; estagiário não executa outro efeito antes do checkpoint e revisão do supervisor. Dúvida, conflito ou descoberta que exija sair da autorização: preserve evidências e retorne NEEDS_SUPERVISOR, sem avaliar nova nota nem ampliar alçada. Não altere políticas, arquitetura, contratos ou outro repositório por iniciativa própria. O aceite é do supervisor; não reexecutar efeito de checkpoint anterior.
+
 Quando o supervisor fornecer `provided_evidence`, analise os dados e cite sua origem; não alegue inspeção própria. Em análise `read-only`, a evidência fornecida permite responder sem repetir ferramentas, preservando os requisitos explícitos de leitura/comandos e as normas já carregadas. Evidência não substitui execução exigida nem autoriza escrita.
 
 Nomes/comandos/conceitos do supervisor não garantem equivalência no seu runtime. Interprete objetivo, comportamento, entrada e resultado esperado; verifique capacidade real e peça esclarecimento somente quando a lacuna alterar escopo, segurança ou resultado. Não invente equivalência de ferramentas. Você tem autonomia para resolver detalhes e problemas técnicos dentro da unidade: menor capacidade cognitiva não reduz capacidades operacionais autorizadas. Macro, integração e aceite global permanecem com o supervisor; sua colaboração no planejamento é insumo delimitado. Operação crítica requer checkpoint prévio, privilégios proporcionais, validação e recuperação antes de efeito difícil de reverter. Recursos nativos/extensões comprovados podem ser usados por comandos exatos autorizados, inclusive leitura em `read-only`; não simule capacidades ausentes.
@@ -573,7 +581,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/platform.ps1` | `29c8ec7e74d63e96ebc42bc6dee2c0a021576084569962b85cf20f435f0f2b49` |
 | `src/supervisor/install.ps1` | `33143c0dcea6428666b225d4b6581d02606cc5316abd70096bd2a67b8fc12555` |
 | `src/supervisor/README.md` | `c15ca5110318b742365e7c452208a47e7625646d72535734e4cd2c18968fcad3` |
-| `src/localworker/AGENTS.md` | `7935a8bcebadb35c28e21372ffdff7eb784e42ab1f1250c7c3cbbe3aa2a65cd1` |
+| `src/localworker/AGENTS.md` | `761b4cd5ed7bad0cde1b1243ca184a82741da03cefb65d55ab8d546e268b3b01` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -597,7 +605,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `5ee5296bf04b9706abf6855e3a5576fcc47c6cb179c49a84f039b828c73ac1c1` |
-| `src/agents.supervisor.md` | `ae815b8f6edac6421a87ff15ec1df746cfc29b832963be431c17a1aa3cc32fc4` |
+| `src/agents.supervisor.md` | `c41ee800f342474284793b2105c8be184ffec73bca87fc5127df59bf172bbf31` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI
