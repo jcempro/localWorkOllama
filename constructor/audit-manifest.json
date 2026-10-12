@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "captured_at": "2026-10-08T01:39:45.629Z",
+  "captured_at": "2026-10-11T19:20:14.940Z",
   "jobs": [
     {
       "job_id": "041b84bc-8499-4085-8cf7-64bed3c3fc19",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "85c880dacf1daf409622c279bb4b7c4c352abb6cde28bf719dff3f7109a72c56",
       "artifacts": [
         {
@@ -61,9 +61,180 @@
       ]
     },
     {
+      "job_id": "05d99ac1-267b-496a-95b9-5f9875c78b28",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "79de18cd57920789adf7e7ff272bc6ec140d8275cdadb682619d4e6b25b55c77",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 8642,
+          "sha256": "35c6180f5223aa3133027c4acec84612bb69795dc8bbf0bb07ca54c7ba6ab660"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 11174,
+          "sha256": "aa5aa48c2b2f57d4d0192744671d66a23e6e13fec651c24334a3d82f4078d205"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 9873,
+          "sha256": "b171a2b972fee99ee244efa67e66525e914b8ce820d8dd2416d54b6d07205cae"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 11842,
+          "sha256": "4c84864950b2cce0fe0dd4422820be30dc18390c1b4681e8b7d096b5b32245c8"
+        },
+        {
+          "path": "context/c0005.json",
+          "bytes": 13282,
+          "sha256": "e4366a4a0269951531c08ee0c059e238c65e995a8f846e4582e2a41fda4a6590"
+        },
+        {
+          "path": "context/c0006.json",
+          "bytes": 14739,
+          "sha256": "5e175d0d063e01d1066c09d9b6c46fddcc10aa6c010490ac4778ee614b762df1"
+        },
+        {
+          "path": "context/c0007.json",
+          "bytes": 15350,
+          "sha256": "137c374653b74ece7ac1369bcab179d87a5278b976be219194ff61c8b51852e6"
+        },
+        {
+          "path": "context/c0008.json",
+          "bytes": 16780,
+          "sha256": "1e4dc7d38e4cb74695276e6ddf7baca766c8d5ac0cc963456a06ae05bacdaa8c"
+        },
+        {
+          "path": "context/c0009.json",
+          "bytes": 16556,
+          "sha256": "eda2304de652b38e2b250be05feb27ddd48b8a466b64a96376de99b51dbfaacf"
+        },
+        {
+          "path": "context/c0010.json",
+          "bytes": 16619,
+          "sha256": "a31d174c523040390da93441bbcdcdf0f471c9503670973c69119f31c77b5bfe"
+        },
+        {
+          "path": "context/c0011.json",
+          "bytes": 18049,
+          "sha256": "4e085f5d7e0feddcaf20382de6e0de2458b617aafe52897a2a8251cbf0f36bde"
+        },
+        {
+          "path": "context/c0012.json",
+          "bytes": 9404,
+          "sha256": "f264a78b677876a4fe084efe46ddc661c52941e9d5a9bf920cfc4948c0070bab"
+        },
+        {
+          "path": "context/c0013.json",
+          "bytes": 20768,
+          "sha256": "970e51cf4240b82663b0bf0740f0a9c1307f111cdc23791829a0b34550e9f056"
+        },
+        {
+          "path": "context/c0014.json",
+          "bytes": 11120,
+          "sha256": "935181db49dc763b829fb587f369a746b3dee822ed6ab6609978279f8c2a194d"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "bd6c63fc8591096bd6706e7ab08d48378f5d509d11e37d6ed3586a26f19bf8da"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 134690,
+          "sha256": "ec0b13750446de05aacf4269ba0ad0c94b7d2bcfdcbe7ed9789a3fa71a1659af"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4062,
+          "sha256": "0a7b1f899523ff7ca10a2edd771ecad4127103cef3a426f344001a02ce7c4c11"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4127,
+          "sha256": "bd689c047cec94ddf277c41ac0d921ce20654033d956bb99db840c99b4979a2b"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5308,
+          "sha256": "313698e7b618731dc860b3aaf357b6eb3e2c738ef18ae911b9fe0ff1b3d543d2"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 774,
+          "sha256": "4d825eec101bd1fa960d933b1a3ebc04512c7724eca47fd4a2fa24aade98c63a"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 41484,
+          "sha256": "bec5814ae2318b4ed57bd08f686b73b91596c8a2e779c1cd8b4a777b121e29f6"
+        }
+      ]
+    },
+    {
+      "job_id": "0636b4d3-dcf0-4f4f-89f3-68cb0f7bd169",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "a3810bc86370ddf4b5eafacb882e3a5930a18d1f9c115ad83258f3fe4f47ff63",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 26,
+          "sha256": "659d36ca563ba4622daabb36a71dafaf6060cdcbf89bb12e75426198496d272c"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 2107,
+          "sha256": "d0660c6993297dfb36c0e3435f3e5a9a524e88439a1d0124e381d705988806fe"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 1743,
+          "sha256": "c4fcc430542d43e286538642beaeeeb7e9a3a8de88ce09f02060585972abbf69"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4480,
+          "sha256": "be4dc6ef0187e779df5080541bcc6e36331aa5aa9f4878cdaed9d8e2812a9802"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "834a709ba2534ebe3ee1397fd4f7bd288b2acc1d20a08d6c862dcd99b6f04400"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "2b609db784bbc429139747320b70d7485a69c003e1a2ea6fe18cd10ff0be150d"
+        },
+        {
+          "path": "state.json",
+          "bytes": 685,
+          "sha256": "20f2563609f631e39763687e5a544ed18f4ce9e51772b091ce557c335ee467f1"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 150,
+          "sha256": "1d83518b897b14e2943990eff655838246cc0207a7c95a5f3dfccc2e395f8bbf"
+        }
+      ]
+    },
+    {
       "job_id": "06b4db91-c629-4971-af57-53ad1a0a333e",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "268e966abab17f8da450911a9cfc330f356baebbc344791d4894e21935b68d94",
       "artifacts": [
         {
@@ -139,9 +310,241 @@
       ]
     },
     {
+      "job_id": "07a35229-efab-416b-bf23-8c2645b81718",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "ded0319838e178d10d8490592e6ebf199e5b759018e670d6296bebf3c0c209ce",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 11364,
+          "sha256": "cee95befee9300748fc377ba76e0abefb9226a8d6396b225c0bf2c2c81aa86b9"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 3417,
+          "sha256": "b171133a6f966500f3a78efc085a4cea70e42606786941e957d8a37a630d23c2"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 3514,
+          "sha256": "ae5fa5f819f85b2843dd17c6884c8bf5445625f5c52d22fdb86c8824c68d77be"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 4302,
+          "sha256": "fb0e3d15d2be7df39cbaf7c6a2f36c0844d83da725aa26635d6ecd932156dedf"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "2011271f9bfa9c634304d0a60517693e4fcf2c23d9c881f9a846f2a71c2a0138"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 18802,
+          "sha256": "1e855e518e9ed3cb03eb3fe15e32bc6a1553da52b6d62ef38e3a21807f13f1d9"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4062,
+          "sha256": "57576af154d850ffa194f60aae73ab829075facd09a8e3a824dded2a42dca3a1"
+        },
+        {
+          "path": "request.json",
+          "bytes": 3548,
+          "sha256": "5e34f07a9db389f0561f81d45498ad84ad160a6bb52514540265489c207aaff7"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5200,
+          "sha256": "f7fba81a9977c50de5820250a05361f6b2a67903b7ee4c5947d9b22e5d729d6c"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 767,
+          "sha256": "d05322c0ef018f1ab25eeec90e5ecdabd8a6b780ba9f9bbd14df0beb1d47fc08"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 13368,
+          "sha256": "29ef1af1db89e441b4ba7e63a2c30bc4c98a1050d37312144028249c0b551711"
+        }
+      ]
+    },
+    {
+      "job_id": "0a5a6a2e-6fc2-4ea2-8f63-b4aa86b3408a",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "1bdc9454cbd5494bce3bf93c72258c907b15faca1f5c6658b5a82936ba284015",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "986e5202708cd631204244f0e615730d9e5ca3f50311c4098d6d9c8129081b88"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1080,
+          "sha256": "121f93afff7f119ef46df1b8a949601e8f12d73c151568d7b88c012cc7e15d0f"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4048,
+          "sha256": "fea9ed311e2c085110c97307dfd3758b162a061d16bbf77000c7c45ab7cae9d0"
+        },
+        {
+          "path": "request.json",
+          "bytes": 5557,
+          "sha256": "b7ad6eeab67d1a9d6a62a1a1c69d8f30a6f805611bc2053dbe27a98f5cf1a960"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4564,
+          "sha256": "dc44e1c4a250f35ad57d6bd20ad42e2a0f7d4c62c46cbf71fc7e785ff5c138ed"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 617,
+          "sha256": "1a90b1da33aae16a629cbe80e9decdc08552fedddca8e4b1501bd9014967079e"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1437,
+          "sha256": "c8fdf68baa1c15f4fe3d33f9136c396d3f315c2e0b21965d6a37875ac5a8a264"
+        }
+      ]
+    },
+    {
+      "job_id": "10ed293e-6362-43ad-9ea7-ad134e176cff",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "bc710f16369ad7f69704d427aec76d04bbd63fb691158d62fbd3481b4e778f59",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 8802,
+          "sha256": "a804dab59e3dae34c9e2828a4e959f3a6ec125ccb2766f3e29d00b3f2c9cf999"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "5c7f8f78b632ceed8178b2467ec38dc42e0f3622a9cf07867489820e537aa609"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 11956,
+          "sha256": "5d3e3c616914375d855c47781d2c3c585cf7b73a3a5240622443dba636c9707f"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "1271b5f7167d375a320c1b0ede4d82fb3735a21ffbbd802d04de39f6bd59a1b0"
+        },
+        {
+          "path": "request.json",
+          "bytes": 1906,
+          "sha256": "34e70f4e595cc5c71ff6c6d279a226aa7f7ec80ff317d6d71c1f31a12daf5ca0"
+        },
+        {
+          "path": "result.md",
+          "bytes": 7562,
+          "sha256": "71f7748d181dc56247ee831fbd9c828f6ac798dfdcc77b707f5a91931e389e97"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 738,
+          "sha256": "e2967b4050d9722c36730805cc059e0b484a2e8791a1c2fd4e9dc1d885f52cc5"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 4006,
+          "sha256": "037fab87e09ccc47643ee10cb15374d745b2e41203fc4074dfa6c7915aea69f3"
+        }
+      ]
+    },
+    {
+      "job_id": "167f9061-2b96-4a45-81a3-e2262572880d",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "598c80e63203eba5fae39b734a25206292b7aa530f48db79ddcacfc9b0a8bb54",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "9cade9e4b2cbeccf2f4167d99e9f1313bdad16711688ba32e2f4dde5add872c6"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "f8783f76b9ab329934feef3d9a3decd826415ba96ffa8a7c3eb447515a5f4a83"
+        },
+        {
+          "path": "request.json",
+          "bytes": 3176,
+          "sha256": "80774648af654c89c3f48e00afa4c4df2b36d9246ae977e199f63cffee3bea78"
+        },
+        {
+          "path": "result.md",
+          "bytes": 8030,
+          "sha256": "cb645e4938e640a7de0a65ce665d2282b80b50446a79a2270be983b0aff9b10e"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 662,
+          "sha256": "be85cf28cc0f3dd8fda10604c8080476df22a75f0dd6a9b4e9a03e4437a05017"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 804,
+          "sha256": "5d5fec314391e008c3faceb03f620a8761f619bb93b09daddf0844151190cc05"
+        }
+      ]
+    },
+    {
       "job_id": "177a3ead-0b73-4d7b-a38b-f9e21557fcc7",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "98c5b6bf548a975ac2d2a14daf2195bea16ecc0edbb8af38b1bcbf66a979042b",
       "artifacts": [
         {
@@ -197,9 +600,62 @@
       ]
     },
     {
+      "job_id": "18958922-a382-4b46-8d43-30265a4469de",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "81f304d528f195c4c73ef2699cc994d8dfbf544e3961514cadf1c3004e248b69",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "8b63fa3531241a351f3214e2443fec1fca2466a9ff9a215f17c6dd05e2bd6d05"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 383,
+          "sha256": "53a91758b11003e816a044e1a2015eed41357d0001ec3e648809d294b0312584"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4063,
+          "sha256": "55c41524f375478c4b3b0df47d055629243d0f895979a71977b3e10645f02ab6"
+        },
+        {
+          "path": "request.json",
+          "bytes": 5789,
+          "sha256": "11e2c7ad7b34bbb9cf489491fc6f2559b1c10fadd370ca29ae22e04499d91891"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4445,
+          "sha256": "34aa152edccaf482f7aa0a960fd5f75318f13949739a3dbe87146441e4913d6f"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 616,
+          "sha256": "577700e9359d56acc7f1b0db190a32a51b5111ce510c3235f7c0f0fbfb23957a"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 695,
+          "sha256": "67441510832c5edb46dd93b501d5aeb60c789ccf95ac4d2b34e1e713f63345b9"
+        }
+      ]
+    },
+    {
       "job_id": "1909cbd7-c886-452b-ab29-146c0936eae7",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "53e2016e6409c1ecd8df08e3b2d88a131fac2311d9d7d03a63065ee835372f00",
       "artifacts": [
         {
@@ -240,9 +696,82 @@
       ]
     },
     {
+      "job_id": "1b270666-9d49-4b10-86d2-840f3b87530e",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "220e8bd61278cbb5db60e9182fd24bda8813ee6ff28d25121a456b7a57eed013",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 15237,
+          "sha256": "7aababb7f1d2c0f7bd24c6251df22c5a0dfee0e6ed6b95c653294fd2c3c9c164"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 3359,
+          "sha256": "5f0abf83e8cdacb5a6e04f05a3198fe2153b228c8cd7c69b186d179b0117299c"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 2454,
+          "sha256": "7908aa2f6e0744172eb803d7b76ee992f62f6ad6127e371ebebfad4c795a49a5"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 14935,
+          "sha256": "0772557a0f21a5a8555d8a4df52f2a1d3d24f68c54124b2223374ace2173d80a"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "651e50053f36d48d8d9cbc42944921a94f330b4b292bf2bd52c13182c311c743"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4592,
+          "sha256": "3da1d09e5faf8f2c10bd60b40446244a80e207a1871a9ab145b3b32e2c0badec"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 47872,
+          "sha256": "a492942eb2d444da841ee3cbda5eaff0fa0a9701c597d124d4e8aacde9b77951"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4051,
+          "sha256": "cc719474909eb0ea3f74357f587cfe70f4d33a4f612c0bbf3483eb01633c58f6"
+        },
+        {
+          "path": "request.json",
+          "bytes": 3054,
+          "sha256": "795e69ecfeed5f192a80f504ca0112fdd583c22c92e12d8a180de0085c78d2e2"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 782,
+          "sha256": "6661ed2b6a9ac8d5879ff3955ff052c28619717085d805b6f7371621385519e8"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 13098,
+          "sha256": "a2eabade5e635f249874a9058e635b64fa2cce7aeff9577326e64015a0e4a4bc"
+        }
+      ]
+    },
+    {
       "job_id": "1b6422cf-7246-402a-831b-a04d74921f52",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "55db533518757e1b52be8a4c0feb45cb35006554502e88169bb8fb79dcdcaac1",
       "artifacts": [
         {
@@ -293,9 +822,62 @@
       ]
     },
     {
+      "job_id": "21365a86-97f3-4745-8c62-85cf650677df",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "2300d91df9ba56f58b230eeaeb63094613825b773799bc87fa3b814eb262f043",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "2028474dc3a739e17c2f029bae487bfc5d4889d24685288834bce7f6eb464d97"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 746,
+          "sha256": "34eb55d5820c31412a6d8d835434ca049f268bbeb826d839d04581e4ae384da6"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4076,
+          "sha256": "a168c6383b2183fa5a3d6ce01a27bd34f046630de5f520e8ed4489ed5b9d5fb2"
+        },
+        {
+          "path": "request.json",
+          "bytes": 3741,
+          "sha256": "b022eb6b6986f75c83179f99821d0de323df0cbcd8b261265bc1b0bf0898a0ad"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4539,
+          "sha256": "6b1af384397c9681e83d1b2365a11605e020977f7aa0bffd94ddaca9fd35c591"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 616,
+          "sha256": "0fa34158389499eedfa67cc63c208835dc811929199f6d634664f5dcb918ead1"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1070,
+          "sha256": "424e39b8b130639b5ad132d8b90611d3036f29cef6534913bbc8ae08982be2ae"
+        }
+      ]
+    },
+    {
       "job_id": "23dae47e-bc49-4c4b-9716-c247f96bfd7c",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "0cd776ef2f7be5fec378543058abbb24e9c10f92c6d0c50f97c23dc6e296e50d",
       "artifacts": [
         {
@@ -368,7 +950,7 @@
     {
       "job_id": "2464bdd0-1d79-4bc1-89bb-9610f9ac6dcd",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "f0017b41c43934f8c80e3dafd9263bcc96571d3e2f39469eab3b0657d9fa09d4",
       "artifacts": [
         {
@@ -414,9 +996,62 @@
       ]
     },
     {
+      "job_id": "2534f348-4461-46be-8531-4260576b006a",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "a5c537de91b3b12c2dc0d21154c3d4d4a1fa5fd1a63410e062b4f331f7ffbe95",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "71048f99d981e18ca7c87b5735c9b8d632012d08a7f538a62d472f8fb4367c01"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1158,
+          "sha256": "1ba21ee11ecdaeb76c13dd009feedb35465e08b7a8014847c5f0030ec20db0f5"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4052,
+          "sha256": "b71cba7deb4a06015c1ae6b040f886a6282a314bf4bab59ac0d5df4bf0be080e"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4163,
+          "sha256": "40b01ffa5f2939d51fa9a2d77006353a51870b123c9fcab746f60b0249979e74"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4644,
+          "sha256": "b25e46626263b2ea5b6a58554e902f8459c3fe45142686220616734777ed4619"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 616,
+          "sha256": "8d83956d938afff959e3c3fb0fc5774ff1cb35935ce63fc3821f50c1ff15e10e"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1454,
+          "sha256": "577a69f9beb26a45ece1b4318d356b45ba07a440357eaebd154a57a2c7ab00b3"
+        }
+      ]
+    },
+    {
       "job_id": "26c72128-8052-4f82-a366-4757468f437d",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "8be5f8f95db7c0857ad8747ac4fd39df8cf96cffa4a52fb43b7ded85f48a4975",
       "artifacts": [
         {
@@ -457,9 +1092,155 @@
       ]
     },
     {
+      "job_id": "26cba7d7-e0dd-4e4e-8742-1bf631a6da41",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "c58dacae9f7ec795008840818686379f40521af09e744d89ff3ce3940375c4a6",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "2f4ce8772c0e0975f34f25d51c0280471eb86a9bb1215ca08f95dc9f03baedf2"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1296,
+          "sha256": "dd36224505ee8db4596a9572fcc650ce951c0f7d6e58a00f12cbd879c354f716"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4151,
+          "sha256": "2d699871c16c04db73c2c67a9ccc48ca963529ecc2279fdfe1808f6df0151b30"
+        },
+        {
+          "path": "request.json",
+          "bytes": 7651,
+          "sha256": "e82f8b762dc1820db32c48c23b74dc339fce99dd389173bac44245b5f25ce6c7"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4866,
+          "sha256": "b827d5e3f907bae7861bbaf5871f3b3c27da821c22f5b3af60c7df36b49ffccd"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 617,
+          "sha256": "6bfa6649209b1fd2a077837a7b7eaf78b5115595061df730016b43b41f8f9a73"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1432,
+          "sha256": "d6d3247338378e5304bcf3ee024fd3a7d13112cc55be0fbfa20a23b6125c8283"
+        }
+      ]
+    },
+    {
+      "job_id": "31315b9d-0fac-4837-83ac-49a2fad55bf1",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "d66e6d25e1cad5894aa202806438994b595e2cac17c1ddd616dbe6946b22817b",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 16191,
+          "sha256": "ab44f4bc1974614008239d8ac0afe821887ccddcdfc458f94f937bbfe87c4bb9"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 3474,
+          "sha256": "27598aa8b8b96d8c901633e5fad9ce08aa97162c11c2299cdaf7a1902eb651e4"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 14969,
+          "sha256": "b18c550eab99d2c3a417315b94e36d860bc414ea10d653ff5d52f3f36bd1fe37"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 3314,
+          "sha256": "7cb9e01a597cfdff9aa499d6480dbb06f48bd6c4668a065839e07e9089a86a5c"
+        },
+        {
+          "path": "context/c0005.json",
+          "bytes": 5871,
+          "sha256": "354d96d65a2ae338e3a98a704807f627ce7713036f37fcc0aecb13e0e845d96d"
+        },
+        {
+          "path": "context/c0006.json",
+          "bytes": 6611,
+          "sha256": "cc80cd598b486d9c0275acaa823a44bb275907b15a59a311c87da4f5e2901b0e"
+        },
+        {
+          "path": "context/c0007.json",
+          "bytes": 7395,
+          "sha256": "ba1b29263519a86dea6de3ef08f4a5a0bff467ceb96701a707650c0398589aa8"
+        },
+        {
+          "path": "context/c0008.json",
+          "bytes": 11528,
+          "sha256": "adf8ab0a093489fd6e7fd98e234032bcefd4a2da58f477d6cad339c9f5463aef"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "7e96d95a412df32c099e1fdc0f8b13f44e9d819cc83a70390b1a386d5e2dc224"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4553,
+          "sha256": "b6acc2fb2f0e0d0df43a874bb58c0e67dddaab927c6f178a3db8ffdf1c51de15"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 77542,
+          "sha256": "e7ac04cd01b26742df90c104b2c63c31af8a63618d8cd26f5932eef0b52e3ecd"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "7cc3a1c0c975995c04a8f50bfdbe8ed0ba4421ebdd7c486fde27cbb1868dc339"
+        },
+        {
+          "path": "request.json",
+          "bytes": 3382,
+          "sha256": "572da96c5482df765b1199edec264e88a531616d08f6487194acce65b8dc184b"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 785,
+          "sha256": "fe377afef0e5c0bc72b552a6b9015da1fc97220d170baea6dfa42d93bb951096"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 22157,
+          "sha256": "624762872cceb9f2bfd7181e1511753142d0cda9735616746f987b79f5cf407e"
+        }
+      ]
+    },
+    {
       "job_id": "335dbab3-f591-4630-88dd-7b6288b1a48c",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "6413e32887cad49e06ae192e4e40e64badd1879c804b4791756cae5022426515",
       "artifacts": [
         {
@@ -532,7 +1313,7 @@
     {
       "job_id": "34f68910-7e3a-44e3-a3ec-88d0524d5d1f",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "cf761e39ca00292ee67c34ae0b50cbefe2048972a30d325f595a9c3e43796dd7",
       "artifacts": [
         {
@@ -578,9 +1359,62 @@
       ]
     },
     {
+      "job_id": "3800f0d6-44e3-4bed-adac-3b4b83d6d206",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "3e3e0cd0b0d2d225da7b29680ec1311f2b06511e28ab67b632cd436cb2d53cf9",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "9be96306d49dd05738f0d101e6e0920604adaa574f858ca27640081859b0c991"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1122,
+          "sha256": "6b3e5f523d9176ba90fcee96800b28cd9099a6dea63ee8699fe54b3c2fbd1324"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4051,
+          "sha256": "28a6539fcf338acbe16db3e5b3ed55d357393a56afbfddb94980ff0e8bc3b811"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4586,
+          "sha256": "2ec014a8e54bcc3921e8fbbe08121588fa9f0194e20f7315df5d0877788f13fc"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4609,
+          "sha256": "a4410323110ca0e388dcecae6f23c04dd4a60a8245fd0935bdc7f2d22fc76ea8"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 616,
+          "sha256": "8238c57c6e5d56ed2bdfb5cf4dfdfa4d3e1f93da7a2823698845836e7b87ba38"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1457,
+          "sha256": "7f0d4c7cb3100e12ab7c5fd19d7c6a7c0ff0e8accd531abc9ecbe7d1806ec3a7"
+        }
+      ]
+    },
+    {
       "job_id": "39a6be1a-3e89-4cad-b3ae-c507bfbcabb9",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "b3743cb1c7b99ce944ed89195a4766f81a9a971260a07e6812a4310c6f66236f",
       "artifacts": [
         {
@@ -631,9 +1465,62 @@
       ]
     },
     {
+      "job_id": "3a1648f0-39c0-4fbf-8d50-21d4ae6169ea",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "3dfb7ae1eb52f70d8f6cacd87dcc997b1506eac372b2f41924abec37aa522949",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "73ba69e72f90298ce833bfe4f989b5f3b6531c20de0e5ac985dd926552908e6a"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1125,
+          "sha256": "59dc5b4de5883cd96250524d86de11978f37732a08173f7c8a4c43c0e3ad6e67"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4051,
+          "sha256": "c67af31283e16b7b4c97554183f373d6109cd71411b6975ad35d18a3022a70e6"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4298,
+          "sha256": "ed73b6109fce6cb5f7dd1fca1911a76eb2ca7b7fb7874afec2cd666db0fd70e3"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4611,
+          "sha256": "58382d22d5dd4384c7e2dc6b67f588b9d7d15e836c95ffcc26b3be5e7fef67b9"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 616,
+          "sha256": "2e4147bdbbd43a4458c704c05d99197f66fb17ffa3a7d5dbd811842aba46233f"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1449,
+          "sha256": "902365ee7525041d2d8018dfc4f5ab8e2a33829bd2d27196a806d95aab7c9ef0"
+        }
+      ]
+    },
+    {
       "job_id": "3cef7c29-1090-4830-856d-5e30f4d7a06d",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "c85f305494bc9946439316203fb5deddebff2e3b4b3347fa847ee3c4a0742609",
       "artifacts": [
         {
@@ -669,9 +1556,62 @@
       ]
     },
     {
+      "job_id": "3fc8d540-0fe7-49d0-949b-ea4f10f3e9b4",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "0787798d91b1a5857cd5175b785236428d944f08ef60cf3a0e5af56d2755dd8c",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "02c2108365d67a706e7ed20f1e088b28eb66b359edcb42c523d5664848a0d0a8"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1092,
+          "sha256": "7561f7b143fc0d6882507acf1046f00b62a653b4625da3aa0092eea1e48172d9"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4062,
+          "sha256": "230dfde76fd12aa30ee3b75557e0033c9418fcccbe0b4541150074a4aa8e8ffc"
+        },
+        {
+          "path": "request.json",
+          "bytes": 6504,
+          "sha256": "7440a33b55dd2cc1812867da9222a2e87b9738e84c7aa2cb2706bdd76b06d5db"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4589,
+          "sha256": "c6bfbf6201b7938650282643e522b1d4ef294cbe1b9833177998b5d2409f3fa8"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 616,
+          "sha256": "3cb6f87b10f5a20caad71c2b0ad3770fcf766a8e54706ab088470686b49c4282"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1450,
+          "sha256": "bc94d9643bf5f534a377ea17740f76112a7444aeba015dab372c09cd88a61b6f"
+        }
+      ]
+    },
+    {
       "job_id": "42d71676-c626-40aa-8002-93ebebc4ec87",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "df0ec9dcd9da5753470890ce4f5aec965011ea3deb36f7a6ef679b6b0ffc72eb",
       "artifacts": [
         {
@@ -714,7 +1654,7 @@
     {
       "job_id": "466f6512-c301-45ee-b75a-dee78657df4c",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "60bc57ccc2128f263b797802c2a861d1d91a693c201337e889757eb354779940",
       "artifacts": [
         {
@@ -770,9 +1710,165 @@
       ]
     },
     {
+      "job_id": "46f217a3-9ffd-4bb3-876b-f7c6e48f1d4d",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "0d26e4662f439fbb646030acf363245f305667cb56365fe226cf915855cba327",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 38303,
+          "sha256": "004431b3e1d1159a4e7cf1c13d484566370f8e4eb651a76a848acd06f819d029"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 12601,
+          "sha256": "b41c19559952563d0e0ce0577bd7cc315b59fd96697b9fe538ba21221a397b19"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 9650,
+          "sha256": "038a842a714768b3368a414f503eeca3af34ac7ded0d7e875c4ca94cbafea684"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 14979,
+          "sha256": "ce152a0e9c669fc36864a159b6f876a58add5faa550a93aae0fb39cc8b5e5d50"
+        },
+        {
+          "path": "context/c0005.json",
+          "bytes": 16370,
+          "sha256": "760ffc4f60847efa4e0b69bf4bfedd23025376eda63cb14af859e6200f302513"
+        },
+        {
+          "path": "context/c0006.json",
+          "bytes": 10233,
+          "sha256": "06b32ae760b41884e8d6fb222bb7b51951a3295f68f3193c03b35f213288c2e1"
+        },
+        {
+          "path": "context/c0007.json",
+          "bytes": 22887,
+          "sha256": "d5315aeb36c3c82a4959228208d219a50ce8b2e4b63fa060b0ee51e8484e7e3d"
+        },
+        {
+          "path": "context/c0008.json",
+          "bytes": 25121,
+          "sha256": "f9219de1ec3bd3e9e7bdd9778ee79c5175dd9aaa51a9a27d2a57ca075b4fc70b"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "6c949c8bc3a3f29dca5173f5f42d2135691f3035cb46185c88a3f634c4d02310"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4671,
+          "sha256": "220570d0a6574a2a2714526215b5d9213ac7c89ccaa9712d7aa5d574acec5eeb"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 95265,
+          "sha256": "1b60585738d55761a9e409454d38a2979d0974fc60ac703d9bde92653156af32"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4130,
+          "sha256": "f4109517315e04202aa7008c68719c08f59c11e29acd83038c8f548dcf0e3d82"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2329,
+          "sha256": "477ce443908a2aa16b68b7077ed22e2a3e592ac869c5a54b70660890b66cd17c"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 822,
+          "sha256": "7a2f2ef98466fd79015f1652bab7ea31d99aa0197d44fba38cbe78a6b4eb2d26"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 21249,
+          "sha256": "850eb6aafa5bb987b893e94705c2dbaba230d6c81e903ca073c4e02dc0cf3ece"
+        }
+      ]
+    },
+    {
+      "job_id": "47087e3b-d3f1-4da4-8333-7541b9702d0e",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "9e2b711a8b1c19ef83a467e9db61d2c1e46e8b49491f09e108fc3252bf15cf4c",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 4578,
+          "sha256": "30ef69ac49db61224d93ab2de5f1c5d3caf60bbec6ffc47bb45a85699deaf2b3"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 5435,
+          "sha256": "10d97332383bc6823661ecd3046950dc20504cfafee8413fb2c723a72482500b"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "eda9682ea8482bf909fbbac568be085663a6c1bb93a2f7e58ce74f54e560b63b"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 9175,
+          "sha256": "d85a2ce14b23c4dd6b3887c5dc3fd6bab4de1ec9b95a8f9b4a1e524373984b05"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4062,
+          "sha256": "ebb80f1621cc96d5ef84d1f862612a789ae847ab1af94e6a73bcb1496fa4e9d8"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2407,
+          "sha256": "292115530fec9da02609ff4b8c56390a4980910374fbda588c58dc457ed145ac"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5441,
+          "sha256": "f028213709e104eb712ab034acc27bc8197ea07ed6d063007c4d7904a788571a"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 766,
+          "sha256": "f328f2bc8838647c74eaef10d3afb0081cce653595e6c303bfc148930e5e9bcb"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 6161,
+          "sha256": "4be8644c500566e951427e07155b3f9fa7ca84e5fec48ea5bd9a2f6fa4334852"
+        }
+      ]
+    },
+    {
       "job_id": "48309641-c02b-4ba1-8a83-ac0138d67679",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "9777a7b7186a5a327ae360f719758d4f5f85b124fbb6a9f1b50831a20d7fb62c",
       "artifacts": [
         {
@@ -828,9 +1924,216 @@
       ]
     },
     {
+      "job_id": "492b9846-2e20-43e5-9d59-5339f27adc79",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "b64b913f32112c96077cd64bcb0d32706a34e0ed77a7e0e677e66dc944ef0f5e",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "377e17735a5cbe4a6462ecd98b75252bf3b5703be93ae1e7b8a72cb8cbd91064"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1079,
+          "sha256": "14752f071e19f3b6059cb1d26067f2f0316571a2825943f363b7ad1f623f1744"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4073,
+          "sha256": "9eaa14e2f070dda8e4df2822787ae0fff375f59fe45a1a8322573fc9ed9bd884"
+        },
+        {
+          "path": "request.json",
+          "bytes": 7116,
+          "sha256": "e1098f54edca9ce8c3bd557f29ff54a2dc1256e81bf4190ad0d324929d225192"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4588,
+          "sha256": "458168df88d423eab5bde64ebb330a12092ae2cf1432fbf6a0222b8b48c44759"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 617,
+          "sha256": "4d3ac6417ef6f7400b2dcc8c792a670b56efd367c1fa2e41bfd96e80a89de694"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1440,
+          "sha256": "aef6002b3527479cb58e40098600981a5778b2bed1d61c00288560eb9589e1f1"
+        }
+      ]
+    },
+    {
+      "job_id": "4aa40afc-5647-4ea2-b88c-b6dab3d8c250",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "791de441ee5ad6d410d7fde2ec3a4389b1c5d52dc1fafb0fb9b99e17b33413ae",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "f2dce8510a64da671fb40ceff3a51302f3a34686cee6080de837b0afb40f2702"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4460,
+          "sha256": "625a3c358a57d25b666d26942aa5bd35f78efe403739c2aae713e16b44d221d8"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "a683495e5671f990e36a8a851f661d04595962cf02bf42a386dac4f94a391288"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2214,
+          "sha256": "9bbb455eef8c59de99b8fbcc1f1bafc7a6b34950abcb308ce43e0e863cd523d7"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 694,
+          "sha256": "f325b62f57174c4ed49f625697936da4429d8e28f6c0770b5eeebd069bad5a16"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 997,
+          "sha256": "22097dbb18681d72fa873adbe567bbd1ece612d6e6a9379e8eb5085880613f15"
+        }
+      ]
+    },
+    {
+      "job_id": "54cf4c6f-79c3-4305-bf90-d57fffa86d0a",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "c931a35899159821a8c861f09116a230466e907300bb4a09f927d2ccea709195",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "c4881ef93481563019a102af70a61a1b4b8c44b55fa5772b4434c4c12f12fd99"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4778,
+          "sha256": "64e176977c81208f37484902bf58ef270677560fbc1cd410d79f98aa097941e1"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 6001,
+          "sha256": "298446e1292c6ed6eda0529f441d76454a01d9131367d0c8d2dac0d126ff5c2f"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "c3e4e16d55a38bad246cd53ffb4fb53ed6234580d4f2f7a1df6891e93950f49d"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2594,
+          "sha256": "f972599e50f3c7faff99ac6df5ab466998e1b63151a56f0a9144ab90dd70df73"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 762,
+          "sha256": "2ba15b7031631f54654893964e81dbb465ae7e16fb26dbd4c0eb30a0c0146898"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 16370,
+          "sha256": "9a7a36e90ee0e6af9f992bc2d4fe947b5b485ddbbbef586da69d3d6d9dfbf569"
+        }
+      ]
+    },
+    {
+      "job_id": "56c15176-0e1a-4393-b0b3-40af3822a841",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "b32e4f9f709c23f4e732dd455535daf78132b2aed3fcadde0faf540632f533c8",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "e457e74036c03817991495ba6f494deae6de3daadea4ff3d6dff164ec2887afb"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 2417,
+          "sha256": "cf990ad873b42f7ef918da8bb56e4e234297a6903e9538f53e3a4f89ed0cd567"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4189,
+          "sha256": "c570ec1cd64965dd22030759f2bc947b840e4c64be4c0948fbaf13edbd7081f0"
+        },
+        {
+          "path": "request.json",
+          "bytes": 9901,
+          "sha256": "074f6aaa764ed4b2305136f0b3bd1dcfb04e5fb4102df27c7ee5264a61c04da9"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5183,
+          "sha256": "78a94918aedcfa0bbd6661e920d257a8121a38af617a90ff3b3e6e1c741b986f"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 691,
+          "sha256": "9c46ad95f38ea7b42f6ca2c7853f55629544b9c54a28f6dc8116a180f2280412"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 2555,
+          "sha256": "737eb51f30f721eb1fe7ff0cf7033a64ea7222f87a1f94671e19e0c7ceff3cbd"
+        }
+      ]
+    },
+    {
       "job_id": "6744af56-d7cd-475e-8bb2-9dbbd40f2805",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "1a27d0320bfa941e689f042e159209739e7cd35c0a38fbce8260c540fbbc29e6",
       "artifacts": [
         {
@@ -881,9 +2184,193 @@
       ]
     },
     {
+      "job_id": "69143910-7699-4fc5-a59a-be0460921ca4",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "575ca6a65d543d1c4b5bf5a7d80eab0fd823bfe6ac498d24580241951dde2f9f",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 22345,
+          "sha256": "5bdf8b21a9c1c634dfc6163954defb99d87c897fb0912f6cf4bb2aef8cc88787"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 14059,
+          "sha256": "7427d6f5fc901fd09de054586241200f73bdf4312e47386ad4f1d86c0582b67c"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 19052,
+          "sha256": "8a6eb68c0e4ed2542cd153afbd0e197dd1cc2df2ee31fde558f7946d8f3ab713"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 11096,
+          "sha256": "a6faab44857d0dfd6e11a040f0ec1dbebf3dffbb35cc0f73d41d9988560c2875"
+        },
+        {
+          "path": "context/c0005.json",
+          "bytes": 28663,
+          "sha256": "fe21f08389af789a2de5f3da18fd2f4b793c0d180f57b629a7b853a0b34ed54e"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "959d6fe9be70f75f122a14453f862a307e16cd8429eb5cb8f02095e5bb83d2da"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4553,
+          "sha256": "5c89a594044346117f16af9762b202d2c02a6c6902de95fa11dada8d114e929f"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 90389,
+          "sha256": "3c2acf5ee88536310a5cb7f245a6405023d49491864cbbb61e5e1fbb63e7f81f"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "c95bcea9f9ab5e52d8f4c37848da8aec6bdcb1c3a47c1a22ba22636ea5e3802f"
+        },
+        {
+          "path": "request.json",
+          "bytes": 1408,
+          "sha256": "07dfe1624a5925eabd5597563a0705e71d9d87f9c8715e9c6ae2c83683765ada"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 818,
+          "sha256": "eb8565ad2e5e95be5ffee730ce3b515acfa7e503fee8d15015ec4f43ec432ae8"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 16494,
+          "sha256": "ebe2092b519061f8d54597a28c4c8425dbf62208c1410b31cf966bfa414a033c"
+        }
+      ]
+    },
+    {
+      "job_id": "698aee2b-a18f-40a1-935a-1cd1fd118da8",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "f3ad86fd6e6d3b8cd57e86a24803da0e8ecd1207604357a8248a67010d0030b6",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "91cf4ca2dbd9a50b853f2399e1ae5f67411ee974ad674b4e471872b095ef00f4"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1168,
+          "sha256": "1cfef56729a0ab69dca7745d3f41bd2abe2eb9bc786cb56c3ef61086b7a0aeba"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4060,
+          "sha256": "b2ac0dbb5f1a1dbe853bcf4d8929d839bbe2e0afd68b3904733bae774457c8d1"
+        },
+        {
+          "path": "request.json",
+          "bytes": 6308,
+          "sha256": "767dfcb1a2439714cf390fc45167052c2dc6f4b1c5d1144be03b2d28e9908572"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4659,
+          "sha256": "975d72b85f1e5e03a5feb594fed771aa0f0a5139b1306c8c4aa9c55f6bc1865f"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 617,
+          "sha256": "636cb4d1af6eaba64e837902023542c6b7d39c299599970b1d8d02b11784cd33"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1441,
+          "sha256": "6a57442751b99d25e8acd758fb4b08fe7e2f3aede3f81e342b78fce913a6ba1e"
+        }
+      ]
+    },
+    {
+      "job_id": "6a5017eb-e247-459f-a19f-1a43d5656a18",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "39629789d1281c066cedeaa0e74c77d8a9d48c826c98e815cfc260488daa2944",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "2f6d1a95131d5546cbf87abcf4da068b51fe038b32fb9c3c21a3acf68ef056df"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 717,
+          "sha256": "6dff99135d0b44c947298e3aff2bcd04e7a9e497d204aa878fa225c81541fcc0"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4119,
+          "sha256": "baf9b8b95de4d9534190d5a38479c7294b176a107fb0915a009293c434b8cddb"
+        },
+        {
+          "path": "request.json",
+          "bytes": 3938,
+          "sha256": "084c142f7001b27197d8a3ff9988a523daf2de487e0ad82b669f2dca69b21e86"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4553,
+          "sha256": "d96380a9f6c821fc93d4b1ee9503a1c47c5aabd3e6b7c5d54397b80ff0f73b65"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 616,
+          "sha256": "024921dda8e1b68f876f1385c51a528ec459a04d4c5972f807e0fe8dd7c7a760"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1056,
+          "sha256": "6cddefd7f372408779d1b2f1b0155d657d58ad192dab968764b928e6c38007c8"
+        }
+      ]
+    },
+    {
       "job_id": "6a5bd838-ef2e-4dc7-ad6d-5c640c15dfa2",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "2fe1d0a18968262676d5a60d0179694307eef531721878bfda9ed4f06a2d3313",
       "artifacts": [
         {
@@ -924,9 +2411,120 @@
       ]
     },
     {
+      "job_id": "705cf4d3-8f02-4dbd-9d29-2a8afb92f669",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "0d549843f81e901e45c76d14e3780d8451acd24fb5ab02d73bb3f36486442847",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "4f0576114abe584f37454b3edcfd2e0bd073d7b452c52dded1be1fa5e8f47877"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1179,
+          "sha256": "95482fc021fd3c124cbea2d8a0e61a1d8e7eb43164cda193c7bbf5904ce65e03"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4041,
+          "sha256": "78d1aa0a46e72f4be5671374381a55be41eeec629bdcbc56e7edf4fc7edfb378"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4445,
+          "sha256": "7c6dc766781895e6abbe56085a6104befc70a04d68827622c186c02fd48104f2"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4653,
+          "sha256": "8d57957bffd67fb81d8e7fef9d4811684594301101b5cffe886e8da04fbbc239"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 617,
+          "sha256": "33664cc2b0414db8ffc90c0fb0e83532eb6315c0ebca07cef5270d9994b3c86d"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1453,
+          "sha256": "0ca0cdb167515a251071a6600ab6ba60cd31726d982e5fac9b76762afcad3673"
+        }
+      ]
+    },
+    {
+      "job_id": "7be626fb-4b8a-4f4a-b693-f3847bdefe82",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "4e4cf8e1dcc988de66d42a333cfdd1007bba8f8f3e715e7bf5d7ee49c95134af",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 3577,
+          "sha256": "aac2991551a351ce41b779d114b837f64c240666b64c057e9fc4df75fba465de"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "97f6758430bd4ee35508b3dd1bc77f9da23ac04655a66f9202eda1a4ea164832"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 6433,
+          "sha256": "b916d41dc8ef8dd5aca97e40bc146bfc16642fc7e93ce10dc8353207374702f3"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4055,
+          "sha256": "25315c3eca64e2262bda82d1a2ffa562fa0833aade36e6323c95bf2d499326d5"
+        },
+        {
+          "path": "request.json",
+          "bytes": 1911,
+          "sha256": "08c791f1480829e67c98c0f96eca111e841ffecee3cf782fa8c64b630420d775"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5178,
+          "sha256": "c50c096b91778189744a7c938ea95119ad973eac1b10a61876b440e89787c8c8"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 759,
+          "sha256": "938140bd4ed4c7231b062396024c69c32278154e479645c766eea747b771c982"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 4306,
+          "sha256": "540520012790955773e4131c972fd1305e1ce470511a796de8e5557395f1fe80"
+        }
+      ]
+    },
+    {
       "job_id": "7cd16c0c-23d1-4b8b-ba19-11ce38850105",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "5b524e979091ceb2f7f1276283f2e015a36931da7392ec76025ae099cb81c92c",
       "artifacts": [
         {
@@ -979,7 +2577,7 @@
     {
       "job_id": "836c3ede-087c-40e6-bad7-d01467d2785f",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4b53d65ddfb0d9e9adee9eee77c0401d4e87adfd0e2cc39aa5d60af5d887539e",
       "artifacts": [
         {
@@ -1047,7 +2645,7 @@
     {
       "job_id": "83cbb4db-bcc2-4a75-845e-63d960bc41b3",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "47183f5c5009793b9e88bcd4c41eee60faf8f29224a7768d1cdd83271ab88d32",
       "artifacts": [
         {
@@ -1130,7 +2728,7 @@
     {
       "job_id": "84ebdfbf-a3d5-453c-8f81-07aad8cc1cd9",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "86a88dd4074a4c798f4aa150c1e8c737d32cd0dc276e44fc033f3bd8a42cb23e",
       "artifacts": [
         {
@@ -1183,7 +2781,7 @@
     {
       "job_id": "85c8d3a8-699e-4534-9107-9c481eb4298e",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "2140df6ca9a20cdd44d6f9d12fb587ef0271361a159a4a0ab415a5d2a9fd511c",
       "artifacts": [
         {
@@ -1259,9 +2857,77 @@
       ]
     },
     {
+      "job_id": "86ad1912-8f39-423d-924c-17cd7b892269",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "363308c50cbc4a23b9f05bf79df5a52e20f2150243970dd4bcef33d2173c643b",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 4492,
+          "sha256": "c978b930afb92e33dabde22ab769f26b0bf9c9ea0f550a6e915c6955841c5b8d"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 7080,
+          "sha256": "f70942c630841d7e0bc0e96745ca65c539b1789a495be13ef5a38052e0fbf1fb"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 6882,
+          "sha256": "77143a512ccfac6a9fa87cda50cc6a6e11c06c7fab884fc1632d1eb285b7a53e"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "ba9b8eb1cfe71a4d5cd0261d913b740b2f30ad77bbed61b4803c5c51a263c0e2"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 5241,
+          "sha256": "e805f8b4144c5478ab9a3e0b63312329d2abd20dcc3650016e1af80cad8edb45"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 13753,
+          "sha256": "89682e77116cffe60f53b862412b26600d9562d7dce734c142733eb82d45cefd"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "4725632a60d4279d45e3f75e0318d390c8002c954821bf167d7cd72ad5d8f470"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2283,
+          "sha256": "837f53ccb8f707caa253b337a3d04b1c92e3721680c3e300ce991b3fc31743da"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 798,
+          "sha256": "f91bd26901653ca4034d91734185151e3cdd8708071fa0b800619cdd9b032eb6"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 12521,
+          "sha256": "d56e227371f55432082884ea9dbd7e5d0806659437934ba865717e5bb72134f2"
+        }
+      ]
+    },
+    {
       "job_id": "87fcc955-0167-4f42-983f-9d5bbc60d7db",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "d0571f681a6eadda6f96cae32af699103bba71cc0a599d9002d9323f0a5dfe89",
       "artifacts": [
         {
@@ -1337,9 +3003,62 @@
       ]
     },
     {
+      "job_id": "88ae962c-9fc0-41a5-9bf0-dcc6797c6604",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "290d5b67dd88fe0570c3549fa235d2dedce4097bf5be667d271bdb9314bb5b62",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "1bd936bd3d6264940b8c94806e8345d1101c59343a67b46e1808c2dbd673d51f"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 2026,
+          "sha256": "a8d484f97350bf1d389b3b033b6a1f357a0f79ab0297db4f0786e6ef3138deb9"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4013,
+          "sha256": "c5464c23576ab6f2965162d04e9fa7dfe2fe14187b60e656f6453f4b123ef960"
+        },
+        {
+          "path": "request.json",
+          "bytes": 5524,
+          "sha256": "0451be55fb51f2e867c24ae2a86b4efe4d7895b344a40400740b796d2b45a73c"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4899,
+          "sha256": "37c7cd5fb45560d5d451d596b64bc0ffca0e0b69ae2b770a2cc1fa541b63e495"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 617,
+          "sha256": "208c70584a83299bf4c5ff1b9c89084b5810e33a42114e4b7defaccaca17bbe2"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 2181,
+          "sha256": "fe7237918221e25d84ed1e8b544c73e9c962cfa3fb5cf939a92c27405df30c5b"
+        }
+      ]
+    },
+    {
       "job_id": "92d264bc-ad30-4a94-9978-aa8715b2e760",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "b5101af60a0c3f5c69970df7c24a820ff6f8832e2a2cf08d6b26d9eba3a0bd30",
       "artifacts": [
         {
@@ -1390,9 +3109,175 @@
       ]
     },
     {
+      "job_id": "93f4bffe-663c-40c6-b5c9-3723671039b3",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "94f8962e9ddfb682262f46bf3ddfeaa6c0bd3d74efed59d6dfe6ee91929bc3e7",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 11398,
+          "sha256": "700103df045092f86d9e975b218632afed43bde97945dfa5333dcd0dd88de62c"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 15642,
+          "sha256": "e07f9c665e639be3c439052a80592790bb73046f2f209d82062dfc047b21215e"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 9288,
+          "sha256": "8423b5a63ea26d001d8abe36e51066982a87c105c4a1d0e720e8d2aba526f754"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 19909,
+          "sha256": "df773da136d5ba29650e6be3fe14dd0ae3a034f991be6963a24d80177a3e03e6"
+        },
+        {
+          "path": "context/c0005.json",
+          "bytes": 8374,
+          "sha256": "fd14f028822c7b2983bafd36661764877919a54bfb7cd706bd4ff5043bca67f8"
+        },
+        {
+          "path": "context/c0006.json",
+          "bytes": 10611,
+          "sha256": "ad5611cdf5f8594c90e035700bd6c5ad66b1f26c5e9cca4008c56b2ef888af46"
+        },
+        {
+          "path": "context/c0007.json",
+          "bytes": 17119,
+          "sha256": "edea490a805c2ac9804d0aba7765290e97df854702a92e4d7c423e8420a225ca"
+        },
+        {
+          "path": "context/c0008.json",
+          "bytes": 10585,
+          "sha256": "e88ca5a59592e1625ace1f43df5429dc33a2c94d2aa836646706910f0b4b04e5"
+        },
+        {
+          "path": "context/c0009.json",
+          "bytes": 10960,
+          "sha256": "d701b1a488f13a1dff410db270b51bd8778d796bbbaafcf5fc76bf07777ffce4"
+        },
+        {
+          "path": "context/c0010.json",
+          "bytes": 12267,
+          "sha256": "fcb7be2e3a9e812e043e1b30e59349b0d491584ef51a5e207bed7a0c7333ccd5"
+        },
+        {
+          "path": "context/c0011.json",
+          "bytes": 10646,
+          "sha256": "e409893d9b19995bddc5a5a0a5ffbfc1dbed6c4686e47b2adbd3d21463c3ba0d"
+        },
+        {
+          "path": "context/c0012.json",
+          "bytes": 10981,
+          "sha256": "031ca879b971015a04f032e408bec413a0b02bfe2f095ca83344d1ca4c292e83"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "31cadfe1403dec3b97d49207230c3f60f986424801ddaa281cdaa9050b9f4863"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4603,
+          "sha256": "44bfc68aaa14caea1936604dc2a4b44f464f9acfa08af9c2a0286f01bbd59138"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 104555,
+          "sha256": "727c91f97d654acf4690980d45829c69066199201854e9bf9f92645e2647f914"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4062,
+          "sha256": "dd6480fcc0a0f82043f503d86b4b3e57f90d396ca8266c455e33f2cad6852bc5"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4580,
+          "sha256": "5624bac60cc21a22436c539ab1ad88c8701487b297d5861fd732f81a90d3cc3f"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 789,
+          "sha256": "d2505184e4c227cd63a65f685e6d0cf6c1c58a9cc6289bfc08f61f97c21f1108"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 34461,
+          "sha256": "8fa02281b60612fe2df734803d31585ae2857bdc44768605b98ddc1b0701684b"
+        }
+      ]
+    },
+    {
+      "job_id": "9479e1c3-40e9-4b46-8920-21098913eeb8",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "936e535879149f1079a5bb858506d6cd69a06c000995d7ecce666297ef36512d",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "f02eefe82bd9de645adf1764628db89e2c1dc630ff8e5988119fe5ea5ff672e5"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 5643,
+          "sha256": "a4b24ec620d3c9385c49fd78c7b481a16b48fc1abd8edf3c61c31ab569fff093"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1927,
+          "sha256": "2d15a208b26b924fc20ea670c9c57d4dbf8e92f523e03284b9885c02e3b025df"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "fdd5e8f39a90733df0460c8c5106c27447eecc85a54725ef09a73d1177f4740a"
+        },
+        {
+          "path": "request.json",
+          "bytes": 1602,
+          "sha256": "da3d0606e66617cfdc92486b6c731be0dcd2035e9adf0c7777009d0987c5f067"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 646,
+          "sha256": "454d4249ee16815d1ad7b057fbe0034156e22c006ad87465f77af9db1acf7b6f"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 454,
+          "sha256": "e6335f5cfa467391ad33f7d33b398b24018fcdca5e62096cf72092b318709ca7"
+        }
+      ]
+    },
+    {
       "job_id": "99f89f39-da51-4085-8752-cac459ee1486",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4ab319d01deaae477115c62fdd61c3527165f9416e8cab5b05c8bbfc7d0fcfa3",
       "artifacts": [
         {
@@ -1438,9 +3323,160 @@
       ]
     },
     {
+      "job_id": "9eeded63-3d66-424f-973e-843fe338e167",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "fe27aa85b7a6510ff93ab8fa2a2e4469d6946c25ccb80332bd13827ff801c21b",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 5031,
+          "sha256": "2caf359d0d0bf1e3f4bb34dc36d3d2c46516ee4d8dd06746874331e22276343f"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 17416,
+          "sha256": "0e0b8a8821d9e1eee68084d5228ea2f4216492e21bb2799ebdd625fb309cff9d"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 6489,
+          "sha256": "c764bad1a8457891cc5dae6ca4479bfdb1b14379fab301994074192af6d5f139"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 6042,
+          "sha256": "3ddc0c31c0b0c522cfe81c18be6144bfe9b3f8d6679e6cea261bbfc16dd030a3"
+        },
+        {
+          "path": "context/c0005.json",
+          "bytes": 10795,
+          "sha256": "0c4543b86ecb1a021672cdc7a381c44cd83b6183d0b6c4f564984cfed4a98183"
+        },
+        {
+          "path": "context/c0006.json",
+          "bytes": 7193,
+          "sha256": "dd739f6ee5cf80d06d32e628c9a97230e211451bcb84d92515dbfe0c8b24ba75"
+        },
+        {
+          "path": "context/c0007.json",
+          "bytes": 13161,
+          "sha256": "ed6935c5e6838599bfc28e7e1947032997de2089b62d99b771b2a33d68bd705e"
+        },
+        {
+          "path": "context/c0008.json",
+          "bytes": 22257,
+          "sha256": "6a794c5867d9e8c1660dae2b4c8fd27f60b669343e0fe5676e500b2e8a9d3ae0"
+        },
+        {
+          "path": "context/c0009.json",
+          "bytes": 13008,
+          "sha256": "f0e779b69a7455d508acbc524872887cd0f55e1b7e6e364044dcfae536065862"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "e15551b6e4ad991b4a20d42f8766d8e64227e99e4a5203bfeda18645d38308f7"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4592,
+          "sha256": "f8b60b6f06139121c7e2f8ab2c221f1c9174941d4bd2fa45c51f616ab20acf83"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 74019,
+          "sha256": "5e76bef79f837cc8b206152a5853286038018722f5e5b1a156acfcc74cd90bef"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4051,
+          "sha256": "975f2ad6f779124efcb8efb8ee4b98692690f4fdf30b91374e6aa214f432419f"
+        },
+        {
+          "path": "request.json",
+          "bytes": 3187,
+          "sha256": "6ee28e0e73ef1fa104e70abe4f2dae20993f124e6cfe79a32bed19b177527441"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 777,
+          "sha256": "1c5701e9414c8d25b880829b8f5f67d25cbb19b391bee7731d85ed5a3abb8bf6"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 26175,
+          "sha256": "55949014c41342da769dc83f7784df9d7f8077fac64b22e292e5147b5388ff86"
+        }
+      ]
+    },
+    {
+      "job_id": "a6711cb4-7a4a-425f-b78e-6f25ec1c1d2d",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "e4234cf9368ddbd8aa13dda9dfb0b044149d32e6d392fcb3abdd7c658ad9be10",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "7c675936602a5e40e452c5efb35da34fea93f21326aeb6c47c5417e37a2b6b3e"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 5657,
+          "sha256": "e46cf8c679c4100a373e9d273a0aba553a5454045001d2df3617cb0dd0d315d8"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 2544,
+          "sha256": "8da3a33a369ea83f68d637f3733a148dc345e48f04077ad75121c1d3bf85fcde"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4076,
+          "sha256": "62f58c95561ee56341e68bcc6cbc7e2b676707cc04b59f534157b8f12de9c152"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4341,
+          "sha256": "fab46cb232db7cf0f2a000645dc89cff90da53a686375088800a733fe7e8e054"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 647,
+          "sha256": "d32643dbd4bc42b5b0adcbf3ba90848b27a8468a511ca38cf205d39d63986d91"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1183,
+          "sha256": "0306825ba6bce1638e07338a42ce0e09feb6ee75db39c7f145a9b0e96dd0bf43"
+        }
+      ]
+    },
+    {
       "job_id": "a85abf9a-36cc-46b0-9ea6-591512f7c716",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "2a5ca41fbeb6e12f72fcedce03d5dbb4cad5917efc5c8c3de839f2f5c409052e",
       "artifacts": [
         {
@@ -1488,7 +3524,7 @@
     {
       "job_id": "a94c101d-861c-4217-9029-451296963c78",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "94ed9dd695f07d1b6033922b28690d7e594bb4ab958fbc42089f74895b1bc930",
       "artifacts": [
         {
@@ -1529,9 +3565,120 @@
       ]
     },
     {
+      "job_id": "ab2ab50e-2917-4428-944c-a87dae966ce2",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "bc3a743285227a21017f2bc2021064f9393fcf4897fa7972a268bcdda88b424f",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "54a5d124f00d0fd8160841a5c73443f492684f5c96b8871f35b11de7e41f43bf"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 4312,
+          "sha256": "da01ccbad63efe4836671d2db19ccf0d6a00a251b1a921cdb2b49951a0ec2180"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 1743,
+          "sha256": "298179f99dcbb8508880bd16385627af22230442b3a8a070e7415fb86f49b794"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2429,
+          "sha256": "84ebaa6bd69bf2c83dd6bda39c49cde3e281c13c899f606bee8c3a1113f865e6"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5766,
+          "sha256": "753d306789df7beba6405defdfe7d2d2344681f3528bd7c36af0f5475544b1f3"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 614,
+          "sha256": "c76e7f0ccfdbbcb41ccc286dacbcd0ddc3ace8f5508003c18f707a21db39d9e4"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 691,
+          "sha256": "066270fefb61fe65f0e4b66b38e3a3167cb801e544f513ec0bcf7d0a7e6b3a92"
+        }
+      ]
+    },
+    {
+      "job_id": "abe917cd-32c3-4925-94c1-cabd719411cc",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "78edc305c2660e4013c8000f4da063e001705632a17295ed3814d3a30c358580",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 3835,
+          "sha256": "95a58cca85a798a3d1e651d8ac57345cbde510864d3d18692004bbd6d394d4d9"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "df0110f2215e446ca4fcd47495994f244e192fd6521d47c3ceb4ffc8d73c4792"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 6012,
+          "sha256": "d4738cbd7bac7c4dbb77cde45e032308620850afe7d1a2bb83fbbb3f42c684e6"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4055,
+          "sha256": "78e19ae21d20dcc96f4ca95529a2cb9303ccf26c30679597fe62ae664c786b5f"
+        },
+        {
+          "path": "request.json",
+          "bytes": 1973,
+          "sha256": "cc4c076ba967d1ed271175e67bdf1711edc0c03ccc376f6b35853e75eb900d11"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5205,
+          "sha256": "655bfb3d8942222f9632a62341481a3fe1e7ccffd1c2c1adf8925d0fa61b06fc"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 758,
+          "sha256": "88a8b9a064ba5b433ef8f5f9b41b7ee46bbf58f8956589a8459cf265f5b1969c"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 4305,
+          "sha256": "7f9505605264c9bf00bf410cf87d12734655448bf527bec31b69b5bdd10bb080"
+        }
+      ]
+    },
+    {
       "job_id": "aeac491f-6da5-4b2b-9bee-9136afaee5eb",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "dd23f78fa9e6de76a5512097c2d96c987fb1b4718150a04932df47544bce0380",
       "artifacts": [
         {
@@ -1572,9 +3719,392 @@
       ]
     },
     {
+      "job_id": "b12224f2-98c7-4da2-898b-00c13b97d28d",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "3ca2ea46f27aa354b5b1571bcd16677be6d744c26c7c6fbc80e3845d57efcbe5",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 4683,
+          "sha256": "10ec1385ac1365192600722c951791223d5e571263838977990d40764a9a9933"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 7339,
+          "sha256": "712fa0049fa6035bf07aff07bf17bea72129e0b02cf203161be8688b927715df"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 7021,
+          "sha256": "a94e9d5c79f17b21adc6177604f79bde02ac499f902727c75488d1c596c2569f"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "e7a72d1fea0537eb8afe249b12f9433a5cbb691e1ffc62f9d817bd2af7bf83ac"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 18901,
+          "sha256": "d878b028b016d764eff092b9ab35e2c1eb62b60995e8ebff0b04a63ee013a9da"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4076,
+          "sha256": "77824c3d463220fa057e9c83bb4f7444bae9d015e18a16ee3a51567ec3405437"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2039,
+          "sha256": "b1828bc8d31b120d7cfceb43c510aba44ac92cbbde3a236a97e4f0733b5c4566"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5351,
+          "sha256": "cf020d4948ab7d257b5588c61bf21f02116544ef715869dfa714b0c81ba71a70"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 754,
+          "sha256": "6077a75fc5af01a26470bbde68a6eac89a888de0a28edf5f1dbb95ee900c4419"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 11163,
+          "sha256": "b24f70c66584254c419104d1420cd27ec2efa8e54b570da99543c547b15accef"
+        }
+      ]
+    },
+    {
+      "job_id": "b5f0a09a-cb2a-4273-9549-5ec256957bfc",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "4523d05d146c613f44adb07759d93a60e6eae2ed370ad36afa1a30e34e8185f7",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 14833,
+          "sha256": "6f18e8f12ab6637d654b34dd70964d99781ca230cb0db47d551df2e3f26dae99"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 3004,
+          "sha256": "543c50ea66d17c091beaa9e278996b5735bd6b3b68f18332013a210a92ae381e"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "0e797c04a30ea2dc58c4f4d43f33caa70ae6633c1c0f864c915493858caf1bbe"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 16747,
+          "sha256": "35b5a3310fdded1f3d7a5185bf1c09d42b894462240aff03e88debfff7c61982"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4130,
+          "sha256": "8938f676ee612e938b2ff411b868a7e2c2c52a586d790435d35b0a87e4c61361"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2200,
+          "sha256": "7579d5e95fbd34248e3a0b3f52a98cbc6fffe3210a9bb237ca9f8c9222760055"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5234,
+          "sha256": "d66405973d2d2ca757c4eb2f8721d9a9fdd5c3f9bcd458e19c6b4b69f5ee4447"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 758,
+          "sha256": "ab60e6845ee3c9cbc27f500ca470a0e7adcd8aa676801f962d99fb38d78a1035"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 6945,
+          "sha256": "5a797843d02694eba12e714799b07a043b2ce1fb708a1a5ff709ef23c1fd2f9e"
+        }
+      ]
+    },
+    {
+      "job_id": "c23fd8a5-f82d-4309-82af-76dcb0c4db84",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "4691566056bd4ede0233088d694e353a9c5a146dd119a63252c31a9441fffa5c",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 5518,
+          "sha256": "0ae81d1abb15133a1f0f0e6019c5e3083dc00c76db309bb98cf7fb0c642c2c72"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 5961,
+          "sha256": "5ad87054bccdd32358ca26af714f24d7bdd0edaafa8b21070115445d091ab60c"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 7786,
+          "sha256": "eb3409a9631ab88bfbccb81eed77fc22e45066b504c3ef8472544a7a4cb83af4"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 6517,
+          "sha256": "d2f19b23f15d6597709eb38f481c21c6b1a37d64acaf00c15c9cc5633c5c6161"
+        },
+        {
+          "path": "context/c0005.json",
+          "bytes": 6134,
+          "sha256": "fe8a90311fe811524d43ae8a114d4a1a0489d7ef1f0b14c4f1032d1acb9baf38"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "a4363302fd2649772493db2fc995e319dbed5aeeafac40bdb136d94b4319e2d7"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4603,
+          "sha256": "38e2fc36204e174d6a27e25ee114a1297614a72df5c2e0fda245b8ed3fc9822f"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 39732,
+          "sha256": "3061a6bc0cde7cace2fc072ec8c5c839679cfd8e81798134875c0323d0f51a72"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4062,
+          "sha256": "cb5aa7d32a94e0add577a9ef192bd6793ddb3233f8a0f5f13cc1951ccf046cc4"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4535,
+          "sha256": "dcdc8866f419b65038234a736f85ed7ba3a0820a3790b68d138d76e99fb729e1"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 782,
+          "sha256": "b610c2f7e3368507c0d4f3f6d2cd28c6ed4449ea9b2127dad376ddc20355ee32"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 15599,
+          "sha256": "ab6dcd3168770fa5860450abff1fa41dad88a19c8bd83b53c441591c5bdd34a8"
+        }
+      ]
+    },
+    {
+      "job_id": "c4ed101e-1ff3-4025-bb1c-ba15942dcab6",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "9858f796cbc1f407f4929e2c1ba8fd2a10e80766475107af63132a1ce4616778",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "925623fd70f5d3cb867f8f0dabc2995a0c05a5b86a7c5d7a043362d3cd7c0945"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 6455,
+          "sha256": "3119e71393f3e2f05c08dba58a104ca26f88a81119edade74241b7387025aea6"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4058,
+          "sha256": "6128ebc6ec94e4f4795a75149d53874784d9f96fc3dd0c39bf9dd22b304ae358"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2027,
+          "sha256": "019325e9709f0a6340420dcb2a6300d5214c6408d51e35275244e709d2b39372"
+        },
+        {
+          "path": "result.md",
+          "bytes": 5306,
+          "sha256": "3198cb9a2b12b57ba28d3ac14951d730ff213a3d28e7d3135025d60c474b0163"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 760,
+          "sha256": "ba054ffdcbf83fc7222c7ff41ba56d3bbbb118f2c52a872ecc79927f69c6daaf"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 4641,
+          "sha256": "f4dc59a3f8f0603693b559382f43ee07a5960b7e481811898527a0e30875ac67"
+        }
+      ]
+    },
+    {
+      "job_id": "c62c960c-f7f1-43ef-96e0-c652db212c41",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "e0af48e97a22789f14bc34d329d4a9f4305b69ce6f6caebc41ffda7c4a9f590a",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "27dcad6f99632d612794c7cffdbc82c7530e1cbabe8f293b514f3838e89d2eca"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1287,
+          "sha256": "fbee65aad305fe3b610e8df299b5ad6206712604e814293ed87c7e3b4b93fc9b"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4113,
+          "sha256": "16d97443d062616f85562a004508191f9919afebb10572fb933fec8a20e7cd94"
+        },
+        {
+          "path": "request.json",
+          "bytes": 6164,
+          "sha256": "eb031bb0bf27ff25f1c7f63bf24cff95de18b8e5b5a2519e91decedeeb9e2f2a"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4819,
+          "sha256": "e9bf4d65e3f8a992caf1019c960a1fd62168b1cbdd997f042793513f985bf783"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 617,
+          "sha256": "6405b8afa0c65296dbbd506ba9bc707a85ca33513e366f7a661d91fd2e7dc9af"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1434,
+          "sha256": "fa1dd74279431cefefd5b836156479ad5881d296929469867321eb830ee1a992"
+        }
+      ]
+    },
+    {
+      "job_id": "c675a003-11e9-437c-bbba-e71fdac0b5a9",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "109d2f84f3abdcd1ea4c2f21f8c87632b92693f309480e0fc33b9b63ee5853e7",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 15924,
+          "sha256": "4045160cfcb293d8fc1ebbe238c80f588d2ea13975c4bd6fb4ab7ddb61d8f793"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 7368,
+          "sha256": "1332d6e48a9e2122ddbe96a5ac68bd7931a2b0f6bbaa87222b4d053937dccbe0"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 18002,
+          "sha256": "8977d4e439f6158df92e38c0fc31793a44513c4e676fab1ae0ddbec2068c3147"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "26a1b7a943c2cd16528cb67c321ee228e35aafa0987e251a60bcaeb255caa975"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4607,
+          "sha256": "18c59b530e7a23d98e19497e27d69166f4eb39165dc7672073072bdeea95cf52"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 38118,
+          "sha256": "236ef80be765d2c6e0c7dcc634b832e358c0cc8138fe6318a6c5771d8fd569bb"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "0ab32c095b9161d7751195d776bf254b09018cc22e297c56927217879f45341c"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4146,
+          "sha256": "f306753e139606fe609deff71ab42732fbf08f7bc15be94fff4903bc9182b8d5"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 761,
+          "sha256": "8aac2fd4f8e41b0e8d3930ffe5daeab636fd4460e4934922339e8914488860fd"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 14833,
+          "sha256": "caf4fc34213c06addb202ec26857d995478af09b7e4299e4c67f48a0348b6e9c"
+        }
+      ]
+    },
+    {
       "job_id": "c76f3c74-3d4c-4f47-ad06-b04c649de01f",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "5b93cbd20977bb972e64dfaa65ef65ee00bb0f7c8679e20ab03bb886ac876cc9",
       "artifacts": [
         {
@@ -1637,7 +4167,7 @@
     {
       "job_id": "cca28055-65ea-489a-92a7-617d00019231",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "25479fd97cc046819f74eeb0cc0d421a47734cd6991aaba3a1672a35eedea7af",
       "artifacts": [
         {
@@ -1688,9 +4218,281 @@
       ]
     },
     {
+      "job_id": "cdd74993-1172-4ddd-b731-7941e2422745",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "9e11c0ba077a76ee1c9cc626327825fb5807ab3140a41ddce153a2945e5eafa5",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 16197,
+          "sha256": "d378e1fb07a3e53b3b57dde24f258b383081dca964e3eb7e22fe18f38f427354"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 17807,
+          "sha256": "a4540cabe9b6546bbf08e5da1e2913c5d3d575ee3fd49561804371ed68f8f726"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 17229,
+          "sha256": "c60a78b431c48e93f6129b0867013667c9e86514945f9f03dc1021560a9bf7ce"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 18001,
+          "sha256": "3318597ca65a16fdee1830eaff0da0a1ce4197c4f259b996e77ccb5e30ff404e"
+        },
+        {
+          "path": "context/c0005.json",
+          "bytes": 17243,
+          "sha256": "a50298a5b4b5d814c0c2fe3a6ce54072df66051f58ef8a16fe3289960b686769"
+        },
+        {
+          "path": "context/c0006.json",
+          "bytes": 7857,
+          "sha256": "409eb7a847ce0a52f2131c74a0a228cb24f6105ae6f67c9a0eedaa1edced85f9"
+        },
+        {
+          "path": "context/c0007.json",
+          "bytes": 17283,
+          "sha256": "8a6a57110193ab71661531d9dee96ce35b43018708ebb8faa5250283a9e1882b"
+        },
+        {
+          "path": "context/c0008.json",
+          "bytes": 24138,
+          "sha256": "4e8efe39bd2b2ca1cc4bcd5e0fa7678026df237a00a73575ce7eb895c510b8b8"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "0f1106e27c14ab61e250e6925afdf0b0fda553b30a32f3f3a874cd015e66f78d"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4740,
+          "sha256": "e44f3342bb02f4f582d56ab7d887f374354bd0c8f80e696a0bc458f475e6480a"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 128708,
+          "sha256": "f4f003d78101d3593e329929c4a18dd80a254c1da771841ef27607d82681ca8e"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "f359f7cca2846f866f7e6b1a2d9f5f1f49d82ac59fb0b901b6261103601475f3"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2214,
+          "sha256": "712e039c9eb27c9029eed928f36034aea978fdea74c7c9f399e1f03d4d65b3f1"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 777,
+          "sha256": "2f84905b76f0cb9c3045ab3277af201dc9c937f79239f684f09f2e7753110078"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 20493,
+          "sha256": "98fe7e5c5726252f6017f016cbf9d5910fa94e34c2581ee0b1fc7b9aed5f480e"
+        }
+      ]
+    },
+    {
+      "job_id": "d3b56ec6-fca2-4dda-be83-5ae58d147366",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "8ce7a314414d31b8a9c06275b2db8efdeae61d8daaa1982a0c36adfa2e18e845",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 6040,
+          "sha256": "2fd3287d7f567a917e1a4eb0bac81e76b880ac667ec59c8ae664bf2c817c8854"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 14769,
+          "sha256": "e8d5bf897e8e5b2a9ab5636290378d8e772bf54d88c58b776260d7d7e8722ad6"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 7036,
+          "sha256": "ade33eae287ef4e5d93c7bcaabc890de401931ce09f03bbf648fa8b9ac5b1d3b"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 14935,
+          "sha256": "d633f1542929778813174cea9fc9d0bc5d6d67b7cb49727466a7eb38490f3853"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "28569cb680b9f1d4b4baea92873df7c7c34b45f966318bda659d29d21f8922d1"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4554,
+          "sha256": "7b24ef82be6de0f335d80cfce541c43c5586346ceb9a639a27ddc8db571a33ce"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 59403,
+          "sha256": "3d1c6fc4e00816ef15bee929d805adb5307224d37af7c57f92bb3b49670d9d20"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4013,
+          "sha256": "0a376a116569dc9b5ab29bb08f007f4e34699523407245d9be98dc08213d3689"
+        },
+        {
+          "path": "request.json",
+          "bytes": 3140,
+          "sha256": "566dcf3d14eaa35f41d6b82e2bbe052ba8bc597ded8d53df0de429a7814232ee"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 782,
+          "sha256": "544fe2bdccb219052a5c56255fbe3f5671168e0a8c82b210bdbc5aac23088f84"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 12239,
+          "sha256": "1d8df00f7ae5c99daee5fe10d7281359d9a77bdc59b41de7c113713098931e61"
+        }
+      ]
+    },
+    {
+      "job_id": "d5fbcef2-3bc2-4646-96a9-b30dc520aa31",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "160dab8966a0a2cace98dbe09a1572c653f7eec381e480eefbf418db1910f93f",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "9eedfbbbda68328c06a97e44ee9b6d1076bac93b96a2bb3fc386c3b3cc106d80"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 8424,
+          "sha256": "aafe93940b811af0158a43f0c8bf1bc1139902d4999b2570c10f1a42a8f73271"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "7a476f09255f8adbfbdbe6c7f6b306dee9307e5032df6395cc87f23f477eb563"
+        },
+        {
+          "path": "request.json",
+          "bytes": 1511,
+          "sha256": "68c6582eacd9b9bf1b904371a4883336f10b33001d0f24f6e03ca777fca1bddf"
+        },
+        {
+          "path": "result.md",
+          "bytes": 7074,
+          "sha256": "dcafc5a31f5eecf9dd2ea87252c2da51f272c860cb792826d280ae07dcc23bb5"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 749,
+          "sha256": "b2ed69b3b3f02a1b51eaca20bb5ca6115b98f763839eca2620f4ed6db1a7435e"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 2123,
+          "sha256": "4f97b326853fc48b5ccb727bbebf6476873ff6cb41dd94f0bf72d3986c7fab17"
+        }
+      ]
+    },
+    {
+      "job_id": "da2d215d-6a6b-442d-87ab-44187379e2a9",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "4ab7143892443ee012da5c220508781cc819f1dd91e78fd58717fb4845ba3c15",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "fd3ca42ad3210b639b01b0e5349e26a7cb0c9859c28a05ccbfd94b1cba1686e6"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1083,
+          "sha256": "2e55ed0034dc4129e4002da423822b5763c1064eb482d566ef3e0d8755a973a0"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4072,
+          "sha256": "2519623139d7aafcb0e06a3b1e65793b491d3b51be325235d844284fc2d45317"
+        },
+        {
+          "path": "request.json",
+          "bytes": 5182,
+          "sha256": "efa04524883fb37e1ae534af2477ded76631f94c4ca215ec225cb74c55fac2df"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4591,
+          "sha256": "9baba03642befc4f352624e1c34dbf282342eccc2bd13956fe4c2b820c8121d5"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 617,
+          "sha256": "17be217eadec1baeaf91df6a048f0a8d7335db00fcfa3605ca7e4c95878aef3a"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1442,
+          "sha256": "e9a29ccb5a6d3f066f245ac41b0bc6e8af9764d205c5eb5ebecf447f6d28950b"
+        }
+      ]
+    },
+    {
       "job_id": "e0d22b19-c4a1-4fc6-94de-9ea4b822e151",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "dd517834fa5f1c5338c677b63810c36c6cf671a49b517703a1a8460a23019d99",
       "artifacts": [
         {
@@ -1726,9 +4528,72 @@
       ]
     },
     {
+      "job_id": "e2491ebb-d3b1-4354-8d5b-48eaba4b63cd",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "751689bc1dabe4d79b40b61803e26c3212ac50cb6cd80794b83266cefd2ae6ff",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 14883,
+          "sha256": "ec62c688791d1dc88e76a1a240b6e36ff2419a13c59b8b654388589e8a90c7a4"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 29635,
+          "sha256": "1ae71a0334daba8309126d084cad930b1ded2ae105b5805e10210f00087e8328"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "eb72766a9f881309d7841b5c7ce612417b0392db6f27a2423b7f42b12e4e1faf"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4569,
+          "sha256": "ab10e22917f7868826b148987b26d19e99816e519792b982540c7b2dabe59e1e"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 46076,
+          "sha256": "9194b9621a7a09238c98ba70c72cb841d43eddd2ce9d41cd6f4ece391008efdb"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "a062ac7ef8defd0d53763b729078bb213a1056d72d9a4c0d535da60cd93d7c96"
+        },
+        {
+          "path": "request.json",
+          "bytes": 2842,
+          "sha256": "6b9f697b91b6105d32b3b5014522dbf86e6be11055b57578fd229ae203ac3411"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 769,
+          "sha256": "c46398652daa1396386e10e948bb123e58cab7107d8029995aecfa22cfe07bb0"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 13231,
+          "sha256": "f10d4ff6d6e5cb0cf7392acbb10408fe0d33d6a808b289c48779778966955a1d"
+        }
+      ]
+    },
+    {
       "job_id": "e52799f4-32ac-4904-a663-b464393fc70f",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "efaf0e38e05a45caec54f0f6f75124f1ef107d930b6986b36438080074201d58",
       "artifacts": [
         {
@@ -1779,9 +4644,135 @@
       ]
     },
     {
+      "job_id": "e6cd3e35-ee34-4da5-af48-3ed7b53f5805",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "21ea6eedfb75450bfe25b6d57e054ea0834559edcdf315b1c21a62831d3dcfac",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 7536,
+          "sha256": "3e505dd7c4264d3098d273c952190c72999c3bbf662e71d9d2baa7b21c3faef2"
+        },
+        {
+          "path": "context/c0002.json",
+          "bytes": 17830,
+          "sha256": "0498f24528d48ecf661a5a3516b82961378836b0652807c673ee521113bd6a7f"
+        },
+        {
+          "path": "context/c0003.json",
+          "bytes": 8739,
+          "sha256": "f5da2fe228260887b4a7a369f77345186cf223bf824b0fafc39678efbaffa45b"
+        },
+        {
+          "path": "context/c0004.json",
+          "bytes": 17829,
+          "sha256": "add904a16ac5fe94367b3edf17a28ef4983bfcef613dfd3839db735a70d010aa"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "fb50e8f1819ab529fe7e8415190b9ad6f2dd1bdc0c992b45d88b8ae319190b79"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4554,
+          "sha256": "de15b17cdb60144375887a655d79d0e885ececb35bfc2597e00d2d58c6a99329"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 56079,
+          "sha256": "6c29f7cb101a6cc74fb319a60682da2c987b1c7faee5d6512af795dc40d27e93"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4013,
+          "sha256": "e15c8256e3da8eee40378a1d7132bbab81b2144a1217cd5d713b102f9449e107"
+        },
+        {
+          "path": "request.json",
+          "bytes": 3035,
+          "sha256": "197793ebd2e9069e154fe70c4d2ceeb4be680c281dec69488e951b9cd15224bf"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 783,
+          "sha256": "ab181c5687bf0ab5934b51a2f942f9598098e803a89000db8e806565fe6d1c53"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 12652,
+          "sha256": "f49bedb9d12037e40c5ec9238ffeb04eb82167a608f4908191bc16ee23e89e6f"
+        }
+      ]
+    },
+    {
+      "job_id": "e790bc2a-5339-4404-a892-a99edeb91e98",
+      "status": "COMPLETED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "2abd7e3c68a42879e89b4530c6e30ec00b7c0b91a93b65c5ec904c051fa60e24",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "0c872076fbf8a5269a849039d36c3ce63960e3d3b96533fd7038fbe7c817d0d5"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 1080,
+          "sha256": "2850f97a8f36ea6074b63653f13a22d6529e6f22e8580c5e23b5f9fae0dd4f02"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4047,
+          "sha256": "6e9679aa9ec034f6035e2b82cf2631e9b5d364b53c8c426d3734ca63da296662"
+        },
+        {
+          "path": "request.json",
+          "bytes": 4189,
+          "sha256": "d26056f4c452606a74a068c3891a65e41515230c2c2436c7e0c07c6c180912c8"
+        },
+        {
+          "path": "result.md",
+          "bytes": 4563,
+          "sha256": "adfa1b1b14dc6eef68a316b3d3f4fe64978dd7a9322f47d75ca805ffff26c94c"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 617,
+          "sha256": "f7b03b4759eb4e71d70bc5654b016e2dc6fb141b416e36f729966701430382aa"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 1437,
+          "sha256": "b18086f9f218889266465f8639010769da8eca374fbb04eae994f19c6846c99e"
+        }
+      ]
+    },
+    {
       "job_id": "ec0fa6fb-a827-43f2-ac39-169126d950db",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "82c00481f03ba4dd925b9e9f9d37654cc3cbfaf67858f969047957dfad7aae62",
       "artifacts": [
         {
@@ -1874,7 +4865,7 @@
     {
       "job_id": "ee2343ff-daf0-4c43-9cff-6de89e6bf546",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "d12bce0551e15b081bb8e6aa671bdf001e847664a1d2d1b1d2c25febc7ca23bb",
       "artifacts": [
         {
@@ -1937,7 +4928,7 @@
     {
       "job_id": "ef363c09-0d86-4058-9b06-a3e0680210aa",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "196c5d098fcdc0678561b31c151078f1b66d8bae6534299f14f0d9d1f1a0f7d7",
       "artifacts": [
         {
@@ -1988,9 +4979,120 @@
       ]
     },
     {
+      "job_id": "efe47108-03f8-42f9-a73a-222092c524af",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "1afc75f99d37c376fa262a82b1dc2247a415312b5b9c763fe6b89912918a5522",
+      "artifacts": [
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "7d1ee8f515e3d24276297af84eabb656bcaeb75d5fdd9572cad55e1201a9da2b"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4580,
+          "sha256": "11b13d0cf3ac786f5a866b92bd32d267894754f43e64d14fbc9004757c9d859d"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 794,
+          "sha256": "413f834225332aaf158af852e447128c713b3a21687d83d916185bb647bb46d1"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "ae745a8b8b8a95d851468d4a87d41c01c763e1fe3ae07dbb8ecbc4192b699289"
+        },
+        {
+          "path": "request.json",
+          "bytes": 1862,
+          "sha256": "37ad750a0f358e6f37fa17a4c2bebd0134812c1fe4bf9712f8e899df3565cffd"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 646,
+          "sha256": "3e50732c5c1fc75749e30172249931c4eb27f23b6cf9ce7b1dc6d3ee9d27f187"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 460,
+          "sha256": "82f7591ff361db3bd7bd41692d9a163748b3c2434b90bb77caee382772938b1b"
+        }
+      ]
+    },
+    {
+      "job_id": "f02aebfe-b77d-4a48-a72e-fe7859e2f353",
+      "status": "FAILED",
+      "captured_at": "2026-10-11T19:20:14.940Z",
+      "artifact_set_sha256": "5d39424038ef8002937fa2b506a017efc49f5281868df6a72db03569825e5ac5",
+      "artifacts": [
+        {
+          "path": "context/c0001.json",
+          "bytes": 21329,
+          "sha256": "7122e7aca50cb0ff5233f4ef2f4484163534aa0c1f9c20d1f3a624eddd429c64"
+        },
+        {
+          "path": "delivery.json",
+          "bytes": 256,
+          "sha256": "789e302865197739bd9ec5d2d45f3c3ce5653c9b03152e3c4b0b193845498713"
+        },
+        {
+          "path": "error.txt",
+          "bytes": 4387,
+          "sha256": "10435954115fe9ba4ff22994423b115d9543862a77164d6461f73439400259ff"
+        },
+        {
+          "path": "evidence.jsonl",
+          "bytes": 16083,
+          "sha256": "afd78ab9f41863aa70ca3924abc8330c56a7e6ef1707121671750495f50edae8"
+        },
+        {
+          "path": "git-status.txt",
+          "bytes": 4012,
+          "sha256": "a9a8562083de8ad47f165946b34e13fc8acfbb6e5b33242b25b618bb6757a2ab"
+        },
+        {
+          "path": "request.json",
+          "bytes": 5403,
+          "sha256": "dec024c2d50ffc2441408500e73e2053754154dcf9ffc7b831550263d4325acd"
+        },
+        {
+          "path": "runner-stderr.log",
+          "bytes": 72,
+          "sha256": "3aea782648191097e7f6c81cd9cd6a45d7a9e35149d4346656577cf03a98f622"
+        },
+        {
+          "path": "runtime.json",
+          "bytes": 421,
+          "sha256": "823b86decb9ede4018a03ba87cd047dbeb2b05b204657e2fc2da90fad7ee699a"
+        },
+        {
+          "path": "state.json",
+          "bytes": 794,
+          "sha256": "6f3a1e26f64db3c3c4d8429b2cda639696333dd035cf15980f5a84e31c023d9c"
+        },
+        {
+          "path": "worker.log",
+          "bytes": 4704,
+          "sha256": "7cc4df9867652e816f4387e2c26e9df776e080f5383a547a3ce03533bfb0834b"
+        }
+      ]
+    },
+    {
       "job_id": "f5c61306-083c-4abe-a67b-a491ed20f7dc",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "0278f59260609ce80533e03567dc64e6bfdabbf00d500ee9aebaccb5de444d02",
       "artifacts": [
         {
@@ -2063,7 +5165,7 @@
     {
       "job_id": "fa74c6a7-2147-43b0-aec8-95945467920b",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "3f3acb59c1a0b7ad0367870ae85fee7803008849d9dd229c7566bc19f1116ca7",
       "artifacts": [
         {
@@ -2126,7 +5228,7 @@
     {
       "job_id": "fad92f07-e0c6-4b38-916c-de6f5f3def67",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "df06e5da4b98c163eee3526c03d67a6332f97dee79eba914f825bd105c3a3d78",
       "artifacts": [
         {
@@ -2179,7 +5281,7 @@
     {
       "job_id": "002b83ae-69a7-4453-b343-1fc50fab59c4",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "f6577c57e520e7bf5471d7982ccd3fe8139954fe5d6231b2b62093494e3fe89e",
       "artifacts": [
         {
@@ -2217,7 +5319,7 @@
     {
       "job_id": "04ab7871-76c1-4301-a017-2ecf9a7646fe",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "751ae7f3306699a75928db5c72a198d2f0f85e8acde08276ed303bd7eaf2ce92",
       "artifacts": [
         {
@@ -2250,7 +5352,7 @@
     {
       "job_id": "0af7ddee-28db-4e8f-bbd8-954c35943b24",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "83418b69fa44f5e2561855406726ae67bd272137f17f5f04f867e2d3a8cbb3ec",
       "artifacts": [
         {
@@ -2283,7 +5385,7 @@
     {
       "job_id": "0b283e75-79b6-43dc-ba28-3d4f893a2539",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4f6976d6c42e24cd29c324f6ee0995897567c3e376ace71a016686cfba6039b9",
       "artifacts": [
         {
@@ -2316,7 +5418,7 @@
     {
       "job_id": "0d61b004-418e-4089-b9fe-065792cae5a1",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "144280f7bd17d1fbf438aae2b9751414b1dee8d3554c3144fe1bdf3ccc4d6c90",
       "artifacts": [
         {
@@ -2354,7 +5456,7 @@
     {
       "job_id": "1363af03-c110-4800-89f9-fbbb1cf5cf20",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4239619f4daf228768f43f3e30566cf3d367916166a89e1758e94495b0434683",
       "artifacts": [
         {
@@ -2387,7 +5489,7 @@
     {
       "job_id": "13f47abd-6da3-45cc-9b23-7c1052b6ebb6",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "c3f52e1ebd7a666b1940b0702dbb800e661f9185a56b17dc81f5d109e77536dc",
       "artifacts": [
         {
@@ -2415,7 +5517,7 @@
     {
       "job_id": "14cf0bac-3a85-40de-b160-4182606c5ba2",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "f147a931b85825e9146a215ade496f8927c73d1a7bcae41f3f86fa92d924cb27",
       "artifacts": [
         {
@@ -2453,7 +5555,7 @@
     {
       "job_id": "15b2cd13-177f-48a2-810f-97af5251fbd4",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "b1006767b7bf9efbf68a027328c63eee9e33310085cc88b8662034d4999b5bae",
       "artifacts": [
         {
@@ -2486,7 +5588,7 @@
     {
       "job_id": "1a12220b-a822-455e-94c7-0da19976e390",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "6ec4aa8459d48197d66266c4616fc7e662b2ff1516b741552b1e40aff86f7ab2",
       "artifacts": [
         {
@@ -2519,7 +5621,7 @@
     {
       "job_id": "1bd3bb82-0ae9-4073-adbd-e576d5763e15",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4e126ab4e53120a7deafb315cfe6799a8cad1cd18f31fbb2aefdf6201f00f00c",
       "artifacts": [
         {
@@ -2552,7 +5654,7 @@
     {
       "job_id": "1d6e77f0-14a4-4352-9cbd-ac11b863f116",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "b044f9366b3d3a0c00cab5162c393b9a03b420c87cb0337afbdb268bbbf0f4c0",
       "artifacts": [
         {
@@ -2590,7 +5692,7 @@
     {
       "job_id": "2184719b-a8c0-41c0-9673-dc3e8a607e69",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "9c998a53f3a74f980f9205ebc1ae681f855681a92deb50302fa2da816cab70a0",
       "artifacts": [
         {
@@ -2623,7 +5725,7 @@
     {
       "job_id": "2343898b-6108-4184-b88c-001b9de1ef55",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "083839c84800ec2d3b614a81e833466bdb2778c6e2d8e3f8051c0ab508191088",
       "artifacts": [
         {
@@ -2656,7 +5758,7 @@
     {
       "job_id": "29b4b6d7-b3c9-4ea8-ac4b-5080a02421cd",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "753b1177ee6ad38287eec9cda994e53a4612dd030be00d0bae24d1b39ea02b37",
       "artifacts": [
         {
@@ -2694,7 +5796,7 @@
     {
       "job_id": "2be6d42a-4594-4cf6-a119-561c230a48a0",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4422162c5f41b03d0b9ea8d1a2bd3c6d6d5bcb54473880010fefcef205ef10bf",
       "artifacts": [
         {
@@ -2727,7 +5829,7 @@
     {
       "job_id": "2eab784f-2730-43f8-abd2-7fd5711e7de4",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "2fbd4eb7779dd78f7e3314e25331241aa8d896b4f9f212df7162be15b96db830",
       "artifacts": [
         {
@@ -2760,7 +5862,7 @@
     {
       "job_id": "30af16b1-7690-4931-8903-91943b7483d2",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "d77d7fac908b92897bed995d069ea28777dba81035eb9d879d78a1a52ebf9bdd",
       "artifacts": [
         {
@@ -2803,7 +5905,7 @@
     {
       "job_id": "32ef20d1-b3d1-4db5-86d0-b378afd3f7be",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "f2667d67e6e272a665405ccf9e979bd388b15ab37784446d9c109a4041dbf38e",
       "artifacts": [
         {
@@ -2841,7 +5943,7 @@
     {
       "job_id": "349dc012-d23c-482a-bbe3-7bffc93e9cef",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "54e7d14c0adc4d25ce2fcc69c080786e3ac8b04443acf5a1febb7953414d298a",
       "artifacts": [
         {
@@ -2879,7 +5981,7 @@
     {
       "job_id": "34fb497a-6e10-4d22-9e49-2aedf46317a7",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "9e472f7081c463696921728018a55bc576a9e8074b887992dfd5d11ddb546713",
       "artifacts": [
         {
@@ -2907,7 +6009,7 @@
     {
       "job_id": "36862cc4-ea4b-4b5e-a118-a17089320330",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "397bd6e31c5ac99034dc6bfc9aa00275d64876b0289b909f035df5f1ef3be715",
       "artifacts": [
         {
@@ -2940,7 +6042,7 @@
     {
       "job_id": "37a1e203-3f16-40c3-bd71-40ba3cc66045",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4bd8b6d2bef47778090b0bc43493d4e9e0dcf724d047ef6bc0653130551eba4f",
       "artifacts": [
         {
@@ -2973,7 +6075,7 @@
     {
       "job_id": "37e18ef0-b31e-467f-86b9-67126c9ec25d",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "210a70d74e59e1e25d894391ae9812afb6c7bb495e141b74d1457de3bb17dc08",
       "artifacts": [
         {
@@ -3006,7 +6108,7 @@
     {
       "job_id": "3a3835c7-0636-43fc-a7d1-90f8c55dbf79",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "6870f2f8d80f1344cf5a089124799ec1a15a618629db1191f89e2bc97b82e39b",
       "artifacts": [
         {
@@ -3039,7 +6141,7 @@
     {
       "job_id": "3d6d2c76-1dbf-4cd5-b36d-221f06bc2a05",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "20fc769b5b2d31b5d8ac4601f0adbfc60b129a117b0b27c620f2f0aadbba0059",
       "artifacts": [
         {
@@ -3077,7 +6179,7 @@
     {
       "job_id": "402c181d-c873-41d1-b62b-02918bf1e7ad",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "366871da276ed6443e3053c106eabb33715e42dddf44a939685d90cc13de9077",
       "artifacts": [
         {
@@ -3110,7 +6212,7 @@
     {
       "job_id": "407f3146-13f9-406e-8d08-44a23fcacb03",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "abf966344503f5ea66055682c8f05790d0d2698ed475ae17d528c5a6416d9860",
       "artifacts": [
         {
@@ -3143,7 +6245,7 @@
     {
       "job_id": "43288595-d2ca-4c29-8497-16506036502d",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "6c58db45722ab240b858e6006fb52c1bcd906cfdb301ce3231c29c81f1425c92",
       "artifacts": [
         {
@@ -3176,7 +6278,7 @@
     {
       "job_id": "45931965-836a-46f1-9048-92d284d91930",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "1558fe40afb555bfd2c78c98434206828f730b73f72f1ffeb85ce8c6372ed703",
       "artifacts": [
         {
@@ -3214,7 +6316,7 @@
     {
       "job_id": "46861072-d9f6-42d4-b33c-46795d9ecdc5",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "d33b37d8b27c1b41d771d0537711cdc14287f325f638f879facf2bd2f2fa2c9a",
       "artifacts": [
         {
@@ -3247,7 +6349,7 @@
     {
       "job_id": "4710b2d9-8c9b-47ed-9531-7e21d916bcf6",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "3a90c3a30ace482ca1231484dcc896dce0ce0eff9181ac244c71402976403d6b",
       "artifacts": [
         {
@@ -3285,7 +6387,7 @@
     {
       "job_id": "4822eb0a-6332-41e8-a9f9-a1c650749128",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4b5d771aeffa19b3616814c3d51ea8472201a35f6025fbebb5160e9cd5106c13",
       "artifacts": [
         {
@@ -3318,7 +6420,7 @@
     {
       "job_id": "4b0b585a-cd01-41db-98e6-9180c9eded98",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "fad28f1a736e59256a0e2c2eaa3d2ae7c3bbbe1f7c825a07957d0a426612a755",
       "artifacts": [
         {
@@ -3356,7 +6458,7 @@
     {
       "job_id": "5096dfd1-359d-4978-a1f8-1116360408f0",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "3b81e94893827bb5c6f8a70c6e57923ab7beb21776ebce46895c42c61a5fad59",
       "artifacts": [
         {
@@ -3389,7 +6491,7 @@
     {
       "job_id": "521e66c6-adf0-4269-92c5-889c54ca2c81",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "1376f1dd65dc6264383498b0a8efdb46ac724fa425ee247f9e31a901b041a553",
       "artifacts": [
         {
@@ -3427,7 +6529,7 @@
     {
       "job_id": "525841a8-acf6-4bbc-a660-1e5e66e954e6",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "d1aaecd0b1afedf9deedd4401381aadcb118038bd2790f53d1eb091aae5d1e27",
       "artifacts": [
         {
@@ -3465,7 +6567,7 @@
     {
       "job_id": "57c91356-ddf6-4b0e-81f5-29f84abb8a13",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "8b8588a42823cc7b212566b2af1dda70f8d60d158a4fb82a79f39afcf3751e7d",
       "artifacts": [
         {
@@ -3503,7 +6605,7 @@
     {
       "job_id": "599a83d2-20b1-4a1c-9a45-f7eb83a5e79c",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "9ea5a2954c85e431d45725ab276b5eb705f5215a551918c50a77c0e7b34e1df0",
       "artifacts": [
         {
@@ -3536,7 +6638,7 @@
     {
       "job_id": "5a3b4878-6545-4306-813f-b04c3e161d6f",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "d83938f49de7f02a147d61600d4010c6575ec20f271d3a2a584656ace99a9e55",
       "artifacts": [
         {
@@ -3569,7 +6671,7 @@
     {
       "job_id": "5bb97f13-56c8-4760-afd6-25f12585f655",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "6a8138fd61b327b2a8e8c6655f0653b41d61d7667c46b3cd7066a186fb64a2a1",
       "artifacts": [
         {
@@ -3602,7 +6704,7 @@
     {
       "job_id": "5ca318be-78ee-4e6f-8306-40f6bef8a904",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "7e281a8aa24fa363d2302595767c84dff73ba58839ab848f5c7b200cca241e53",
       "artifacts": [
         {
@@ -3635,7 +6737,7 @@
     {
       "job_id": "6223748e-150d-4a16-a664-a590fe4fbf1e",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "83862dac0458aaecf3f5b75ab9324b6fd864564a96890768ee60e8d1524c9fd8",
       "artifacts": [
         {
@@ -3663,7 +6765,7 @@
     {
       "job_id": "63c0ef6e-2d18-4afa-a615-c7a58166fae1",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4586b6a118aa2bacaf52df43f6e62bfd97007e1c2347a00ec922913bbe966846",
       "artifacts": [
         {
@@ -3696,7 +6798,7 @@
     {
       "job_id": "687f429d-c09c-47ee-9812-3d61efa52f04",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "510e7404574394a2c4edf934c92ca3f4b017d58f9b20b1b34b44137fe5ceb169",
       "artifacts": [
         {
@@ -3734,7 +6836,7 @@
     {
       "job_id": "68986e7e-d764-42d3-b791-9efc79a17c81",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "2657589ae821249224e4cab41c31239d8829af633df0ccd9741dba4e38bfb14b",
       "artifacts": [
         {
@@ -3772,7 +6874,7 @@
     {
       "job_id": "6b5ba12b-a2ba-4b52-846e-15a81b8efe41",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "e34dbea685802f716b794924930b17756f5ffc37906ce18515e11050ba8a2cd4",
       "artifacts": [
         {
@@ -3805,7 +6907,7 @@
     {
       "job_id": "71135d8f-a644-419c-8fe9-a93ffad3f3c4",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "a86181070871a1661343d7ce04296ac8002811e3cf7abec24548809428ff9599",
       "artifacts": [
         {
@@ -3843,7 +6945,7 @@
     {
       "job_id": "74e99878-68c1-475a-843c-ffd492f13bce",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "0ef1bb460afb701eed9be63401848d10dea97a064a6b32d61be688df301c541a",
       "artifacts": [
         {
@@ -3876,7 +6978,7 @@
     {
       "job_id": "7ab04af1-cf97-4461-8435-6eeebfa5d9f4",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "8e13e1c0db481eff7be241e96ac1b83233b3771106fd4b6361e5223e7bc2dcbe",
       "artifacts": [
         {
@@ -3919,7 +7021,7 @@
     {
       "job_id": "7b851202-04d4-4333-8069-db30250aef5a",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "46b984d65530d5114e50c043eacf660ea52812fa7a2d71e2774997f55f36bb79",
       "artifacts": [
         {
@@ -3952,7 +7054,7 @@
     {
       "job_id": "7c83c3c8-a830-419b-8beb-2703aed5ec4f",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "f054c0513164a3395c99f997e285987db1a6fe5a57b582caf069dd0d6b25962c",
       "artifacts": [
         {
@@ -3990,7 +7092,7 @@
     {
       "job_id": "7e3c3d98-d1b0-4046-b3de-3372a4620f36",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "ed927b256e0f2fc966db78e9e36c620bc9d3cf6dd76c8f53fcd7a268f51cba59",
       "artifacts": [
         {
@@ -4023,7 +7125,7 @@
     {
       "job_id": "7e83cf71-5f9d-4e12-8428-bed49e075076",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "a33f402ffa9bd8e4643c626dd84a6b799a1acc68d28af22e9463ba40aa5ff12e",
       "artifacts": [
         {
@@ -4061,7 +7163,7 @@
     {
       "job_id": "801027ea-70e0-4c42-bd0b-06215900fcd6",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "c1f3e82e418b308085fabddc6edf7dd4f0016e67d4839ae0ba1e43206140744c",
       "artifacts": [
         {
@@ -4099,7 +7201,7 @@
     {
       "job_id": "82a2b2e1-e968-47bc-8384-4699fa5515a8",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4feb5477c1b9ca8f8ecddf77a545641cb8538f211f5dbe4560f8bd42d06a8bfa",
       "artifacts": [
         {
@@ -4127,7 +7229,7 @@
     {
       "job_id": "85319e53-7d8a-4f17-8e4b-48a3913e503b",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "e8ea3fb50ae9dc6c3f5d0c7c05c029322568ce3c83147acb1a16dd880a44adec",
       "artifacts": [
         {
@@ -4160,7 +7262,7 @@
     {
       "job_id": "8a6463c6-8490-4853-8471-121fa704c7d6",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "9fd255362454082d5795284f502244cc4fe55ffb4b218e868241a3767284b382",
       "artifacts": [
         {
@@ -4193,7 +7295,7 @@
     {
       "job_id": "8d167601-fc48-4176-818f-8c8ad5d39168",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "d75f3641fc548d2a6d655aadcc81d5c44c801925573150fb2285ea267f2c0526",
       "artifacts": [
         {
@@ -4226,7 +7328,7 @@
     {
       "job_id": "92771c9b-c901-45ee-9369-dbb33ca44351",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "838f453349757d4379fa724f531cad37105e170f27034680839f18f4593769e8",
       "artifacts": [
         {
@@ -4259,7 +7361,7 @@
     {
       "job_id": "955931d8-3f2f-498d-84e5-a4cfe081ba0a",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "b9191b10e9de550575b444bc4f3a7d0e40abe48e14b3f6e6c8907015e9198140",
       "artifacts": [
         {
@@ -4297,7 +7399,7 @@
     {
       "job_id": "996a0ac0-8a2f-4a2f-adcf-bb96b4498a91",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "f77943b2170083882d8ddb3b2f80e53227e761a0c2e97661d4724fef6adaa2a5",
       "artifacts": [
         {
@@ -4330,7 +7432,7 @@
     {
       "job_id": "9a423410-d0ce-4cf6-9f7d-2b5198fd03f2",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "12d544aaf905e9a74274f783da320dfc7ebb186b5e04ae5c46009f1f00b76edf",
       "artifacts": [
         {
@@ -4363,7 +7465,7 @@
     {
       "job_id": "9c81ff58-61d4-4751-8275-21f52358a428",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "f0120e4ea8585d6d256077d78f6ffcbdc81b9e17ecdf65147a0ad21c9c0fdd39",
       "artifacts": [
         {
@@ -4406,7 +7508,7 @@
     {
       "job_id": "9f85b11e-fe74-4ecc-a72f-f8028739a237",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "d18a58f210101748460ed85753334ac7cf850ab7e5ab3883ca586a0cfc99b522",
       "artifacts": [
         {
@@ -4444,7 +7546,7 @@
     {
       "job_id": "a405ec96-3062-4156-b910-1167f7c3c405",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "c1e2561ffbdb31931be450f133ea9c61a9a2cdd91383b2af9e9048dbbc2ab937",
       "artifacts": [
         {
@@ -4477,7 +7579,7 @@
     {
       "job_id": "a90944cf-45f2-4e8f-b3b1-8d76762bb040",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "5e0c94f8951be608c936bb96fd4092706f7c0531cf2f5c68784e47777d5b7267",
       "artifacts": [
         {
@@ -4515,7 +7617,7 @@
     {
       "job_id": "ad5523e3-416b-447d-958c-e8a5b9564571",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "8761224fe2ef7f2793cb3ba2d7f1e9c34775a2e69428f4a1b67da447c506244e",
       "artifacts": [
         {
@@ -4558,7 +7660,7 @@
     {
       "job_id": "aee9087e-bf43-440f-acac-379567057611",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "33ad6ebab5c846992df698af4f3ac9605c00cb4840b2356230b6dd89e9c73fd4",
       "artifacts": [
         {
@@ -4591,7 +7693,7 @@
     {
       "job_id": "b05bfefd-f227-4e48-b902-82bcd3713e5d",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "041bcb5446f99baed115ecc941072bd13193864596363ec5351993da1a4d6868",
       "artifacts": [
         {
@@ -4634,7 +7736,7 @@
     {
       "job_id": "b57439ef-d040-4f01-9d2f-d5e6e277d13d",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "2513658cd912d6b136f12928e05fcb6f3844a4c9562bb6190f58863edfcf8eda",
       "artifacts": [
         {
@@ -4672,7 +7774,7 @@
     {
       "job_id": "b61c5e99-409f-4e25-94c4-3c7e83d0927b",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "fccc1ce3bcefafdb1ba92304baf943b6ff7323620ab36518e8882157d5359535",
       "artifacts": [
         {
@@ -4715,7 +7817,7 @@
     {
       "job_id": "b9ab2290-8707-4404-90d5-bb395e5bc30e",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "45f4088deed3c5a8deb4a66b49b3125f2b724d70c31e1c84cf9cc81f7e2b71d8",
       "artifacts": [
         {
@@ -4753,7 +7855,7 @@
     {
       "job_id": "bd486d4c-1211-490d-98ef-22b04dac6059",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "7c972afb68f0ff5d3d91adfbd7ef7a17ed9d9dcb42511108e41bd2bec2548fe0",
       "artifacts": [
         {
@@ -4786,7 +7888,7 @@
     {
       "job_id": "bf3252e1-c894-4774-b8ad-d5297eb8b6bb",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "fa7789fc362017cae101f4d5aba48e35e862782fc5048a5b79efd4adf3050c36",
       "artifacts": [
         {
@@ -4829,7 +7931,7 @@
     {
       "job_id": "c07e5f5b-2f0b-40ef-bed0-5af8abc5c8e6",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "500763523c0c803cd4b121298d5d49a4ff620a4e3bafce93292ed145c2da3579",
       "artifacts": [
         {
@@ -4867,7 +7969,7 @@
     {
       "job_id": "c2da3188-1b80-4f9e-80ea-870029d0f5f5",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "1daa4ee6bacabfadc97849fab76755f303a396493d0f8e10cd86bca4c8df09c3",
       "artifacts": [
         {
@@ -4900,7 +8002,7 @@
     {
       "job_id": "c96ef6d6-c427-423c-b85e-1dfdde679676",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "b3e445ba3094d531a320ce77c61ef247b0a2fea505c990ffcf941d30f12b456c",
       "artifacts": [
         {
@@ -4933,7 +8035,7 @@
     {
       "job_id": "c9fdb1a8-1621-44ff-8529-5c6cac6fe9ca",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "e4536891de06f3275028d6cfe9f18bf2f3d8c1c9378c5c1789754a8a7e918864",
       "artifacts": [
         {
@@ -4966,7 +8068,7 @@
     {
       "job_id": "cc8faeb3-ac75-4cfa-8e90-6549f50a9855",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "6135292784c43834eb901e13c0aaf1325d2c074d1daf6adf7cc4692e02e7b7bc",
       "artifacts": [
         {
@@ -5004,7 +8106,7 @@
     {
       "job_id": "cd45eba1-230b-4b57-9ea3-fe4c52fbd4dc",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "2796cc4498e2748c6c0be214a634477554a6956acdeef7b33b913fd0907a1885",
       "artifacts": [
         {
@@ -5037,7 +8139,7 @@
     {
       "job_id": "cf6c78c8-3004-41dd-87a6-ba0d809ba96e",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "2aca3ed42b5d44fe302dd37ec39fbde12c024e481f92d1720fbabc17518ef2e2",
       "artifacts": [
         {
@@ -5070,7 +8172,7 @@
     {
       "job_id": "d03f9e4b-35e4-4d1a-9233-2ce194d45a2c",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "ce47dabc85092374416ce36f2fd6b48a73dd3b02782949a3baff97922ecc8e29",
       "artifacts": [
         {
@@ -5108,7 +8210,7 @@
     {
       "job_id": "d18b6868-9dba-4279-bd9b-04d136f655d0",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "7f0d6b04bdc14dc9bc64284e5306f91461ef2c0270f370d559c6ff2eaf5c6f4c",
       "artifacts": [
         {
@@ -5146,7 +8248,7 @@
     {
       "job_id": "d3fa395e-252e-479f-8d9e-c12c11c6c600",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "ac18e94e0a720ca0785b7484553d383f8881f31e339f4a1e3182e720d633b242",
       "artifacts": [
         {
@@ -5179,7 +8281,7 @@
     {
       "job_id": "d476ff1e-f8e2-4b9f-abc1-4471042cca58",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "a13477ccbfc07e2a6a9ac711776d91921fc5855f8e6924b122d7a4b47ba24193",
       "artifacts": [
         {
@@ -5212,7 +8314,7 @@
     {
       "job_id": "d5c642ef-10b9-4b77-b2e3-fa29ad1283b5",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "ccb48f5efc1818db0651f179445369778bea17f556159cdbe83d5757a928f904",
       "artifacts": [
         {
@@ -5245,7 +8347,7 @@
     {
       "job_id": "d7a33055-7b9c-4fb8-b2e9-efb572e172ec",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "21efb9fc06f219af281da76dbf3cf74f14911dd82f209cf2edceab790d3443bf",
       "artifacts": [
         {
@@ -5278,7 +8380,7 @@
     {
       "job_id": "d9f4b5c1-cee3-43a8-99f8-a55c25c586b6",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "9bad5dab1dc99b0e5f102063274e6e89f383e1350e4c11ce0b3372ff9b77bc29",
       "artifacts": [
         {
@@ -5311,7 +8413,7 @@
     {
       "job_id": "da4ee65f-7856-4cf7-bc5b-0a886810da5f",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "fc89c7dd7b1d31b20656663cd74501cc507d5cd89b6bbbae06eff76ddff1d3e5",
       "artifacts": [
         {
@@ -5339,7 +8441,7 @@
     {
       "job_id": "e0f35158-2865-4d81-b0bd-07a557c87a54",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "9fff64f279a47796338880548b57604d9b8bb435f37c6aeae32c008b6761d648",
       "artifacts": [
         {
@@ -5367,7 +8469,7 @@
     {
       "job_id": "e4bdc80a-65fc-4493-98d6-d4ac445fec22",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "5f7f19b08bf2476e6db69798883ca278ec157bf0cadd68e713ffe4598378b557",
       "artifacts": [
         {
@@ -5400,7 +8502,7 @@
     {
       "job_id": "e9a1c3ba-96c9-47a2-8e76-fa8d7a5968d5",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "8a9102d05f94c54724f725b8b0484fd20ce9b2cd3e51edd36d4015068c3ddd37",
       "artifacts": [
         {
@@ -5433,7 +8535,7 @@
     {
       "job_id": "e9c18298-d075-4d43-9ad8-38c611ab1685",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "500d5989ea97e002b7e28b1aa831707ef55d0bed22d299f07422d89079d6d447",
       "artifacts": [
         {
@@ -5471,7 +8573,7 @@
     {
       "job_id": "ebb56ce8-dbaa-417e-b434-382240083605",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "3b12f9201329a2563dd6aeac8ac5d5443bd46b8b29a58477e3e55d03502dc29a",
       "artifacts": [
         {
@@ -5509,7 +8611,7 @@
     {
       "job_id": "ed8f336b-0f44-4d45-b71f-acea3dbe2b48",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "4b74814f5fc3d29b7efcf9ad77b93390b3909f9b46dbeac808802a74b5478144",
       "artifacts": [
         {
@@ -5542,7 +8644,7 @@
     {
       "job_id": "ef68edbf-d106-443d-87d0-85b11c772905",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "7006f79dc4e38dc9e6e837d49deb97a0219f0dd8bfe2a6055ea7d1ac033c6358",
       "artifacts": [
         {
@@ -5575,7 +8677,7 @@
     {
       "job_id": "f18b0e17-59c8-42bc-b76d-0cc46b547f33",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "0221a045c0d0b7bd42ea06bfd4562f1ef14017543d23e2e91976bc7b551f52eb",
       "artifacts": [
         {
@@ -5613,7 +8715,7 @@
     {
       "job_id": "f1fa2cd9-7a2d-49dc-bc7c-34b53d28d949",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "586df39ecf986d989537a478ac8f84bf2caebb814a014674e84f4806a8ca7cac",
       "artifacts": [
         {
@@ -5641,7 +8743,7 @@
     {
       "job_id": "f541b345-e8f4-4dd3-84c5-66d6022c5aa9",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "a1ee8581bb1ca8b6fd53218bb2c4d1a5026c4cc856a17f4e6921a0c440f55b7e",
       "artifacts": [
         {
@@ -5679,7 +8781,7 @@
     {
       "job_id": "f75f0e92-2058-4454-8e38-374f0bd7ee0d",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "af3aa7f94c5a2b6b16cfc9f7593c218fbdfeb3aed39aaff943fe17e745e7cf91",
       "artifacts": [
         {
@@ -5717,7 +8819,7 @@
     {
       "job_id": "f9089aeb-1ad4-4a18-8e59-691cd32597dc",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "ad7098a1790fe9c14c16545b115c2e872e2088b8afc4f11e681cf5f6f955c39c",
       "artifacts": [
         {
@@ -5750,7 +8852,7 @@
     {
       "job_id": "fa466d56-8255-4379-841b-d5ab7cd954bc",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "937932465234c2b49e8cb816b51797078861c076103b7ef2f91746ca99a91aaa",
       "artifacts": [
         {
@@ -5788,7 +8890,7 @@
     {
       "job_id": "fa843e53-f2b5-4190-aafa-70f57cee56cf",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "ad38c5cadc509f431fe38d005c983ccf1533acf78c4de1554d698bef918b741e",
       "artifacts": [
         {
@@ -5826,7 +8928,7 @@
     {
       "job_id": "fab0570c-5d97-47e8-b2a1-eb18a980cc6d",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "51a5c4a51c660240ab299830bbc0ae4ac1b7fc6e05ef2bf124bb463543fdb4c0",
       "artifacts": [
         {
@@ -5859,7 +8961,7 @@
     {
       "job_id": "fb5c756f-7018-45dc-8002-d83a46339ac5",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "8dad1317871288c9072b5c0f5c1bccce1450f8faa3a7ca4cd91bfc83c618fb78",
       "artifacts": [
         {
@@ -5887,7 +8989,7 @@
     {
       "job_id": "fc4d9614-a3b0-48a5-b83c-2ed248bd2d50",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "193c0110fcf8f19ac23835861111f974da5d6fb866bc814ecf074ab634cdd2ca",
       "artifacts": [
         {
@@ -5920,7 +9022,7 @@
     {
       "job_id": "ff6d4e1e-8620-4806-abdf-09bf2c8a3e0f",
       "status": "COMPLETED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "d936a3696cf928a4d88894a5c989e3d537a71b4b7d8e3e58f9e6b9d9861b5b13",
       "artifacts": [
         {
@@ -5958,7 +9060,7 @@
     {
       "job_id": "ffafd1bd-c635-4969-8b4b-0cb3719d8dc8",
       "status": "FAILED",
-      "captured_at": "2026-10-08T01:39:45.629Z",
+      "captured_at": "2026-10-11T19:20:14.940Z",
       "artifact_set_sha256": "66e6d816fc799aa989290f476902e9af8b8bc073ebf1d22daee4c0ba8d18e0da",
       "artifacts": [
         {

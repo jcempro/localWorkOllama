@@ -1,0 +1,60 @@
+// Avaliacoes explicitas dos 49 novos jobs; nao inferir sucesso de negocio do status.
+const review:Record<string,[string,string]>= {
+ '05d99ac1':['Clonagem JSON: testes falharam, houve edicoes e validacoes finais aprovadas; nova revisao exigiu ajustes no job 07a35229.','C6,C12'],
+ '0636b4d3':['Runner desapareceu durante prepare; Kernel-Power41/6008 registram reinicio inesperado. Logs, delivery e indice ativo zerados. Efeitos do comando nao sao comprovaveis; proibido replay cego.','C11'],
+ '07a35229':['Duas substituicoes inicialmente recusadas por trecho nao unico/ausente; leituras e edicoes corrigidas, typecheck/clone_behavior aprovados.','C5,C12'],
+ '0a5a6a2e':['Suite permanente do adaptador criada por sequencia deterministica e validada.','C2,C6'],
+ '10ed293e':['Duas leituras nao impediram exportacoes inventadas e proposta de mudar core; supervisor rejeitou desenho e delegou 167f9061 com evidencia delimitada. Houve duas consultas local_result.','C6,C9'],
+ '167f9061':['Desenho corretivo baseado em evidencia fornecida; nenhuma ferramenta foi executada. Nao comprova implementacao propria.','C6'],
+ '18958922':['Documentacao preparada aplicada e verificada, recuperando a omissao de 4aa40afc.','C2'],
+ '1b270666':['Continuidade de 31315b9d voltou a repetir leituras sem escrever; recuperada por sequencia deterministica 3800f0d6.','C1,C12'],
+ '21365a86':['Build corrigido de ESM para CommonJS respeitando package.json aplicavel; validacao passou.','C2,C9'],
+ '2534f348':['Quatro testes de clonagem adicionados e validados; callback recebeu falha de cota no supervisor.','C2,C10'],
+ '26cba7d7':['Guia e checkpoint/projecao atualizados por sequencia oficial; FT continua pendente de gates.','C2,C6'],
+ '31315b9d':['Criacao de suite virou 12 leituras e uma listagem, sem escrita; contrato interrompeu estagnacao.','C1,C12'],
+ '3800f0d6':['Tres testes terminais implementados pela sequencia corretiva de 1b270666.','C2'],
+ '3a1648f0':['Correcao preservou teste parcial de 9eeded63, ajustando clone/isolation sem reaplicar a unidade inteira.','C2,C3'],
+ '3fc8d540':['Patch deterministico do executor recuperou c23fd8a5; typecheck e comportamento aprovados.','C2'],
+ '46f217a3':['Cobertura PDF nao concluida, 12 leituras e uma tentativa de edit; b5f0a09a recuperou trecho/estrategia delimitados.','C1,C5,C12'],
+ '47087e3b':['Clonagem JSON escrita e testes iniciais passaram; revisao posterior encontrou getters/limites/arrays incorretos. Passar teste parcial nao prova contrato completo.','C6,C9'],
+ '492b9846':['Criou adaptador antes da verificacao, recuperando fonte ausente em f02aebfe.','C2'],
+ '4aa40afc':['Resposta sem ferramenta nem inspecao, documentacao nao entregue; recuperada em 18958922.','C2,C6'],
+ '54cf4c6f':['Validacao preparada falhou reiteradamente por contrato de CLI; supervisor corrigiu precondicao e argumentos na unidade seguinte.','C5,C9,C12'],
+ '56c15176':['Patch de classificacao/estados executado com cinco validacoes; callback falhou por cota.','C2,C10'],
+ '69143910':['Checkpoint de leitura virou nove releituras sem conclusao; evidencia preservada sustentou correcao documental c4ed101e.','C1,C12'],
+ '698aee2b':['Integracao real run/resume e pos-condicao passou; retomada por SR-001 entregou esta unidade ao chat original.','C2,C10'],
+ '6a5017eb':['Builds e suite compilada aprovados; supervisor versionou, mas esgotou cota antes da proxima delegacao. SR-001 retomou sem replay.','C2,C10'],
+ '705cf4d3':['Teste de ordem/elegibilidade/parada adicionado por sequencia, recuperando d3b56ec6.','C2'],
+ '7be626fb':['Teste PDF acumulado real subestimado: uma leitura, edicao e teste aprovado.','C6'],
+ '86ad1912':['write_file/typecheck ocorreram, mas ausencia de alteracao liquida impediu COMPLETED; codigo recuperado foi revisado/corrigido em b12224f2. Escrita nao equivale a delta.','C6'],
+ '88ae962c':['Baseline Node24 executado com checagem de tipos e quatro suites; evidencia restrita ao executavel testado.','C2,C6'],
+ '93f4bffe':['Executor ficou parcial apos edicao e validacoes; 13 leituras terminaram em estagnacao, com efeitos preservados.','C1,C12'],
+ '9479e1c3':['Gate oficial --check retornou erro real; wrapper ocultou detalhe de handoff, recuperado no diagnostico efe47108.','C2,C9'],
+ '9eeded63':['Teste parcialmente alterado; revalidacao falhou/estagnou. Unidade 3a1648f0 corrigiu, preservando o parcial.','C3,C12'],
+ 'a6711cb4':['Build ESM falhou sob package.json CommonJS; supervisor havia presumido semantica da raiz. 21365a86 corrigiu formato.','C9'],
+ 'ab2ab50e':['Inventario de rastreabilidade apontou10 materiais/0 mapeadas e gate externo; diagnostico nao e conclusao da FT.','C2,C6'],
+ 'abe917cd':['Um caso PDF recuperou cdd74993 com leitura/edicao/teste delimitados.','C6'],
+ 'b12224f2':['Correcao da API recuperada de 86ad1912 validou tipos/comportamento; revisao do supervisor continua necessaria para contrato completo.','C6'],
+ 'b5f0a09a':['Patch cirurgico PDF e teste aprovados, recuperando tentativa nao unica de 46f217a3.','C5,C6'],
+ 'c23fd8a5':['Correcao do executor repetiu sete leituras sem editar; sequencia 3fc8d540 recuperou.','C1,C12'],
+ 'c4ed101e':['Guia PDF corrigido a partir de evidencia recuperada: leitura unica, edit e diff_check aprovados.','C6'],
+ 'c62c960c':['Checkpoint e projecao sincronizados pela API oficial sem repetir testes funcionais.','C2'],
+ 'c675a003':['Modelo leu arquivo novo inexistente e executou types antes de cria-lo; da2d215d corrigiu ordem por sequencia.','C2,C5,C12'],
+ 'cdd74993':['Dois casos PDF nao escritos; dez releituras e bloqueio antecipado, recuperados por unidades menores.','C1,C12'],
+ 'd3b56ec6':['Seis releituras sem acrescer teste; callback esgotou cota; 705cf4d3 recuperou por sequencia.','C1,C10,C12'],
+ 'd5fbcef2':['Leitura unica do modulo produziu checkpoint arquitetural; cota do supervisor bloqueou callback.','C6,C10'],
+ 'da2d215d':['Classificador criado antes de types/matrix por sequencia exata; corrigiu fonte ausente.','C2'],
+ 'e2491ebb':['Diretorio ausente e node -e nao autorizado pelo mecanismo usado; nao ampliou permissao, mas sem implementacao.','C5,C9,C12'],
+ 'e6cd3e35':['Seis leituras substituiriam testes de clonagem; guard interrompeu, 2534f348 recuperou sem inferencia.','C1,C12'],
+ 'e790bc2a':['Matriz do classificador persistida e validada por sequencia.','C2'],
+ 'efe47108':['Diagnostico oficial exposto: release v0.1.14-rc5 exige atualizar package.json. Gate permaneceu falho; correto nao declarar conclusao.','C2,C9'],
+ 'f02aebfe':['Verificacao TS6053 sem criacao do arquivo; CONTRACT_UNFULFILLED preservou falha em vez de sucesso textual.','C2,C6,C12'],
+};
+export function additionalAssessments(inventory:any){
+ return inventory.jobs.flatMap(j=>{
+  const p=j.id.slice(0,8),r=review[p];if(!r)return [];
+  const tools=j.events.filter(e=>e.phase==='tool_result');
+  const summary=`${j.state.status}; ${tools.filter(e=>e.outcome==='ok').length} ferramentas aprovadas, ${tools.filter(e=>e.outcome!=='ok').length} recusas/erros; ${j.request.command_sequence?.length??0} comandos em sequencia. ${r[0]}`;
+  return [[p,(j.request.task??'Pedido sem texto retido').split(/\.\s/)[0].slice(0,160),summary,r[0],r[1]]];
+ });
+}

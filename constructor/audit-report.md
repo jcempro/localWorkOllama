@@ -2,7 +2,7 @@
 
 [Diagnóstico, causas e correções](audit-causes.md) · [Manifesto de evidências](audit-manifest.json)
 
-Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) excluído(s). Estados originais: 93 FAILED, 54 COMPLETED. 38 operacionais e 109 fixtures. Não confundir estes estados com o aceite da entrega.
+Captura: 2026-10-11T19:20:14.940Z. **196 jobs examinados**, 1 cancelado(s) excluído(s). Estados originais: 113 FAILED, 83 COMPLETED. 87 operacionais e 109 fixtures. Não confundir estes estados com o aceite da entrega.
 
 ## Jobs operacionais
 
@@ -15,6 +15,24 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C1,C2 (tabela do relatório de causas).
 - **Evidência:** 38 eventos; 3 checkpoints; read_file=7. Manifesto 85c880dacf1d.
 
+### 05d99ac1-267b-496a-95b9-5f9875c78b28
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 21 ferramentas aprovadas, 5 recusas/erros; 0 comandos em sequencia. Clonagem JSON: testes falharam, houve edicoes e validacoes finais aprovadas; nova revisao exigiu ajustes no job 07a35229.
+- **Causa/impacto:** Clonagem JSON: testes falharam, houve edicoes e validacoes finais aprovadas; nova revisao exigiu ajustes no job 07a35229.
+- **Correções generalizadas:** C6,C12 (tabela do relatório de causas).
+- **Evidência:** 200 eventos; 14 checkpoints; read_file=9, run_authorized_command=12, edit_file=5. Manifesto 79de18cd5792.
+
+### 0636b4d3-dcf0-4f4f-89f3-68cb0f7bd169
+
+- **Estado persistido:** FAILED; entrega: ausente.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 0 ferramentas aprovadas, 0 recusas/erros; 2 comandos em sequencia. Runner desapareceu durante prepare; Kernel-Power41/6008 registram reinicio inesperado. Logs, delivery e indice ativo zerados. Efeitos do comando nao sao comprovaveis; proibido replay cego.
+- **Causa/impacto:** Runner desapareceu durante prepare; Kernel-Power41/6008 registram reinicio inesperado. Logs, delivery e indice ativo zerados. Efeitos do comando nao sao comprovaveis; proibido replay cego.
+- **Correções generalizadas:** C11 (tabela do relatório de causas).
+- **Evidência:** 1 eventos; 0 checkpoints; sem eventos de ferramenta retidos. Manifesto a3810bc86370.
+
 ### 06b4db91-c629-4971-af57-53ad1a0a333e
 
 - **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
@@ -23,6 +41,42 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Script preparado pelo supervisor usou variável fake_pdf_engine que sombreava função; retry de patch não idempotente.
 - **Correções generalizadas:** C2,C3,C9 (tabela do relatório de causas).
 - **Evidência:** 115 eventos; 7 checkpoints; read_file=8, run_authorized_command=3, search_text=12, list_dir=1. Manifesto 268e966abab1.
+
+### 07a35229-efab-416b-bf23-8c2645b81718
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 7 ferramentas aprovadas, 2 recusas/erros; 0 comandos em sequencia. Duas substituicoes inicialmente recusadas por trecho nao unico/ausente; leituras e edicoes corrigidas, typecheck/clone_behavior aprovados.
+- **Causa/impacto:** Duas substituicoes inicialmente recusadas por trecho nao unico/ausente; leituras e edicoes corrigidas, typecheck/clone_behavior aprovados.
+- **Correções generalizadas:** C5,C12 (tabela do relatório de causas).
+- **Evidência:** 67 eventos; 4 checkpoints; read_file=3, edit_file=4, run_authorized_command=2. Manifesto ded0319838e1.
+
+### 0a5a6a2e-6fc2-4ea2-8f63-b4aa86b3408a
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Suite permanente do adaptador criada por sequencia deterministica e validada.
+- **Causa/impacto:** Suite permanente do adaptador criada por sequencia deterministica e validada.
+- **Correções generalizadas:** C2,C6 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto 1bdc9454cbd5.
+
+### 10ed293e-6362-43ad-9ea7-ad134e176cff
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 2 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Duas leituras nao impediram exportacoes inventadas e proposta de mudar core; supervisor rejeitou desenho e delegou 167f9061 com evidencia delimitada. Houve duas consultas local_result.
+- **Causa/impacto:** Duas leituras nao impediram exportacoes inventadas e proposta de mudar core; supervisor rejeitou desenho e delegou 167f9061 com evidencia delimitada. Houve duas consultas local_result.
+- **Correções generalizadas:** C6,C9 (tabela do relatório de causas).
+- **Evidência:** 21 eventos; 1 checkpoints; read_file=2. Manifesto bc710f16369a.
+
+### 167f9061-2b96-4a45-81a3-e2262572880d
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 0 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Desenho corretivo baseado em evidencia fornecida; nenhuma ferramenta foi executada. Nao comprova implementacao propria.
+- **Causa/impacto:** Desenho corretivo baseado em evidencia fornecida; nenhuma ferramenta foi executada. Nao comprova implementacao propria.
+- **Correções generalizadas:** C6 (tabela do relatório de causas).
+- **Evidência:** 6 eventos; 0 checkpoints; sem eventos de ferramenta retidos. Manifesto 598c80e63203.
 
 ### 177a3ead-0b73-4d7b-a38b-f9e21557fcc7
 
@@ -33,6 +87,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C1,C5 (tabela do relatório de causas).
 - **Evidência:** 38 eventos; 3 checkpoints; read_file=7. Manifesto 98c5b6bf548a.
 
+### 18958922-a382-4b46-8d43-30265a4469de
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 1 ferramentas aprovadas, 0 recusas/erros; 1 comandos em sequencia. Documentacao preparada aplicada e verificada, recuperando a omissao de 4aa40afc.
+- **Causa/impacto:** Documentacao preparada aplicada e verificada, recuperando a omissao de 4aa40afc.
+- **Correções generalizadas:** C2 (tabela do relatório de causas).
+- **Evidência:** 5 eventos; 0 checkpoints; run_authorized_command=1. Manifesto 81f304d528f1.
+
 ### 1909cbd7-c886-452b-ab29-146c0936eae7
 
 - **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
@@ -42,6 +105,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C2,C6 (tabela do relatório de causas).
 - **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=1. Manifesto 53e2016e6409.
 
+### 1b270666-9d49-4b10-86d2-840f3b87530e
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 7 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Continuidade de 31315b9d voltou a repetir leituras sem escrever; recuperada por sequencia deterministica 3800f0d6.
+- **Causa/impacto:** Continuidade de 31315b9d voltou a repetir leituras sem escrever; recuperada por sequencia deterministica 3800f0d6.
+- **Correções generalizadas:** C1,C12 (tabela do relatório de causas).
+- **Evidência:** 53 eventos; 4 checkpoints; read_file=7. Manifesto 220e8bd61278.
+
 ### 1b6422cf-7246-402a-831b-a04d74921f52
 
 - **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
@@ -50,6 +122,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Execução solicitada convertida em exploração; evidência perdida e ausência de obrigação de executar ID específico.
 - **Correções generalizadas:** C1,C2 (tabela do relatório de causas).
 - **Evidência:** 32 eventos; 2 checkpoints; read_file=7. Manifesto 55db53351875.
+
+### 21365a86-97f3-4745-8c62-85cf650677df
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 2 ferramentas aprovadas, 0 recusas/erros; 2 comandos em sequencia. Build corrigido de ESM para CommonJS respeitando package.json aplicavel; validacao passou.
+- **Causa/impacto:** Build corrigido de ESM para CommonJS respeitando package.json aplicavel; validacao passou.
+- **Correções generalizadas:** C2,C9 (tabela do relatório de causas).
+- **Evidência:** 8 eventos; 0 checkpoints; run_authorized_command=2. Manifesto 2300d91df9ba.
 
 ### 23dae47e-bc49-4c4b-9716-c247f96bfd7c
 
@@ -69,6 +150,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C4 (tabela do relatório de causas).
 - **Evidência:** 34 eventos; 1 checkpoints; read_file=2, list_dir=1, run_authorized_command=1, git_commit_unit=1. Manifesto f0017b41c439.
 
+### 2534f348-4461-46be-8531-4260576b006a
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** FT-104, correção do job e6cd3e35-ee34-4da5-af48-3ed7b53f5805: nenhuma escrita, apenas releituras.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Quatro testes de clonagem adicionados e validados; callback recebeu falha de cota no supervisor.
+- **Causa/impacto:** Quatro testes de clonagem adicionados e validados; callback recebeu falha de cota no supervisor.
+- **Correções generalizadas:** C2,C10 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto a5c537de91b3.
+
 ### 26c72128-8052-4f82-a366-4757468f437d
 
 - **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
@@ -77,6 +167,24 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Inspeção genérica contava metadados Git como evidência de conteúdo.
 - **Correções generalizadas:** C6 (tabela do relatório de causas).
 - **Evidência:** 15 eventos; 0 checkpoints; git_status=1. Manifesto 8be5f8f95db7.
+
+### 26cba7d7-e0dd-4e4e-8742-1bf631a6da41
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Guia e checkpoint/projecao atualizados por sequencia oficial; FT continua pendente de gates.
+- **Causa/impacto:** Guia e checkpoint/projecao atualizados por sequencia oficial; FT continua pendente de gates.
+- **Correções generalizadas:** C2,C6 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto c58dacae9f7e.
+
+### 31315b9d-0fac-4837-83ac-49a2fad55bf1
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 13 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Criacao de suite virou 12 leituras e uma listagem, sem escrita; contrato interrompeu estagnacao.
+- **Causa/impacto:** Criacao de suite virou 12 leituras e uma listagem, sem escrita; contrato interrompeu estagnacao.
+- **Correções generalizadas:** C1,C12 (tabela do relatório de causas).
+- **Evidência:** 91 eventos; 8 checkpoints; read_file=12, list_dir=1. Manifesto d66e6d25e1ca.
 
 ### 335dbab3-f591-4630-88dd-7b6288b1a48c
 
@@ -96,6 +204,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C1,C9 (tabela do relatório de causas).
 - **Evidência:** 80 eventos; 1 checkpoints; read_file=34. Manifesto cf761e39ca00.
 
+### 3800f0d6-44e3-4bed-adac-3b4b83d6d206
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** FT-104: unidade corretiva do job 1b270666-9d49-4b10-86d2-840f3b87530e, que repetiu leituras sem mudanças.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Tres testes terminais implementados pela sequencia corretiva de 1b270666.
+- **Causa/impacto:** Tres testes terminais implementados pela sequencia corretiva de 1b270666.
+- **Correções generalizadas:** C2 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto 3e3e0cd0b0d2.
+
 ### 39a6be1a-3e89-4cad-b3ae-c507bfbcabb9
 
 - **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
@@ -105,6 +222,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C6,C9 (tabela do relatório de causas).
 - **Evidência:** 52 eventos; 2 checkpoints; read_file=8, run_authorized_command=1, git_commit_unit=1. Manifesto b3743cb1c7b9.
 
+### 3a1648f0-39c0-4fbf-8d50-21d4ae6169ea
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Unidade corretiva FT-104 do job 9eeded63-3d66-424f-973e-843fe338e167.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Correcao preservou teste parcial de 9eeded63, ajustando clone/isolation sem reaplicar a unidade inteira.
+- **Causa/impacto:** Correcao preservou teste parcial de 9eeded63, ajustando clone/isolation sem reaplicar a unidade inteira.
+- **Correções generalizadas:** C2,C3 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto 3dfb7ae1eb52.
+
 ### 3cef7c29-1090-4830-856d-5e30f4d7a06d
 
 - **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
@@ -113,6 +239,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Schema MCP aceitava argv multiline, mas runner o proibia; contrato divergente entre camadas.
 - **Correções generalizadas:** C2 (tabela do relatório de causas).
 - **Evidência:** 0 eventos; 0 checkpoints; sem eventos de ferramenta retidos. Manifesto c85f305494bc.
+
+### 3fc8d540-0fe7-49d0-949b-ea4f10f3e9b4
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** FT-104 continuação determinística do job c23fd8a5, que só repetiu leituras.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Patch deterministico do executor recuperou c23fd8a5; typecheck e comportamento aprovados.
+- **Causa/impacto:** Patch deterministico do executor recuperou c23fd8a5; typecheck e comportamento aprovados.
+- **Correções generalizadas:** C2 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto 0787798d91b1.
 
 ### 42d71676-c626-40aa-8002-93ebebc4ec87
 
@@ -132,6 +267,24 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C2,C3 (tabela do relatório de causas).
 - **Evidência:** 64 eventos; 3 checkpoints; read_file=7, list_dir=2, run_authorized_command=3, git_status=1. Manifesto 60bc57ccc212.
 
+### 46f217a3-9ffd-4bb3-876b-f7c6e48f1d4d
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Você é worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 12 ferramentas aprovadas, 1 recusas/erros; 0 comandos em sequencia. Cobertura PDF nao concluida, 12 leituras e uma tentativa de edit; b5f0a09a recuperou trecho/estrategia delimitados.
+- **Causa/impacto:** Cobertura PDF nao concluida, 12 leituras e uma tentativa de edit; b5f0a09a recuperou trecho/estrategia delimitados.
+- **Correções generalizadas:** C1,C5,C12 (tabela do relatório de causas).
+- **Evidência:** 86 eventos; 8 checkpoints; read_file=12, edit_file=1. Manifesto 0d26e4662f43.
+
+### 47087e3b-d3f1-4da4-8333-7541b9702d0e
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 4 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Clonagem JSON escrita e testes iniciais passaram; revisao posterior encontrou getters/limites/arrays incorretos. Passar teste parcial nao prova contrato completo.
+- **Causa/impacto:** Clonagem JSON escrita e testes iniciais passaram; revisao posterior encontrou getters/limites/arrays incorretos. Passar teste parcial nao prova contrato completo.
+- **Correções generalizadas:** C6,C9 (tabela do relatório de causas).
+- **Evidência:** 34 eventos; 2 checkpoints; read_file=1, run_authorized_command=2, edit_file=1. Manifesto 9e2b711a8b1c.
+
 ### 48309641-c02b-4ba1-8a83-ac0138d67679
 
 - **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
@@ -140,6 +293,42 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Semântica de ferramentas não compartilhada; comando permitido não era execução obrigatória.
 - **Correções generalizadas:** C2,C5,C9 (tabela do relatório de causas).
 - **Evidência:** 40 eventos; 3 checkpoints; read_file=4, run_command=1. Manifesto 9777a7b7186a.
+
+### 492b9846-2e20-43e5-9d59-5339f27adc79
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Criou adaptador antes da verificacao, recuperando fonte ausente em f02aebfe.
+- **Causa/impacto:** Criou adaptador antes da verificacao, recuperando fonte ausente em f02aebfe.
+- **Correções generalizadas:** C2 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto b64b913f3211.
+
+### 4aa40afc-5647-4ea2-b88c-b6dab3d8c250
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 0 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Resposta sem ferramenta nem inspecao, documentacao nao entregue; recuperada em 18958922.
+- **Causa/impacto:** Resposta sem ferramenta nem inspecao, documentacao nao entregue; recuperada em 18958922.
+- **Correções generalizadas:** C2,C6 (tabela do relatório de causas).
+- **Evidência:** 9 eventos; 0 checkpoints; sem eventos de ferramenta retidos. Manifesto 791de441ee5a.
+
+### 54cf4c6f-79c3-4305-bf90-d57fffa86d0a
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 2 ferramentas aprovadas, 6 recusas/erros; 0 comandos em sequencia. Validacao preparada falhou reiteradamente por contrato de CLI; supervisor corrigiu precondicao e argumentos na unidade seguinte.
+- **Causa/impacto:** Validacao preparada falhou reiteradamente por contrato de CLI; supervisor corrigiu precondicao e argumentos na unidade seguinte.
+- **Correções generalizadas:** C5,C9,C12 (tabela do relatório de causas).
+- **Evidência:** 55 eventos; 0 checkpoints; read_file=2, list_dir=1, run_authorized_command=4, run_command=1. Manifesto c931a3589915.
+
+### 56c15176-0e1a-4393-b0b3-40af3822a841
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 6 ferramentas aprovadas, 0 recusas/erros; 6 comandos em sequencia. Patch de classificacao/estados executado com cinco validacoes; callback falhou por cota.
+- **Causa/impacto:** Patch de classificacao/estados executado com cinco validacoes; callback falhou por cota.
+- **Correções generalizadas:** C2,C10 (tabela do relatório de causas).
+- **Evidência:** 20 eventos; 0 checkpoints; run_authorized_command=6. Manifesto b32e4f9f709c.
 
 ### 6744af56-d7cd-475e-8bb2-9dbbd40f2805
 
@@ -150,6 +339,33 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C2,C6 (tabela do relatório de causas).
 - **Evidência:** 40 eventos; 2 checkpoints; read_file=2, run_authorized_command=1, git_commit_unit=1. Manifesto 1a27d0320bfa.
 
+### 69143910-7699-4fc5-a59a-be0460921ca4
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 9 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Checkpoint de leitura virou nove releituras sem conclusao; evidencia preservada sustentou correcao documental c4ed101e.
+- **Causa/impacto:** Checkpoint de leitura virou nove releituras sem conclusao; evidencia preservada sustentou correcao documental c4ed101e.
+- **Correções generalizadas:** C1,C12 (tabela do relatório de causas).
+- **Evidência:** 64 eventos; 5 checkpoints; read_file=9. Manifesto 575ca6a65d54.
+
+### 698aee2b-a18f-40a1-935a-1cd1fd118da8
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Integracao real run/resume e pos-condicao passou; retomada por SR-001 entregou esta unidade ao chat original.
+- **Causa/impacto:** Integracao real run/resume e pos-condicao passou; retomada por SR-001 entregou esta unidade ao chat original.
+- **Correções generalizadas:** C2,C10 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto f3ad86fd6e6d.
+
+### 6a5017eb-e247-459f-a19f-1a43d5656a18
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 2 ferramentas aprovadas, 0 recusas/erros; 2 comandos em sequencia. Builds e suite compilada aprovados; supervisor versionou, mas esgotou cota antes da proxima delegacao. SR-001 retomou sem replay.
+- **Causa/impacto:** Builds e suite compilada aprovados; supervisor versionou, mas esgotou cota antes da proxima delegacao. SR-001 retomou sem replay.
+- **Correções generalizadas:** C2,C10 (tabela do relatório de causas).
+- **Evidência:** 8 eventos; 0 checkpoints; run_authorized_command=2. Manifesto 39629789d128.
+
 ### 6a5bd838-ef2e-4dc7-ad6d-5c640c15dfa2
 
 - **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
@@ -158,6 +374,24 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Repetição indevida de mutação já concluída e política de commit incompatível.
 - **Correções generalizadas:** C3,C4 (tabela do relatório de causas).
 - **Evidência:** 54 eventos; 0 checkpoints; run_authorized_command=4, git_status=1, git_diff=1, run_command=1. Manifesto 2fe1d0a18968.
+
+### 705cf4d3-8f02-4dbd-9d29-2a8afb92f669
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Teste de ordem/elegibilidade/parada adicionado por sequencia, recuperando d3b56ec6.
+- **Causa/impacto:** Teste de ordem/elegibilidade/parada adicionado por sequencia, recuperando d3b56ec6.
+- **Correções generalizadas:** C2 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto 0d549843f81e.
+
+### 7be626fb-4b8a-4f4a-b693-f3847bdefe82
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Teste PDF acumulado real subestimado: uma leitura, edicao e teste aprovado.
+- **Causa/impacto:** Teste PDF acumulado real subestimado: uma leitura, edicao e teste aprovado.
+- **Correções generalizadas:** C6 (tabela do relatório de causas).
+- **Evidência:** 26 eventos; 1 checkpoints; read_file=1, edit_file=1, run_authorized_command=1. Manifesto 4e4cf8e1dcc9.
 
 ### 7cd16c0c-23d1-4b8b-ba19-11ce38850105
 
@@ -204,6 +438,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C1,C2,C5,C10 (tabela do relatório de causas).
 - **Evidência:** 147 eventos; 7 checkpoints; read_file=7, git_diff=2, run_authorized_command=2, delegate_readonly_subagent=2. Manifesto 2140df6ca9a2.
 
+### 86ad1912-8f39-423d-924c-17cd7b892269
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 7 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. write_file/typecheck ocorreram, mas ausencia de alteracao liquida impediu COMPLETED; codigo recuperado foi revisado/corrigido em b12224f2. Escrita nao equivale a delta.
+- **Causa/impacto:** write_file/typecheck ocorreram, mas ausencia de alteracao liquida impediu COMPLETED; codigo recuperado foi revisado/corrigido em b12224f2. Escrita nao equivale a delta.
+- **Correções generalizadas:** C6 (tabela do relatório de causas).
+- **Evidência:** 69 eventos; 3 checkpoints; read_file=2, run_authorized_command=3, write_file=1, git_status=1. Manifesto 363308c50cbc.
+
 ### 87fcc955-0167-4f42-983f-9d5bbc60d7db
 
 - **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
@@ -212,6 +455,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Replay de patch não idempotente; cota do supervisor impediu a etapa seguinte, não o gatilho.
 - **Correções generalizadas:** C3,C10 (tabela do relatório de causas).
 - **Evidência:** 96 eventos; 7 checkpoints; read_file=10, run_authorized_command=4. Manifesto d0571f681a6e.
+
+### 88ae962c-9fc0-41a5-9bf0-dcc6797c6604
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 5 ferramentas aprovadas, 0 recusas/erros; 5 comandos em sequencia. Baseline Node24 executado com checagem de tipos e quatro suites; evidencia restrita ao executavel testado.
+- **Causa/impacto:** Baseline Node24 executado com checagem de tipos e quatro suites; evidencia restrita ao executavel testado.
+- **Correções generalizadas:** C2,C6 (tabela do relatório de causas).
+- **Evidência:** 17 eventos; 0 checkpoints; run_authorized_command=5. Manifesto 290d5b67dd88.
 
 ### 92d264bc-ad30-4a94-9978-aa8715b2e760
 
@@ -222,6 +474,24 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C1,C6,C7 (tabela do relatório de causas).
 - **Evidência:** 20 eventos; 0 checkpoints; read_file=1. Manifesto b5101af60a0c.
 
+### 93f4bffe-663c-40c6-b5c9-3723671039b3
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 15 ferramentas aprovadas, 2 recusas/erros; 0 comandos em sequencia. Executor ficou parcial apos edicao e validacoes; 13 leituras terminaram em estagnacao, com efeitos preservados.
+- **Causa/impacto:** Executor ficou parcial apos edicao e validacoes; 13 leituras terminaram em estagnacao, com efeitos preservados.
+- **Correções generalizadas:** C1,C12 (tabela do relatório de causas).
+- **Evidência:** 143 eventos; 12 checkpoints; read_file=13, run_authorized_command=3, edit_file=1. Manifesto 94f8962e9ddf.
+
+### 9479e1c3-40e9-4b46-8920-21098913eeb8
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** FT-104: executar uma vez agents_check para gate oficial de lacuna; sem inferência, edição, atualização efetiva ou retry.
+- **Execução, retorno e avaliação:** FAILED; 0 ferramentas aprovadas, 1 recusas/erros; 1 comandos em sequencia. Gate oficial --check retornou erro real; wrapper ocultou detalhe de handoff, recuperado no diagnostico efe47108.
+- **Causa/impacto:** Gate oficial --check retornou erro real; wrapper ocultou detalhe de handoff, recuperado no diagnostico efe47108.
+- **Correções generalizadas:** C2,C9 (tabela do relatório de causas).
+- **Evidência:** 3 eventos; 0 checkpoints; run_authorized_command=1. Manifesto 936e53587914.
+
 ### 99f89f39-da51-4085-8752-cac459ee1486
 
 - **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
@@ -230,6 +500,24 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Detector contabilizava somente git_commit_unit, ignorando commit legítimo feito pelo comando autorizado.
 - **Correções generalizadas:** C4 (tabela do relatório de causas).
 - **Evidência:** 34 eventos; 1 checkpoints; read_file=3, run_authorized_command=1, git_commit_unit=1. Manifesto 4ab319d01dea.
+
+### 9eeded63-3d66-424f-973e-843fe338e167
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 13 ferramentas aprovadas, 2 recusas/erros; 0 comandos em sequencia. Teste parcialmente alterado; revalidacao falhou/estagnou. Unidade 3a1648f0 corrigiu, preservando o parcial.
+- **Causa/impacto:** Teste parcialmente alterado; revalidacao falhou/estagnou. Unidade 3a1648f0 corrigiu, preservando o parcial.
+- **Correções generalizadas:** C3,C12 (tabela do relatório de causas).
+- **Evidência:** 117 eventos; 9 checkpoints; read_file=9, edit_file=2, run_authorized_command=4. Manifesto fe27aa85b7a6.
+
+### a6711cb4-7a4a-425f-b78e-6f25ec1c1d2d
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 2 ferramentas aprovadas, 1 recusas/erros; 3 comandos em sequencia. Build ESM falhou sob package.json CommonJS; supervisor havia presumido semantica da raiz. 21365a86 corrigiu formato.
+- **Causa/impacto:** Build ESM falhou sob package.json CommonJS; supervisor havia presumido semantica da raiz. 21365a86 corrigiu formato.
+- **Correções generalizadas:** C9 (tabela do relatório de causas).
+- **Evidência:** 9 eventos; 0 checkpoints; run_authorized_command=3. Manifesto e4234cf9368d.
 
 ### a85abf9a-36cc-46b0-9ea6-591512f7c716
 
@@ -249,6 +537,24 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C2,C6 (tabela do relatório de causas).
 - **Evidência:** 29 eventos; 0 checkpoints; run_authorized_command=1, run_command=1, file_info=1, git_commit_unit=1. Manifesto 94ed9dd695f0.
 
+### ab2ab50e-2917-4428-944c-a87dae966ce2
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 1 ferramentas aprovadas, 0 recusas/erros; 1 comandos em sequencia. Inventario de rastreabilidade apontou10 materiais/0 mapeadas e gate externo; diagnostico nao e conclusao da FT.
+- **Causa/impacto:** Inventario de rastreabilidade apontou10 materiais/0 mapeadas e gate externo; diagnostico nao e conclusao da FT.
+- **Correções generalizadas:** C2,C6 (tabela do relatório de causas).
+- **Evidência:** 5 eventos; 0 checkpoints; run_authorized_command=1. Manifesto bc3a74328522.
+
+### abe917cd-32c3-4925-94c1-cabd719411cc
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Um caso PDF recuperou cdd74993 com leitura/edicao/teste delimitados.
+- **Causa/impacto:** Um caso PDF recuperou cdd74993 com leitura/edicao/teste delimitados.
+- **Correções generalizadas:** C6 (tabela do relatório de causas).
+- **Evidência:** 26 eventos; 1 checkpoints; read_file=1, edit_file=1, run_authorized_command=1. Manifesto 78edc305c266.
+
 ### aeac491f-6da5-4b2b-9bee-9136afaee5eb
 
 - **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
@@ -257,6 +563,60 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Guarda de inspeção aceitava metadados como prova de revisão de arquivos; alucinação sem fonte.
 - **Correções generalizadas:** C6 (tabela do relatório de causas).
 - **Evidência:** 15 eventos; 0 checkpoints; git_status=1. Manifesto dd23f78fa9e6.
+
+### b12224f2-98c7-4da2-898b-00c13b97d28d
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 7 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Correcao da API recuperada de 86ad1912 validou tipos/comportamento; revisao do supervisor continua necessaria para contrato completo.
+- **Causa/impacto:** Correcao da API recuperada de 86ad1912 validou tipos/comportamento; revisao do supervisor continua necessaria para contrato completo.
+- **Correções generalizadas:** C6 (tabela do relatório de causas).
+- **Evidência:** 61 eventos; 3 checkpoints; read_file=3, run_authorized_command=3, edit_file=1. Manifesto 3ca2ea46f27a.
+
+### b5f0a09a-cb2a-4273-9549-5ec256957bfc
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Patch cirurgico PDF e teste aprovados, recuperando tentativa nao unica de 46f217a3.
+- **Causa/impacto:** Patch cirurgico PDF e teste aprovados, recuperando tentativa nao unica de 46f217a3.
+- **Correções generalizadas:** C5,C6 (tabela do relatório de causas).
+- **Evidência:** 36 eventos; 2 checkpoints; read_file=1, edit_file=1, run_authorized_command=1. Manifesto 4523d05d146c.
+
+### c23fd8a5-f82d-4309-82af-76dcb0c4db84
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 7 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Correcao do executor repetiu sete leituras sem editar; sequencia 3fc8d540 recuperou.
+- **Causa/impacto:** Correcao do executor repetiu sete leituras sem editar; sequencia 3fc8d540 recuperou.
+- **Correções generalizadas:** C1,C12 (tabela do relatório de causas).
+- **Evidência:** 59 eventos; 5 checkpoints; read_file=7. Manifesto 4691566056bd.
+
+### c4ed101e-1ff3-4025-bb1c-ba15942dcab6
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Guia PDF corrigido a partir de evidencia recuperada: leitura unica, edit e diff_check aprovados.
+- **Causa/impacto:** Guia PDF corrigido a partir de evidencia recuperada: leitura unica, edit e diff_check aprovados.
+- **Correções generalizadas:** C6 (tabela do relatório de causas).
+- **Evidência:** 30 eventos; 0 checkpoints; read_file=1, edit_file=1, run_authorized_command=1. Manifesto 9858f796cbc1.
+
+### c62c960c-f7f1-43ef-96e0-c652db212c41
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Checkpoint e projecao sincronizados pela API oficial sem repetir testes funcionais.
+- **Causa/impacto:** Checkpoint e projecao sincronizados pela API oficial sem repetir testes funcionais.
+- **Correções generalizadas:** C2 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto e0af48e97a22.
+
+### c675a003-11e9-437c-bbba-e71fdac0b5a9
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 4 ferramentas aprovadas, 2 recusas/erros; 0 comandos em sequencia. Modelo leu arquivo novo inexistente e executou types antes de cria-lo; da2d215d corrigiu ordem por sequencia.
+- **Causa/impacto:** Modelo leu arquivo novo inexistente e executou types antes de cria-lo; da2d215d corrigiu ordem por sequencia.
+- **Correções generalizadas:** C2,C5,C12 (tabela do relatório de causas).
+- **Evidência:** 61 eventos; 3 checkpoints; read_file=5, run_authorized_command=1. Manifesto 109d2f84f3ab.
 
 ### c76f3c74-3d4c-4f47-ad06-b04c649de01f
 
@@ -276,6 +636,42 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C1,C2 (tabela do relatório de causas).
 - **Evidência:** 40 eventos; 2 checkpoints; read_file=11. Manifesto 25479fd97cc0.
 
+### cdd74993-1172-4ddd-b731-7941e2422745
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 9 ferramentas aprovadas, 1 recusas/erros; 0 comandos em sequencia. Dois casos PDF nao escritos; dez releituras e bloqueio antecipado, recuperados por unidades menores.
+- **Causa/impacto:** Dois casos PDF nao escritos; dez releituras e bloqueio antecipado, recuperados por unidades menores.
+- **Correções generalizadas:** C1,C12 (tabela do relatório de causas).
+- **Evidência:** 80 eventos; 8 checkpoints; read_file=10. Manifesto 9e11c0ba077a.
+
+### d3b56ec6-fca2-4dda-be83-5ae58d147366
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 6 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Seis releituras sem acrescer teste; callback esgotou cota; 705cf4d3 recuperou por sequencia.
+- **Causa/impacto:** Seis releituras sem acrescer teste; callback esgotou cota; 705cf4d3 recuperou por sequencia.
+- **Correções generalizadas:** C1,C10,C12 (tabela do relatório de causas).
+- **Evidência:** 47 eventos; 4 checkpoints; read_file=6. Manifesto 8ce7a314414d.
+
+### d5fbcef2-3bc2-4646-96a9-b30dc520aa31
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 1 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Leitura unica do modulo produziu checkpoint arquitetural; cota do supervisor bloqueou callback.
+- **Causa/impacto:** Leitura unica do modulo produziu checkpoint arquitetural; cota do supervisor bloqueou callback.
+- **Correções generalizadas:** C6,C10 (tabela do relatório de causas).
+- **Evidência:** 13 eventos; 0 checkpoints; read_file=1. Manifesto 160dab8966a0.
+
+### da2d215d-6a6b-442d-87ab-44187379e2a9
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Classificador criado antes de types/matrix por sequencia exata; corrigiu fonte ausente.
+- **Causa/impacto:** Classificador criado antes de types/matrix por sequencia exata; corrigiu fonte ausente.
+- **Correções generalizadas:** C2 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto 4ab714389244.
+
 ### e0d22b19-c4a1-4fc6-94de-9ea4b822e151
 
 - **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
@@ -285,6 +681,15 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Correções generalizadas:** C6,C9 (tabela do relatório de causas).
 - **Evidência:** 11 eventos; 0 checkpoints; sem eventos de ferramenta retidos. Manifesto dd517834fa5f.
 
+### e2491ebb-d3b1-4354-8d5b-48eaba4b63cd
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 5 ferramentas aprovadas, 4 recusas/erros; 0 comandos em sequencia. Diretorio ausente e node -e nao autorizado pelo mecanismo usado; nao ampliou permissao, mas sem implementacao.
+- **Causa/impacto:** Diretorio ausente e node -e nao autorizado pelo mecanismo usado; nao ampliou permissao, mas sem implementacao.
+- **Correções generalizadas:** C5,C9,C12 (tabela do relatório de causas).
+- **Evidência:** 42 eventos; 2 checkpoints; read_file=4, list_dir=3, run_command=2. Manifesto 751689bc1dab.
+
 ### e52799f4-32ac-4904-a663-b464393fc70f
 
 - **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
@@ -293,6 +698,24 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Pré-validação de dependências do script delegado incompleta; guarda de teste falho funcionou.
 - **Correções generalizadas:** C2,C9 (tabela do relatório de causas).
 - **Evidência:** 39 eventos; 2 checkpoints; read_file=4, run_authorized_command=2. Manifesto efaf0e38e05a.
+
+### e6cd3e35-ee34-4da5-af48-3ed7b53f5805
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 6 ferramentas aprovadas, 0 recusas/erros; 0 comandos em sequencia. Seis leituras substituiriam testes de clonagem; guard interrompeu, 2534f348 recuperou sem inferencia.
+- **Causa/impacto:** Seis leituras substituiriam testes de clonagem; guard interrompeu, 2534f348 recuperou sem inferencia.
+- **Correções generalizadas:** C1,C12 (tabela do relatório de causas).
+- **Evidência:** 51 eventos; 4 checkpoints; read_file=6. Manifesto 21ea6eedfb75.
+
+### e790bc2a-5339-4404-a892-a99edeb91e98
+
+- **Estado persistido:** COMPLETED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** COMPLETED; 3 ferramentas aprovadas, 0 recusas/erros; 3 comandos em sequencia. Matriz do classificador persistida e validada por sequencia.
+- **Causa/impacto:** Matriz do classificador persistida e validada por sequencia.
+- **Correções generalizadas:** C2 (tabela do relatório de causas).
+- **Evidência:** 11 eventos; 0 checkpoints; run_authorized_command=3. Manifesto 2abd7e3c68a4.
 
 ### ec0fa6fb-a827-43f2-ac39-169126d950db
 
@@ -320,6 +743,24 @@ Captura: 2026-10-08T01:39:45.629Z. **147 jobs examinados**, 1 cancelado(s) exclu
 - **Causa/impacto:** Correção não executada antes da validação e estratégia sem adaptação útil.
 - **Correções generalizadas:** C2,C5 (tabela do relatório de causas).
 - **Evidência:** 38 eventos; 2 checkpoints; read_file=7, run_authorized_command=1. Manifesto 196c5d098fcd.
+
+### efe47108-03f8-42f9-a73a-222092c524af
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** FT-104 diagnóstico determinístico, sem inferência.
+- **Execução, retorno e avaliação:** FAILED; 0 ferramentas aprovadas, 1 recusas/erros; 1 comandos em sequencia. Diagnostico oficial exposto: release v0.1.14-rc5 exige atualizar package.json. Gate permaneceu falho; correto nao declarar conclusao.
+- **Causa/impacto:** Diagnostico oficial exposto: release v0.1.14-rc5 exige atualizar package.json. Gate permaneceu falho; correto nao declarar conclusao.
+- **Correções generalizadas:** C2,C9 (tabela do relatório de causas).
+- **Evidência:** 3 eventos; 0 checkpoints; run_authorized_command=1. Manifesto 1afc75f99d37.
+
+### f02aebfe-b77d-4a48-a72e-fe7859e2f353
+
+- **Estado persistido:** FAILED; entrega: QUEUED_TO_CHAT.
+- **Unidade delegada:** Worker subordinado.
+- **Execução, retorno e avaliação:** FAILED; 2 ferramentas aprovadas, 1 recusas/erros; 0 comandos em sequencia. Verificacao TS6053 sem criacao do arquivo; CONTRACT_UNFULFILLED preservou falha em vez de sucesso textual.
+- **Causa/impacto:** Verificacao TS6053 sem criacao do arquivo; CONTRACT_UNFULFILLED preservou falha em vez de sucesso textual.
+- **Correções generalizadas:** C2,C6,C12 (tabela do relatório de causas).
+- **Evidência:** 27 eventos; 1 checkpoints; read_file=2, run_authorized_command=1. Manifesto 5d39424038ef.
 
 ### f5c61306-083c-4abe-a67b-a491ed20f7dc
 

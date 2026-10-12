@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {assessmentsA7D} from './audit-assessments.mjs';
+import {additionalAssessments} from './audit-assessments-2026-10-11.mts';
 const dirA7D=path.dirname(fileURLToPath(import.meta.url));
 const inputA7D=path.resolve(process.argv[2]||path.join(dirA7D,'audit-private/inventory.json'));
 const inventoryA7D=JSON.parse(fs.readFileSync(inputA7D,'utf8'));
@@ -11,7 +12,7 @@ const jobsA7D=inventoryA7D.jobs;
 assert.equal(new Set(jobsA7D.map(j=>j.id)).size,jobsA7D.length,'ID duplicado na captura');
 assert.ok(jobsA7D.every(j=>j.state&&j.state.status!=='CANCELLED'&&!j.invalid_state),'Estado ausente ou cancelado indevidamente incluído');
 const selectedA7D=new Map();
-for(const row of assessmentsA7D){
+for(const row of [...assessmentsA7D,...additionalAssessments(inventoryA7D)]){
   const matches=jobsA7D.filter(j=>j.id.startsWith(row[0]));
   assert.equal(matches.length,1,`Prefixo ausente/ambíguo: ${row[0]}`);
   assert.ok(!selectedA7D.has(matches[0].id),'Avaliação duplicada');
