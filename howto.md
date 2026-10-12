@@ -4,6 +4,8 @@
 
 Após reinício inesperado, o runtime reconstrói um índice ativo corrompido a partir dos estados íntegros e preserva o original com hash. Se o recibo de envio estiver corrompido, o job fica com entrega `AMBIGUOUS`: conferir o chat de origem é obrigatório antes de qualquer reenvio. Os arquivos críticos são sincronizados antes da substituição atômica; isso reduz perda por interrupção, sem garantir a integridade de hardware ou energia.
 
+Sem job ativo, o índice reconstruído fica ausente, representação compatível com servidores MCP anteriores ainda carregados na sessão. Atualizar arquivos não recarrega automaticamente módulos de um processo existente. Se a sessão continuar retornando erro antigo já corrigido e nenhum job tiver sido criado, use a ponte instalada descrita abaixo; ela inicia o servidor atualizado, preserva os mesmos contratos e a entrega ao chat. Nunca reenvie uma mutação cuja execução esteja incerta.
+
 O atualizador usa a mesma recuperação com raiz destino explícita antes de verificar jobs ativos. Assim, pode atualizar uma instalação antiga cujo `active.json` esteja corrompido; estados inválidos ou múltiplos jobs ativos impedem a atualização com diagnóstico, preservando os originais.
 
 No monitor, o evento `strategy_adaptation` indica duas ações sem progresso: o runtime orientou uma alternativa legítima e informou comandos obrigatórios pendentes. A guarda continua interrompendo quatro ações improdutivas; a orientação não concede acesso adicional nem transforma testes em implementação.
@@ -424,6 +426,8 @@ e, salvo autorização expressa:
 
 A preferência pelo `localWorker` vale em toda conversa nova ou retomada no Codex Desktop, sem nova solicitação do usuário.
 
+Uma sessão MCP pode manter módulos antigos após atualização dos arquivos. Se houver erro anterior à criação do job, comprovadamente incompatível com a instalação já corrigida, use a ponte instalada para iniciar o servidor atualizado. Primeiro confirme que o pedido não criou job nem efeito; chamada de resultado que falhou não comprova resultado obtido. Execução ou envio incerto exige reconciliar evidências antes de nova unidade, sem replay cego nem fallback pago.
+
 Se `local_analyze` ou `local_result` estiver ausente do catálogo da sessão, trate isso como falha de integração recuperável, sem pedir fallback pago. Verifique o `CODEX_HOME` efetivo e repare o registro MCP pelo `mcp-config.mjs` instalado, usando o CLI Codex com `CODEX_HOME` explícito; confirme com `codex mcp get localworker --json`. Enquanto o catálogo do Desktop não recarrega, invoque a mesma ferramenta pelo `mcp-call.mjs` instalado, com argumentos JSON UTF-8 codificados em Base64. Essa ponte usa o próprio servidor e suas validações, retorna `job_id`/resultado e preserva a entrega automática ao chat. Não passe conteúdo bruto do usuário ao shell nem use o Worker para manter a si próprio. Se a ponte também falhar, classifique a falha concreta conforme as regras abaixo antes de interromper o pedido.
 
 Para etapa de repositório adequada à inferência local — exploração extensa, análise, planejamento, implementação ou verificação delegável — inicie **um `local_analyze` persistente por menor unidade coerente**, com dependências e critérios de aceite precisos. Revise o checkpoint dessa unidade antes de liberar a próxima. Uma FT extensa nunca deve ser enviada inteira em um único job.
@@ -569,7 +573,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `4edbd4585d9380370a5d2efa25c9c000af36666c99916d90a8433077d40ebcb9` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `a5c6bc9cfbbdfa5b80633fd12c5dba2043c9db958a3d1bf307755e5b88292b20` |
+| `src/localworker/job-store.mjs` | `12d3218db2187b1b8e50c599d523692151e9e0c48b646f294ce09ff86ef9dba9` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
@@ -587,7 +591,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
-| `src/agents.supervisor.md` | `ae6212aa882bfbef2dea1d6d0ae377292eb9030b5e2ebdb35c76979fb2774dc3` |
+| `src/agents.supervisor.md` | `b9f832d57347fee3c3da45ebb5cc2214689bfc01113d1006d843756eb66d8165` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

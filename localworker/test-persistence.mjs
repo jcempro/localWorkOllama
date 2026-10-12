@@ -9,13 +9,23 @@ const source=path.join(path.dirname(fileURLToPath(import.meta.url)),'job-store.m
 try{
   await fs.copyFile(source,path.join(root,'job-store.mjs'));
   const store=await import(pathToFileURL(path.join(root,'job-store.mjs')));
+  // Contrato efetivamente usado antes da atualizacao: null provocava job_id invalido.
+  const legacyActive=async()=>{
+    try{const active=await store.readJson(path.join(root,'active.json'));const state=await store.getState(active.job_id);return store.TERMINAL.has(state.status)?null:active.job_id;}
+    catch(error){if(error.code==='ENOENT')return null;throw error;}
+  };
   const id=randomUUID(),dir=store.jobDir(id);
   await fs.mkdir(dir,{recursive:true});
   await store.setState(id,{job_id:id,status:'FAILED'});
   await fs.writeFile(path.join(root,'active.json'),Buffer.alloc(75));
   assert.equal(await store.activeJob(),null);
   assert.equal(await store.activeJob(root),null);
-  assert.equal((await store.readJson(path.join(root,'active.json'))).job_id,null);
+  await assert.rejects(fs.stat(path.join(root,'active.json')),{code:'ENOENT'});
+  assert.equal(await legacyActive(),null);
+  await store.atomicJson(path.join(root,'active.json'),{job_id:null});
+  await assert.rejects(legacyActive(),/job_id/);
+  assert.equal(await store.activeJob(),null);
+  assert.equal(await legacyActive(),null);
   await fs.writeFile(path.join(dir,'delivery.json'),Buffer.alloc(26));
   const delivery=await store.readDelivery(id);
   assert.equal(delivery.status,'AMBIGUOUS');
@@ -24,6 +34,7 @@ try{
   await store.setState(id,{job_id:id,status:'RUNNING'});
   await fs.writeFile(path.join(root,'active.json'),Buffer.alloc(75));
   assert.equal(await store.activeJob(),id);
+  assert.equal(await legacyActive(),id);
   const other=randomUUID();await fs.mkdir(store.jobDir(other));await store.setState(other,{job_id:other,status:'RUNNING'});
   await fs.writeFile(path.join(root,'active.json'),Buffer.alloc(75));
   await assert.rejects(store.activeJob(),/multiplos jobs ativos/);

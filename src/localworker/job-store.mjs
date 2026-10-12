@@ -100,7 +100,9 @@ export async function activeJob(runtimeRoot = ROOT) {
   const jobsDir=path.join(runtimeRoot,'jobs');
   try {
     const active = await readJson(activeFile);
-    if(active.job_id===null)return null;
+    // Ausencia e o formato vazio aceito tambem pelos servidores MCP legados.
+    // Migrar null evita getState(null) em um processo ainda carregado em memoria.
+    if(active.job_id===null){await fs.rm(activeFile,{force:true});return null;}
     if(!JOB_ID_J4R.test(active.job_id??''))throw new SyntaxError('active schema invalid');
     const state = await readJson(path.join(jobsDir,active.job_id,'state.json'));
     return TERMINAL.has(state.status) ? null : active.job_id;
@@ -121,7 +123,8 @@ export async function activeJob(runtimeRoot = ROOT) {
       }
       if(candidates.length>1)throw Error('WORKER_INFRA_ERROR: multiplos jobs ativos; indice nao reconstruido');
       const id=candidates[0]??null;
-      await atomicJson(activeFile,{job_id:id,recovered_at:new Date().toISOString(),prior_sha256:hash,preserved_artifact:path.basename(backup)});
+      if(id)await atomicJson(activeFile,{job_id:id,recovered_at:new Date().toISOString(),prior_sha256:hash,preserved_artifact:path.basename(backup)});
+      else await fs.rm(activeFile,{force:true}); // Backup sincronizado preserva a evidencia.
       return id;
     }
     throw error;
