@@ -107,5 +107,5 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `1052acd9f91c77d80d673a25d00faddfaf4eb54938f1d91d782ae62ba7ea23d5` |
-| `src/agents.supervisor.md` | `b9f832d57347fee3c3da45ebb5cc2214689bfc01113d1006d843756eb66d8165` |
+| `src/agents.supervisor.md` | `ae815b8f6edac6421a87ff15ec1df746cfc29b832963be431c17a1aa3cc32fc4` |
 <!-- LOCALWORKER_GENERATED_END -->
