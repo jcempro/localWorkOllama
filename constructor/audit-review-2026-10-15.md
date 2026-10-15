@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa somente seis deles; não substitui o aceite dos outros 61.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa nove deles; não substitui o aceite dos outros 58.
 
 ## Segmento 01
 
@@ -20,3 +20,17 @@ Aceite **parcial com correções do supervisor**: falha de precisão semântica,
 A afirmação do relatório de que todos os jobs eram somente leitura e nenhum alterou arquivos foi rejeitada. Permissão, execução, mudança líquida e autoria são fatos distintos; os campos ausentes não autorizam inferir nenhum deles. O comando patch bem-sucedido contradiz a generalização, mas não demonstra por si só todo o conteúdo/qualidade do patch. A seção Git determinística do **job auditor** é `main...origin/main` limpo neste repositório; não descreve o blog histórico. O recorte de 29ac7c19 registra `dev...origin/dev [ahead 11]` e alterações herdadas, sem atribuir todas ao job.
 
 Causas já cobertas pelos controles anteriores: contrato não cumprido, exploração em vez de efeito, ausência de segmentação/execução obrigatória; sequências determinísticas recuperaram unidades delimitadas. Não há, nesses seis registros, prova de novo defeito de permissões ou do parser Ollama. Precisão semântica permanece sujeita à revisão proporcional; não prometer infalibilidade de texto gerado. Nos próximos segmentos, incluir modo e limites de cobertura explicitamente e preferir extração determinística para campos mecânicos; não repetir este segmento para fabricar um relatório correto.
+
+## Segmento 02
+
+Job auditor `4c898543-0325-4a05-b1a9-5f8c8fbb6dae`: COMPLETED em 15/10 às 23:41:29 UTC; uma inferência, 13.382 tokens de entrada/599 de saída, nenhuma ferramenta ou escrita, como solicitado. Transporte MCP fechado na única chamada de resultado; leitura dos artefatos persistidos, sem nova inferência. A seção Git determinística é `main...origin/main` limpo, referente a este auditor, não ao estado histórico do repositório auditado.
+
+Aceite **parcial com correções**. Modo e contagens fornecidos reduziram as generalizações anteriores, mas o texto não citou as linhas solicitadas e contou incorretamente as tentativas de edição do terceiro registro. A revisão abaixo usa exclusivamente a mesma evidência fornecida, sem repetir exploração ou negócio.
+
+| ID | Retorno efetivo | Evidência e obrigação pendente |
+| --- | --- | --- |
+| d7a0443d | FAILED/WORKER_INCOMPLETE, resposta final sem inspeção após orientação explícita; read-only. | Zero read_file bem-sucedida; cinco leituras obrigatórias declaradas. Levantamento de gates FT-104/FT-105 não entregue. O recorte não contém eventos agrupados de ferramenta; a contagem e o diagnóstico são campos explícitos do inventário, não citações de linhas inexistentes. |
+| c783f2b4 | FAILED/WORKER_INCOMPLETE por ausência de progresso verificável; write/expect_changes=true. | Oito leituras bem-sucedidas; edit_file falhou na linha 20 por âncora ausente/não única. Leituras repetidas sem progresso nas linhas 44/52/67/70; test_accessible pendente na linha 60; bloqueio de estratégia na 69. Zero mutações diretas/command exit0 comprovados. |
+| 567e8a54 | FAILED/WORKER_INCOMPLETE por ausência de progresso; write/expect_changes=true. | Seis leituras bem-sucedidas; **quatro erros de edit_file**, linhas 14/45/61/87, mais **uma recusa**, linha 29; não apenas duas tentativas. Bloqueios nas linhas 28/86. syntax pendente; zero mutações diretas/command exit0 comprovados. |
+
+Os bloqueios impediram falso sucesso e repetição ilimitada; não comprovam defeito de permissão. A âncora textual inválida e a repetição de leituras caracterizam estratégia improdutiva; não autorizam ampliar acesso automaticamente. A seção NEEDS_SUPERVISOR do auditor é uma recomendação textual sobre registros históricos, **não** reclassificação de seus error_kind nem prova de autorização ausente. Nenhum desses registros contém avaliação de risco, e WORKER_INCOMPLETE sozinho não determina sua causa. Recuperações posteriores ficam indeterminadas neste recorte. A correção da omissão de citações/contagens usa extração determinística dos campos já registrados, sem redelegar a mesma análise ou relaxar guardas.
