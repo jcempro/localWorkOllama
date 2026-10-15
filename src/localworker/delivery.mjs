@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { jobDir, getState, readJson, readDelivery, atomicJson, atomicText } from "./job-store.mjs";
 import { withJobControl } from "./job-control.mjs";
+import { observeContinuityU6C, latestContinuityTurnU6C, callbackReasonU6C, captureContinuityU6C } from "./continuity.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 export async function codexCommand() {
@@ -46,8 +47,20 @@ export function queueMessage(id, state) {
     "Compare afirmações sobre o estado Git com a seção ESTADO GIT DETERMINÍSTICO do resultado e corrija qualquer divergência.",
     `Se o transporte MCP estiver fechado, leia apenas os artefatos persistidos em ${dir} (state.json e result.md ou error.txt) para obter o resultado, sem reiniciar a análise.`,
     "Se houver WORKER_INFRA_ERROR, diagnostique a causa e corrija a integração ou o ambiente dentro do escopo autorizado; não refaça a tarefa delegada no supervisor.",
-    "Não reinicie este job nem repita exploração recuperável. Em falha ou resultado incompleto, identifique estágio e causa pelas evidências; corrija dentro do escopo autorizado e crie NOVO job pequeno e verificável com mudança material documentada, reaproveitando resultados parciais. Não reiniciar não proíbe nova unidade corrigida; não peça autorização redundante nem repita cegamente as mesmas condições. Preserve limites, permissões e a proibição de o Worker manter a si próprio.",
+    "Não reinicie este job nem repita exploração recuperável. Em falha ou resultado incompleto, identifique estágio e causa pelas evidências; corrija dentro do escopo autorizado e crie NOVO job pequeno e verificável com mudança material documentada, reaproveitando resultados parciais. Não reiniciar não proíbe nova unidade corrigida; não peça autorização redundante nem repita cegamente as mesmas condições. Preserve limites e permissões. Manutenção própria somente sob SW-HYBRID explicitamente adotado e contrato válido, nunca em C>7; sem adoção permanece o veto.",
   ].join(" ");
+}
+
+const codexHomeU6C = () => process.env.LOCAL_CODEX_HOME ?? process.env.CODEX_HOME ?? path.join(os.homedir(),".codex");
+async function assertCallbackU6C(request,id) {
+  let reason;
+  try {
+    const authorization = await readJson(path.join(jobDir(id),"delivery-authorization.json")).catch(error=>{if(error.code==="ENOENT")return null;throw error;});
+    if(authorization && (authorization.job_id!==id || authorization.thread_id!==request.thread_id || authorization.repoPath!==request.repoPath))throw Error("CALLBACK_AUTHORIZATION_TARGET_MISMATCH");
+    const lease=authorization?.continuity ?? request.continuity;
+    reason=callbackReasonU6C(lease,await observeContinuityU6C(),latestContinuityTurnU6C(codexHomeU6C(),request.thread_id,request.repoPath));
+  } catch { reason="CALLBACK_AUTHORIZATION_UNVERIFIABLE"; }
+  if(reason)throw Object.assign(new Error(reason),{code:"USER_PAUSED"});
 }
 
 async function queueInChat(request, id, state) {
@@ -55,6 +68,7 @@ async function queueInChat(request, id, state) {
   if (!Array.isArray(preArgs) || preArgs.some(value => typeof value !== "string")) throw new Error("LOCAL_CODEX_PREARGS_JSON inválido");
   const codexHome = process.env.LOCAL_CODEX_HOME ?? process.env.CODEX_HOME ?? path.join(os.homedir(), ".codex");
   const command = await codexCommand();
+  await assertCallbackU6C(request,id); // Recheck immediately before queue; no launch on refusal.
   return new Promise((resolve, reject) => {
     const child = spawn(command, [...preArgs,
       "queue", "-C", request.repoPath, "--thread", request.thread_id, "--message", queueMessage(id, state),
@@ -96,6 +110,12 @@ async function deliverLocked(id) {
       await notify("localWorker: retomada pendente", `Job ${id}: informe a conversa de origem.`, "error");
       return { status: "BLOCKED_NO_THREAD" };
     }
+    try { await assertCallbackU6C(request,id); }
+    catch(error) {
+      if(error.code!=="USER_PAUSED")throw error;
+      const paused={status:"PAUSED_USER",paused_at:new Date().toISOString(),reason:error.message,thread_id:request.thread_id,not_sent:true};
+      await atomicJson(deliveryFile,paused);return paused;
+    }
     await atomicJson(deliveryFile, { status: "STARTED", started_at: new Date().toISOString(), pid: process.pid, thread_id: request.thread_id });
     try {
       const acknowledgement = await queueInChat(request, id, state);
@@ -103,6 +123,10 @@ async function deliverLocked(id) {
       await notify("localWorker concluído", `Job ${id}: retomada enviada ao chat de origem.`);
       return { status: "QUEUED_TO_CHAT" };
     } catch (error) {
+      if(error.code==="USER_PAUSED") {
+        const paused={status:"PAUSED_USER",paused_at:new Date().toISOString(),reason:error.message,thread_id:request.thread_id,not_sent:true};
+        await atomicJson(deliveryFile,paused);return paused;
+      }
       await atomicText(path.join(dir, "delivery-error.txt"), String(error?.stack ?? error) + "\n");
       const definitelyNotSent = error?.code === "ENOENT";
       await atomicJson(deliveryFile, {
@@ -117,6 +141,21 @@ async function deliverLocked(id) {
     await lock.close();
     await fs.rm(lockFile, { force: true });
   }
+}
+
+// Explicit human authorization only: does not restart inference or replay uncertain sends.
+export async function resumeDelivery(id) {
+  await withJobControl(id,async()=>{
+    const current=await readDelivery(id);
+    if(current.status!=="PAUSED_USER" || current.not_sent!==true)throw Error("RESUME_REQUIRES_PROVEN_UNSENT_PAUSED_CALLBACK");
+    const request=await readJson(path.join(jobDir(id),"request.json"));
+    const continuity=await captureContinuityU6C(request,codexHomeU6C());
+    const reason=callbackReasonU6C(continuity,await observeContinuityU6C(),latestContinuityTurnU6C(codexHomeU6C(),request.thread_id,request.repoPath));
+    if(reason)throw Error(reason);
+    await atomicJson(path.join(jobDir(id),"delivery-authorization.json"),{schema:1,job_id:id,thread_id:request.thread_id,repoPath:request.repoPath,continuity,reason:"EXPLICIT_RESUME"});
+    await atomicJson(path.join(jobDir(id),"delivery.json"),{status:"PENDING"});
+  });
+  return deliver(id);
 }
 
 export async function recoverMissingCliDelivery(id) {
@@ -141,7 +180,7 @@ export async function recoverMissingCliDelivery(id) {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const action = process.argv[2] === "recover-missing-cli" ? recoverMissingCliDelivery : deliver;
+  const action = process.argv[2] === "resume" ? resumeDelivery : process.argv[2] === "recover-missing-cli" ? recoverMissingCliDelivery : deliver;
   const id = action === deliver ? process.argv[2] : process.argv[3];
   action(id).catch(error => { console.error(error); process.exitCode = 1; });
 }

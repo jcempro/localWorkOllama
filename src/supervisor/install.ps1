@@ -56,7 +56,7 @@ try{
   try{$ownsS8R=$installMutexS8R.WaitOne(0)}catch [Threading.AbandonedMutexException]{$ownsS8R=$true}
   if(-not $ownsS8R){throw 'Runtime ativo; instalacao pode ser repetida depois sem interrupcao.'}
   [IO.File]::WriteAllText((Join-Path $Target 'install-owner.json'),(@{threadId=$ThreadId;repoPath=[IO.Path]::GetFullPath($RepoPath)}|ConvertTo-Json),$utfS8R)
-$filesS8R=@('core.mjs','core.mts','rpc.mjs','rpc.mts','receipts.mjs','receipts.mts','run.mjs','run.mts','platform.ps1','install.ps1')
+$filesS8R=@('continuity.mts','continuity.mjs','continuity.ps1','core.mjs','core.mts','rpc.mjs','rpc.mts','receipts.mjs','receipts.mts','run.mjs','run.mts','platform.ps1','install.ps1')
 foreach($nameS8R in $filesS8R){
   if(-not(Test-Path -LiteralPath (Join-Path $PSScriptRoot $nameS8R) -PathType Leaf)){throw 'Fonte incompleta.'}
   if($nameS8R.EndsWith('.mjs')){& $NodeExe --check (Join-Path $PSScriptRoot $nameS8R);if($LASTEXITCODE -ne 0){throw 'Fonte JS invalida.'}}
@@ -91,7 +91,7 @@ if(Test-Path -LiteralPath $configFileS8R){[IO.File]::Replace(($configFileS8R+'.n
 $recoveryS8R=Join-Path $Target 'worker-recovery'
 New-Item -ItemType Directory -Path $recoveryS8R -Force|Out-Null
 $manifestS8R=@()
-$workerFilesS8R=@('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1')
+$workerFilesS8R=@('AGENTS.md','config.json','package.json','package-lock.json','server.mjs','delegation-policy.mts','delegation-policy.mjs','continuity.mts','continuity.mjs','continuity.ps1','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1')
 foreach($nameS8R in $workerFilesS8R){$fromS8R=Join-Path $WorkerHome $nameS8R;$toS8R=Join-Path $recoveryS8R $nameS8R;Copy-Item -LiteralPath $fromS8R -Destination $toS8R -Force;$manifestS8R+=@{name=$nameS8R;sha256=(Get-FileHash -LiteralPath $toS8R -Algorithm SHA256).Hash.ToLowerInvariant()}}
 [IO.File]::WriteAllText((Join-Path $recoveryS8R 'manifest.json'),(@{schema=1;files=$manifestS8R}|ConvertTo-Json -Depth 8),$utfS8R)
 $commandS8R='"'+$psS8R+'" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "'+(Join-Path $Target 'platform.ps1')+'" -Action Tick -Config "'+(Join-Path $Target 'config.json')+'"'
@@ -101,6 +101,7 @@ $vbsS8R='Set shell = CreateObject("WScript.Shell")'+"`r`n"+'WScript.Quit shell.R
 if($LASTEXITCODE -ne 0){throw 'Prontidao nao comprovada; tarefa nao registrada.'}
 & $psS8R -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $Target 'platform.ps1') -Action Register -Config (Join-Path $Target 'config.json')
 if($LASTEXITCODE -ne 0){throw 'Registro de tarefa falhou.'}
+Write-Output "Continuidade requer Resume explicito; instalacao nao rearma eventos de outra sessao."
 Write-Output "Instalado: $Target; tarefa: $prefixS8R; intervalo gratuito: $ScanMinutes min."
 Write-Output "Cobertura exclusiva: conversa $ThreadId, repositorio $RepoPath. Outras conversas requerem registro proprio."
 }finally{if($ownsS8R){$installMutexS8R.ReleaseMutex()};$installMutexS8R.Dispose()}

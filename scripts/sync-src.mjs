@@ -11,7 +11,7 @@ const START_A3C = '<!-- LOCALWORKER_GENERATED_START -->';
 const END_A3C = '<!-- LOCALWORKER_GENERATED_END -->';
 const RUNTIME_A3C = [
   'AGENTS.md', 'config.json', 'package.json', 'package-lock.json',
-  'server.mjs', 'delegation-policy.mts', 'delegation-policy.mjs', 'thread-check.mjs', 'job-store.mjs', 'job-control.mjs', 'context-manager.mjs','progress-guard.mjs', 'worker-core.mjs',
+  'server.mjs', 'delegation-policy.mts', 'delegation-policy.mjs', 'continuity.mts', 'continuity.mjs', 'continuity.ps1', 'thread-check.mjs', 'job-store.mjs', 'job-control.mjs', 'context-manager.mjs','progress-guard.mjs', 'worker-core.mjs',
   'worker-runner.mjs', 'delivery.mjs', 'watchdog.mjs', 'monitor.mjs', 'monitor-page.mjs', 'mcp-config.mjs', 'mcp-call.mjs', 'notify.ps1',
   'install.ps1', 'update-installed.ps1', 'register-watchdog.ps1', 'watchdog-launch.vbs.template',
 ];
@@ -83,6 +83,14 @@ const inventory = [];
 // Nova guarda: fonte TS é canônica; artefato instalado não recebe edição manual.
 const policySource = await fs.readFile(path.join(ROOT_A3C, 'localworker/delegation-policy.mts'), 'utf8');
 await putOrCompare('localworker/delegation-policy.mjs', Buffer.from(stripTypeScriptTypes(policySource, {mode:'strip'})));
+const continuitySource = await fs.readFile(path.join(ROOT_A3C,'localworker/continuity.mts'),'utf8');
+const continuityCompiled = Buffer.from(stripTypeScriptTypes(continuitySource,{mode:'strip'}));
+await putOrCompare('localworker/continuity.mjs',continuityCompiled);
+for(const [name,bytes] of [['continuity.mts',Buffer.from(continuitySource)],['continuity.mjs',continuityCompiled],['continuity.ps1',await fs.readFile(path.join(ROOT_A3C,'localworker/continuity.ps1'))]]) {
+  await putOrCompare(`supervisor/${name}`,bytes);
+  await putOrCompare(`src/supervisor/${name}`,bytes);
+  inventory.push({target:`src/supervisor/${name}`,sha256:createHash('sha256').update(canonical(bytes)).digest('hex')});
+}
 // Manifesto positivo do componente opcional; nunca copiar configuração privada.
 for (const name of ['core.mts', 'rpc.mts', 'receipts.mts', 'run.mts', 'platform.ps1', 'install.ps1', 'README.md']) {
   const bytes = await fs.readFile(path.join(ROOT_A3C, 'supervisor', name));

@@ -7,9 +7,11 @@ import { DatabaseSync } from 'node:sqlite';
 
 const execU6C = promisify(execFile);
 const ROOT_U6C = path.dirname(fileURLToPath(import.meta.url));
+const WINDOWS_ROOT_U6C = process.env.SystemRoot ?? process.env.WINDIR;
 export async function observeContinuityU6C() {
   if (process.platform !== 'win32') return {schema:1,bootId:null,desktopInstance:null,reason:'PLATFORM_OBSERVATION_UNAVAILABLE'};
-  const exe = path.join(process.env.SystemRoot ?? 'C:\\Windows','System32','WindowsPowerShell','v1.0','powershell.exe');
+  if(!WINDOWS_ROOT_U6C)throw Error('WINDOWS_ROOT_UNAVAILABLE');
+  const exe = path.join(WINDOWS_ROOT_U6C,'System32','WindowsPowerShell','v1.0','powershell.exe');
   const {stdout} = await execU6C(exe,['-NoProfile','-NonInteractive','-File',path.join(ROOT_U6C,'continuity.ps1')],
     {windowsHide:true,timeout:15_000,maxBuffer:16_384});
   const value = JSON.parse(stdout.replace(/^\uFEFF/,''));
@@ -21,7 +23,7 @@ export function latestContinuityTurnU6C(codexHome: string, threadId: string, rep
   const db = new DatabaseSync(path.join(codexHome,'state_5.sqlite'),{readOnly:true});
   try {
     const row:any=db.prepare('SELECT cwd,archived FROM threads WHERE id=?').get(threadId);
-    const norm=(p:string)=>path.resolve(p.replace(/^\\\\\?\\/,''))[process.platform==='win32'?'toLowerCase':'toString']();
+    const norm=(p:string)=>{const value=path.resolve(p.replace(/^\\\\\?\\/,''));return process.platform==='win32'?value.toLowerCase():value;};
     if(!row || row.archived || norm(row.cwd)!==norm(repoPath)) throw Error('CONTINUITY_TARGET_UNAVAILABLE');
   } finally {db.close();}
   const history = new DatabaseSync(path.join(codexHome,'thread_history_1.sqlite'),{readOnly:true});

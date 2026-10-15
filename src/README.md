@@ -48,7 +48,7 @@ Contrato por job: `provided_evidence={source,content}` opcional somente em `read
 | Pré-argumentos do CLI | `LOCAL_CODEX_PREARGS_JSON`; somente cenários controlados. |
 | Pasta de jobs, recuperação e latência | Derivadas do diretório instalado; não editar manualmente. |
 | Recuperação de anomalias | `-WatchdogIntervalMinutes` ou `-IntervalMinutes` no registro da tarefa; padrão 2 minutos. A conclusão normal chama `codex queue` diretamente, sem aguardar esse intervalo. |
-| Retenção do histórico | `LOCAL_WORKER_HISTORY_DAYS` (90), `LOCAL_WORKER_HISTORY_MAX_JOBS` (500), `LOCAL_WORKER_HISTORY_MAX_BYTES` (536870912) e `LOCAL_WORKER_HISTORY_MAX_TOTAL_JOBS` (1000). A limpeza verifica a cada 6 h e só remove jobs terminais com entrega `QUEUED_TO_CHAT`; jobs ativos, pendentes e ambíguos são preservados. Ao chegar ao teto total, tenta limpar elegíveis e, se persistir, impede novo job com diagnóstico. |
+| Retenção do histórico | `LOCAL_WORKER_HISTORY_DAYS` (90), `LOCAL_WORKER_HISTORY_MAX_JOBS` (500), `LOCAL_WORKER_HISTORY_MAX_BYTES` (536870912) e `LOCAL_WORKER_HISTORY_MAX_TOTAL_JOBS` (1000). A limpeza verifica a cada 6 h e só remove jobs terminais com entrega `QUEUED_TO_CHAT` ou `PAUSED_USER` comprovadamente não enviada (`not_sent=true`); jobs ativos, pendentes e ambíguos são preservados. Ao chegar ao teto total, tenta limpar elegíveis e, se persistir, impede novo job com diagnóstico. |
 | Log operacional por job | `MAX_AUDIT_LOG_BYTES_K9P` (2 MiB) e `AUDIT_LOG_TAIL_BYTES_K9P` (1 MiB) no topo de `worker-runner.mjs`; compactação registra o evento e preserva a cauda recente, sem afetar resultado/estado. |
 | Limites da UI/API | `MAX_EVENTS_M7Q` (2000 eventos recentes por detalhe), `MAX_LIST_LIMIT_M7Q` (100 linhas por resposta), `PAGE_LIMIT_M7Q` (50 linhas por página); constantes no topo de `monitor.mjs`/script de `monitor-page.mjs`. Se houver mais eventos que o limite, a timeline mostra os mais recentes em ordem cronológica. |
 | Tempos de observação | `STALE_HEARTBEAT_MS_M7Q` (90 s), `WAIT_MODEL_MS_M7Q` (180 s), `WATCHDOG_INTERVAL_MS_M7Q` (60 s), `DETAIL_REFRESH_MS_M7Q` (3 s), `INDEX_REFRESH_MS_M7Q` (10 s), carência de órfão `ORPHAN_GRACE_MS_W8K` (120 s). Alterar somente com validação proporcional e atualização do guia. |
@@ -85,48 +85,52 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/supervisor/continuity.mts` | `b801c10bf06068960aacbe714fffe9682c8133ceb4cb357f68b44d98b139ed2e` |
-| `src/supervisor/continuity.mjs` | `010bf1306e9cfd8b95e7e5ebae5c2e5f99334c71207412c938f2c1cf7b4ab180` |
+| `src/supervisor/continuity.mts` | `11a8e59dbf5f0d67973a5899904523ab4cb76b69132e6751334e356a101a530b` |
+| `src/supervisor/continuity.mjs` | `dd7994e000e3af7cfb54a90509368e7d1d84b75ce2f94598486e1045e769e9c3` |
 | `src/supervisor/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
-| `src/supervisor/core.mts` | `142cd02bc7150645b8830ffdf9cdd0a2c4346a9236e79bdc53dbae207013db9f` |
-| `src/supervisor/core.mjs` | `1620e13577602620527966005223c0d67b0aec9a6fe3fdb92b46b5ec2f0a76c3` |
+| `src/supervisor/core.mts` | `6e6026c6ba621969683d34f8aa1b465e2ab4ef18e953f2738231b2932406ddd9` |
+| `src/supervisor/core.mjs` | `f7bb067bc49f36754c62cba3685f5436111beba3c69dbaf66989a99de0c48402` |
 | `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
 | `src/supervisor/rpc.mjs` | `6745f678c8c2c629c9cc27f42f0a162ad26b7608310a84a7676924d6dbe23fe0` |
 | `src/supervisor/receipts.mts` | `472334c7fb986d5aed3023aea120477f0954e6cd611b4aea413a781adb402b5d` |
 | `src/supervisor/receipts.mjs` | `168438d24b63e9fa0bd2fd54a6466b2ed655cffc1303186b9b395a9c00a51d1d` |
-| `src/supervisor/run.mts` | `fac1743d4aa3c85b8617fe66b6e89dbab467cec34bb3d2f79223b66c8e57f59f` |
-| `src/supervisor/run.mjs` | `1a6467142dc9e08d44a87463b725476acad84e556dd219885d53bea34bcb5a12` |
-| `src/supervisor/platform.ps1` | `29c8ec7e74d63e96ebc42bc6dee2c0a021576084569962b85cf20f435f0f2b49` |
-| `src/supervisor/install.ps1` | `33143c0dcea6428666b225d4b6581d02606cc5316abd70096bd2a67b8fc12555` |
-| `src/supervisor/README.md` | `c15ca5110318b742365e7c452208a47e7625646d72535734e4cd2c18968fcad3` |
-| `src/localworker/AGENTS.md` | `761b4cd5ed7bad0cde1b1243ca184a82741da03cefb65d55ab8d546e268b3b01` |
+| `src/supervisor/run.mts` | `97c521e8be6aa1a7e4613529cc5c7929516d6c9cad2c929bf7ac77de5299003c` |
+| `src/supervisor/run.mjs` | `192fd249c8990f043917a96e16a5f9bf6b967818c59146f80cbc3cb933e33a83` |
+| `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
+| `src/supervisor/install.ps1` | `7e7157fe7d5f5a9fd481ed9a9830febe3728c22b5316078f6c44a07467afc434` |
+| `src/supervisor/README.md` | `44acf8bfc339f287ce8910a3eda08d878d4f82c42dadce666d750ce1925dced7` |
+| `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `f1fb0dbc0c9db58ac98dcd59a47642856403a6304ca1bee7a9acd86d1cb25384` |
+| `src/localworker/server.mjs` | `b184e17df90d43600f92e007a4d81f4d09fb13f8524d5d785a9cd5c917538f8d` |
 | `src/localworker/delegation-policy.mts` | `c4954d25b0e7e2d3542a33a30c7881544091fd4cf2b30499f4e906d2955f8993` |
 | `src/localworker/delegation-policy.mjs` | `b0e99d7a88d51f8df32d99d3b686b82521062515ee684d37f9a3eac9f98f9e4f` |
-| `src/localworker/continuity.mts` | `b801c10bf06068960aacbe714fffe9682c8133ceb4cb357f68b44d98b139ed2e` |
-| `src/localworker/continuity.mjs` | `010bf1306e9cfd8b95e7e5ebae5c2e5f99334c71207412c938f2c1cf7b4ab180` |
+| `src/localworker/continuity.mts` | `11a8e59dbf5f0d67973a5899904523ab4cb76b69132e6751334e356a101a530b` |
+| `src/localworker/continuity.mjs` | `dd7994e000e3af7cfb54a90509368e7d1d84b75ce2f94598486e1045e769e9c3` |
 | `src/localworker/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `12d3218db2187b1b8e50c599d523692151e9e0c48b646f294ce09ff86ef9dba9` |
+| `src/localworker/job-store.mjs` | `77a7c43f613fdf3a4c9209dbbf5c65f431aa1d99a09a98383363326a7a227ed2` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `55785153652cfb3f10208b4627e210fa088256fdad9085c807b610fba6663174` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
-| `src/localworker/delivery.mjs` | `c45dace916fca7de5dc17d6c7089c23bc36ed3ba0422121bfcf63d7c67f25920` |
+| `src/localworker/delivery.mjs` | `5a3bd36fc10af1f4678124e67d2fbecc08c28583b97399e2b4e613d9ee4aa91c` |
 | `src/localworker/watchdog.mjs` | `208d32ac905bbceb57dca6a06fb4af93790c8393b9f40f9d59dc6e2374dcd984` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
 | `src/localworker/monitor-page.mjs` | `c9f7b66a1afc7134a406bb3670e3c0e1a7832af57edd493d9234523f3c88ac8f` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `c87f4ac83c56dcd8e9e70b6d2cb1b9235037acbbaf695a37a4ed8972524ff60a` |
-| `src/localworker/update-installed.ps1` | `4e147ad658ed26a9e56a2604c9c5317bcb4025e5464c57cce1f5bf12efe43795` |
+| `src/localworker/install.ps1` | `d037f8562cea072f5d609c800afee6c5834ea46bfed0e917faa0f783ce11895b` |
+| `src/localworker/update-installed.ps1` | `2a884ee01bece4138eef4dabaf7bc3c35ce14700d8f33c3471e55e448a62a92b` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `eca58197999e5bd62167b5c72b0d06528d4b0c8545112fdc5714c6befa89d4bd` |
+| `src/agents.supervisor.md` | `67aac8aea0de83f1f2d11b547adc19a26dc043cd483909b610ea8139925fbff3` |
 <!-- LOCALWORKER_GENERATED_END -->
+
+## Continuidade U6C
+
+`localworker/continuity.mts` e `continuity.ps1`: fonte comum de observação somente leitura, gerada em JS e espelhada também em `supervisor/`; não dependem da árvore de desenvolvimento. Não há parâmetro para ignorar intenção. SystemRoot/WINDIR vêm do SO; CODEX_HOME/LOCAL_CODEX_HOME localizam metadados; Worker e SR-001 seguem seus diretórios instalados. Identidades bootId/desktopInstance/originTurnId/generation são capturadas, nunca editadas manualmente. `continuity.json` privado por conversa: ACTIVE/PAUSED, motivo, sessão, geração, horário; PAUSED_USER em evento/entrega não é COMPLETED. `delivery-authorization.json` privado por job só é criado por retomada explícita de callback comprovadamente não enviado. `platform.ps1 -Action Pause|Resume -Config <config.json>` controla SR-001; `delivery.mjs resume <job_id>` controla entrega pausada sem reexecutar job. Instalar não rearma legado. Consulte os comandos sequenciais e limitações no howto e no README do supervisor.

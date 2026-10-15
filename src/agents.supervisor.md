@@ -193,6 +193,8 @@ e, salvo autorização expressa:
 
 ## Ativação automática no Codex Desktop
 
+Intenção humana prevalece sobre retomada: boot/logon, app fechado, quota baixa ou histórico pendente não autorizam abrir interfaces nem continuar conversa. Não reabra Desktop encerrado. Fechamento/reabertura, nova sessão do SO, turno interrompido/substituído ou autorização incerta exigem pausa, preservando resultados. Aplique FT-CONTINUITY-U6C instalada; SR-001 usa Pause/Resume explícitos pelo `platform.ps1` daquela instalação/conversa. Não rearme em boot/logon, callback automático ou inferência sobre intenção. Na retomada humana, aproveite resultado persistido antes de criar outro job; não reenvie callback já aceito/ambíguo. Ausência de API que diferencie crash/fechamento exige diagnóstico conservador, nunca presunção de autorização.
+
 A preferência pelo `localWorker` vale em toda conversa nova ou retomada no Codex Desktop, sem nova solicitação do usuário.
 
 Uma sessão MCP pode manter módulos antigos após atualização dos arquivos. Se houver erro anterior à criação do job, comprovadamente incompatível com a instalação já corrigida, use a ponte instalada para iniciar o servidor atualizado. Primeiro confirme que o pedido não criou job nem efeito; chamada de resultado que falhou não comprova resultado obtido. Execução ou envio incerto exige reconciliar evidências antes de nova unidade, sem replay cego nem fallback pago.

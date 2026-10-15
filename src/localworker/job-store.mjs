@@ -6,6 +6,7 @@ import { randomUUID, createHash } from "node:crypto";
 export const ROOT = path.dirname(fileURLToPath(import.meta.url));
 export const JOBS = path.join(ROOT, "jobs");
 export const TERMINAL = new Set(["COMPLETED", "FAILED", "CANCELLED"]);
+const resolvedForRetentionU6C = delivery => delivery.status === "QUEUED_TO_CHAT" || delivery.status === "PAUSED_USER" && delivery.not_sent === true;
 const JOB_ID_J4R = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 const HISTORY_DAYS_J4R = Number(process.env.LOCAL_WORKER_HISTORY_DAYS ?? 90);
 const HISTORY_MAX_JOBS_J4R = Number(process.env.LOCAL_WORKER_HISTORY_MAX_JOBS ?? 500);
@@ -222,7 +223,7 @@ export async function pruneJobHistory({ force = false, now = Date.now() } = {}) 
         const retiredDir = path.join(JOBS, entry.name);
         const [state, delivery] = await Promise.all([readJson(path.join(retiredDir, "state.json")),
           readJson(path.join(retiredDir, "delivery.json"))]);
-        if (state.job_id !== retiredId || !TERMINAL.has(state.status) || delivery.status !== "QUEUED_TO_CHAT") continue;
+        if (state.job_id !== retiredId || !TERMINAL.has(state.status) || !resolvedForRetentionU6C(delivery)) continue;
         await safeJobBytesJ4R(retiredDir);
         await fs.rm(retiredDir, { recursive: true, force: true });
         removed.push(retiredId);
@@ -234,7 +235,7 @@ export async function pruneJobHistory({ force = false, now = Date.now() } = {}) 
         const [state, delivery, bytes] = await Promise.all([
           getState(id), readJson(path.join(dir, "delivery.json")), safeJobBytesJ4R(dir),
         ]);
-        if (state.job_id !== id || !TERMINAL.has(state.status) || delivery.status !== "QUEUED_TO_CHAT") continue;
+        if (state.job_id !== id || !TERMINAL.has(state.status) || !resolvedForRetentionU6C(delivery)) continue;
         const completed = Date.parse(state.completed_at ?? "");
         if (!Number.isFinite(completed) || completed > now) continue;
         eligible.push({ id, dir, completed, bytes });
@@ -248,7 +249,7 @@ export async function pruneJobHistory({ force = false, now = Date.now() } = {}) 
       if (!expired && retained <= HISTORY_MAX_JOBS_J4R && totalBytes <= HISTORY_MAX_BYTES_J4R) continue;
       try {
         const [state, delivery] = await Promise.all([getState(item.id), readJson(path.join(item.dir, "delivery.json"))]);
-        if (state.job_id !== item.id || !TERMINAL.has(state.status) || delivery.status !== "QUEUED_TO_CHAT") continue;
+        if (state.job_id !== item.id || !TERMINAL.has(state.status) || !resolvedForRetentionU6C(delivery)) continue;
         await safeJobBytesJ4R(item.dir);
         const retired = path.join(JOBS, `.retired-${item.id}`);
         await fs.rename(item.dir, retired);

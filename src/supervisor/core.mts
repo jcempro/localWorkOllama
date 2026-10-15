@@ -96,8 +96,15 @@ export function responseEvidence(event: any, turns: any[]) {
 
 // Todas as mutações passam por save antes de efeitos não idempotentes.
 export async function advance(event: any, io: any, now: number) {
-  if (['COMPLETED','RESOLVED_EXTERNALLY'].includes(event.status)) return event;
+  if (['COMPLETED','RESOLVED_EXTERNALLY','PAUSED_USER'].includes(event.status)) return event;
   const save = async (patch: any) => { Object.assign(event, patch, { updatedAt: now }); await io.save(event); };
+  const allowed=async()=>{
+    if(!io.continuity){await save({status:'PAUSED_USER',diagnostic:'AUTHORIZATION_GATE_MISSING'});return false;}
+    const decision=await io.continuity(event);
+    if(decision.allowed)return true;
+    await save({status:'PAUSED_USER',diagnostic:decision.reason});return false;
+  };
+  if(!await allowed())return event;
   // Recuperar recibo enquanto a fila ainda retém a mensagem, mesmo durante backoff.
   if(event.sendStartedAt&&!event.messageClientId&&io.reconcileReceipt){
     const receipt=await io.reconcileReceipt(event);
@@ -132,11 +139,13 @@ export async function advance(event: any, io: any, now: number) {
       return event;
     }
     await io.ready(event.target);
+    if(!await allowed())return event;
     // Prontidao pode demorar: revalidar antes do unico efeito de envio.
     if(event.interruptedTurnId && !await io.incidentCurrent(event.interruptedTurnId)){
       await save({status:'RESOLVED_EXTERNALLY',diagnostic:'NEWER_TURN_SUPERSEDES_QUOTA_FAILURE'});return event;
     }
     const baselineTurns = (await io.turns(event.target)).map((t: any) => t.id);
+    if(!await allowed())return event;
     stage='send';
     await save({ status: 'SENDING', baselineTurns, dispatchObservedAt: now, sendStartedAt: io.now(),
       attempts: event.attempts + 1,sendAttempts:(event.sendAttempts??0)+1 });

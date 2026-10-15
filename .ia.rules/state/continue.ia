@@ -1,0 +1,2 @@
+FT-CONTINUITY-U6C: proteção da intenção humana implementada e testada; instalar e validar tarefas/arquivos reais sem reabrir Desktop nem enviar mensagens. Plano/evidência: constructor/continuity-intent-plan.md e constructor/continuity-intent-validation.md. C=8, execução exclusiva do supervisor.
+Depois: auditoria dos 67 jobs posteriores à captura anterior, reaproveitando constructor/audit-private/2026-10-15-current/inventory.json. Achados delimitados: 0ceda154 CONTEXT_CAPACITY; 4cb8cc24 runner ausente. Não repetir negócio delegado nem reiniciar jobs.

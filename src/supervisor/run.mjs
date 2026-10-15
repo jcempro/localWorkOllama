@@ -7,6 +7,8 @@ import { DatabaseSync } from 'node:sqlite';
 import { connect } from './rpc.mjs';
 import { planCycles, planQuotaFailure, advance, digest, responseEvidence } from './core.mjs';
 import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn, latestTurn, pendingQueue } from './receipts.mjs';
+import { observeContinuityU6C, sessionReasonU6C } from './continuity.mjs';
+import { randomUUID } from 'node:crypto';
 
 const ROOT_S8R = path.dirname(fileURLToPath(import.meta.url));
 const readJson = async (p        ) => JSON.parse((await fs.readFile(p, 'utf8')).replace(/^\uFEFF/, ''));
@@ -66,12 +68,66 @@ async function repairWorker(config     ) {
 }
 
 async function main() {
-  if (process.argv.includes('--help')) { console.log('Executar via platform.ps1 -Action Tick -Config <config.json>; --probe é somente prontidão; --test-event agenda teste real autorizado sem alterar a cota.'); return; }
+  if (process.argv.includes('--help')) { console.log('platform.ps1 -Action Tick|Pause|Resume -Config <config.json>; Resume rearma somente a sessão aberta atual; --probe nunca abre Desktop; --test-event exige autorização ativa.'); return; }
   const config = await readJson(path.join(ROOT_S8R,'config.json'));
   if (config.schema !== 1 || !/^[\da-f-]{36}$/i.test(config.threadId)) throw new Error('INVALID_CONFIG');
   if (!process.argv.includes('--probe') && process.env.SUPERVISOR_MUTEX_S8R !== config.mutexName) throw new Error('USE_CANONICAL_MUTEX_LAUNCHER');
   await safeRoot(ROOT_S8R); await safeRoot(config.repoPath); assertThread(config);
   await fs.mkdir(path.join(ROOT_S8R,'events'),{recursive:true}); await safeRoot(path.join(ROOT_S8R,'events'));
+  const controlFile=path.join(ROOT_S8R,'continuity.json');
+  let control=await readJson(controlFile).catch((error    )=>{if(error.code==='ENOENT')return {schema:1,mode:'PAUSED',reason:'MIGRATION_REQUIRES_EXPLICIT_RESUME'};throw error;});
+  const observation=process.argv.includes('--pause')?null:await observeContinuityU6C();
+  if(process.argv.includes('--pause') || process.argv.includes('--resume')){
+    if(process.argv.includes('--resume') && !observation.desktopInstance)throw Error('DESKTOP_CLOSED_OR_UNAVAILABLE');
+    control={schema:1,mode:process.argv.includes('--resume')?'ACTIVE':'PAUSED',reason:process.argv.includes('--resume')?'EXPLICIT_RESUME':'EXPLICIT_PAUSE',
+      session:observation,generation:randomUUID(),authorizedAt:Date.now()};
+    await atomic(controlFile,control);
+    if(control.mode==='ACTIVE'){
+      const origin=latestTurn(config);
+      for(const name of await fs.readdir(path.join(ROOT_S8R,'events'))){
+        if(!/^[a-f0-9]{64}\.json$/.test(name))continue;
+        const file=path.join(ROOT_S8R,'events',name),event=await readJson(file);
+        if(event.status==='PAUSED_USER' && !event.sendStartedAt && event.originTurnId===origin?.id &&
+            origin?.status==='failed' && origin.error?.codexErrorInfo==='usageLimitExceeded'){
+          await atomic(file,{...event,status:'SCHEDULED',continuity:{generation:control.generation},reauthorizedAt:Date.now()});
+        }
+      }
+    }
+    console.log(JSON.stringify({status:control.mode,reason:control.reason}));return;
+  }
+  const continuity=async(event     )=>{
+    const current=await readJson(controlFile).catch((error    )=>{if(error.code==='ENOENT')return null;throw error;});
+    let reason=current?.mode==='ACTIVE'?sessionReasonU6C(current.session,await observeContinuityU6C()):'EXPLICIT_RESUME_REQUIRED';
+    if(!reason && event?.continuity?.generation!==current.generation && event)reason='EVENT_AUTHORIZATION_EXPIRED';
+    if(!reason && event && !event.sendStartedAt){
+      const latest=latestTurn(config);
+      if(!latest || latest.id!==event.originTurnId)reason='NEWER_TURN_SUPERSEDES_EVENT';
+      else if(latest.status==='completed' || latest.status==='interrupted')reason='ORIGIN_TURN_FINISHED_OR_STOPPED';
+      else if(latest.status==='failed' && latest.error?.codexErrorInfo!=='usageLimitExceeded')reason='ORIGIN_TURN_FAILED_WITHOUT_QUOTA_CAUSE';
+    }
+    if(!reason && event?.sendStartedAt){
+      const latest=latestTurn(config);
+      const received=event.messageClientId?correlatedTurn(config,event.messageClientId):null;
+      if(!latest || latest.id!==event.originTurnId && latest.id!==received?.id)reason='NEWER_TURN_SUPERSEDES_EVENT';
+      else if(latest.id===event.originTurnId && latest.status==='interrupted')reason='ORIGIN_TURN_FINISHED_OR_STOPPED';
+    }
+    return {allowed:!reason,reason};
+  };
+  if(!process.argv.includes('--probe')){
+    const reason=control.mode==='ACTIVE'?sessionReasonU6C(control.session,observation):control.reason;
+    if(reason){
+      control={...control,mode:'PAUSED',reason,pausedAt:control.pausedAt??Date.now()};await atomic(controlFile,control);
+      for(const name of await fs.readdir(path.join(ROOT_S8R,'events'))){
+        if(!/^[a-f0-9]{64}\.json$/.test(name))continue;
+        const file=path.join(ROOT_S8R,'events',name),event=await readJson(file);
+        if(!['COMPLETED','RESOLVED_EXTERNALLY','PAUSED_USER'].includes(event.status))await atomic(file,{...event,priorStatus:event.status,status:'PAUSED_USER',diagnostic:reason,updatedAt:Date.now()});
+        if(!control.unscheduled)await platform(config,'Unschedule',['-EventId',event.id]);
+      }
+      if(!control.unscheduled){control.unscheduled=true;await atomic(controlFile,control);}
+      await atomic(path.join(ROOT_S8R,'status.json'),{schema:1,status:'PAUSED_USER',diagnostic:reason,checkedAt:Date.now()});
+      console.log(JSON.stringify({status:'PAUSED_USER',reason}));return;
+    }
+  }
   // Confirmacao local independe da API/rede e do backoff de recuperacao.
   // Nao existe efeito de envio neste caminho; prova exige clientId exato.
   if(!process.argv.includes('--probe'))for(const name of await fs.readdir(path.join(ROOT_S8R,'events'))){
@@ -96,6 +152,7 @@ async function main() {
     const target = {threadId:config.threadId,repoPath:config.repoPath,accountKey};
     const io = {
       now:Date.now, save: (e     )=>atomic(path.join(ROOT_S8R,'events',`${e.id}.json`),e),
+      continuity,
       identity:async(t     )=>{if(JSON.stringify(t)!==JSON.stringify(target))throw new Error('TARGET_CHANGED');assertThread(config);},
       quota:()=>rpc.read('account/rateLimits/read'),
       incidentCurrent:async(id        )=>latestTurn(config)?.id===id,
@@ -107,6 +164,7 @@ async function main() {
       },
       recoverDesktop:()=>platform(config,'Desktop'),
       restoreConversation:async(event     )=>{
+        if(!(await continuity(event)).allowed)return null;
         if(!pendingQueue(config,event))return null;
         const desktop=JSON.parse(await platform(config,'Desktop'));
         if(typeof desktop.desktopInstance!=='string')throw new Error('DESKTOP_INSTANCE_UNAVAILABLE');
@@ -144,7 +202,7 @@ async function main() {
         }catch(error     ){if(error.code==='ENOENT')error.code='SEND_NOT_STARTED';throw error;}finally{observer.close();}
       },
     };
-    if(process.argv.includes('--probe')){await io.ready();console.log(JSON.stringify({status:'READY',threadId:config.threadId,auth:'chatgpt',worker:'MCP_AND_MODEL_READY'}));return;}
+    if(process.argv.includes('--probe')){await io.ready();console.log(JSON.stringify({status:'READY',threadId:config.threadId,auth:'chatgpt',worker:'MCP_AND_MODEL_READY',continuity:control.mode}));return;}
     const now=Date.now();
     let discoveryError               =null;
     let detected       =[];
@@ -158,16 +216,20 @@ async function main() {
     const ledger=await readJson(ledgerPath).catch((error     )=>{if(error.code==='ENOENT')return {schema:1,windows:{}};throw error;});
     try {
       const snapshot=await io.quota();
-      detected=planCycles(snapshot,target,ledger,existing,now);
+      const origin=latestTurn(config);
+      const pending=origin && (origin.status==='inProgress' || origin.status==='in_progress' || origin.status==='failed'&&origin.error?.codexErrorInfo==='usageLimitExceeded');
+      detected=pending?planCycles(snapshot,target,ledger,existing,now):[];
       const merged=[...existing.filter(e=>!detected.some(d=>d.id===e.id)),...detected];
-      for(const recovery of planQuotaFailure(snapshot,target,latestTurn(config),merged,now)){
+      for(const recovery of pending?planQuotaFailure(snapshot,target,origin,merged,now):[]){
         detected=detected.filter(e=>e.id!==recovery.id);detected.push(recovery);
       }
+      detected=detected.filter(e=>!existing.some(p=>p.id===e.id && (p.status==='PAUSED_USER'||p.continuity?.generation!==control.generation)));
+      detected=detected.map(e=>({...e,originTurnId:origin.id,continuity:{generation:control.generation}}));
     } catch(error     ) { discoveryError=String(error.message).slice(0,300); }
     if(process.argv.includes('--test-event')) {
       const testId=process.argv.find(v=>v.startsWith('--test-id='))?.slice(10)??'installation-test';
       if(!/^[a-z0-9-]{1,64}$/.test(testId))throw new Error('INVALID_TEST_ID');
-      detected.push({schema:1,id:digest([target,testId]),target,window:{test:true,testId},dueAt:Math.ceil(now/1000)*1000+60_000,detectedAt:now,status:'SCHEDULED',attempts:0});
+      detected.push({schema:1,id:digest([target,testId]),target,window:{test:true,testId},dueAt:Math.ceil(now/1000)*1000+60_000,detectedAt:now,status:'SCHEDULED',attempts:0,originTurnId:latestTurn(config)?.id,continuity:{generation:control.generation}});
     }
     const eventNames=await fs.readdir(path.join(ROOT_S8R,'events'));
     if(eventNames.filter(n=>/^[a-f0-9]{64}\.json$/.test(n)).length>=512){detected=[];discoveryError='EVENT_RETENTION_CAP_REQUIRES_REVIEW';}
@@ -185,10 +247,10 @@ async function main() {
       const event=await readJson(file); if(name!==`${event.id}.json`)throw new Error('EVENT_ID_MISMATCH');
       await advance(event,io,now);
       summary.push({id:event.id,status:event.status,dueAt:event.dueAt,nextAttemptAt:event.nextAttemptAt??null});
-      if(!['COMPLETED','RESOLVED_EXTERNALLY'].includes(event.status))await platform(config,'Schedule',['-EventId',event.id,'-DueAt',String(Math.max(event.dueAt,event.nextAttemptAt??0))]);
+      if(!['COMPLETED','RESOLVED_EXTERNALLY','PAUSED_USER'].includes(event.status))await platform(config,'Schedule',['-EventId',event.id,'-DueAt',String(Math.max(event.dueAt,event.nextAttemptAt??0))]);
       else {
         await platform(config,'Unschedule',['-EventId',event.id]);
-        if(now-(event.updatedAt??event.dueAt)>90*86400_000)await fs.unlink(file);
+        if(now-(event.updatedAt??event.dueAt)>90*86400_000 && (event.status!=='PAUSED_USER'||!event.sendStartedAt))await fs.unlink(file);
       }
     }
     await atomic(path.join(ROOT_S8R,'status.json'),{schema:1,status:discoveryError?'TELEMETRY_RETRY':'MONITORING',checkedAt:now,diagnostic:discoveryError,events:summary});

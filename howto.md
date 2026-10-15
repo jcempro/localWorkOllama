@@ -18,7 +18,7 @@ No PowerShell, a partir da raiz obtida deste repositório:
 
 Atualizações do Desktop podem mudar o caminho versionado de `codex.exe`: a instalação e cada passagem recuperam automaticamente um CLI disponível pelos mecanismos de descoberta já instalados. Não edite manualmente o hash da pasta. Se nenhuma alternativa válida existir, o estado registra `CODEX_CLI_UNAVAILABLE` e preserva os eventos para recuperação posterior.
 
-Se o último turno já falhou com o código verificável `usageLimitExceeded`, a instalação também cobre esse incidente: aguarda reset+60s se a cota continuar limitada, ou retoma na próxima passagem se a restauração já ocorreu. Essa recuperação tardia fica identificada no evento e não é apresentada como disparo pontual no passado. Um turno novo iniciado manualmente antes do envio resolve a pendência sem outro `continue`.
+Com autorização U6C vigente, se o último turno falhou com o código verificável `usageLimitExceeded`, a recuperação também cobre esse incidente: aguarda reset+60s se a cota continuar limitada, ou retoma na próxima passagem se a restauração já ocorreu. Essa recuperação tardia fica identificada no evento e não é apresentada como disparo pontual no passado. Um turno novo iniciado manualmente antes do envio resolve a pendência sem outro `continue`.
 
 ```powershell
 $ConversaS8R = Read-Host 'ID confirmado da conversa original no Codex Desktop'
@@ -26,11 +26,30 @@ $RepositorioS8R = Read-Host 'Caminho absoluto do projeto associado a essa conver
 & ./src/supervisor/install.ps1 -ThreadId $ConversaS8R -RepoPath $RepositorioS8R
 ```
 
+A abertura/fechamento manual e a intenção humana prevalecem sobre recuperação. Para autorizar retomadas futuras de trabalho pendente na sessão aberta, informe o diretório retornado pelo instalador; `Resume` não envia mensagem imediatamente. Use `Pause` para suspender explicitamente:
+
+```powershell
+$DestinoU6C = Read-Host 'Diretório instalado desta conversa'
+$ConfigU6C = Join-Path $DestinoU6C 'config.json'
+& (Join-Path $DestinoU6C 'platform.ps1') -Action Resume -Config $ConfigU6C
+& (Join-Path $DestinoU6C 'platform.ps1') -Action Pause -Config $ConfigU6C
+```
+
+Reboot, fechamento/reabertura do Desktop, turno interrompido/substituído ou observação incerta pausam a autorização; abrir o aplicativo novamente não rearma eventos antigos. O script nunca abre Desktop fechado. Em Windows, `continuity.ps1` observa boot e janela/PID/início; outras plataformas ficam bloqueadas por falta de observação implementada. Sem prova da causa de fechamento não se presume crash. `PAUSED_USER` preserva resultados/recibos, sem falso sucesso; uma nova autorização humana permite recuperação compatível. Mensagens já aceitas na fila nativa não têm revogação disponível no CLI verificado; não se altera SQLite para apagá-las.
+
+Callbacks de jobs novos vinculam sessão, Desktop e turno originador, sem depender de SR-001. Para reaproveitar resultado após pausa, consulte-o no chat original; não reinicie inferência. Somente para callback comprovadamente não enviado (`PAUSED_USER`, `not_sent=true`), existe retomada explícita, sem replay de envio aceito/ambíguo:
+
+```powershell
+$WorkerU6C = Read-Host 'Diretório instalado do Worker'
+$JobU6C = Read-Host 'ID confirmado do job pausado'
+node (Join-Path $WorkerU6C 'delivery.mjs') resume $JobU6C
+```
+
 O ID deve ser obtido e confirmado pelas ferramentas do Desktop, junto ao diretório; não use exemplo ou ID de outro chat. O instalador verifica a identidade na API. `-Target`, `-CodexHome`, `-WorkerHome`, `-NodeExe`, `-CodexExe`, `-OllamaExe` e `-ScanMinutes` permitem caminhos/intervalo específicos. A instalação normal usa descoberta de executáveis e `CODEX_HOME`/`LOCAL_WORKER_HOME` quando definidos. Autentique-se no próprio Desktop antes de instalar; não cole tokens em arquivos.
 
-A tarefa de detecção executa a cada 2 minutos e no logon; ao atingir o limiar cria tarefa exclusiva no timestamp oficial de restauração +60s. `status.json` e `events/` no destino informado pelo instalador registram operação, impedimentos e confirmação. Verifique uma vez a prontidão com `node <destino>/run.mjs --probe`, substituindo `<destino>` pelo path real instalado. Scripts e configurações canônicos estão integralmente em [src/supervisor](src/supervisor/README.md), incluindo interfaces e comandos de diagnóstico/teste.
+A instalação começa pausada. A tarefa de detecção faz observação gratuita a cada 2 minutos, sem logon/boot nem despertar do SO; somente trabalho pendente sob autorização U6C válida pode criar tarefa no timestamp oficial de restauração +60s. `status.json` e `events/` no destino informado pelo instalador registram operação, impedimentos e confirmação. Verifique uma vez a prontidão com `node <destino>/run.mjs --probe`, substituindo `<destino>` pelo path real instalado. Scripts e configurações canônicos estão integralmente em [src/supervisor](src/supervisor/README.md), incluindo interfaces e comandos de diagnóstico/teste.
 
-Uma conversa pode permanecer não carregada depois de reiniciar o Desktop. Se o `continue` exato ainda estiver na fila daquele chat, o script ativa seu destino pela rota nativa registrada `codex://threads/<ID confirmado>`, sem enviar outra mensagem. Isso pode selecionar o chat original na UI, uma vez por evento/instância do aplicativo; não abre console transitório. Sem protocolo ou recibo correlacionável, registra impedimento. Ativar o chat não é sucesso: só a resposta final sem erro e com identidade confirmada permite `COMPLETED`.
+Somente na mesma sessão/instância autorizada, se o `continue` exato ainda estiver na fila daquele chat, o script pode ativar seu destino pela rota nativa registrada `codex://threads/<ID confirmado>`, sem enviar outra mensagem. Isso pode selecionar o chat original na UI, uma vez por evento/instância do aplicativo; não abre console transitório. Sem protocolo ou recibo correlacionável, registra impedimento. Ativar o chat não é sucesso: só a resposta final sem erro e com identidade confirmada permite `COMPLETED`.
 
 Não há garantia de pontualidade de um Windows desligado, sem logon ou sem rede. Login que exige pessoa permanece bloqueio explícito. Um recibo sem identidade de mensagem não permite atribuir inequivocamente a resposta ao envio: o estado será `RESPONSE_OBSERVED_UNCORRELATED`, nunca `COMPLETED` presumido. O script não repete envio ambíguo. Tarefas de outros componentes e arquivos pessoais são preservados. Remoção/desativação, retenção e recuperação estão no contrato vinculado; o Worker continua independente deste componente.
 
@@ -235,7 +254,7 @@ Quando a unidade de implementação tem arquivos-alvo definidos, passe caminhos 
 
 ## 4. Registrar o watchdog
 
-O watchdog recupera jobs persistidos após logon e verifica anomalias a cada 2 minutos por padrão. A conclusão normal notifica o chat diretamente; esse intervalo não impõe espera ao job nem consome tokens do supervisor. Use os mesmos caminhos da instalação:
+O watchdog verifica silenciosamente dados/jobs e anomalias a cada 2 minutos por padrão; logon não autoriza abrir interfaces ou retomar conversas. Callbacks exigem vínculo U6C válido. A conclusão normal notifica o chat diretamente; esse intervalo não impõe espera ao job nem consome tokens do supervisor. Use os mesmos caminhos da instalação:
 
 ```powershell
 & (Join-Path $Source 'src/localworker/register-watchdog.ps1') -Target $WorkerHome -NodePath $NodeExe
@@ -463,6 +482,8 @@ e, salvo autorização expressa:
 
 ## Ativação automática no Codex Desktop
 
+Intenção humana prevalece sobre retomada: boot/logon, app fechado, quota baixa ou histórico pendente não autorizam abrir interfaces nem continuar conversa. Não reabra Desktop encerrado. Fechamento/reabertura, nova sessão do SO, turno interrompido/substituído ou autorização incerta exigem pausa, preservando resultados. Aplique FT-CONTINUITY-U6C instalada; SR-001 usa Pause/Resume explícitos pelo `platform.ps1` daquela instalação/conversa. Não rearme em boot/logon, callback automático ou inferência sobre intenção. Na retomada humana, aproveite resultado persistido antes de criar outro job; não reenvie callback já aceito/ambíguo. Ausência de API que diferencie crash/fechamento exige diagnóstico conservador, nunca presunção de autorização.
+
 A preferência pelo `localWorker` vale em toda conversa nova ou retomada no Codex Desktop, sem nova solicitação do usuário.
 
 Uma sessão MCP pode manter módulos antigos após atualização dos arquivos. Se houver erro anterior à criação do job, comprovadamente incompatível com a instalação já corrigida, use a ponte instalada para iniciar o servidor atualizado. Primeiro confirme que o pedido não criou job nem efeito; chamada de resultado que falhou não comprova resultado obtido. Execução ou envio incerto exige reconciliar evidências antes de nova unidade, sem replay cego nem fallback pago.
@@ -498,6 +519,8 @@ O instalador copia `src/localworker/AGENTS.md` para `$WorkerHome\AGENTS.md`. O a
 
 ```markdown
 # Worker local
+
+FT-CONTINUITY-U6C: fechamento do Desktop, reboot, interrupção/pausa humana ou mudança do turno não autorizam reabrir app/conversa. Preserve resultados; callbacks exigem autorização de sessão/instância/turno válida. Não rearme nem contorne pausa, não infira intenção pela ausência de processo. Inferência em curso e monitorização silenciosa seguem contratos próprios; a entrega não autoriza novo trabalho após revogação.
 
 Worker subordinado ao supervisor. Execute estritamente a tarefa recebida, somente dentro de sua alçada.
 
@@ -597,50 +620,50 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/supervisor/continuity.mts` | `b801c10bf06068960aacbe714fffe9682c8133ceb4cb357f68b44d98b139ed2e` |
-| `src/supervisor/continuity.mjs` | `010bf1306e9cfd8b95e7e5ebae5c2e5f99334c71207412c938f2c1cf7b4ab180` |
+| `src/supervisor/continuity.mts` | `11a8e59dbf5f0d67973a5899904523ab4cb76b69132e6751334e356a101a530b` |
+| `src/supervisor/continuity.mjs` | `dd7994e000e3af7cfb54a90509368e7d1d84b75ce2f94598486e1045e769e9c3` |
 | `src/supervisor/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
-| `src/supervisor/core.mts` | `142cd02bc7150645b8830ffdf9cdd0a2c4346a9236e79bdc53dbae207013db9f` |
-| `src/supervisor/core.mjs` | `1620e13577602620527966005223c0d67b0aec9a6fe3fdb92b46b5ec2f0a76c3` |
+| `src/supervisor/core.mts` | `6e6026c6ba621969683d34f8aa1b465e2ab4ef18e953f2738231b2932406ddd9` |
+| `src/supervisor/core.mjs` | `f7bb067bc49f36754c62cba3685f5436111beba3c69dbaf66989a99de0c48402` |
 | `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
 | `src/supervisor/rpc.mjs` | `6745f678c8c2c629c9cc27f42f0a162ad26b7608310a84a7676924d6dbe23fe0` |
 | `src/supervisor/receipts.mts` | `472334c7fb986d5aed3023aea120477f0954e6cd611b4aea413a781adb402b5d` |
 | `src/supervisor/receipts.mjs` | `168438d24b63e9fa0bd2fd54a6466b2ed655cffc1303186b9b395a9c00a51d1d` |
-| `src/supervisor/run.mts` | `fac1743d4aa3c85b8617fe66b6e89dbab467cec34bb3d2f79223b66c8e57f59f` |
-| `src/supervisor/run.mjs` | `1a6467142dc9e08d44a87463b725476acad84e556dd219885d53bea34bcb5a12` |
-| `src/supervisor/platform.ps1` | `29c8ec7e74d63e96ebc42bc6dee2c0a021576084569962b85cf20f435f0f2b49` |
-| `src/supervisor/install.ps1` | `33143c0dcea6428666b225d4b6581d02606cc5316abd70096bd2a67b8fc12555` |
-| `src/supervisor/README.md` | `c15ca5110318b742365e7c452208a47e7625646d72535734e4cd2c18968fcad3` |
-| `src/localworker/AGENTS.md` | `761b4cd5ed7bad0cde1b1243ca184a82741da03cefb65d55ab8d546e268b3b01` |
+| `src/supervisor/run.mts` | `97c521e8be6aa1a7e4613529cc5c7929516d6c9cad2c929bf7ac77de5299003c` |
+| `src/supervisor/run.mjs` | `192fd249c8990f043917a96e16a5f9bf6b967818c59146f80cbc3cb933e33a83` |
+| `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
+| `src/supervisor/install.ps1` | `7e7157fe7d5f5a9fd481ed9a9830febe3728c22b5316078f6c44a07467afc434` |
+| `src/supervisor/README.md` | `44acf8bfc339f287ce8910a3eda08d878d4f82c42dadce666d750ce1925dced7` |
+| `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `f1fb0dbc0c9db58ac98dcd59a47642856403a6304ca1bee7a9acd86d1cb25384` |
+| `src/localworker/server.mjs` | `b184e17df90d43600f92e007a4d81f4d09fb13f8524d5d785a9cd5c917538f8d` |
 | `src/localworker/delegation-policy.mts` | `c4954d25b0e7e2d3542a33a30c7881544091fd4cf2b30499f4e906d2955f8993` |
 | `src/localworker/delegation-policy.mjs` | `b0e99d7a88d51f8df32d99d3b686b82521062515ee684d37f9a3eac9f98f9e4f` |
-| `src/localworker/continuity.mts` | `b801c10bf06068960aacbe714fffe9682c8133ceb4cb357f68b44d98b139ed2e` |
-| `src/localworker/continuity.mjs` | `010bf1306e9cfd8b95e7e5ebae5c2e5f99334c71207412c938f2c1cf7b4ab180` |
+| `src/localworker/continuity.mts` | `11a8e59dbf5f0d67973a5899904523ab4cb76b69132e6751334e356a101a530b` |
+| `src/localworker/continuity.mjs` | `dd7994e000e3af7cfb54a90509368e7d1d84b75ce2f94598486e1045e769e9c3` |
 | `src/localworker/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `12d3218db2187b1b8e50c599d523692151e9e0c48b646f294ce09ff86ef9dba9` |
+| `src/localworker/job-store.mjs` | `77a7c43f613fdf3a4c9209dbbf5c65f431aa1d99a09a98383363326a7a227ed2` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `55785153652cfb3f10208b4627e210fa088256fdad9085c807b610fba6663174` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
-| `src/localworker/delivery.mjs` | `c45dace916fca7de5dc17d6c7089c23bc36ed3ba0422121bfcf63d7c67f25920` |
+| `src/localworker/delivery.mjs` | `5a3bd36fc10af1f4678124e67d2fbecc08c28583b97399e2b4e613d9ee4aa91c` |
 | `src/localworker/watchdog.mjs` | `208d32ac905bbceb57dca6a06fb4af93790c8393b9f40f9d59dc6e2374dcd984` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
 | `src/localworker/monitor-page.mjs` | `c9f7b66a1afc7134a406bb3670e3c0e1a7832af57edd493d9234523f3c88ac8f` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `7b0b82af8abe603cb4f6ffbed93ac2d36c5c2d930ddca1ccc480fb62f53e6d5c` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `c87f4ac83c56dcd8e9e70b6d2cb1b9235037acbbaf695a37a4ed8972524ff60a` |
-| `src/localworker/update-installed.ps1` | `4e147ad658ed26a9e56a2604c9c5317bcb4025e5464c57cce1f5bf12efe43795` |
+| `src/localworker/install.ps1` | `d037f8562cea072f5d609c800afee6c5834ea46bfed0e917faa0f783ce11895b` |
+| `src/localworker/update-installed.ps1` | `2a884ee01bece4138eef4dabaf7bc3c35ce14700d8f33c3471e55e448a62a92b` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `eca58197999e5bd62167b5c72b0d06528d4b0c8545112fdc5714c6befa89d4bd` |
+| `src/agents.supervisor.md` | `67aac8aea0de83f1f2d11b547adc19a26dc043cd483909b610ea8139925fbff3` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

@@ -23,6 +23,7 @@ assert.throws(() => detect(quota(90, null), target, now), /RESET_TIME/);
 assert.equal(detect({ rateLimits: { primary: null } }, target, now).length, 0);
 let sent = 0, ready = 0, saved: any[] = [], turns: any[] = [];
 const io: any = { now: () => seed.dueAt, save: async (e: any) => saved.push(structuredClone(e)), identity: async () => {}, recoverDesktop: async () => {},
+  continuity:async()=>({allowed:true}),
   quota: async () => quota(1), ready: async () => { ready++; }, turns: async () => turns,
   send: async (_t: any, text: string) => { assert.equal(text, 'continue'); assert.equal(saved.at(-1).status, 'SENDING'); sent++; return { messageId: 'u1' }; } };
 await advance(structuredClone(seed), io, seed.dueAt - 1); assert.equal(sent, 0);
@@ -81,7 +82,7 @@ turns=[];let activated=0,desktopInstance='instance-a';
 const activationIo={...io,restoreConversation:async(event: any)=>{
   if(event.conversationActivation?.desktopInstance===desktopInstance)return null;
   activated++;return {desktopInstance,at:seed.dueAt,count:activated};
-}};
+},continuity:async()=>({allowed:desktopInstance==='instance-a',reason:'DESKTOP_INSTANCE_CHANGED'})};
 const beforeActivation=sent;
 let pending=await advance(structuredClone(seed),activationIo,seed.dueAt);
 assert.equal(pending.status,'SENT');assert.equal(activated,1);assert.equal(sent,beforeActivation+1);
@@ -89,9 +90,10 @@ pending=await advance(pending,activationIo,pending.nextAttemptAt);
 assert.equal(pending.status,'AWAITING_RESPONSE');assert.equal(activated,1);assert.equal(sent,beforeActivation+1);
 desktopInstance='instance-b';
 pending=await advance(pending,activationIo,pending.nextAttemptAt);
-assert.equal(activated,2);assert.equal(sent,beforeActivation+1);
+assert.equal(activated,1);assert.equal(pending.status,'PAUSED_USER');assert.equal(sent,beforeActivation+1);
+desktopInstance='instance-a';
 const restoreFailure={...activationIo,restoreConversation:async()=>{throw Error('DESKTOP_PROTOCOL_UNAVAILABLE');}};
 pending=await advance(structuredClone(seed),restoreFailure,seed.dueAt);
 assert.equal(pending.status,'CONFIRMATION_RETRY');assert.equal(pending.sendAttempts,1);
 await advance(pending,activationIo,pending.nextAttemptAt);assert.equal(pending.sendAttempts,1);
-console.log('PASS: conversa pendente ativada por instancia, reboot recuperado, falha rastreavel e sem reenvio');
+console.log('PASS: conversa autorizada ativada uma vez, nova instancia pausada, falha rastreavel e sem reenvio');

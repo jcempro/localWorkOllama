@@ -5,6 +5,7 @@ import { promises as fs } from "node:fs";
 import { spawn, execFile } from "node:child_process";
 import { promisify } from "node:util";
 import path from "node:path";
+import os from "node:os";
 import { fileURLToPath } from "node:url";
 import { createJob, getState, jobDir, readJson, setState } from "./job-store.mjs";
 import { assertTargetThread } from "./thread-check.mjs";
@@ -12,6 +13,7 @@ import { ensureMonitor, monitorUrl, monitorIndexUrl, monitorSnapshot, inventoryS
 import { reconcileJob } from "./watchdog.mjs";
 import { cancelJob, deleteJob } from "./job-control.mjs";
 import { authorizeMaintenanceS4W, MaintenancePolicyError } from "./delegation-policy.mjs";
+import { captureContinuityU6C } from "./continuity.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await fs.readFile(path.join(root, "config.json"), "utf8"));
@@ -90,7 +92,10 @@ server.registerTool("local_analyze", {
       throw error;
     }
     const monitor = await ensureMonitor();
-    const created = await createJob({ ...intent, git_root: await gitRoot(repo) });
+    const codexHome = process.env.LOCAL_CODEX_HOME ?? process.env.CODEX_HOME ?? path.join(os.homedir(),".codex");
+    const continuity = codexHome ? await captureContinuityU6C(intent,codexHome) :
+      {schema:1,bootId:null,desktopInstance:null,reason:"CODEX_HOME_UNVERIFIABLE"};
+    const created = await createJob({ ...intent, git_root: await gitRoot(repo), continuity });
     if (created.busy) return reply({ status: "WORKER_BUSY", job_id: created.job_id, monitor_url: monitorUrl(monitor, created.job_id), monitor_index_url: monitorIndexUrl(monitor) });
     const runnerDiagnostic = await fs.open(path.join(jobDir(created.job_id), "runner-stderr.log"), "a");
     const child = spawn(process.execPath, [path.join(root, "worker-runner.mjs"), created.job_id], {

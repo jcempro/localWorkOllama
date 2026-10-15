@@ -24,7 +24,7 @@ if (Test-Path -LiteralPath $activeFile) {
   }finally{Pop-Location;Remove-Item Env:LOCAL_WORKER_UPDATE_ROOT_R8Q}
 }
 $stamp = Get-Date -Format yyyyMMddHHmmss
-$files = @('AGENTS.md','server.mjs','delegation-policy.mts','delegation-policy.mjs','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1','package.json','package-lock.json')
+$files = @('AGENTS.md','server.mjs','delegation-policy.mts','delegation-policy.mjs','continuity.mts','continuity.mjs','continuity.ps1','thread-check.mjs','job-store.mjs','job-control.mjs','context-manager.mjs','progress-guard.mjs','worker-core.mjs','worker-runner.mjs','delivery.mjs','watchdog.mjs','monitor.mjs','monitor-page.mjs','mcp-config.mjs','mcp-call.mjs','notify.ps1','package.json','package-lock.json')
 $existingFiles = @()
 $newFiles = @()
 foreach ($name in $files) {

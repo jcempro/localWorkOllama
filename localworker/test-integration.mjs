@@ -26,6 +26,10 @@ const insertThread = codexDb.prepare("INSERT INTO threads (id, archived, cwd) VA
 insertThread.run(thread, 0, repo);
 insertThread.run(archivedThread, 1, repo);
 codexDb.close();
+const historyDbU6C = new DatabaseSync(path.join(codexHome,"thread_history_1.sqlite"));
+historyDbU6C.exec("CREATE TABLE thread_turns (thread_id TEXT, turn_id TEXT, status TEXT, error_json TEXT, started_at INTEGER, rollout_ordinal INTEGER)");
+historyDbU6C.prepare("INSERT INTO thread_turns VALUES (?, ?, 'completed', NULL, 1, 1)").run(thread,randomUUID());
+historyDbU6C.close();
 const queueLog = path.join(root, "jobs", `test-queue-${randomUUID()}.jsonl`);
 const maintenanceId = (await fs.readFile(path.join(root, "..", ".localworker-maintenance-id"), "utf8")).trim();
 const baseline = await new Promise((resolve, reject) => {
@@ -187,12 +191,11 @@ try {
   assert.match(orphanError, /runner ausente/);
   assert.match(orphanError, /ESTADO GIT DETERMINÍSTICO/);
   const orphanAgain = await rpc("tools/call", { name: "local_status", arguments: { job_id: orphanId } });
-  assert.equal(JSON.parse(orphanAgain.result.content[0].text).delivery, "QUEUED_TO_CHAT");
+  assert.equal(JSON.parse(orphanAgain.result.content[0].text).delivery, "PAUSED_USER"); // Legacy orphan has no session authorization.
   const queued = (await fs.readFile(queueLog, "utf8")).trim().split("\n").map(line => JSON.parse(line)).filter(item => item.thread === thread);
-  assert.equal(queued.length, 3);
+  assert.equal(queued.length, 2);
   assert.ok(queued.every(item => item.thread === thread && item.repo === repo));
   assert.match(queued[1].message, /FAILED/);
-  assert.match(queued[2].message, /FAILED/);
   assert.match(await fs.readFile(path.join(runtimeRoot, "jobs", failedId, "error.txt"), "utf8"), /WORKER_INFRA_ERROR/);
   const after = await new Promise((resolve, reject) => {
     const git = spawn("git", ["-C", repo, "status", "--porcelain=v1", "-uall"]);
