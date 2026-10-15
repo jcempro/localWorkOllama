@@ -1,0 +1,9 @@
+# FT-CONTEXT-DRAFT-C7M — continuidade após conclusão recusada
+
+Fonte: pedido vigente de compactação sem perda, investigação de todos os jobs e retomada de 15/10. Correção completa, documentação, testes e instalação autorizados no escopo da solicitação original. Não reiniciar jobs históricos nem repetir seu negócio.
+
+Diagnóstico concreto do supervisor: em 0ceda154 o runtime recusou a conclusão por leituras obrigatórias pendentes e reinseriu um relatório de 13.843 tokens no histórico ativo. A compactação preserva todo texto assistant como decisão; assim não consegue reduzir esse rascunho recusado, e a chamada seguinte é rejeitada por 32.848>32.768 tokens. A recusa de conclusão é correta; a retenção indiscriminada no contexto ativo é a lacuna. Estimativas não são tokenização exata; não aumentar janela nem reduzir reservas para mascarar o problema.
+
+C=8, exclusivamente supervisor: mudanças de preservação contextual podem afetar instruções/evidências e futuras operações. Worker não classifica risco nem mantém esta guarda. Menor unidade: distinguir explicitamente rascunhos de conclusão recusados; preservar conteúdo integral em checkpoint verificável e recuperável; deixar no contexto índice marcado sem aceite, instruções e evidências necessárias. Conclusões aceitas, normas, decisões consolidadas e ferramentas ainda não vistas permanecem sob proteção existente. Nenhum truncamento silencioso, perda de requisitos, replay, novo job ou reset de guardas.
+
+Fases: plano/FT; RCF; implementação cirúrgica no gerenciador e ponto de recusa; teste de regressão com resposta grande, checkpoint integral, feedback obrigatório preservado e conclusão no mesmo job; espelhos/howto e instalação idempotente. Testes usam somente o alvo autorizado, Ollama simulado e nenhuma mensagem real. Cada unidade concluída exige commit/push imediato.
