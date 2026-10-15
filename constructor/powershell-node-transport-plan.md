@@ -1,0 +1,7 @@
+# FT-INSTALL-STDIN-P5N — transporte PowerShell/Node
+
+Origem: instalação real da unidade D4S em Windows PowerShell 5.1. `update-installed.ps1` passa JavaScript com aspas duplas em argv `node -e`; o transporte legado remove as aspas, gerando SyntaxError antes da inspeção activeJob. Não houve cópia do runtime nessa tentativa. Não alterar active.json para contornar o bloqueio.
+
+C=8, execução exclusivamente pelo supervisor: instalação, autenticação, identidade e proteção de jobs ativos são controles transversais. Worker não participa desta manutenção. Correção mínima: transmitir código estático por stdin ao Node em três invocações existentes (guarda activeJob, descoberta Codex, prova de autenticação/identidade), preservando código, ambiente, cwd, diagnóstico e códigos de saída. Dados variáveis continuam em ambiente/configuração externa; não interpolar dados do usuário em código ou shell. Sem novo mecanismo concorrente, remoção de guarda, ativação de chats ou troca de configuração.
+
+Validação: parser PowerShell e fixture isolada no namespace privado, com job RUNNING recusado sem escrita de instalação e job terminal ultrapassando a guarda até a pré-condição config ausente. Conferir preservação de estados/resultados. Reexecutar instalação oficial real, atualizar as duas cópias/manifestos SR-001 e comparar hashes/configurações/pausa. Testes não reabrem Desktop nem enviam continue. Guardar evidências privadas e documentação sanitizada, regenerar src pelo mecanismo oficial e commit/push por unidade funcional.
