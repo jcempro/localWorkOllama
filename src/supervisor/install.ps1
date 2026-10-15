@@ -22,7 +22,7 @@ if(-not $CodexExe -or -not(Test-Path -LiteralPath $CodexExe -PathType Leaf)){
   $env:SUPERVISOR_DISCOVER_S8R=(@{workerHome=[IO.Path]::GetFullPath($WorkerHome);codex=$CodexExe}|ConvertTo-Json -Compress)
   Push-Location $PSScriptRoot
   try{
-    $foundS8R=& $NodeExe --input-type=module -e 'import {resolveCodex} from "./rpc.mjs"; console.log(await resolveCodex(JSON.parse(process.env.SUPERVISOR_DISCOVER_S8R)));'
+    $foundS8R='import {resolveCodex} from "./rpc.mjs"; console.log(await resolveCodex(JSON.parse(process.env.SUPERVISOR_DISCOVER_S8R)));' | & $NodeExe --input-type=module -
     if($LASTEXITCODE -ne 0){throw 'CODEX_CLI_UNAVAILABLE'}
     $CodexExe=($foundS8R|Select-Object -Last 1).Trim()
   }finally{Pop-Location;Remove-Item Env:SUPERVISOR_DISCOVER_S8R}
@@ -81,7 +81,7 @@ const c=JSON.parse(process.env.SUPERVISOR_INSTALL_CONFIG_S8R);const r=await conn
 try{const a=await r.read('account/read',{refreshToken:true});if(a.account?.type!=='chatgpt')throw Error('CHATGPT_LOGIN_REQUIRED');const t=(await r.read('thread/read',{threadId:c.threadId})).thread;if(t.id!==c.threadId||t.cwd.toLowerCase()!==c.repoPath.toLowerCase())throw Error('TARGET_MISMATCH');console.log(digest(a.account));}finally{r.close();}
 '@
 Push-Location $Target
-try{$identityS8R=& $NodeExe --input-type=module -e $probeS8R;if($LASTEXITCODE -ne 0){throw 'Falha na autenticacao/identidade.'}}finally{Pop-Location;Remove-Item Env:SUPERVISOR_INSTALL_CONFIG_S8R}
+try{$identityS8R=$probeS8R | & $NodeExe --input-type=module -;if($LASTEXITCODE -ne 0){throw 'Falha na autenticacao/identidade.'}}finally{Pop-Location;Remove-Item Env:SUPERVISOR_INSTALL_CONFIG_S8R}
 $cfgS8R.accountKey=($identityS8R|Select-Object -Last 1).Trim()
 if($oldS8R -and $oldS8R.accountKey -ne $cfgS8R.accountKey){throw 'Conta mudou; instalacao preservada sem ativacao.'}
 $configFileS8R=Join-Path $Target 'config.json'

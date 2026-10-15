@@ -18,7 +18,8 @@ if (Test-Path -LiteralPath $activeFile) {
   $env:LOCAL_WORKER_UPDATE_ROOT_R8Q=$target
   Push-Location $source
   try {
-    $activeId=& $node --input-type=module -e 'import {activeJob} from "./job-store.mjs"; console.log((await activeJob(process.env.LOCAL_WORKER_UPDATE_ROOT_R8Q))??"");'
+    # Stdin preserva aspas tambem no transporte nativo do Windows PowerShell 5.1.
+    $activeId='import {activeJob} from "./job-store.mjs"; console.log((await activeJob(process.env.LOCAL_WORKER_UPDATE_ROOT_R8Q))??"");' | & $node --input-type=module -
     if($LASTEXITCODE -ne 0){throw 'Indice ativo nao recuperavel: instalacao adiada com evidencia preservada.'}
     if(($activeId|Select-Object -Last 1)){throw 'Job ativo: instalação adiada.'}
   }finally{Pop-Location;Remove-Item Env:LOCAL_WORKER_UPDATE_ROOT_R8Q}
