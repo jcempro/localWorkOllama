@@ -1676,13 +1676,14 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
 
     if (calls.length === 0) {
       const finalText = String(message.content ?? "").trim();
+      const rejectedDraft = contextManager.rejectedDraft(message);
 
       // Impede resposta "de cabeça" sem examinar o repo.
       if (toolExecutions === 0 && !suppliedEvidence) {
         if (forcedInspection) throw new WorkerIncompleteError("WORKER_INCOMPLETE: resposta final sem inspeção bem-sucedida após orientação explícita.");
         forcedInspection = true;
 
-        messages.push(message);
+        messages.push(rejectedDraft);
         messages.push({
           role: "user",
           content:
@@ -1704,7 +1705,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
         const reason = `CONTRACT_UNFULFILLED: leituras pendentes=${JSON.stringify(missingReads)}; comandos pendentes=${JSON.stringify(missingCommands)}`;
         if (contractReminder || commandSequence.length) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: ${reason}`);
         contractReminder = true;
-        messages.push(message, {role:"user",content:`Conclusão recusada: ${reason}. Execute somente o que falta; Git/metadados não substituem leitura de conteúdo.`});
+        messages.push(rejectedDraft, {role:"user",content:`Conclusão recusada: ${reason}. Execute somente o que falta; Git/metadados não substituem leitura de conteúdo.`});
         await onProgress({phase:"completion_blocked", reason});
         continue;
       }
@@ -1716,7 +1717,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
           throw new WorkerIncompleteError(`WORKER_INCOMPLETE: alteração obrigatória não comprovada; caminhos inalterados: ${missingPaths.join(", ") || "nenhum"}; Git sem mudança líquida: ${Boolean(noNetGitChange)}. Última resposta: ${compact(finalText, 3000)}`);
         }
         forcedImplementation = true;
-        messages.push(message);
+        messages.push(rejectedDraft);
         messages.push({ role: "user", content: `A tarefa exige alteração líquida comprovada. Caminhos obrigatórios ainda inalterados: ${missingPaths.join(", ") || "nenhum"}. Git sem mudança líquida: ${Boolean(noNetGitChange)}. Corrija antes de concluir; se houver impedimento real, descreva-o em NEEDS_SUPERVISOR.` });
         await onProgress({ phase: "change_requirement", step: step + 1, missing_paths: missingPaths, no_net_git_change: Boolean(noNetGitChange) });
         continue;
@@ -1726,7 +1727,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
         const pending = [...failedValidations];
         if (forcedValidation) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: validações falharam e não passaram novamente: ${pending.join(", ")}. Última resposta: ${compact(finalText, 3000)}`);
         forcedValidation = true;
-        messages.push(message);
+        messages.push(rejectedDraft);
         messages.push({ role: "user", content: `Validações obrigatórias falharam: ${pending.join(", ")}. Corrija a causa e execute novamente cada comando até passar antes de concluir. Se houver impedimento real, documente-o; não declare teste falho como sucesso.` });
         await onProgress({ phase: "validation_requirement", step: step + 1, pending });
         continue;
@@ -1738,7 +1739,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
         if (commitContext.commits === 0 || pending.trim()) {
           if (commitContext.commitReminder) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: unidade funcional sem commit próprio ou com alterações pendentes; commits=${commitContext.commits}; pendências=${compact(pending, 1000)}`);
           commitContext.commitReminder = true;
-          messages.push(message);
+          messages.push(rejectedDraft);
           messages.push({ role: "user", content: "A unidade funcional validada requer commit próprio. Use git_commit_unit apenas nos arquivos produzidos neste job; não inclua alterações preexistentes. Se impedido, informe a causa exata ao supervisor." });
           continue;
         }

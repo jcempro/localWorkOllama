@@ -79,6 +79,26 @@ try {
   assert.match(dense[2].content, /Decisão necessária/);
   assert.match(dense[2].content, /Decisão 0/);
   assert.equal(await adaptive.prepare(dense, [], { forceCompaction: true }), false);
+  const rejected = new ContextManagerC7M(path.join(directory,"rejected-draft"),32768);
+  const publicDraft = "rascunho público sem aceite ".repeat(8000);
+  const draft = rejected.rejectedDraft({role:"assistant",content:publicDraft,thinking:"PRIVATE_SENTINEL"});
+  const draftMessages=[{role:"system",content:"NORMA INTEGRAL"},{role:"user",content:"OBJETIVO ORIGINAL"},
+    {role:"assistant",content:"DECISÃO CONSOLIDADA"},draft,{role:"user",content:"OBRIGAÇÃO PENDENTE: ler arquivo requerido"}];
+  const draftEvents=[];
+  assert.equal(await rejected.prepare(draftMessages,[],{forceCompaction:true},async event=>draftEvents.push(event)),true);
+  assert.equal(draftMessages[0].content,"NORMA INTEGRAL");
+  assert.equal(draftMessages[1].content,"OBJETIVO ORIGINAL");
+  assert.match(draftMessages[2].content,/DECISÃO CONSOLIDADA/);
+  assert.match(draftMessages[2].content,/OBRIGAÇÃO PENDENTE/);
+  assert.match(draftMessages[2].content,/RASCUNHO DE CONCLUSÃO RECUSADA/);
+  assert.equal(draftEvents.find(e=>e.phase==="context_compacted").rejected_drafts_archived,1);
+  const draftCheckpoint=JSON.parse(await fs.readFile(path.join(directory,"rejected-draft/context/c0001.json"),"utf8"));
+  const draftIndex=draftCheckpoint.entries.findIndex(e=>e.content===publicDraft);
+  assert.ok(draftCheckpoint.rejected_draft_entries.includes(draftIndex));
+  assert.ok(!JSON.stringify(draftCheckpoint).includes("PRIVATE_SENTINEL"));
+  let restored="",offset=0;
+  do {const page=JSON.parse(await rejected.recall("c0001",draftIndex,offset));assert.equal(page.rejected_draft,true);restored+=page.content;offset=page.next_offset;}while(offset!==null);
+  assert.equal(JSON.parse(restored).content,publicDraft);
   assert.match(PAGE_M7Q, /context_compactions/);
   assert.match(PAGE_M7Q, /function contextDiagnostic/);
   for (const script of PAGE_M7Q.split("<script>").slice(1)) new vm.Script(script.split("</script>")[0]);

@@ -112,9 +112,9 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `77a7c43f613fdf3a4c9209dbbf5c65f431aa1d99a09a98383363326a7a227ed2` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
-| `src/localworker/context-manager.mjs` | `a7697f5b88b1b327acd1baf0ba2298dbb82333dada34e4a08b05211684abcbe0` |
+| `src/localworker/context-manager.mjs` | `6648d72a76cdac96b9d5f84a84fdb8f9a05c0047ac35af640f298ddda15a8d54` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `55785153652cfb3f10208b4627e210fa088256fdad9085c807b610fba6663174` |
+| `src/localworker/worker-core.mjs` | `6746b60ce8f65691b891322d3c9e7bee55575a381487925eda7ab310ad0a33de` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `5a3bd36fc10af1f4678124e67d2fbecc08c28583b97399e2b4e613d9ee4aa91c` |
 | `src/localworker/watchdog.mjs` | `208d32ac905bbceb57dca6a06fb4af93790c8393b9f40f9d59dc6e2374dcd984` |
@@ -134,3 +134,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 ## Continuidade U6C
 
 `localworker/continuity.mts` e `continuity.ps1`: fonte comum de observação somente leitura, gerada em JS e espelhada também em `supervisor/`; não dependem da árvore de desenvolvimento. Não há parâmetro para ignorar intenção. SystemRoot/WINDIR vêm do SO; CODEX_HOME/LOCAL_CODEX_HOME localizam metadados; Worker e SR-001 seguem seus diretórios instalados. Identidades bootId/desktopInstance/originTurnId/generation são capturadas, nunca editadas manualmente. `continuity.json` privado por conversa: ACTIVE/PAUSED, motivo, sessão, geração, horário; PAUSED_USER em evento/entrega não é COMPLETED. `delivery-authorization.json` privado por job só é criado por retomada explícita de callback comprovadamente não enviado. `platform.ps1 -Action Pause|Resume -Config <config.json>` controla SR-001; `delivery.mjs resume <job_id>` controla entrega pausada sem reexecutar job. Instalar não rearma legado. Consulte os comandos sequenciais e limitações no howto e no README do supervisor.
+
+## Rascunho recusado e contexto
+
+`localworker/context-manager.mjs` distingue exclusivamente rascunhos explicitamente recusados pelo runtime; nenhuma opção do modelo/usuário marca decisões como descartáveis. Pressão contextual usa o checkpoint existente, com `rejected_draft_entries` opcional no schema v1; checkpoints anteriores continuam legíveis. Texto público completo, hash, objetivo/normas/feedback e decisões consolidadas são preservados conforme seu contrato; pensamento privado não é copiado. `context_recall` retorna `rejected_draft` e paginação já existente; campo falso não implica aceite. Eventos `context_compacted.rejected_drafts_archived` informam quantos rascunhos saíram do contexto ativo, sem publicar conteúdo. Sem parâmetro novo nem aumento automático de num_ctx; limites e reservas continuam os existentes. Fonte legada .mjs espelhada pelo mecanismo canônico, sem cópia manual na instalação.

@@ -1,0 +1,16 @@
+# FT-CONTEXT-DRAFT-C7M — evidência
+
+Plano/avaliação do supervisor: `context-rejected-draft-plan.md`, C=8/exclusivo. Worker não manteve a guarda. Alteração cirúrgica no gerenciador e nos cinco caminhos de conclusão recusada; limites, reservas, tentativas, commit/leituras/comandos e contexto de outros repositórios mantidos.
+
+Rascunho público recusado é registrado por identidade interna (WeakSet), não por campo controlável pelo modelo. Pressão usa o mecanismo de checkpoint existente: integral/hash/releitura/rename antes de alterar histórico; índice e reidratação marcam explicitamente sem aceite. Texto público somente, sem copiar thinking/campos adicionais do modelo. Objetivo/normas/feedback e decisões consolidadas permanecem. Schema v1 ganhou campo opcional `rejected_draft_entries`; entradas antigas continuam legíveis. `context_recall.rejected_draft=false` não significa aceite. Telemetria existente mostra estratégia, quantidade e contexto, sem publicar conteúdo.
+
+## Testes
+
+- `localworker/test-context-manager.mjs`: passou. Preserva norma/objetivo/decisão/obrigação, arquiva integralmente rascunho grande, reidrata todas as páginas com igualdade de conteúdo e classificação, sem campo privado; guardas anteriores de evidência ainda não vista, hash e redução adaptativa preservadas.
+- `localworker/test-context-overflow.mjs`: passou em três cenários com runtime real/Ollama simulado: overflow recuperável no mesmo job; base irredutível falha como CONTEXT_CAPACITY sem retry cego; conclusão grande recusada por leitura pendente sai do contexto ativo via checkpoint, requisito é cumprido e o mesmo job conclui. Quatro chamadas no cenário de rascunho, nenhum callback real. Primeira execução alcançou COMPLETED e falhou somente na expectativa de caixa README/readme, normalizada pelo Windows; corrigido o teste, sem enfraquecer a validação de leitura do produto.
+- `localworker/test-execution-contract.mjs`: passou. Leitura ausente rejeitada, leitura comprovada, sequência/comandos multiline, primeiro erro interrompe sem replay, recibos e não repetição de sucesso preservados.
+- Sintaxe Node e 44 espelhos consistentes. Testes somente leitura/fixtures governados no alvo autorizado; alterações herdadas do blog não foram apresentadas como produzidas pelos testes. Nenhuma análise histórica foi reiniciada.
+
+Instalação real pendente neste checkpoint. A correção elimina retenção indevida do rascunho ativo, não garante que todo pedido arbitrariamente grande caiba nem substitui segmentação prévia. O job histórico 0ceda154 não foi reexecutado; sua janela/resultado não são falsificados retroativamente.
+
+Para 4cb8cc24, uma consulta adicional autorizada aos logs Application1000/1001/1002 e System41/1074/6005/6006/6008 entre 22:29–22:33 UTC retornou zero eventos. Isso não prova ausência de encerramento/crash e não permite atribuir causa física. Continua classificado como runner ausente, causa do desaparecimento não comprovada; não repetir negócio nem assumir RAM/VRAM/OS culpados.
