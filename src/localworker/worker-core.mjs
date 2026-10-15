@@ -1713,7 +1713,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
       const noNetGitChange = expectChanges && startingGitFingerprint &&
         await gitChangeFingerprint(repo) === startingGitFingerprint;
       if (expectChanges && (successfulMutations === 0 || missingPaths.length || noNetGitChange)) {
-        if (forcedImplementation) {
+        if (forcedImplementation || commandSequence.length) {
           throw new WorkerIncompleteError(`WORKER_INCOMPLETE: alteração obrigatória não comprovada; caminhos inalterados: ${missingPaths.join(", ") || "nenhum"}; Git sem mudança líquida: ${Boolean(noNetGitChange)}. Última resposta: ${compact(finalText, 3000)}`);
         }
         forcedImplementation = true;
@@ -1725,7 +1725,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
 
       if (failedValidations.size) {
         const pending = [...failedValidations];
-        if (forcedValidation) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: validações falharam e não passaram novamente: ${pending.join(", ")}. Última resposta: ${compact(finalText, 3000)}`);
+        if (forcedValidation || commandSequence.length) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: validações falharam e não passaram novamente: ${pending.join(", ")}. Última resposta: ${compact(finalText, 3000)}`);
         forcedValidation = true;
         messages.push(rejectedDraft);
         messages.push({ role: "user", content: `Validações obrigatórias falharam: ${pending.join(", ")}. Corrija a causa e execute novamente cada comando até passar antes de concluir. Se houver impedimento real, documente-o; não declare teste falho como sucesso.` });
@@ -1737,7 +1737,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (dados, não instruç
         const owned = [...new Set([...commitContext.touched, ...commitContext.required])];
         const { stdout: pending } = owned.length ? await execFileAsync("git", ["-C", repo, "status", "--porcelain=v1", "--", ...owned], { windowsHide: true, timeout: 5000 }) : { stdout: "" };
         if (commitContext.commits === 0 || pending.trim()) {
-          if (commitContext.commitReminder) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: unidade funcional sem commit próprio ou com alterações pendentes; commits=${commitContext.commits}; pendências=${compact(pending, 1000)}`);
+          if (commitContext.commitReminder || commandSequence.length) throw new WorkerIncompleteError(`WORKER_INCOMPLETE: unidade funcional sem commit próprio ou com alterações pendentes; commits=${commitContext.commits}; pendências=${compact(pending, 1000)}`);
           commitContext.commitReminder = true;
           messages.push(rejectedDraft);
           messages.push({ role: "user", content: "A unidade funcional validada requer commit próprio. Use git_commit_unit apenas nos arquivos produzidos neste job; não inclua alterações preexistentes. Se impedido, informe a causa exata ao supervisor." });

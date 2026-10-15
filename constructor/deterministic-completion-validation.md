@@ -1,0 +1,10 @@
+# FT-DETERMINISTIC-DIAGNOSTIC-D4S — validação
+
+Escopo/risco fixados exclusivamente pelo supervisor em `deterministic-completion-plan.md`: C=6/júnior, comandos preparados e revisão independente. Não houve avaliação de risco pelo Worker, mudança de permissões, afrouxamento de guarda ou repetição de negócio histórico.
+
+- `0391cd14`: patch das três condições e sintaxe executados; contract falhou. Causa do harness: supervisor inverteu flags posicionais, recusadas corretamente por required_change_paths. Preservados os efeitos e o job falho.
+- `1dee9ddb`: NOVA unidade, alteração material somente no teste, flags nomeadas com expectChanges=true e requireCommits=false. fix_test, syntax e contract retornaram exit0; resultado obtido uma única vez. A suíte existente passou e o snapshot Git do alvo antes/depois coincidiu (`D4S_CONTRACT_AND_TARGET_GIT_PRESERVED`). Sem inferência real ou callback de teste.
+- Regressão verifica: comando bem-sucedido executado uma vez; pós-condição de alteração ausente retorna o diagnóstico específico; zero chamadas Ollama e nenhum lembrete change_requirement. Casos existentes de leituras/comandos obrigatórios, ordem, argv multiline, primeiro erro sem replay, recibos e não repetição de sucesso permanecem aprovados.
+- Revisão do diff: três condições existentes passam a falhar imediatamente somente quando command_sequence está presente. Execução agentiva conserva seus lembretes. Guardas e mensagens de alteração/validação/commit são as mesmas; o erro genérico de ciclos deixa de mascarar esses bloqueios finais da sequência.
+
+Git determinístico do job corretivo: main...origin/main com quatro arquivos modificados (estado/plano e os dois arquivos da unidade); zero commits do Worker, conforme commit_policy=supervisor. Não afirmar árvore limpa nem atribuir o patch herdado do primeiro job ao segundo. Commit da unidade e espelhos cabem ao supervisor após este aceite. Instalação ainda pendente neste checkpoint; não confundir teste da fonte com atualização do runtime instalado.

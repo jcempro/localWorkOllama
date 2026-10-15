@@ -56,6 +56,13 @@ try {
   await assert.rejects(run(commands,{command_sequence:['one']},'read-only'),/efeitos compatíveis/);
   await assert.rejects(run([{id:'fail',program:process.execPath,args:['-e','process.exit(2)']}],{command_sequence:['fail']}),/execução suspensa sem repetir/);
   assert.equal(calls,0);
+  const postconditionEvents=[];
+  const postconditionExpectChanges=true, postconditionRequireCommits=false;
+  await assert.rejects(runLocalAnalysis(repo,'Sequencia sem alteracao; deve falhar pela pos-condicao.', 'write',e=>postconditionEvents.push(e),commands,postconditionExpectChanges,['package.json'],postconditionRequireCommits,0,1,{command_sequence:['one'],required_command_ids:['one']}),error=>
+    /alteração obrigatória não comprovada/.test(error.message) && !/limite de .*ciclos/.test(error.message));
+  assert.equal(calls,0,'Falha de pos-condicao deterministica nao chama Ollama');
+  assert.equal(postconditionEvents.filter(e=>e.phase==='tool_result'&&e.outcome==='ok').length,1,'Comando bem-sucedido nao pode ser repetido');
+  assert.ok(!postconditionEvents.some(e=>e.phase==='change_requirement'),'Sequencia nao envia lembrete a modelo ausente');
   scenario='repeat';calls=0;
   const events=[];
   await runLocalAnalysis(repo,'Teste de não repetição de comando.','write',e=>events.push(e),[{id:'once',program:process.execPath,args:['-e','console.log("ONCE")']}]);
