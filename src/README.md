@@ -85,6 +85,9 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
+| `src/supervisor/continuity.mts` | `b801c10bf06068960aacbe714fffe9682c8133ceb4cb357f68b44d98b139ed2e` |
+| `src/supervisor/continuity.mjs` | `010bf1306e9cfd8b95e7e5ebae5c2e5f99334c71207412c938f2c1cf7b4ab180` |
+| `src/supervisor/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
 | `src/supervisor/core.mts` | `142cd02bc7150645b8830ffdf9cdd0a2c4346a9236e79bdc53dbae207013db9f` |
 | `src/supervisor/core.mjs` | `1620e13577602620527966005223c0d67b0aec9a6fe3fdb92b46b5ec2f0a76c3` |
 | `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
@@ -103,6 +106,9 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/server.mjs` | `f1fb0dbc0c9db58ac98dcd59a47642856403a6304ca1bee7a9acd86d1cb25384` |
 | `src/localworker/delegation-policy.mts` | `c4954d25b0e7e2d3542a33a30c7881544091fd4cf2b30499f4e906d2955f8993` |
 | `src/localworker/delegation-policy.mjs` | `b0e99d7a88d51f8df32d99d3b686b82521062515ee684d37f9a3eac9f98f9e4f` |
+| `src/localworker/continuity.mts` | `b801c10bf06068960aacbe714fffe9682c8133ceb4cb357f68b44d98b139ed2e` |
+| `src/localworker/continuity.mjs` | `010bf1306e9cfd8b95e7e5ebae5c2e5f99334c71207412c938f2c1cf7b4ab180` |
+| `src/localworker/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `12d3218db2187b1b8e50c599d523692151e9e0c48b646f294ce09ff86ef9dba9` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |

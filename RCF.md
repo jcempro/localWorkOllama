@@ -32,15 +32,23 @@ Scripts/Skills inequivocamente determinísticos triviais, seguros, com procedên
 
 ## Componente opcional de continuidade do supervisor — SR-001
 
+### Soberania do desenvolvedor — FT-CONTINUITY-U6C
+
+A intenção atual do humano prevalece sobre recuperação, fail-safe, quota e callbacks. Inicialização/logon do Windows, Linux ou outro SO NUNCA autoriza abrir monitor/Desktop, ativar conversa ou enviar continuação. Fechar o aplicativo, interromper o turno ou pausar explicitamente invalida a autorização automática anterior; abrir novamente não rearma eventos antigos. Não inferir falha involuntária apenas da ausência de processo. Sem causa verificável, pausar conservadoramente com diagnóstico e preservar dados, resultados e recibos, sem COMPLETED fictício. Serviços silenciosos de observação/recuperação de dados podem operar sem ativar interface/conversa.
+
+Toda retomada DEVE validar sessão do SO, instância aberta do Desktop, destino e turno/escopo originador antes de efeitos e novamente antes do envio/ativação. Eventos legados sem vínculo válido ficam suspensos. Turno explicitamente interrompido ou substituído não pode ser reativado pelo callback. Quota baixa sozinha, conversa já concluída ou estado histórico pendente não autorizam nova solicitação. SR-001 exige pausa/retomada explícitas e detecta apenas trabalho ativo ou falha estruturada de quota dentro da autorização vigente. Recuperação de rede/serviços/Worker e confirmação sem reenvio permanecem disponíveis enquanto esse vínculo for válido. A retomada explícita cria autorização nova, sem repetir envio ambíguo.
+
+O componente não reabre automaticamente Desktop fechado; prontidão é observação, não lançamento. Não registrar gatilho de logon/boot nem acordar o SO para retomar trabalho. Após reboot, fechamento/reabertura ou incerteza de intenção, exigir retomada explícita no mecanismo instalado. Ausência de telemetria autoritativa para distinguir crash de fechamento voluntário deve ser declarada; diagnóstico nunca pode simular essa capacidade. Mensagem já aceita pela fila nativa pode ser irrecuperável por API suportada: registrar limite, não alterar SQLite/fila por acesso direto nem prometer revogação inexistente.
+
 Remoção do path versionado do CLI por atualização do Desktop DEVE acionar descoberta dinâmica pelos mecanismos instalados, incluindo cópia de recuperação se o Worker estiver ausente. O executável explícito válido mantém precedência; nenhuma descoberta pode mudar conta, conversa, modelo ou esforço. Ausência de alternativa mantém diagnóstico e eventos, sem envio cego.
 
 A cobertura DEVE identificar cada conversa efetivamente registrada; disponibilidade do Worker ou instalação em outro chat NÃO comprova cobertura. Em instalação/reparo tardio, o último turno com falha estruturada `usageLimitExceeded` DEVE ser recuperado idempotentemente pelo ID do incidente e telemetria atual. Cota já restaurada permite recuperação imediata identificada como tardia; cota limitada exige reset verificável +60s. Turno substituído por continuação manual antes do envio encerra a pendência como `RESOLVED_EXTERNALLY`, nunca como resposta confirmada. Erro textual arbitrário ou outro tipo de falha NÃO autoriza continuação automática.
 
 Componente independente do Worker, ativado por conversa mediante autorização. Consulta somente telemetria oficial verificável, sem inferência, e detecta `usedPercent >= 90`. Agenda tarefa persistente do Windows para `resetsAt * 1000 + 60000`, identifica conta/conversa/diretório/ciclo e valida prontidão antes de enviar exatamente `continue`. Não consome créditos de reset, troca modelo/esforço nem contorna limites ou login.
 
-Fila pendente com recibo/clientId exatos DEVE restaurar a conversa original por navegação nativa comprovada, sem reenviar mensagem. Ativação é idempotente por evento/instância do Desktop e pode selecionar o chat na UI; ausência do protocolo ou da correlação exige diagnóstico. Reinício do aplicativo permite nova ativação, nunca novo envio do mesmo evento. Navegação e recebimento NÃO equivalem à resposta final exigida para COMPLETED.
+Fila pendente com recibo/clientId exatos DEVE restaurar a conversa original por navegação nativa comprovada somente sob autorização U6C válida, sem reenviar mensagem. Ativação é idempotente por evento/instância do Desktop e pode selecionar o chat na UI; ausência do protocolo, da autorização ou da correlação exige diagnóstico. Reinício do aplicativo invalida a ativação automática anterior. Navegação e recebimento NÃO equivalem à resposta final exigida para COMPLETED.
 
-Persistência antecede efeitos. Envio não é sucesso: `COMPLETED` exige turno novo, mensagem recebida e resposta final não vazia, sem erro. Falha parcial mantém evidência e recuperação com backoff; envio ambíguo nunca recebe retry cego. Concorrência deve ser serializada por mutex do SO. Recuperação deve iniciar Desktop/serviços instalados, reparar componentes a partir de cópia íntegra quando possível e diagnosticar sessão expirada/componente não recuperável. Nenhuma recuperação pode reiniciar jobs ou apagar dados pessoais.
+Persistência antecede efeitos. Envio não é sucesso: `COMPLETED` exige turno novo, mensagem recebida e resposta final não vazia, sem erro. Falha parcial mantém evidência e recuperação com backoff sob autorização vigente; envio ambíguo nunca recebe retry cego. Concorrência deve ser serializada por mutex do SO. Recuperação pode iniciar serviços instalados, reparar componentes a partir de cópia íntegra quando possível e diagnosticar Desktop fechado, sessão expirada/componente não recuperável. Nenhuma recuperação pode reabrir aplicativo encerrado, reiniciar jobs ou apagar dados pessoais.
 
 O agendamento é exato na configuração; execução pontual não é garantida por um SO não determinístico, computador desligado, falta de logon/rede ou autenticação que exija interação. Ausência de identificador idempotente no transporte pode impedir prova inequívoca/reenvio seguro. Essas condições mantêm diagnóstico explícito sem `COMPLETED` falso. Fonte, limites, parâmetros, instalação, testes e cobertura real devem permanecer documentados e espelhados, sem impor este componente como requisito do Worker.
 
@@ -148,6 +156,9 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
+| `src/supervisor/continuity.mts` | `b801c10bf06068960aacbe714fffe9682c8133ceb4cb357f68b44d98b139ed2e` |
+| `src/supervisor/continuity.mjs` | `010bf1306e9cfd8b95e7e5ebae5c2e5f99334c71207412c938f2c1cf7b4ab180` |
+| `src/supervisor/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
 | `src/supervisor/core.mts` | `142cd02bc7150645b8830ffdf9cdd0a2c4346a9236e79bdc53dbae207013db9f` |
 | `src/supervisor/core.mjs` | `1620e13577602620527966005223c0d67b0aec9a6fe3fdb92b46b5ec2f0a76c3` |
 | `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
@@ -166,6 +177,9 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/server.mjs` | `f1fb0dbc0c9db58ac98dcd59a47642856403a6304ca1bee7a9acd86d1cb25384` |
 | `src/localworker/delegation-policy.mts` | `c4954d25b0e7e2d3542a33a30c7881544091fd4cf2b30499f4e906d2955f8993` |
 | `src/localworker/delegation-policy.mjs` | `b0e99d7a88d51f8df32d99d3b686b82521062515ee684d37f9a3eac9f98f9e4f` |
+| `src/localworker/continuity.mts` | `b801c10bf06068960aacbe714fffe9682c8133ceb4cb357f68b44d98b139ed2e` |
+| `src/localworker/continuity.mjs` | `010bf1306e9cfd8b95e7e5ebae5c2e5f99334c71207412c938f2c1cf7b4ab180` |
+| `src/localworker/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `12d3218db2187b1b8e50c599d523692151e9e0c48b646f294ce09ff86ef9dba9` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
