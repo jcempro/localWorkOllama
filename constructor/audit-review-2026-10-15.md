@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa nove deles; não substitui o aceite dos outros 58.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 15 deles; não substitui o aceite dos outros 52.
 
 ## Segmento 01
 
@@ -34,3 +34,20 @@ Aceite **parcial com correções**. Modo e contagens fornecidos reduziram as gen
 | 567e8a54 | FAILED/WORKER_INCOMPLETE por ausência de progresso; write/expect_changes=true. | Seis leituras bem-sucedidas; **quatro erros de edit_file**, linhas 14/45/61/87, mais **uma recusa**, linha 29; não apenas duas tentativas. Bloqueios nas linhas 28/86. syntax pendente; zero mutações diretas/command exit0 comprovados. |
 
 Os bloqueios impediram falso sucesso e repetição ilimitada; não comprovam defeito de permissão. A âncora textual inválida e a repetição de leituras caracterizam estratégia improdutiva; não autorizam ampliar acesso automaticamente. A seção NEEDS_SUPERVISOR do auditor é uma recomendação textual sobre registros históricos, **não** reclassificação de seus error_kind nem prova de autorização ausente. Nenhum desses registros contém avaliação de risco, e WORKER_INCOMPLETE sozinho não determina sua causa. Recuperações posteriores ficam indeterminadas neste recorte. A correção da omissão de citações/contagens usa extração determinística dos campos já registrados, sem redelegar a mesma análise ou relaxar guardas.
+
+## Segmento 03
+
+Job auditor `277d10e4-c24f-4b94-a0a8-0ba3cb5a475a`: COMPLETED em 16/10 às 00:08:08 UTC. Resultado consultado uma vez; análise exclusiva de evidência fornecida, nenhuma ferramenta, escrita ou commit. Git determinístico do auditor: main...origin/main limpo; não descreve o Git histórico do alvo. Aceite **parcial**, com correções de precisão semântica; não há falha de transporte/infraestrutura comprovada.
+
+| ID | Entrega comprovada e limite |
+| --- | --- |
+| b9790e31 | patch/verify exit0, eventos 3/6; TRACE_LINE25_VALIDATED_1_SYNC_9_PENDING_OTHERS_PRESERVED. Aceite da sentença25, sem concluir rastreabilidade global ou FT. |
+| 15e0efc2 | patch/verify exit0, eventos 3/6; TRACE_EXECUTOR_VALIDATED_8_SYNC_2_PENDING_OTHERS_PRESERVED. Aceite das sete entradas delimitadas, preservando as demais. |
+| 7a4bfd71 | patch/verify exit0, eventos 3/6; TRACE_RESILIENCE_VALIDATED_10_SYNC_0_PENDING_OTHERS_PRESERVED. Dez entradas desse RCF sincronizadas; não equivale a gate global aprovado. |
+| 80d75353 | Parecer sobre evidência fornecida, sem inspeção própria. Listagem dos scripts e ausência de demonstração de seus contratos completos são compatíveis; a contradição apontada pelo auditor **não existe**. O resultado original chamou IDs de jobs 56c15176/7a4bfd71 de commits e acrescentou agentsGovernance.managedScripts sem prova no pacote: essas extrapolações são rejeitadas. Commit explicitamente fornecido: 1e19f7dc0c. |
+| c5cc6492 | audit/verify aprovados, eventos 3/6; step3 no evento8 registra missing_paths=[] e no_net_git_change=true. O erro textual de 40 ciclos era diagnóstico incorreto da saída da sequência finita; não houve exploração agentiva não segmentada nesse job. Causa corrigida, testada e instalada em D4S, sem repetir o job. |
+| 50968baf | patch/verify exit0, eventos 3/6; FT104_EXACT_IGNORE_EXCEPTION_ADDED e AUDIT_VISIBLE_OTHER_FILES_IGNORED. Unidade preserva auditoria existente e corrige visibilidade Git; não prometia recriá-la. Recibo comprova a validação delimitada de visibilidade, não commit/push ou autoria integral do documento. |
+
+Headers dev...origin/dev ahead1/2/3/4 pertencem aos respectivos estados históricos. Não demonstram por si sós autoria, commit desse job ou push; ausência desses dados neste recorte também não prova ausência global de versionamento. A seção NEEDS_SUPERVISOR do auditor não muda os estados/error_kind dos seis jobs nem comprova nova falta de permissão. A causa D4S já resolvida não fica aberta por repetição do erro textual antigo.
+
+Limitação observada em três segmentos: inferência local ainda extrapola fatos explícitos e relações semânticas, mesmo com contagens prontas e instruções restritas. Não reexecutar esses segmentos para obter texto aparentemente melhor. Próxima melhoria delimitada: extrair mecanicamente os campos verificáveis, com proveniência e limites de aceite explícitos; reservar inferência para uma comparação realmente necessária por unidade, seguida da revisão proporcional. Relatório gerado mecanicamente não pode declarar aceite semântico/global por contagem ou status.
