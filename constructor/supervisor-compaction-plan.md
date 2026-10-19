@@ -16,4 +16,6 @@ Somente medida atual e autoritativa vinculada à conversa permite exceção estr
 
 ## Entrega verificável
 
+Complementação humana de 18/10/2026: explicitar N7C como modus operandi obrigatório e incisivo no AGENTS global, suficiente para instituir a obrigação sem repetição em cada prompt. Escopo desta unidade: reforço textual preservador, sincronização e atualização pelo instalador existente. C=8/exclusivo mantido pelo alcance global; não criar interface, job ou chamada de compactação fictícia. Aceite: texto global instalado igual à fonte, demais instruções e configurações preservadas; acionamento nativo permanece condicionado à capacidade real já documentada.
+
 Implementar regra em RCF, fonte global do supervisor, governança local de distribuição e howto; sincronizar e instalar pelo GlobalRulesOnly, que não altera runtime/modelo/tarefas/jobs. Validar preservação do conteúdo externo ao bloco global e das configurações. Esta entrega torna a obrigação global; não instala uma ferramenta nativa ausente. Execução automática e ordem temporal continuam não demonstráveis neste cliente até expor um acionamento suportado ligado ao contexto vivo. Registrar impedimento explícito, sem transformar resumo em arquivo, texto `/compactar` ou fila em compactação nativa. Não declarar aceite operacional integral.
