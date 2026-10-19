@@ -6,6 +6,16 @@ import {fileURLToPath} from 'node:url';
 import {assessmentsA7D} from './audit-assessments.mjs';
 import {additionalAssessments} from './audit-assessments-2026-10-11.mts';
 const dirA7D=path.dirname(fileURLToPath(import.meta.url));
+// A3F_FACTS_MODE_START
+if(process.argv[2]==='--facts'){
+  if(process.argv.length!==5)throw Error('Uso: node --experimental-strip-types constructor/render-audit.mjs --facts <current.json> <baseline.json>');
+  const {extractAuditFactsA3F}=await import('./audit-facts.mts');
+  const currentText=fs.readFileSync(path.resolve(process.argv[3]),'utf8');
+  const baselineText=fs.readFileSync(path.resolve(process.argv[4]),'utf8');
+  process.stdout.write(JSON.stringify(extractAuditFactsA3F(currentText,baselineText),null,2)+'\n');
+  process.exit(0);
+}
+// A3F_FACTS_MODE_END
 const inputA7D=path.resolve(process.argv[2]||path.join(dirA7D,'audit-private/inventory.json'));
 const inventoryA7D=JSON.parse(fs.readFileSync(inputA7D,'utf8'));
 const jobsA7D=inventoryA7D.jobs;
