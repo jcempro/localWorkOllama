@@ -25,14 +25,23 @@ export function canonicalS4W(value: any): string {
   if (value === undefined || typeof value === 'number' && !Number.isFinite(value)) rejectS4W('Valor inválido no vínculo de escopo');
   return JSON.stringify(value);
 }
-/** Projeção coincide com os defaults do MCP; avaliação/patente não entra no próprio hash. */
+/** Mesma projeção source/content e trim de bordas do schema MCP, inclusive no contexto efetivo. */
+export function normalizedEvidenceS4W(value: any): {source: string; content: string} | undefined {
+  if (value === undefined) return undefined;
+  if (!value || typeof value !== 'object' || Array.isArray(value) ||
+      typeof value.source !== 'string' || typeof value.content !== 'string') {
+    rejectS4W('provided_evidence inválida no vínculo de escopo');
+  }
+  return {source: value.source.trim(), content: value.content.trim()};
+}
+/** Projeção coincide com os defaults/normalização do MCP; avaliação/patente não entra no próprio hash. */
 export function scopeHashS4W(request: any): string {
   const mode = request.mode ?? 'read-only';
   const material = { repoPath: foldS4W(path.resolve(request.repoPath)), task: request.task, thread_id: request.thread_id,
     mode, expect_changes: request.expect_changes ?? (mode === 'write'), commit_policy: request.commit_policy ?? 'worker',
     required_change_paths: request.required_change_paths ?? [], required_read_paths: request.required_read_paths ?? [],
     required_command_ids: request.required_command_ids ?? [], command_sequence: request.command_sequence ?? [],
-    provided_evidence: request.provided_evidence,
+    provided_evidence: normalizedEvidenceS4W(request.provided_evidence),
     assessment: request.maintenance_supervision ? Object.fromEntries(Object.entries(request.maintenance_supervision).filter(([k]) => k !== 'scope_sha256')) : undefined,
     authorized_commands: (request.authorized_commands ?? []).map((c: any) => ({ ...c, mode: c.mode ?? 'write', network: c.network ?? false, repeatable: c.repeatable ?? false })) };
   return createHash('sha256').update(canonicalS4W(material)).digest('hex');

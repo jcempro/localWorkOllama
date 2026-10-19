@@ -24,6 +24,8 @@ O acionamento deve usar capacidade nativa efetivamente acessível e vinculada à
 
 ## Manutenção própria híbrida — SW-HYBRID
 
+O vínculo de escopo usa a mesma projeção e normalização efetiva do MCP: provided_evidence contém somente source/content com trim de bordas, sem colapsar whitespace interno. O contexto enviado ao modelo usa essa mesma projeção, inclusive em chamadas diretas ao runtime; campos descartados pelo schema não afetam a execução. Alteração substantiva em qualquer campo vinculado continua exigindo nova avaliação/hash. Normalização não é dispensa de autorização nem autenticação.
+
 Esta seção substitui SOMENTE o veto absoluto de manutenção do próprio produto. Recursos, contratos, limites legítimos, testes, recuperação, seleção de modelo/esforço e regime dos demais repositórios permanecem. A identidade de manutenção continua obrigatória; sua ausência/corrupção nunca autoriza acesso. Instalação sem adoção explícita da política híbrida conserva o veto anterior.
 
 Somente o supervisor pago analisa TODAS as etapas de risco e decide/reavalia criticidade C e regime. Worker não calcula, estima, pondera, classifica, recomenda nem fornece triagem orientada por risco, inclusive indiretamente; consultas factuais objetivas por mecanismo previamente verificado não transferem a avaliação. Macro, autoridade e aceite independente permanecem integralmente do supervisor. C considera consequências diretas/indiretas/em cadeia, dependências, alcance, reversibilidade, contratos/dados, propagação, controles, observabilidade, testes e incerteza, sem precisão/probabilidade inventadas. Usos futuros desconhecidos e consequências graves plausíveis não podem ser excluídos pela aparência de inocuidade; analogias nucleares/vida ou morte expressam cautela, não fatos nem motivo para nota 10 indiscriminada. C=0 tende a desprezível, não zero absoluto; C=5 é neutralidade/indeterminação (50/50 não estatística); C=10 é iminente/intolerável.
@@ -187,8 +189,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `b184e17df90d43600f92e007a4d81f4d09fb13f8524d5d785a9cd5c917538f8d` |
-| `src/localworker/delegation-policy.mts` | `c4954d25b0e7e2d3542a33a30c7881544091fd4cf2b30499f4e906d2955f8993` |
-| `src/localworker/delegation-policy.mjs` | `b0e99d7a88d51f8df32d99d3b686b82521062515ee684d37f9a3eac9f98f9e4f` |
+| `src/localworker/delegation-policy.mts` | `d7f1eed4081eb23983c7a26ca1a29e7e646ce0ae23550ff4fc1c84ea6bdb115d` |
+| `src/localworker/delegation-policy.mjs` | `8370a671d03257175895e65864f3ae1e9836023b7566f928dda470c1c35feeae` |
 | `src/localworker/continuity.mts` | `11a8e59dbf5f0d67973a5899904523ab4cb76b69132e6751334e356a101a530b` |
 | `src/localworker/continuity.mjs` | `dd7994e000e3af7cfb54a90509368e7d1d84b75ce2f94598486e1045e769e9c3` |
 | `src/localworker/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
@@ -197,7 +199,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `6648d72a76cdac96b9d5f84a84fdb8f9a05c0047ac35af640f298ddda15a8d54` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `dcd278f1c335a4a8377826a9160c3b3875340b3fc98496cffbce630acf914f0d` |
+| `src/localworker/worker-core.mjs` | `dbb09fe19b60fd8042a891be21bd8c14d0b9c21815a64579d60f712a6c280ef8` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `5a3bd36fc10af1f4678124e67d2fbecc08c28583b97399e2b4e613d9ee4aa91c` |
 | `src/localworker/watchdog.mjs` | `208d32ac905bbceb57dca6a06fb4af93790c8393b9f40f9d59dc6e2374dcd984` |

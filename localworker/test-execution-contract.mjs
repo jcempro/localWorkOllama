@@ -8,10 +8,11 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 const repo=process.env.TEST_REPO_PATH;
 if(!repo || path.basename(path.resolve(repo)).toLowerCase()!=='jeancarloem.com.blog')throw Error('Use o repositório de teste autorizado');
-let scenario='missing', calls=0;
+let scenario='missing', calls=0, lastModelMessages=[];
 const server=createServer(async(req,res)=>{
-  for await(const chunk of req){}
+  const chunks=[];for await(const chunk of req)chunks.push(chunk);
   if(req.url==='/api/ps'){res.end('{"models":[]}');return;}
+  const body=Buffer.concat(chunks).toString('utf8');if(body){const parsed=JSON.parse(body);if(parsed.messages)lastModelMessages=parsed.messages;}
   calls++;
   let fn=null;
   if(calls===1 && scenario!=='supplied') fn=scenario==='read'?{name:'read_file',arguments:{path:'package.json',startLine:1,endLine:5}}:
@@ -32,6 +33,11 @@ try {
   const supplied={provided_evidence:{source:'checkpoint verificado pelo supervisor',content:'O teste X retornou exit_code=0.'}};
   assert.match(await run([],supplied,'read-only'),/Base fornecida pelo supervisor: "checkpoint/);
   assert.equal(calls,1);
+  calls=0;
+  assert.match(await run([],{provided_evidence:{source:' \nbase\t',content:'\t dados internos  preservados\n',extra:'MUST_NOT_REACH_MODEL_T8H'}},'read-only'),/Base fornecida pelo supervisor: "base"/);
+  assert.equal(calls,1);
+  assert.ok(lastModelMessages.some(message=>message.role==='user'&&message.content.includes(JSON.stringify({source:'base',content:'dados internos  preservados'}))));
+  assert.equal(JSON.stringify(lastModelMessages).includes('MUST_NOT_REACH_MODEL_T8H'),false,'Contexto efetivo usa somente campos vinculados pelo hash');
   await assert.rejects(run([],supplied),/provided_evidence inválida/);
   await assert.rejects(run([],{provided_evidence:{source:'',content:'x'}},'read-only'),/provided_evidence inválida/);
   calls=0;

@@ -11,7 +11,7 @@ import https from "node:https";
 import { jobDir } from "./job-store.mjs";
 import { ContextManagerC7M, ContextOverflowC7M } from "./context-manager.mjs";
 import { ProgressGuardP6R, failureClassP6R } from "./progress-guard.mjs";
-import { authorizeMaintenanceS4W, checkActionS4W, MaintenancePolicyError } from "./delegation-policy.mjs";
+import { authorizeMaintenanceS4W, checkActionS4W, MaintenancePolicyError, normalizedEvidenceS4W } from "./delegation-policy.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -1438,7 +1438,7 @@ export async function runLocalAnalysis(repoPath, task, mode = "read-only", onPro
   const requiredReads = contract.required_read_paths ?? [];
   const requiredCommands = contract.required_command_ids ?? [];
   const commandSequence = contract.command_sequence ?? [];
-  const suppliedEvidence = contract.provided_evidence;
+  const suppliedEvidence = normalizedEvidenceS4W(contract.provided_evidence);
   if (suppliedEvidence !== undefined && (mode !== "read-only" || expectChanges ||
     typeof suppliedEvidence?.source !== "string" || !suppliedEvidence.source.trim() || suppliedEvidence.source.length > 1024 ||
     typeof suppliedEvidence?.content !== "string" || !suppliedEvidence.content.trim() || suppliedEvidence.content.length > 12000)) throw new Error("provided_evidence inválida: exige origem/conteúdo delimitados e análise read-only");

@@ -32,6 +32,11 @@ try{
   assert.match(await call(req(5,'intern')),/Regime incompatível/);
   assert.match(await call(req(6,'exclusive')),/Supervisor exclusivo/);
   const expanded=req(3);expanded.task+=' expansão';assert.match(await call(expanded),/Escopo mudou/);
+  const evidence=req(3);evidence.provided_evidence={source:' \tbase\r\n',content:'\n dados internos  preservados \t',extra:'ignorado pelo schema'};
+  evidence.maintenance_supervision.scope_sha256=scopeHashS4W(evidence);
+  assert.match(await call(evidence),/conversa arquivada/,'Bordas e campo extra normalizados pelo schema não mudam o vínculo');
+  const alteredEvidence=structuredClone(evidence);alteredEvidence.provided_evidence.content+='mudança substantiva';
+  assert.match(await call(alteredEvidence),/Escopo mudou/,'Conteúdo efetivo alterado continua recusado antes de criar job');
   const uncertain=req(3);uncertain.maintenance_supervision.uncertainty_resolved=false;assert.match(await call(uncertain),/Incerteza/);
   const missing=req(3);delete missing.maintenance_supervision;assert.match(await call(missing),/Avaliação exclusiva/);
   const jobs=await fs.readdir(path.join(fixture,'jobs')).catch(e=>{if(e.code==='ENOENT')return [];throw e;});assert.deepEqual(jobs,[]);
