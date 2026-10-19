@@ -1,5 +1,11 @@
 # FT-AUDIT-FACTS-A3F — projeção mecânica da auditoria
 
+## Aceite do validador e integração do helper — 19/10/2026
+
+810a1d13 resultado consultado uma vez: COMPLETED determinístico, patch/syntax/verify exit0,87 entradas inválidas recusadas e positivos/imutabilidade aprovados. Hash db2ac6593d5f69c000b8622a039bb4fbd18efa7731e3ccc44d51b4b3ca587df5 confirmado e teste preservado. Módulo+teste aceitos como unidade autônoma, commit/push pelo supervisor antes da próxima unidade; evidência em audit-input-validation-validation.md. Não repetir testes sem motivo nem aceitar helper pelo sucesso desse módulo.
+
+Próxima unidade C=5/júnior definida pelo supervisor: integração mecânica de constructor/audit-facts.mts, único alvo mutável. Importar assertAuditJobsA3F já aceito, retirar os validadores antigos e chamá-lo nas duas capturas antes de filtro; manter tipagem/normalização existentes. Converter campos/coletores de linhas para arrays, incluir todo tool_result ok independentemente da ferramenta, manter contagens específicas, ordenar novos IDs lexicograficamente sem locale. Projeção positiva/hash/ausência-zero/normas preservados. command_sequence patch→syntax→verify, argv exato/hashes/cardinalidade/identidade/temporário; proteger também hash do módulo importado e teste integral, sem editar teste. A suíte integral original é obrigatória: somente após exit0, revisão e commit/push de helper+teste, liberar integração no renderizador. Nenhuma captura real emitida antes de conferir privacidade; nenhuma alteração de runtime/src ou negócio externo.
+
 ## Checkpoint de eefc722e — 19/10/2026
 
 Resultado consultado uma vez: FAILED/WORKER_INCOMPLETE, verify pendente. syntax foi tentado antes da criação e falhou precondição; write_file criou audit-input-validation.mts no passo2; syntax então exit0 e verify exit1. Leituras posteriores não produziram reparo; a guarda recusou conclusão sem teste aprovado. Git determinístico: quatro arquivos novos não rastreados (helper, validador e respectivos testes), nenhum commit funcional. Teste do validador mantém hash aprovado; fonte parcial097b140bc0ebf6afd9b513ea29206bb2526e39fd550fa5cd171f53160a268620.
