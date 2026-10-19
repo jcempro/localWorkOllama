@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 41 deles; não substitui o aceite dos outros 26.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 44 deles; não substitui o aceite dos outros 23.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os41 aceites/correções semânticos já registrados neste documento nem aceita os26 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os44 aceites/correções semânticos já registrados neste documento nem aceita os23 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -176,3 +176,16 @@ Auditor ee5a5fe6-bee2-4c62-a6b0-1d333de58900: local_result uma vez; COMPLETED po
 | 87920a99 | caption exit0 no evento3, depois build falhou1 ENOSPC em write no evento6. Efeito anterior preservado, não ausência de patch. Sem prova de mudança líquida/hunks completos no recorte, não afirmar expect_changes=true descumprido nem comprovar integralmente preservação byte a byte. Não é build completo ou production comprovado; ambiente não definido nesse pedido. |
 
 Corrigir a afirmação “ENOSPC impede nova execução”: é falha histórica, não prova de espaço livre/bloqueio atual. O pacote incluiu bdc48fc3, já aceito no segmento06, com inspect_saved_utf8/build_production exit0 e SAVED_TABLE_UTF8_OK: recuperação posterior delimitada comprovada. Estados FAILED dos jobs antigos permanecem históricos mesmo após correção por outro job; isso não demonstra problema ainda não corrigido. Não reiniciar nem reexecutar por essa inferência. A referência do auditor ao relatório como RCF é imprecisa: constructor/audit-review-2026-10-15.md é registro de revisão, não o RCF. HeaderGit não prova autoria/push/limpeza; QUEUED_TO_CHAT só fila. Nenhum novo bloqueio material sustentado. Acumulado41 revisados/26 pendentes nessa captura.
+
+
+## Segmento 13 — 19/10/2026
+
+Auditor a0f95ed9-f473-460d-a702-0f5ec6168210: local_result uma vez; COMPLETED por análise dos três recibos, nenhuma ferramenta/escrita/commit. Aceite com qualificação de entrega versus atividade e de mensagem genérica versus efeito real. Git determinístico main...origin/main limpo descreve o auditor, não os headers históricos dev.
+
+| ID | Estágio/fato comprovado e limite |
+| --- | --- |
+| 4cb8cc24 | WORKER_INFRA_ERROR: runner ausente após heartbeat vencido, PID35028; stderr filesystemOK é pré-varredura, não prova leitura dos três required_read_paths. Zero ferramentas aprovadas e nenhuma proposta entregue. “Alterações parciais preservadas” é mensagem genérica do recuperador, não evidência de que esse job read-only tenha produzido alterações. Causa física do desaparecimento permanece desconhecida conforme checkpoint anterior; não repetir forense ou atribuir OOM/crash/permissão. |
+| 9238f726 | WORKER_INCOMPLETE: resposta final sem inspeção após orientação explícita; quatro leituras obrigatórias, zero read_file ou outra ferramenta aprovada. Análise requerida do fragmento não entregue/comprovada; não afirmar ausência de qualquer raciocínio interno. Events vazio: a evidência é facts/public_result, não linhas de eventos inventadas. |
+| c08b2047 | WORKER_INCOMPLETE: resposta final sem inspeção; uma leitura e comando ruby exigidos, nenhum executado com aprovação. Zero ferramentas, sem implementação/teste comprovados. A causa não é automaticamente runner ausente ou hardware incapaz; modo write/expect_changes=true não é prova de alteração. |
+
+Os estados e error_kind foram distinguidos corretamente. As duas últimas falhas são ausência de inspeção/entrega; a primeira é perda de processo/heartbeat, não prova de causa física. Nenhum desses registros demonstra falta de autorização. Recuperações não presentes no pacote são indeterminadas, não inexistentes globalmente. EstadoFAILED antigo não determina defeito atual; headerGit não prova autoria/push/limpeza; QUEUED_TO_CHAT só fila. Não houve nova execução, forense ou plano de replay. Acumulado44 revisados/23 pendentes nessa captura.
