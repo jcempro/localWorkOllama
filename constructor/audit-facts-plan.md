@@ -1,5 +1,11 @@
 # FT-AUDIT-FACTS-A3F — projeção mecânica da auditoria
 
+## Aceite do extrator e unidade CLI — 19/10/2026
+
+3932e312 resultado consultado uma vez: patch/syntax/verify exit0, hash90c68dbbbcf15ea82b38feff5dfc53fb43e461bf8e0cf5067fceabc64cce59e6 e dependências/teste conferidos. Extrator e suíte integral aceitos/versionados antes desta unidade; evidência em audit-facts-validation.md. Não repetir suíte anterior por precaução genérica.
+
+Próxima unidade C=5/júnior pelo supervisor: adicionar somente ramo CLI --facts <current.json> <baseline.json> a render-audit.mjs existente, antes de leitura/efeitos do modo padrão. Importação dinâmica do extrator, stdout JSON e nenhum write no ramo factual. Argc inválido falha com uso explícito. Código legado fora da inserção deve permanecer byte a byte igual, inclusive modo padrão e guardas semânticas. Teste novo constructor/test-audit-facts-cli.mts preparado pelo supervisor cobre fixture com sentinela privada, JSON/argumentos/duplicados inválidos, capturas existentes264/197/67 e preservação dos relatórios/manifesto. Fixtures JSON em diretório exclusivo sob audit-private, sem Git/servidor; limpeza com fronteira absoluta conferida. command_sequence patch→syntax→verify, hashes de pre/post e dependências, sem inferência; somente renderizador mutável pelo Worker, commit_policy=supervisor. Teste gera/limpa seus próprios arquivos e deve ser declarado write, não read-only. Após exit0, revisão proporcional e commit/push renderizador+teste; somente então usar projeção na revisão dos52 pendentes. Contagem não substitui aceite semântico.
+
 ## Aceite do validador e integração do helper — 19/10/2026
 
 810a1d13 resultado consultado uma vez: COMPLETED determinístico, patch/syntax/verify exit0,87 entradas inválidas recusadas e positivos/imutabilidade aprovados. Hash db2ac6593d5f69c000b8622a039bb4fbd18efa7731e3ccc44d51b4b3ca587df5 confirmado e teste preservado. Módulo+teste aceitos como unidade autônoma, commit/push pelo supervisor antes da próxima unidade; evidência em audit-input-validation-validation.md. Não repetir testes sem motivo nem aceitar helper pelo sucesso desse módulo.
