@@ -1,5 +1,11 @@
 # FT-AUDIT-FACTS-A3F — projeção mecânica da auditoria
 
+## Checkpoint de fa0d3ccf — 19/10/2026
+
+Resultado consultado uma vez: FAILED/WORKER_INCOMPLETE por quatro leituras sem progresso. Git determinístico main...origin/main, somente audit-facts.mts e test-audit-facts.mts novos/não rastreados; nenhum efeito adicional. Hash do helper inalterado. Houve uma tentativa edit_file no passo2: before sintetizou indentação de três espaços no bloco Row, mas a fonte tem dois. Fonte e before usam LF; não é incompatibilidade CRLF. O matcher exato recusou sem mutação; depois o Worker voltou a ler helper/teste até strategy_blocked no passo8, mesmo após orientação de adaptação. Nenhum syntax/verify executado; cinco compactações não comprovaram progresso. Não atribuir a falha a permissões, saturação ou defeito do matcher/guarda, nem flexibilizar correspondência textual para aceitar patch incerto.
+
+Correção de segmentação: próxima unidade somente representação, validação e extração de step numérico (tipos JobEvent/Job.state/Row, extractStepNumber e critério de event.step). Demais defeitos de validação fail-closed, UUID/diferença e listas ficam explicitamente pendentes, com suíte integral preservada e não dispensada do aceite final. Exigir âncoras literais curtas e únicas, sem reconstruir blocos/indentação nem releituras repetidas. Comando numérico isolado comprova valores válidos, zero e ausência; não comprova o helper completo nem tolerância a entrada inválida. C=5/júnior mantido pelo supervisor, somente helper mutável, commit_policy=supervisor; não reiniciar job anterior. Resultado deve permitir checkpoint factual antes de liberar a próxima unidade. Commit funcional somente da unidade aceita, nunca conclusão global baseada em teste parcial.
+
 ## Checkpoint de 6a4534fd — 19/10/2026
 
 Resultado consultado uma vez: FAILED/WORKER_INFRA_ERROR, delivery PAUSED_USER. Runner PID159740 ausente, último heartbeat 16/10 03:02:51UTC; somente primeira requisição Ollama, sem retorno/ferramenta/mutação. RAM disponível58,3GB e VRAM livre10854MiB na admissão; nenhuma evidência de falta de recursos, erro de ferramenta ou falha cognitiva. Helper permanece com SHA256 ecaa5571fe5c56373a8fc77de48b5307c557ca72960625df1188ddf6b423ba2f. Git determinístico histórico e atual: apenas helper novo/não rastreado além de commits normativos posteriores, sem implementação aceita.
