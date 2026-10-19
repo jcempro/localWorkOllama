@@ -1,5 +1,11 @@
 # FT-AUDIT-FACTS-A3F — projeção mecânica da auditoria
 
+## Checkpoint de eefc722e — 19/10/2026
+
+Resultado consultado uma vez: FAILED/WORKER_INCOMPLETE, verify pendente. syntax foi tentado antes da criação e falhou precondição; write_file criou audit-input-validation.mts no passo2; syntax então exit0 e verify exit1. Leituras posteriores não produziram reparo; a guarda recusou conclusão sem teste aprovado. Git determinístico: quatro arquivos novos não rastreados (helper, validador e respectivos testes), nenhum commit funcional. Teste do validador mantém hash aprovado; fonte parcial097b140bc0ebf6afd9b513ea29206bb2526e39fd550fa5cd171f53160a268620.
+
+Revisão proporcional encontrou causa de código: condição inicial rejeita Array.isArray(job.events), contradizendo o contrato e a checagem positiva posterior; state.step/context_compactions/error_kind foram acessados em job em vez de job.state. Restante do módulo preservado; não recriar. Nova unidade determinística via command_sequence patch→syntax→verify: remover apenas guardas contraditórias de events, corrigir três paths de estado e tornar explícita a assinatura TypeScript unknown:void já exigida. Substituições literais/cardinalidade/hashes/identidade/escrita temporária e validações idênticas; sem inferência/replay de mutação. C=5/júnior mantido pelo supervisor, somente módulo mutável, commit_policy=supervisor. Se suíte passar, revisar delta e commit/push módulo+teste como unidade autônoma antes da integração do helper. Não alegar que syntax equivale a correção nem reduzir teste para aceitar fonte errada.
+
 ## Revisão de 7456cd74 — 19/10/2026
 
 Resultado obtido uma vez: COMPLETED somente como inferência/proposta, sem leituras/comandos/efeitos/commits. Aceite semântico recusado (WORKER_INCOMPLETE na revisão, sem reclassificar estado persistido): validateJob copiou o corpo antigo sem guardas null/objeto/inteiros/campos opcionais; validateJobs adicionou Set de UUID, mas continua incrementando invalidCount e descartando registro inválido. Afirmação textual de segurança contra null contradiz o código. Não aplicar proposta nem aceitar status como entrega. Git permanece com helper/teste novos não rastreados e fragmento numérico já comprovado.
