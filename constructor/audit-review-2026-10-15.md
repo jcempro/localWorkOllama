@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 37 deles; não substitui o aceite dos outros 30.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 39 deles; não substitui o aceite dos outros 28.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os37 aceites/correções semânticos já registrados neste documento nem aceita os30 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os39 aceites/correções semânticos já registrados neste documento nem aceita os28 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -152,3 +152,15 @@ Auditor eb04e73d-e3d1-4c50-a92a-668f6c3f88f4: local_result uma vez; COMPLETED, c
 | f7f94ad3 | patch/ruby exit0, eventos3/6; PATCH_APPLIED e markdown_tables=ok. Aceita unidade delimitada de asserções de caption/preservação e teste Ruby, não cobertura universal ou conclusão da FT. |
 
 Três unidades independentes, sem sequência causal presumida entre elas. Efeitos de comandos mutantes são alterações mesmo com direct_mutation_ok=0; o auditor não executou esses comandos, apenas analisou os recibos. Pendência funcional reservada em7a06 não prova pendência atual. HeaderGit/ahead não prova autoria, publicação ou árvore limpa; QUEUED_TO_CHAT só fila, sem determinar resposta posterior. Não houve novo bloqueio material ou necessidade de ampliar acesso/reexecutar. Acumulado37 revisados/30 pendentes nessa captura.
+
+
+## Segmento 11 — 19/10/2026
+
+Auditor 47844a0d-e5b9-4282-9021-d8bbd85842ea: local_result uma vez; COMPLETED por comparação dos dois recibos, nenhuma ferramenta/escrita/commit. Aceite com qualificação de alcance; ausência da tabela/linhas pedidas e abreviações excessivas corrigidas no registro abaixo, sem nova inferência. Git determinístico main...origin/main limpo refere-se ao auditor, não ao Git histórico do blog.
+
+| ID | Fato comprovado e limite de aceite |
+| --- | --- |
+| d247d901 | integrate/build/browser exit0, eventos3/6/9; INTEGRATION_OK, build concluído32.717s, accessible_runtime=ok spoken_units=23 chart=4.5.1. Aceita integração delimitada e build/runtime no destino temporário; dev-live exato e gate geral estavam fora desta unidade. Não prova autoria ou todo hunk/invariante. |
+| 850fe313 | gate executado e falhou1, evento3; check:documentation terminou com inventário de modos de uso divergente. Marcadores intermediários visíveis incluem accessible_reading/markdown_tables/biblical_reference_speech/table_speech aprovados. Saída já truncada na fonte: não reconstruir marcadores/cobertura ausentes. expect_changes=false era intencional; sem obrigação de patch neste gate. Rejeição anterior de timeout600000, narrada no pedido, não é timeout desta execução. |
+
+A falha documental não converte o gate em sucesso e não invalida automaticamente os recibos de build/runtime aprovados. A frase “sem impacto” do parecer é forte demais: não foi demonstrado impacto sobre aquelas validações, mas não se provou ausência universal de impacto. “Demais checks passaram” deve ser limitado aos recibos/marcadores presentes e à progressão observada do comando; a captura não fornece stdout integral. Causa detalhada do inventário, baseline4vs5 e eventual regressão não são comprovadas só pelo task. Histórico não determina estado atual; headerGit não prova autoria/push/limpeza. QUEUED_TO_CHAT só fila, não resposta aceita. Sem novo pedido ou execução de negócio. Acumulado39 revisados/28 pendentes nessa captura.
