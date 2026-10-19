@@ -1,5 +1,9 @@
 # FT-SUPERVISOR-COMPACT-N7C — cobertura efetiva e impedimento
 
+## Reforço do modus operandi — 18/10/2026
+
+Complementação humana incorporada: obrigação global explícita, permanente e incisiva, sem lembrete em cada prompt e sem aceitar promessa como execução. Atualização real GlobalRulesOnly às 22:46:01 (São Paulo); fonte e único bloco instalado iguais, conteúdo externo e hashes das configurações preservados. Prova privada: audit-private/supervisor-compaction-modus-proof.json. Sincronização: 44 artefatos consistentes; diff sem erros de whitespace. A reinjeção das instruções neste chat já contém o reforço. Nenhuma compactação nativa executada ou alegada; os impedimentos técnicos abaixo permanecem. O aceite desta unidade é normativo, não comprovação de automação.
+
 Avaliação/execução exclusivamente do supervisor, C=8. Fonte humana integral e plano em `.ia.rules/state/requests/FT-SUPERVISOR-COMPACT-N7C/prompt.md` e `supervisor-compaction-plan.md`. Norma versionada/enviada em7415925. Nenhum Worker usado para esta manutenção global; helper parcial de A3F preservado.
 
 ## Entregue e conferido

@@ -10,14 +10,12 @@ Em anexo segue uma captura de tela que é apenas um mero exemplo do contexto: so
 
 o recurso de `/compactar` estar disponível no supervisor. Importante que o recursos solicitado de compactar DEVE ser implementado globalmente.
 
-## Vínculo e alcance
-
 ## Complementação humana — modus operandi (18/10/2026)
-
-Exigir isso no próprio prompt/solicitação ou no agents.md como "modus operandi" de forma explicita, normativa e incisiva, provavelmente é suficiente.
 
 Texto original integral: “Exigir isso no próprio prompt/solicitação ou no agents.md como "modus operandi" de forma explicita, normativa e incisiva, provavelmente é suficiente.”
 
 Incorporação: reforço na mesma norma global N7C, sem exigir repetição por pedido e sem substituir confirmação real por declaração textual. Não modifica exceção, ordem, segurança ou limitações técnicas verificadas.
+
+## Vínculo e alcance
 
 RCF: seção FT-SUPERVISOR-COMPACT-N7C. Norma fonte: src/agents.supervisor.md, instalada pelo mecanismo GlobalRulesOnly em CODEX_HOME efetivo. Não é regra local transportada de agents.local.md para outros repositórios. Preservar jobs em curso, seleção de modelo/esforço, pausa humana e demais solicitações pendentes. Não confundir compactação da UI, acionamento pelo agente e confirmação efetiva.

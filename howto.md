@@ -2,6 +2,8 @@
 
 ## Compactação do supervisor após delegar
 
+Esta sequência é o **modus operandi obrigatório** do supervisor, definido no AGENTS global; não é preciso repeti-la em cada pedido. Uma promessa de compactar não comprova a ação.
+
 A norma global instalada exige: recibo `RUNNING` → preservar o mínimo necessário à retomada → avisar no chat com links → compactar o contexto do supervisor → encerrar. Vale para todas as conversas/repositórios, sem configurar agents.local.md em cada um. Somente uso **<10%**, comprovado por medida atual obtida sem custo ou com custo desprezível, dispensa compactar; 10% ou percentual indisponível não dispensam.
 
 O Desktop oferece **Compactar** no menu `/` (`/compactar` em pt-BR). A ação automática depende de o cliente expor esse recurso ao agente na conversa viva. Um botão disponível para o usuário não garante essa interface programática. Na sessão verificada, ela não está exposta: a obrigação global fica instalada, mas a execução automática permanece **impedida**, não concluída. O supervisor deve informar esse limite. Usar manualmente o comando é uma alternativa humana; não é prova da automação solicitada. Não enviar o texto `/compactar` como mensagem comum, editar bancos de histórico ou compactar uma cópia da conversa.
@@ -407,6 +409,8 @@ Fluxo preferencial:
 
 ### Compactação global do supervisor após delegação — N7C
 
+**Modus operandi obrigatório do supervisor: DEVE compactar antes de encerrar após delegação confirmada e aviso, na ordem abaixo. É PROIBIDO tratar esta regra como sugestão, depender de lembrete no pedido ou substituir a compactação por promessa de fazê-la.** A instrução global é permanente; não exija sua repetição em cada solicitação. Aplique somente a exceção estrita de ocupação e, se houver impedimento técnico, registre-o conforme abaixo, sem alegar execução.
+
 Esta obrigação é **global**, para toda conversa nova ou retomada e todo repositório em que este supervisor delegar a um Worker. Não depende de solicitação por chat nem de agents.local.md do alvo. Aplica-se ao contexto do supervisor; não delegue ao Worker sua execução nem confunda com compactação do Ollama.
 
 Após a criação efetiva do job, comprovada pelo recibo `RUNNING`, e somente então:
@@ -691,7 +695,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `e528c19a8e0a99fe0eaa91123822736a5cf29069cca887de493bb5f64b8a7e17` |
+| `src/agents.supervisor.md` | `4db4ce27af892924c367ab5ea8f638a4e1d9e76a9e2f637228809bdd6de0f79c` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

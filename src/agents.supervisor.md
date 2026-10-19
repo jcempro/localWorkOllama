@@ -104,6 +104,8 @@ Fluxo preferencial:
 
 ### Compactação global do supervisor após delegação — N7C
 
+**Modus operandi obrigatório do supervisor: DEVE compactar antes de encerrar após delegação confirmada e aviso, na ordem abaixo. É PROIBIDO tratar esta regra como sugestão, depender de lembrete no pedido ou substituir a compactação por promessa de fazê-la.** A instrução global é permanente; não exija sua repetição em cada solicitação. Aplique somente a exceção estrita de ocupação e, se houver impedimento técnico, registre-o conforme abaixo, sem alegar execução.
+
 Esta obrigação é **global**, para toda conversa nova ou retomada e todo repositório em que este supervisor delegar a um Worker. Não depende de solicitação por chat nem de agents.local.md do alvo. Aplica-se ao contexto do supervisor; não delegue ao Worker sua execução nem confunda com compactação do Ollama.
 
 Após a criação efetiva do job, comprovada pelo recibo `RUNNING`, e somente então:
