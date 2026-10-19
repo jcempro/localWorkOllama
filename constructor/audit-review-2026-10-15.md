@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 27 deles; não substitui o aceite dos outros 40.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 29 deles; não substitui o aceite dos outros 38.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os27 aceites/correções semânticos já registrados neste documento nem aceita os40 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os29 aceites/correções semânticos já registrados neste documento nem aceita os38 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -100,3 +100,15 @@ Auditor 9c725391-020c-4917-aa70-fa6978dce173: local_result consultado uma vez; C
 A progressão comprovada é limpeza seguida de ENOSPC; render sem cópia com assert falha; exclusão de QA reduzindo volume estático medido e expondo HTML; comparação ASCII/escapes aprovada e build completo aprovado. A hipótese de encoding e os5.2GB do pedido não viram prova independente. Não adotar a afirmação contraditória do auditor de que ENOSPC foi resolvido em f70dec62; a recuperação de build é comprovada somente em bdc48fc3. Não inferir espaço livre atual, cobertura global de drafts, autoria/push ou aceite humano. QUEUED_TO_CHAT confirma fila, não resposta aceita.
 
 Falha localizada no parecer: mistura de contexto herdado com efeitos do job e inferência causal além dos recibos, apesar de restrição explícita; WORKER_INCOMPLETE histórico não é reclassificado como infraestrutura. O texto também excedeu o limite solicitado. Correção do registro usa o pacote já disponível; não repete inferência nem negócio. A3F já elimina recontagens mecânicas; próximos recortes semânticos serão menores, exigindo separar fato, hipótese e limite em cada linha. Nenhum novo defeito de runtime/permissão foi demonstrado por este parecer. Acumulado27 revisados/40 pendentes nessa captura.
+
+
+## Segmento 07 — 19/10/2026
+
+Auditor 73cf965d-8f6c-47f8-a29d-ddc13f9c7f78: resultado consultado uma vez; COMPLETED por comparação dos dois recibos fornecidos, nenhuma ferramenta/escrita/commit. Aceite com qualificações de precisão abaixo. Git determinístico main...origin/main limpo corresponde ao auditor, não ao header histórico dev/ahead14.
+
+| ID | Recibo e limite de aceite |
+| --- | --- |
+| ded6e9d8 | Evento3: dev_live falhou1, stderr DEV_LIVE_TIMEOUT; stdout mostra comando npm iniciado e OWN_PROCESS_TREE_STOPPED exit=0. Timeout do critério de prontidão, sem prova de HTTP aprovado, buffering ou defeito funcional do servidor. exit0 pertence ao encerramento comandado da árvore própria, não ao teste inteiro nem a confirmação independente da morte de cada processo. |
+| 7b7c2de3 | Evento3: dev_live_http exit0; DEV_LIVE_DRAFTS_OK HTTP200 ARTICLE_CAPTION_OK e OWN_PROCESS_TREE_STOPPED exit=0. Aceita validação delimitada do dev-live/drafts via HTTP e caption do artigo, com encerramento reportado da árvore própria. Não representa gate global, compatibilidade entre ambientes ou causa comprovada do timeout anterior. |
+
+O sucessor comprova recuperação da validação delimitada usando prontidão HTTP; buffering/tempo insuficiente/instabilidade permanecem hipóteses. Corrigir a expressão do auditor “não há validação de conteúdo”: há verificação delimitada da caption; não há validação integral do conteúdo. “Recupera estado canônico” não é sustentado por recibo de alteração de estado: recupera a validação operacional. Ausência de edição de fontes é restrição do pedido, não demonstração por hunks ausentes. expect_changes=false era intencional para ambos, não implementação omitida. Falha documental do gate anterior não é falha desses comandos. Header Git não comprova autoria/push/limpeza; QUEUED_TO_CHAT só fila. Nenhuma nova execução ou causa de runtime foi necessária. Acumulado29 revisados/38 pendentes nessa captura.
