@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 23 deles; não substitui o aceite dos outros 44.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 27 deles; não substitui o aceite dos outros 40.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os23 aceites/correções semânticos já registrados neste documento nem aceita os44 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os27 aceites/correções semânticos já registrados neste documento nem aceita os40 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -84,3 +84,19 @@ Auditor 6d229ecf-1f6a-4405-a3a5-8f61a88f7ff8: COMPLETED; local_result consultado
 | 67ba13f0 | apply/verify exit0, eventos3/6; FT104_CLOSED_FT105_ACTIVE_STATE_APPLIED e preservação das demais FTs verificada. Transição técnica ensaiada aplicada; aceite humano da FT104 ainda pendente. Não equivale a aceite global ou prova de commit/push. |
 
 As três últimas sequências comprovam somente seus contratos delimitados. As duas primeiras preservaram efeitos e pararam no primeiro erro, sem replay. A frase do auditor sobre ausência de commit/push/limpeza Git vale somente para os recibos fornecidos: headers dev/ahead não provam autoria, publicação ou árvore limpa, nem sua ausência global. QUEUED_TO_CHAT comprova fila, não resposta aceita. Recuperações posteriores não presentes no pacote permanecem indeterminadas; não reabrir falha já corrigida apenas pelo texto histórico. Contagem acumulada:23 revisados/44 pendentes nessa captura.
+
+
+## Segmento 06 — 19/10/2026
+
+Auditor 9c725391-020c-4917-aa70-fa6978dce173: local_result consultado uma vez; COMPLETED por análise exclusiva dos quatro registros fornecidos, sem ferramentas/escrita/commits. Aceite parcial com correções substanciais de atribuição e causalidade. A seção Git determinística main...origin/main limpa é deste auditor; não substitui os headers históricos dev/ahead.
+
+| ID | Evidência efetiva e revisão proporcional |
+| --- | --- |
+| f70dec62 | cleanup_residue exit0, evento3; build_production falhou1, evento6, ENOSPC em write. A liberação anterior de5.2GB por Remove-Item e o resíduo pertencem ao contexto herdado de582a4183, não a um efeito comprovado deste job. O build foi executado e falhou; não estava ausente. Espaço insuficiente NÃO foi resolvido neste recibo. inspect_caption não alcançado. |
+| d7b5c0a5 | cleanup_failed_output exit0, evento3; render_inspect falhou1, evento6, TABLE_SEMANTICS_FAILED; STATIC_BYTES=5816968744 e maiores screenshots listados. Estratégia evita cópia/write completo e muda a validação: ausência de ENOSPC nesse caminho não comprova espaço suficiente para build. Erro da assert não prova defeito semântico da página nem que o render não ocorreu. |
+| 7bb1d8bf | exclude_qa exit0, evento3; render_diagnostic falhou1, evento6. STATIC_BYTES=34337005; stdout ARTICLE=1 TABLES=1, caption, accessible=true, três headers e sete linhas. HTML gerado e propriedades expostas apesar da assert falha; não chamar ausência de render ou diagnóstico totalmente sem detalhes. Exclusão é da entrada/cópia Jekyll, não apagamento dos artefatos QA. |
+| bdc48fc3 | inspect_saved_utf8/build_production exit0, eventos3/6; SAVED_TABLE_UTF8_OK e build concluído25.467s. Aceita a comparação corrigida do HTML salvo e o build completo delimitado solicitado. ENCODING=UTF-8 é dado observado, não prova isolada de defeito de encoding literal Windows no comando anterior. Docs/TTS/dev-live/gate geral permaneceram fora desta unidade. |
+
+A progressão comprovada é limpeza seguida de ENOSPC; render sem cópia com assert falha; exclusão de QA reduzindo volume estático medido e expondo HTML; comparação ASCII/escapes aprovada e build completo aprovado. A hipótese de encoding e os5.2GB do pedido não viram prova independente. Não adotar a afirmação contraditória do auditor de que ENOSPC foi resolvido em f70dec62; a recuperação de build é comprovada somente em bdc48fc3. Não inferir espaço livre atual, cobertura global de drafts, autoria/push ou aceite humano. QUEUED_TO_CHAT confirma fila, não resposta aceita.
+
+Falha localizada no parecer: mistura de contexto herdado com efeitos do job e inferência causal além dos recibos, apesar de restrição explícita; WORKER_INCOMPLETE histórico não é reclassificado como infraestrutura. O texto também excedeu o limite solicitado. Correção do registro usa o pacote já disponível; não repete inferência nem negócio. A3F já elimina recontagens mecânicas; próximos recortes semânticos serão menores, exigindo separar fato, hipótese e limite em cada linha. Nenhum novo defeito de runtime/permissão foi demonstrado por este parecer. Acumulado27 revisados/40 pendentes nessa captura.
