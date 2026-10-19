@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 34 deles; não substitui o aceite dos outros 33.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 37 deles; não substitui o aceite dos outros 30.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os34 aceites/correções semânticos já registrados neste documento nem aceita os33 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os37 aceites/correções semânticos já registrados neste documento nem aceita os30 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -139,3 +139,16 @@ Auditor d3413300-88ca-494a-a993-4cb632d8a343: local_result uma vez; COMPLETED po
 | a742868d | patch/test exit0, eventos3/6; REFERENCES_PATCH_OK e table_speech=ok, teste autorizado60s. Aceita unidade delimitada de comparações exatas dos três modos de referências e sua validação, sem gate global, autoria/push ou prova de ausência de todo defeito TTS. Efeito por comando mutante não é ausência de edição por direct_mutation_ok=0. |
 
 A recomendação nova foi corretamente omitida; não há bloqueio atual demonstrado. Corrigir o limite categórico “10000 insuficiente” para hipótese sustentada pelo diagnóstico posterior, não causa conclusiva. O parecer usa events[43]/events[3,6] como notação de citação: são valores de events.line, não índices de array. QUEUED_TO_CHAT prova enfileiramento, não resposta/aceite do supervisor; sua presença não prova ausência de entrega posterior. Formato excedeu o limite textual solicitado, sem justificar nova inferência. Não reexecutar comandos históricos. Acumulado34 revisados/33 pendentes nessa captura.
+
+
+## Segmento 10 — 19/10/2026
+
+Auditor eb04e73d-e3d1-4c50-a92a-668f6c3f88f4: local_result uma vez; COMPLETED, comparação exclusiva dos três recibos fornecidos, nenhuma ferramenta/escrita/commit. Parecer aceito nos limites declarados; IDs excessivamente abreviados no texto foram expandidos abaixo para identificação inequívoca. Git determinístico main...origin/main limpo refere-se ao auditor, não aos headers históricos dev/ahead7/10/15.
+
+| ID | Efeito/validação comprovados e limite |
+| --- | --- |
+| 7818e441 | patch/test_accessible exit0, eventos3/6; PATCH_APPLIED e accessible_reading=ok. Aceita patch delimitado da instrução/diagnóstico e regressão existente; não funcionalidade global nem prova integral de hunks/invariantes ausentes do pacote. |
+| 7a06b980 | apply_recovered/syntax exit0, eventos3/6; REVIEWED_WORKER_PATCH_APPLIED. Proposta recuperada/revisada aplicada e sintaxe aprovada; não teste funcional TTS. Leitura externa da evidência era delimitada por comando, não manutenção da instalação do Worker. |
+| f7f94ad3 | patch/ruby exit0, eventos3/6; PATCH_APPLIED e markdown_tables=ok. Aceita unidade delimitada de asserções de caption/preservação e teste Ruby, não cobertura universal ou conclusão da FT. |
+
+Três unidades independentes, sem sequência causal presumida entre elas. Efeitos de comandos mutantes são alterações mesmo com direct_mutation_ok=0; o auditor não executou esses comandos, apenas analisou os recibos. Pendência funcional reservada em7a06 não prova pendência atual. HeaderGit/ahead não prova autoria, publicação ou árvore limpa; QUEUED_TO_CHAT só fila, sem determinar resposta posterior. Não houve novo bloqueio material ou necessidade de ampliar acesso/reexecutar. Acumulado37 revisados/30 pendentes nessa captura.
