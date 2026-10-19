@@ -1,5 +1,13 @@
 # FT-AUDIT-FACTS-A3F — projeção mecânica da auditoria
 
+## Checkpoint de 77407022 — compatibilidade com captura real
+
+Resultado consultado uma vez: FAILED/WORKER_INCOMPLETE na etapa verify. Patch CLI aplicado e syntax aprovada; fixtures/erros iniciais passaram, mas leitura da captura real falhou em event.phase no validador. Renderizador permanece com pós-hashf66852fa20fbdc6e4a881455f3668bb12b3971b6178d39b715efa0e559360b7d; Git determinístico registra somente renderer modificado/teste CLI novo. Não reaplicar esse patch nem alegar modo CLI aceito.
+
+Causa-raiz comprovada no contrato de captura: audit-jobs.mjs transforma linha ilegível de worker.log em registro válido {line,parse_error:true}; não é evento normal com phase. As duas capturas retidas possuem seis marcadores dessa forma, nos mesmos jobs antigos. O validador confundiu marcador do coletor com registro de captura malformado; testes sintéticos não cobriam essa variante real. Não corrigir apagando marcador/captura nem inventando phase.
+
+Unidade funcional corretiva C=5/júnior pelo supervisor: adicionar variante EXATA de evento de captura contendo somente line inteiro seguro>0 e parse_error===true. Qualquer outra chave, parse_error inválido ou evento normal sem phase continua recusado. Extrator deve preservar e expor log_parse_error_lines:number[] (campo aditivo, não contagem de ferramenta/progresso), sem incluir texto da linha ilegível. Acrescentar casos de marcador aos testes existentes sem remover/reduzir assertions. command_sequence com patch literal/hashes de ambos os módulos, sintaxe e suites validador/extrator/CLI, incluindo capturas reais. Renderer/teste CLI são dependências preservadas, não alvos de mutação desse reparo. Se tudo passar, revisar e commit/push unidade de variante+testes primeiro; depois aceite/commit próprio CLI. Capturas históricas, hashes de origem, resultados/estado e conhecimento semântico permanecem intactos. Ausência de campo normal obrigatório não vira opcionalidade indiscriminada: variante é discriminada antes da exigência de phase.
+
 ## Aceite do extrator e unidade CLI — 19/10/2026
 
 3932e312 resultado consultado uma vez: patch/syntax/verify exit0, hash90c68dbbbcf15ea82b38feff5dfc53fb43e461bf8e0cf5067fceabc64cce59e6 e dependências/teste conferidos. Extrator e suíte integral aceitos/versionados antes desta unidade; evidência em audit-facts-validation.md. Não repetir suíte anterior por precaução genérica.
