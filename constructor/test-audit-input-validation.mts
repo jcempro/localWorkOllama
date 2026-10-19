@@ -20,4 +20,7 @@ for(const request of [null,[],1])bad([{...base,request}]);
 for(const key of ['required_read_paths','required_command_ids','command_sequence'])for(const value of [null,{},'x',[1],[null]])bad([{...base,request:{[key]:value}}]);
 for(const key of ['result','error'])for(const value of [null,1,{}])bad([{...base,[key]:value}]);
 bad([base,base]);bad([base,{...base,id:id.toUpperCase()}]);bad([{...base,state:{status:'CANCELLED'}},{...base,id:id.toUpperCase()}]);
+const PARSE_MARKER_A3F={...base,events:[{line:7,parse_error:true}]};
+const markerSnapshotA3F=structuredClone(PARSE_MARKER_A3F);assert.equal(validate([PARSE_MARKER_A3F]),undefined);assert.deepEqual(PARSE_MARKER_A3F,markerSnapshotA3F);
+for(const event of [{line:1,parse_error:false},{line:1,parse_error:'true'},{line:1,parse_error:true,phase:'step'},{line:1,parse_error:true,tool:'read_file'},{line:1,parse_error:true,payload:secret},{parse_error:true},{line:0,parse_error:true}])bad([{...base,events:[event]}]);
 console.log('A3F_INPUT_VALIDATION_OK; rejected='+rejected+'; positivos/imutabilidade/UUID/cancelled/ausencia-zero/erro-fixo');

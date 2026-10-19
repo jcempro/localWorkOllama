@@ -8,7 +8,8 @@ type JobStatus = 'QUEUED' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
 
 interface JobEvent {
   line: number;
-  phase: string;
+  phase?: string;
+  parse_error?: true;
   step?: number;
   tool?: string;
   outcome?: string;
@@ -51,6 +52,7 @@ interface Row {
   success_lines: number[];
   error_lines: number[];
   rejected_lines: number[];
+  log_parse_error_lines: number[];
   required_reads_count: number | null;
   required_commands_count: number | null;
   sequence_length: number | null;
@@ -136,8 +138,13 @@ function extractAuditFactsA3F(currentText: string, baselineText: string): Output
     let successLines: number[] = [];
     let errorLines: number[] = [];
     let rejectedLines: number[] = [];
+    const logParseErrorLines: number[] = [];
 
     for (const event of job.events) {
+      if (event.parse_error === true) {
+        logParseErrorLines.push(event.line);
+        continue;
+      }
       const stepNum = extractStepNumber(event.step);
       if (stepNum !== null && (maxLoggedStep === null || stepNum > maxLoggedStep)) {
         maxLoggedStep = stepNum;
@@ -195,6 +202,7 @@ function extractAuditFactsA3F(currentText: string, baselineText: string): Output
       success_lines: successLines,
       error_lines: errorLines,
       rejected_lines: rejectedLines,
+      log_parse_error_lines: logParseErrorLines,
       required_reads_count: requiredReadsCount,
       required_commands_count: requiredCommandsCount,
       sequence_length: sequenceLength,

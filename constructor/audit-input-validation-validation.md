@@ -1,5 +1,9 @@
 # A3F — aceite do módulo de validação de entrada
 
+## Extensão do formato do coletor — 19/10/2026
+
+4988362b consultado uma vez: patch/sintaxe/suítes validador, extrator e CLI exit0. Suite do validador agora rejeita94 casos, preservando os87 anteriores e acrescentando marcador exato {line,parse_error:true} válido/imutável e variantes inválidas. Hash fonte10852aac816172e545fccf772b907309effc93b3df4aa95575be15e4f0947eaa e dependências confirmados. Registros normais continuam exigindo phase; marcador não aceita outra chave nem line inválido. É variante real do coletor, não dispensa genérica para captura malformada. Capturas originais preservadas; nenhuma nova execução dos testes pelo supervisor.
+
 Em 19/10/2026, resultado de 810a1d13-4252-4332-8139-cfaf8f6ed39f consultado uma vez: patch, syntax e verify com exit_code=0. Execução determinística sem inferência. Suíte: 87 entradas inválidas recusadas com erro fixo, entradas válidas/estados permitidos, zero/ausência, UUID duplicado inclusive CANCELLED/caixa e imutabilidade. Não houve repetição desses testes no supervisor.
 
 Revisão proporcional confirmou fonte SHA256 db2ac6593d5f69c000b8622a039bb4fbd18efa7731e3ccc44d51b4b3ca587df5 igual à pós-condição, teste igual ao hash preparado, paths de estado e guarda positiva de events corretos, sem IO/rede/importações externas. Evidências privadas: facts-input-module-proof.json e facts-input-sequence-proof.json em audit-private/2026-10-15-review/.

@@ -96,6 +96,13 @@ export function assertAuditJobsA3F(value: unknown): void {
         throw new Error('MALFORMED_AUDIT_INPUT');
       }
 
+      if (Object.prototype.hasOwnProperty.call(event, 'parse_error')) {
+        if (event.parse_error !== true || Object.keys(event).length !== 2 || !Object.prototype.hasOwnProperty.call(event, 'line')) {
+          throw new Error('MALFORMED_AUDIT_INPUT');
+        }
+        continue;
+      }
+
       const phase = event.phase;
       if (typeof phase !== 'string' || phase.trim() === '') {
         throw new Error('MALFORMED_AUDIT_INPUT');
