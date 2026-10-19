@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 15 deles; não substitui o aceite dos outros 52.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 18 deles; não substitui o aceite dos outros 49.
 
 ## Segmento 01
 
@@ -56,4 +56,16 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os15 aceites/correções semânticos já registrados neste documento nem aceita os52 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os18 aceites/correções semânticos já registrados neste documento nem aceita os49 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+
+## Segmento 04 — 19/10/2026
+
+Auditor d1cebcaf-1814-485b-a585-5fc20f2aa8d4: resultado obtido uma vez, COMPLETED por análise exclusiva de evidência fornecida, sem ferramentas/escrita/commits. Aceite parcial com correções semânticas abaixo, sem repetir a análise. Git determinístico do auditor main...origin/main limpo corresponde a este repositório, não aos headers dev históricos do pacote.
+
+| ID | Retorno efetivo e revisão proporcional |
+| --- | --- |
+| 36078456 | preview exit0, evento3, FT104_CLOSE_PREVIEW_OK_LIVE_STATE_UNCHANGED. Ensaio em cópia isolada, expect_changes=false intencional; não implementa conclusão no estado vivo nem dispensa aceite humano. Não é ausência indevida de implementação. Header histórico ahead5 não prova autoria/push/limpeza. |
+| 373f8fd3 | attach_ial/test_tables exit0, eventos3/6; IAL_ADJACENT=4 e markdown_tables=ok. Prova da correção delimitada de associação das quatro IALs e teste funcional da fixture, não apenas sintaxe. Não comprova gate global, outro job ou conteúdo ausente do pacote; header ahead8 é histórico. |
+| 5be68a62 | Quatro edições bem-sucedidas, eventos13/19/41/63; dois erros de âncora27/49; syntax exit0 no71. Alteração da fixture/stub com validação de sintaxe; teste funcional era explicitamente proibido nessa unidade e ficou para outra. Conteúdo das edições não consta do pacote: cobertura integral dos cinco pontos e linhas removidas73–83 permanece indeterminada, não negada. Header ahead10 não demonstra autoria/push/limpeza. |
+
+Correção do parecer: omitir erros intermediários não contradiz necessariamente uma conclusão após reparos. Há edições posteriores aos erros27/49; o pacote não sustenta a afirmação categórica de que não houve recuperação, nem prova quais hunks resolveram cada erro. A seção NEEDS_SUPERVISOR do auditor é recomendação textual baseada nessa inferência indevida, não prova de autorização faltante ou mudança do error_kind dos jobs. Não pedir confirmação humana redundante nem reexecutar o negócio por essa alegação. Afirmação histórica de ausência de risco não é adotada como avaliação pelo supervisor. Os três registros ficam revisados com estes limites;49 pendentes.
