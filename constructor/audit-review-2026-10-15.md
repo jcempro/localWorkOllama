@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 18 deles; não substitui o aceite dos outros 49.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 23 deles; não substitui o aceite dos outros 44.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os18 aceites/correções semânticos já registrados neste documento nem aceita os49 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os23 aceites/correções semânticos já registrados neste documento nem aceita os44 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -69,3 +69,18 @@ Auditor d1cebcaf-1814-485b-a585-5fc20f2aa8d4: resultado obtido uma vez, COMPLETE
 | 5be68a62 | Quatro edições bem-sucedidas, eventos13/19/41/63; dois erros de âncora27/49; syntax exit0 no71. Alteração da fixture/stub com validação de sintaxe; teste funcional era explicitamente proibido nessa unidade e ficou para outra. Conteúdo das edições não consta do pacote: cobertura integral dos cinco pontos e linhas removidas73–83 permanece indeterminada, não negada. Header ahead10 não demonstra autoria/push/limpeza. |
 
 Correção do parecer: omitir erros intermediários não contradiz necessariamente uma conclusão após reparos. Há edições posteriores aos erros27/49; o pacote não sustenta a afirmação categórica de que não houve recuperação, nem prova quais hunks resolveram cada erro. A seção NEEDS_SUPERVISOR do auditor é recomendação textual baseada nessa inferência indevida, não prova de autorização faltante ou mudança do error_kind dos jobs. Não pedir confirmação humana redundante nem reexecutar o negócio por essa alegação. Afirmação histórica de ausência de risco não é adotada como avaliação pelo supervisor. Os três registros ficam revisados com estes limites;49 pendentes.
+
+
+## Segmento 05 — 19/10/2026
+
+Auditor 6d229ecf-1f6a-4405-a3a5-8f61a88f7ff8: COMPLETED; local_result consultado uma vez, análise exclusiva do pacote fornecido, sem ferramentas/escrita/commits. Aceite parcial com complemento dos efeitos e limites omitidos, sem reexecutar o negócio. Git determinístico do auditor main...origin/main limpo; não descreve o Git histórico do alvo.
+
+| ID | Retorno efetivo e revisão proporcional |
+| --- | --- |
+| 226196af | docs_patch exit0, evento3; docs_test falhou1, evento6: inventário de modos de uso divergente. tables_test não alcançado. O parecer omitiu o patch anterior bem-sucedido; falha posterior não o desfaz. Unidade documental/gate incompleta, sem causa mais profunda demonstrada pelo recorte. |
+| 582a4183 | cleanup_own_tmp falhou1, evento3: pasta não vazia/CLEANUP_FAILED. Build e inspeção seguintes não executados. expect_changes=false era intencional. Possíveis efeitos parciais da limpeza não são demonstrados nem negados; erro não prova permissão, lock ou causa do SO. |
+| 5ffd962a | assert_patch/test exit0, eventos3/6; ASSERT_PATCH_OK e table_speech=ok. Aceita correção delimitada das asserções/timer e teste com runtime real/unidades faladas; referências e variantes HTML permaneceram fora desta unidade. |
+| 6136638a | patch_load/syntax exit0, eventos3/6; LOAD_PATCH_OK. Aceita alteração delimitada de carregamento jsdom/import e sintaxe; teste funcional estava explicitamente proibido, controles/asserções reservados à unidade seguinte. Não é prova funcional completa. |
+| 67ba13f0 | apply/verify exit0, eventos3/6; FT104_CLOSED_FT105_ACTIVE_STATE_APPLIED e preservação das demais FTs verificada. Transição técnica ensaiada aplicada; aceite humano da FT104 ainda pendente. Não equivale a aceite global ou prova de commit/push. |
+
+As três últimas sequências comprovam somente seus contratos delimitados. As duas primeiras preservaram efeitos e pararam no primeiro erro, sem replay. A frase do auditor sobre ausência de commit/push/limpeza Git vale somente para os recibos fornecidos: headers dev/ahead não provam autoria, publicação ou árvore limpa, nem sua ausência global. QUEUED_TO_CHAT comprova fila, não resposta aceita. Recuperações posteriores não presentes no pacote permanecem indeterminadas; não reabrir falha já corrigida apenas pelo texto histórico. Contagem acumulada:23 revisados/44 pendentes nessa captura.
