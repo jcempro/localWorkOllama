@@ -1,5 +1,11 @@
 # FT-AUDIT-FACTS-A3F — projeção mecânica da auditoria
 
+## A3F entregue e segmento04 delimitado — 19/10/2026
+
+4988362b resultado uma vez: todos os sete comandos exit0,94 rejeições mais positivos, extrator integral e CLI real264/197/67 aprovados. Hashes/dependências/diff conferidos; variante e CLI versionadas em unidades próprias. Projeção positiva audit-facts-2026-10-15.json gerada para apoiar os52 registros pendentes;33 FAILED/34 COMPLETED não são aceites. Não repetir os15 registros já revisados ou suas execuções.
+
+Próxima unidade de auditoria read-only, C=5/júnior pelo supervisor: comparação única pedido↔retorno em três jobs ainda não revistos, 36078456/373f8fd3/5be68a62. Evidência mínima da captura histórica já obtida, fatos do gerador aceito e eventos/recibos pertinentes, sem exploração nova nem atuação no repositório de negócio. Worker não calcula risco, não reconta fatos mecânicos, não recomenda acesso nem afirma causalidade/recuperação global sem fonte. Critério: distinguir ensaio isolado/implementação delimitada/teste de aceite global; citar ID/campos/linhas, marcar limite material e divergência textual observável, até360 palavras. Resultado é parecer preliminar; supervisor revisa somente inconsistências e aceite proporcional. Nenhum arquivo/comando obrigatório é necessário para análise exclusiva de evidência fornecida; ausência de ferramenta não simula execução.
+
 ## Checkpoint de 77407022 — compatibilidade com captura real
 
 Resultado consultado uma vez: FAILED/WORKER_INCOMPLETE na etapa verify. Patch CLI aplicado e syntax aprovada; fixtures/erros iniciais passaram, mas leitura da captura real falhou em event.phase no validador. Renderizador permanece com pós-hashf66852fa20fbdc6e4a881455f3668bb12b3971b6178d39b715efa0e559360b7d; Git determinístico registra somente renderer modificado/teste CLI novo. Não reaplicar esse patch nem alegar modo CLI aceito.

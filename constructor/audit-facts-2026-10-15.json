@@ -1,0 +1,1987 @@
+{
+  "schema": 1,
+  "hashes": {
+    "current": "37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9",
+    "baseline": "3be6512b551998ea3b57e3a6fcaade266fcbbb874415947c9f114fee2e363bdf"
+  },
+  "counts": {
+    "current": 264,
+    "baseline": 197,
+    "new": 67
+  },
+  "rows": [
+    {
+      "id": "00621c72-993c-4cca-9e36-d53e4a174745",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 40,
+      "max_logged_step": 40,
+      "context_compactions": 21,
+      "tool_counts": {
+        "read_file_ok": 18,
+        "direct_mutation_ok": 8,
+        "authorized_command_ok": 1,
+        "errors": 12,
+        "rejected": 1
+      },
+      "success_lines": [
+        13,
+        15,
+        22,
+        46,
+        52,
+        58,
+        64,
+        72,
+        81,
+        96,
+        111,
+        120,
+        135,
+        142,
+        158,
+        165,
+        180,
+        194,
+        202,
+        210,
+        218,
+        233,
+        240,
+        255,
+        261,
+        277,
+        284,
+        300
+      ],
+      "error_lines": [
+        11,
+        39,
+        88,
+        103,
+        127,
+        150,
+        173,
+        186,
+        225,
+        248,
+        269,
+        292
+      ],
+      "rejected_lines": [
+        31
+      ],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "0ceda154-03fc-4bd9-9fe1-0da624ebfb43",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        7,
+        9
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 3,
+      "required_commands_count": 2,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "15e0efc2-6fb7-4ccc-8396-f5d72bcaf8ed",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "226196af-e92e-47b5-99e3-1820c828dab8",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [
+        6
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 3,
+      "sequence_length": 3,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "29ac7c19-0e24-4f09-9c5e-677a435e1ae2",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "2d6789a3-1ccb-4909-92e1-627d9f45fd5c",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 6,
+      "max_logged_step": 6,
+      "context_compactions": 3,
+      "tool_counts": {
+        "read_file_ok": 4,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        7,
+        13,
+        21,
+        29
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "2da3cc2a-c3f8-4335-a1e5-a33c7229fa0b",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "36078456-a0bc-48f5-955f-f0bd6555e241",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 1,
+      "sequence_length": 1,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "373f8fd3-5e0f-45f6-855c-0e5a3a3a9019",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "3db8dd11-3a39-47e2-b6a8-24f1f60ee06d",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "48b4c5ac-a49f-488d-9af6-8ebe24e33737",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "4cb8cc24-6889-455f-8810-ed4bdcf93a0f",
+      "status": "FAILED",
+      "error_kind": "WORKER_INFRA_ERROR",
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 3,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "50968baf-706f-4792-b186-1863640dcdcb",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "52ac1052-de4c-47a1-83c2-16c6fe984fcd",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 7,
+      "max_logged_step": 7,
+      "context_compactions": 3,
+      "tool_counts": {
+        "read_file_ok": 4,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [
+        7,
+        13,
+        21,
+        29
+      ],
+      "error_lines": [
+        43
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "567e8a54-748e-43d2-b2bb-3c1067ff3db9",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 11,
+      "max_logged_step": 11,
+      "context_compactions": 7,
+      "tool_counts": {
+        "read_file_ok": 6,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 4,
+        "rejected": 1
+      },
+      "success_lines": [
+        7,
+        22,
+        37,
+        53,
+        69,
+        79
+      ],
+      "error_lines": [
+        14,
+        45,
+        61,
+        87
+      ],
+      "rejected_lines": [
+        29
+      ],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "582a4183-33a7-4e97-9bad-2868443ec00f",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [
+        3
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 3,
+      "sequence_length": 3,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "5be68a62-dd24-42e8-8683-85be37d4af30",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 11,
+      "max_logged_step": 11,
+      "context_compactions": 5,
+      "tool_counts": {
+        "read_file_ok": 3,
+        "direct_mutation_ok": 4,
+        "authorized_command_ok": 1,
+        "errors": 2,
+        "rejected": 0
+      },
+      "success_lines": [
+        7,
+        13,
+        19,
+        33,
+        41,
+        55,
+        63,
+        71
+      ],
+      "error_lines": [
+        27,
+        49
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "5ffd962a-edba-4289-86be-8af5db81caf6",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "6136638a-e2bf-4c88-b7fb-cab7e432fd0c",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "67ba13f0-e284-4f7f-b0e6-43bac8c44a79",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "7818e441-7f6d-4b64-aa8f-4f4f5dca9879",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "7951fc49-57bd-4198-8c82-00fa0f7f738a",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 5,
+      "max_logged_step": 5,
+      "context_compactions": 3,
+      "tool_counts": {
+        "read_file_ok": 6,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        7,
+        13,
+        21,
+        29,
+        38,
+        41
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "7a06b980-2c92-4931-958e-0608469662a1",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "7a4bfd71-36da-4441-9135-bb3e08d4090c",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "7b7c2de3-a397-4c50-8a44-cd5495e0c29f",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 1,
+      "sequence_length": 1,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "7bb1d8bf-5f39-4d45-9a9a-79f2d5786ae6",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [
+        6
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "80d75353-ed04-49f1-87f7-3dd1f18be80b",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "81771c36-02c3-4b30-b74d-0e5923772c02",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "845e8f16-0c15-45a9-9108-7058e6f2ae16",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 4,
+      "max_logged_step": 4,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 3,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6,
+        9
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 3,
+      "sequence_length": 3,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "850fe313-7097-43cb-a93d-cbd62eac7755",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [
+        3
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 1,
+      "sequence_length": 1,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "855bbb2a-5620-417f-bef9-05e8ccb00ec3",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 1,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        11
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "87920a99-c743-44fa-80a1-6e46ba8158db",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [
+        6
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "9238f726-d0e3-47f8-b272-279168a3f460",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 4,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "964bf666-03be-4d7c-b042-0b3bf881d136",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 6,
+      "max_logged_step": 6,
+      "context_compactions": 3,
+      "tool_counts": {
+        "read_file_ok": 4,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        7,
+        13,
+        21,
+        29
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "9ca23c77-0a8d-4063-ab91-3ba338eb03e1",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 17,
+      "max_logged_step": 17,
+      "context_compactions": 11,
+      "tool_counts": {
+        "read_file_ok": 14,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        11,
+        18,
+        26,
+        33,
+        41,
+        49,
+        57,
+        65,
+        74,
+        80,
+        88,
+        96,
+        104,
+        112
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "9dd1915a-c01f-441f-8268-c7f2161e4e5b",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "9ec1e23a-d31c-4818-8ba1-013346b15497",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [
+        3
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 1,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "a742868d-3f27-4c61-a5c3-00181d6711fc",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "a98bd4cf-bb4f-4f40-83a6-59382676168b",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 4,
+      "max_logged_step": 4,
+      "context_compactions": 1,
+      "tool_counts": {
+        "read_file_ok": 1,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 2,
+        "rejected": 0
+      },
+      "success_lines": [
+        11
+      ],
+      "error_lines": [
+        13,
+        15
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "ac25e110-065d-454e-b29a-3f1238c74c1f",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 7,
+      "max_logged_step": 7,
+      "context_compactions": 4,
+      "tool_counts": {
+        "read_file_ok": 7,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        7,
+        14,
+        22,
+        30,
+        37,
+        46,
+        55
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "ace2caf9-fd2f-4ae1-9b94-9c7285bd169c",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 6,
+      "max_logged_step": 6,
+      "context_compactions": 3,
+      "tool_counts": {
+        "read_file_ok": 6,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        7,
+        13,
+        21,
+        29,
+        38,
+        46
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "b212e6dd-aac0-49ae-89cd-77186777c006",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "b7d4115e-9223-4c1f-88d6-e72010802c77",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "b8d8a59b-052a-40e6-ab79-3fe6f7449362",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "b9790e31-92b4-4c5d-8508-a46724f997e5",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "bdc48fc3-f75f-4b18-b2ab-63d41b1d97cb",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "be54a370-2976-4c6a-be5e-dc89e229e813",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 12,
+      "max_logged_step": 12,
+      "context_compactions": 2,
+      "tool_counts": {
+        "read_file_ok": 3,
+        "direct_mutation_ok": 1,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 3
+      },
+      "success_lines": [
+        11,
+        18,
+        37,
+        43,
+        51,
+        59,
+        73,
+        80
+      ],
+      "error_lines": [],
+      "rejected_lines": [
+        24,
+        30,
+        66
+      ],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "c08b2047-0952-4110-af9c-f11078a077c6",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "c47c35df-3deb-43d1-a66b-ba9c18d6fc5d",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "c5cc6492-20a0-47e7-8c5b-4dc078f1fa5e",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "c783f2b4-a750-4ff4-8c6d-774188d8353a",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 9,
+      "max_logged_step": 9,
+      "context_compactions": 5,
+      "tool_counts": {
+        "read_file_ok": 8,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [
+        11,
+        13,
+        28,
+        36,
+        44,
+        52,
+        67,
+        70
+      ],
+      "error_lines": [
+        20
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 2,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "ca6bcea3-674b-47c4-bc29-c936108a2b4b",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 2,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "cee6b553-6454-4ef3-8cb8-b3eb0ee6a347",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 1,
+      "sequence_length": 1,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "d247d901-849b-42bf-99bb-3e40e5982f36",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 4,
+      "max_logged_step": 4,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 3,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6,
+        9
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 3,
+      "sequence_length": 3,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "d256005c-42c9-49e4-a804-e946ccc262e6",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [
+        6
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "d57cd733-a47d-41db-8add-1d87e99bc872",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 5,
+      "max_logged_step": 5,
+      "context_compactions": 2,
+      "tool_counts": {
+        "read_file_ok": 6,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 3,
+        "rejected": 0
+      },
+      "success_lines": [
+        11,
+        13,
+        15,
+        17,
+        19,
+        21,
+        28
+      ],
+      "error_lines": [
+        30,
+        32,
+        35
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 4,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "d7a0443d-b8da-4d05-a5f5-98dee1a619e9",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 5,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "d7b5c0a5-be55-401b-9fe2-52214f95c5a3",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [
+        6
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "ded6e9d8-0bc1-46d2-818d-6e748dd277d0",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [
+        3
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 1,
+      "sequence_length": 1,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "dfcf6830-dcb2-4f7d-a7e1-b58aad673491",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 1,
+      "sequence_length": 1,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "e12c3b2b-a8e5-4103-9479-52f657b205ce",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 8,
+      "max_logged_step": 8,
+      "context_compactions": 3,
+      "tool_counts": {
+        "read_file_ok": 2,
+        "direct_mutation_ok": 1,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        11,
+        18,
+        31,
+        38,
+        46
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 1,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "f38692fc-4f5a-48b7-a595-d3d83b28f79b",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 1,
+      "max_logged_step": 1,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "f604c51c-fa1c-4111-a73c-6731cb390b0d",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 6,
+      "max_logged_step": 6,
+      "context_compactions": 3,
+      "tool_counts": {
+        "read_file_ok": 8,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 1,
+        "rejected": 2
+      },
+      "success_lines": [
+        9,
+        11,
+        13,
+        20,
+        22,
+        24,
+        32,
+        34
+      ],
+      "error_lines": [
+        7
+      ],
+      "rejected_lines": [
+        37,
+        46
+      ],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "f6aee59a-4cbb-4056-9c19-5e7e46509a88",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 6,
+      "max_logged_step": 6,
+      "context_compactions": 2,
+      "tool_counts": {
+        "read_file_ok": 3,
+        "direct_mutation_ok": 1,
+        "authorized_command_ok": 0,
+        "errors": 3,
+        "rejected": 0
+      },
+      "success_lines": [
+        7,
+        11,
+        13,
+        28
+      ],
+      "error_lines": [
+        9,
+        20,
+        34
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 1,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "f70dec62-442a-458b-96da-82882b0d0e73",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 1,
+        "errors": 1,
+        "rejected": 0
+      },
+      "success_lines": [
+        3
+      ],
+      "error_lines": [
+        6
+      ],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 3,
+      "sequence_length": 3,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "f7f94ad3-1941-4cef-a266-bd10eda6e578",
+      "status": "COMPLETED",
+      "error_kind": null,
+      "reported_step": 3,
+      "max_logged_step": 3,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 2,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [
+        3,
+        6
+      ],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 0,
+      "required_commands_count": 2,
+      "sequence_length": 2,
+      "result_present": true,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    },
+    {
+      "id": "ff4dda85-bd36-4b69-87f0-9d4dd50f19de",
+      "status": "FAILED",
+      "error_kind": "WORKER_INCOMPLETE",
+      "reported_step": 2,
+      "max_logged_step": 2,
+      "context_compactions": 0,
+      "tool_counts": {
+        "read_file_ok": 0,
+        "direct_mutation_ok": 0,
+        "authorized_command_ok": 0,
+        "errors": 0,
+        "rejected": 0
+      },
+      "success_lines": [],
+      "error_lines": [],
+      "rejected_lines": [],
+      "log_parse_error_lines": [],
+      "required_reads_count": 7,
+      "required_commands_count": 0,
+      "sequence_length": 0,
+      "result_present": false,
+      "git_section_present": true,
+      "semantic_acceptance": "NOT_ASSESSED"
+    }
+  ]
+}
