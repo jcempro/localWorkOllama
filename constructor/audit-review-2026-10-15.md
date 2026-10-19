@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 29 deles; não substitui o aceite dos outros 38.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 31 deles; não substitui o aceite dos outros 36.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os29 aceites/correções semânticos já registrados neste documento nem aceita os38 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os31 aceites/correções semânticos já registrados neste documento nem aceita os36 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -112,3 +112,17 @@ Auditor 73cf965d-8f6c-47f8-a29d-ddc13f9c7f78: resultado consultado uma vez; COMP
 | 7b7c2de3 | Evento3: dev_live_http exit0; DEV_LIVE_DRAFTS_OK HTTP200 ARTICLE_CAPTION_OK e OWN_PROCESS_TREE_STOPPED exit=0. Aceita validação delimitada do dev-live/drafts via HTTP e caption do artigo, com encerramento reportado da árvore própria. Não representa gate global, compatibilidade entre ambientes ou causa comprovada do timeout anterior. |
 
 O sucessor comprova recuperação da validação delimitada usando prontidão HTTP; buffering/tempo insuficiente/instabilidade permanecem hipóteses. Corrigir a expressão do auditor “não há validação de conteúdo”: há verificação delimitada da caption; não há validação integral do conteúdo. “Recupera estado canônico” não é sustentado por recibo de alteração de estado: recupera a validação operacional. Ausência de edição de fontes é restrição do pedido, não demonstração por hunks ausentes. expect_changes=false era intencional para ambos, não implementação omitida. Falha documental do gate anterior não é falha desses comandos. Header Git não comprova autoria/push/limpeza; QUEUED_TO_CHAT só fila. Nenhuma nova execução ou causa de runtime foi necessária. Acumulado29 revisados/38 pendentes nessa captura.
+
+
+## Segmento 08 — 19/10/2026
+
+Auditor 70d246a7-42c3-40dc-894c-1baf70c04007: local_result uma vez; COMPLETED, análise exclusiva de evidência fornecida, nenhuma ferramenta/escrita/commit. Aceite parcial; recomendação de nova execução recusada por extrapolar estado histórico e ignorar sucessor já informado. Git determinístico main...origin/main limpo descreve o auditor, não dev/ahead10 histórico.
+
+| ID | Fato comprovado e limite |
+| --- | --- |
+| 964bf666 | WORKER_INCOMPLETE/CONTEXT_CAPACITY, HTTP400:32824 tokens para32768. Quatro read_file exitok nos eventos7/13/21/29, nenhum efeito de mutação ou comando aprovado; evento37 registra test pendente. Três compactações registradas não demonstram causa exata do crescimento ou defeito de hardware. Não reclassificar automaticamente como infraestrutura. Acusação herdada sobre remoção no job5be68 não está comprovada por hunks neste pacote. |
+| 9dd1915a | restore/syntax exit0, eventos3/6; FIXTURE_RESTORED. Aceita restauração delimitada da fixture e sintaxe, não teste funcional. A frase “sem edição” do parecer é incorreta: o efeito foi produzido por comando autorizado, não por ferramenta edit_file; zero mutações diretas não implica zero alterações. Asserções/teste estavam reservados à próxima unidade. |
+
+Progressão correta: falha contextual sem implementação; nova unidade determinística reduzida restaurou fixture/sintaxe; sucessor5ffd962a, já revisado no segmento05 e explicitamente incluído no pacote, aprovou assert_patch/test com table_speech=ok. Portanto não há fundamento para afirmar contexto atual excedido, teste atual bloqueado ou necessidade atual de executar test. NEEDS_SUPERVISOR do parecer não comprova bloqueio presente nem autorização faltante. Nenhuma reexecução histórica ou alteração de reservas/contexto é autorizada por esse texto. QUEUED_TO_CHAT permanece recibo de fila.
+
+Causa observada do erro de parecer: interpretação temporal e confusão entre ferramenta direta e efeito de comando. Conferência pontual de worker-core.mjs mostrou suppliedEvidence serializado integralmente no contexto; não foi encontrada omissão no caminho de montagem. Isso não prova causa interna do modelo. Recorte menor e instruções explícitas reduziram volume, mas não eliminaram extrapolação: manter revisão proporcional e não tratar recomendações geradas como novos bloqueios. Formato fixo do runtime inclui seções adicionais; próximos pedidos devem preenchê-las com limites objetivos, sem plano futuro especulativo. Sem repetição deste parecer ou negócio. Acumulado31 revisados/36 pendentes nessa captura.
