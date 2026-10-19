@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 45 deles; não substitui o aceite dos outros 22.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 46 deles; não substitui o aceite dos outros 21.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os45 aceites/correções semânticos já registrados neste documento nem aceita os22 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os46 aceites/correções semânticos já registrados neste documento nem aceita os21 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -202,3 +202,14 @@ Auditor f76c4cb8-873c-4491-b2bb-5b9a1c1a8681: local_result uma vez; runtime COMP
 A frase “strategy_blocked não se aplica, não houve repetição sem progresso” não está demonstrada: falta de evento nesse recorte não prova a negação causal. Rejeitar pedido de nova autorização: test_accessible já estava autorizado/exigido, não existe evidência de permissão faltante. Sucessor7818e441, já aceito no segmento10 e explicitamente informado, aprovou patch/test_accessible com accessible_reading=ok; a pendência histórica não prova bloqueio atual. HeaderGit não prova autoria/push/limpeza; QUEUED_TO_CHAT só fila.
 
 Localização da omissão: geração do parecer depois da entrega do pacote de dois registros; não há evidência de perda de transporte ou de erro de ferramenta. Causa interna do modelo indeterminada; tarefa de comparação com dois itens não produziu cobertura integral. Correção de contexto/delegação: preservar9ca já revisto, reduzir a continuação exclusivamente ao item omitido7951fc49, com resposta factual curta e identidade explícita. Novo job deve referenciar esta falha e não reanalisar9ca ou sucessores já aceitos. Isto não refaz o negócio nem repete a análise entregue. Acumulado45 revisados/22 pendentes nessa captura.
+
+
+## Segmento 14b — 19/10/2026
+
+Auditor aceedc24-1103-4913-9796-65b5ff04400f: local_result uma vez; runtime COMPLETED/error_kind=null, nenhuma ferramenta/escrita/commit. Continuação corretiva cobriu o único item omitido no parecerf76c4cb8; aceite parcial com correção do plano/autorização indevidos. Git determinístico main...origin/main limpo é do auditor, não do header histórico dev/ahead10.
+
+| ID | Fato comprovado e limite |
+| --- | --- |
+| 7951fc49 | WORKER_INCOMPLETE por ausência de progresso verificável; seis read_file aprovadas nos eventos7/13/21/29/38/41; strategy_blocked40 por quatro ações sem progresso. Nenhuma mutação/comando aprovado ou erro de ferramenta registrado. Correção/validação exigidas não foram entregues nessa unidade. reported_step=5 e max_logged_step=5 são posições observadas, não limite de cinco ciclos: rejeitar notação5/5 como orçamento. Três compactações não provam causa interna do comportamento. |
+
+O item foi finalmente identificado, mas o parecer repetiu inferência temporal indevida: falta atual de alternativa/autorização não foi demonstrada. O pacote informava sucessores6136638a e5ffd962a já aceitos: carregamento/sintaxe e asserções/teste delimitados recuperados em outras unidades. Não chamar isso patch já validado pelo próprio7951 nem afirmar recuperação global universal. A autorização para corrigir/testar já existia; NEEDS_SUPERVISOR textual não cria decisão material pendente e não muda error_kind histórico. O registroFAILED permanece como história, não prova de defeito atual. QUEUED_TO_CHAT só fila; headerGit não autoria/push/limpeza. Não repetir mais esta análise para obter redação perfeita nem executar negócio por sugestão do parecer. Cobertura da omissão concluída com revisão proporcional:46 revisados/21 pendentes nessa captura.
