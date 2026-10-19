@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 48 deles; não substitui o aceite dos outros 19.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 51 deles; não substitui o aceite dos outros 16.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os48 aceites/correções semânticos já registrados neste documento nem aceita os19 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os51 aceites/correções semânticos já registrados neste documento nem aceita os16 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -225,3 +225,16 @@ Auditor d27e267c-05f4-4d12-b8ea-c235374b0f40: local_result uma vez; COMPLETED, c
 | d256005c | patch_fixture exit0 no evento3, seguido de test_tables exit1 no evento6; stderr duas tabelas com captions falhou, Jekyll::Errors::FatalException/jcem_accessibility=tabela_sem_caption. Efeito do patch preservado; não é nenhuma edição ou teste aprovado. Sem scripts/hunks, causa específica entre fixture, parser, metadados e runtime permanece indeterminada neste pacote. |
 
 O parecer não transformou f7f94ad3 já revisto em prova de toda recuperação específica, nem a ausência dessa prova em ausência global de recuperação. reported_step/max_logged_step são posições observadas, não limite de ciclos. Histórico não determina estado atual; headerGit não prova autoria/push/limpeza; QUEUED_TO_CHAT só fila. Não há pedido novo sustentado ou motivo para replay/expansão de acesso. Acumulado48 revisados/19 pendentes nessa captura.
+
+
+## Segmento 16 — 19/10/2026
+
+Auditor 47d485d0-6849-424a-998e-dbf511c026ce: local_result uma vez; COMPLETED por análise dos três recibos, nenhuma ferramenta/escrita/commit. Cobertura integral dos três IDs, aceite parcial com correção de interpretação de campo. Git determinístico main...origin/main limpo é do auditor, não dos headers históricos dev/ahead15/14/16.
+
+| ID | Efeito/validação e limite de aceite |
+| --- | --- |
+| ac25e110 | Sete read_file aprovadas nos eventos7/14/22/30/37/46/55; strategy_blocked54 por quatro ações sem progresso, sem mutação/comando aprovado. Ampliação das asserções não entregue nessa unidade. Sucessorf7f94ad3 já aceito como patch/ruby delimitados; não converter pendência histórica em bloqueio atual ou falta de autorização. |
+| e12c3b2b | Leitura11; ruby18 aprovado antes de alterar. Evento25 change_requirement contém missing_paths do alvo e no_net_git_change=true: ainda não havia mudança líquida exigida no conteúdo Git. Leitura31, edit_file38 aprovado, ruby46 aprovado depois da edição. Guarda operou, não estava ausente; nada nesse campo informa rede. Aceita edição/teste delimitados de HTML existente; sem hunks, não provar toda contagem/asserção de caption só pelo relato final. |
+| b7d4115e | patch/tts exit0, eventos3/6; PATCH_APPLIED e table_speech=ok. Aceita fixture/teste real delimitados de headers múltiplos, TH de dados e tfoot. Stub CSS.escape para IDs simples não valida escaping geral. Não é gate global ou cobertura universal. |
+
+Rejeitar “guarda não gerada por ausência de rede”: a própria guarda existe no evento25, e no_net_git_change é ausência de diferença líquida de conteúdo Git, não ausência de rede. Causa de comunicação identificada: a tarefa do supervisor abreviou o campo para “missing/no_net”, expressão ambígua; o modelo ampliou-a para causa inventada. Correção generalista na preparação de evidência: constructor/audit-field-semantics.json define campos potencialmente ambíguos e deve acompanhar os próximos pacotes como dados auxiliares, com nomes completos e significado literal, sem acrônimos soltos. Não alterar runtime, permissões ou rede por essa interpretação. Os números7/8/3 na coluna limite do parecer eram passos observados, não limites de ciclo/aceite; substituídos pelos limites reais acima. Avaliação histórica de risco não é adotada. QUEUED_TO_CHAT só fila. Acumulado51 revisados/16 pendentes nessa captura.

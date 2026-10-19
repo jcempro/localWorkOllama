@@ -1,0 +1,10 @@
+{
+  "reported_step": "Passo informado pelo estado; não é limite nem orçamento de ciclos.",
+  "max_logged_step": "Maior passo observado nos eventos retidos; não é teto configurado.",
+  "change_requirement.no_net_git_change": "true significa nenhuma diferença líquida de conteúdo Git comprovada naquele checkpoint. NET é líquido, NÃO rede/network. Não informa conectividade.",
+  "change_requirement.missing_paths": "Alvos ainda sem a alteração líquida exigida naquele checkpoint; não significa necessariamente arquivo ausente no filesystem.",
+  "tool_counts.direct_mutation_ok": "Sucessos das ferramentas diretas de mutação; não inclui efeitos mutantes de comandos autorizados.",
+  "tool_counts.authorized_command_ok": "Quantidade de comandos autorizados com exit_code=0; não prova commit, cobertura universal ou ausência de tentativas falhas.",
+  "QUEUED_TO_CHAT": "Recibo de enfileiramento, não confirmação de resposta/aceite do supervisor.",
+  "git_header": "Header histórico do Git; ahead não comprova autoria, push ou árvore limpa."
+}
