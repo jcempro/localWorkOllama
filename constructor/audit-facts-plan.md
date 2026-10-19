@@ -1,5 +1,11 @@
 # FT-AUDIT-FACTS-A3F — projeção mecânica da auditoria
 
+## Segmento04 revisto e segmento05 delimitado — 19/10/2026
+
+d1cebcaf resultado uma vez, parecer read-only aceito parcialmente com correções em audit-review-2026-10-15.md (commit136a714):18 registros revistos/49 pendentes. Não repetir o segmento. Erros intermediários não provam ausência de reparo quando há efeitos posteriores; sintaxe não equivale a teste funcional. Git do auditor main limpo não é o header dev/ahead dos registros históricos. Recomendação textual NEEDS_SUPERVISOR baseada em inferência errada não exige confirmação humana redundante.
+
+Correção geral T8H de normalização do vínculo/contexto concluída, testada e instalada exclusivamente pelo supervisor C=8; plano/validação próprios, commit45594d8, duas cópias PAUSED preservadas. Não usar esse Worker para sua correção nem reabrir Desktop. Próximo segmento05 C=5/júnior, somente comparação de evidência histórica já obtida, sem classificação de risco: até cinco sequências determinísticas ainda não revistas (226196af/582a4183/5ffd962a/6136638a/67ba13f0), até12000 caracteres com margem. Separar efeitos/validações, falha localizada, recuperação explicitamente indicada e limite de aceite; não inferir ausência global por omissão nem refazer negócio. Fatos numéricos fornecidos pelo extrator não serão recontados por modelo; cada afirmação deve citar ID/campo/linha do recorte. Origem e estado Git inequívocos; entrega QUEUED_TO_CHAT só prova fila, não resposta semanticamente aceita. Parecer preliminar para revisão proporcional, sem ferramentas/escrita/testes/novas leituras.
+
 ## A3F entregue e segmento04 delimitado — 19/10/2026
 
 4988362b resultado uma vez: todos os sete comandos exit0,94 rejeições mais positivos, extrator integral e CLI real264/197/67 aprovados. Hashes/dependências/diff conferidos; variante e CLI versionadas em unidades próprias. Projeção positiva audit-facts-2026-10-15.json gerada para apoiar os52 registros pendentes;33 FAILED/34 COMPLETED não são aceites. Não repetir os15 registros já revisados ou suas execuções.
