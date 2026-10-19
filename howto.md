@@ -1,5 +1,19 @@
 # localWorker no Codex Desktop (Windows 11 2025H2+)
 
+## Compactação do supervisor após delegar
+
+A norma global instalada exige: recibo `RUNNING` → preservar o mínimo necessário à retomada → avisar no chat com links → compactar o contexto do supervisor → encerrar. Vale para todas as conversas/repositórios, sem configurar agents.local.md em cada um. Somente uso **<10%**, comprovado por medida atual obtida sem custo ou com custo desprezível, dispensa compactar; 10% ou percentual indisponível não dispensam.
+
+O Desktop oferece **Compactar** no menu `/` (`/compactar` em pt-BR). A ação automática depende de o cliente expor esse recurso ao agente na conversa viva. Um botão disponível para o usuário não garante essa interface programática. Na sessão verificada, ela não está exposta: a obrigação global fica instalada, mas a execução automática permanece **impedida**, não concluída. O supervisor deve informar esse limite. Usar manualmente o comando é uma alternativa humana; não é prova da automação solicitada. Não enviar o texto `/compactar` como mensagem comum, editar bancos de histórico ou compactar uma cópia da conversa.
+
+Para atualizar apenas essa norma, a partir da raiz do repositório:
+
+```powershell
+& .\src\install.ps1 -GlobalRulesOnly
+```
+
+O instalador descobre CODEX_HOME e respeita AGENTS.override.md quando presente, preservando as demais instruções com backup. Essa operação não inicia/interrompe Worker, troca modelo/esforço, cria tarefa ou abre Desktop. A fonte integral da norma está reproduzida na seção de instruções globais deste artigo. [Protocolo oficial de compactação](https://learn.chatgpt.com/docs/app-server#trigger-thread-compaction).
+
 ## Opcional: continuar o supervisor depois da restauração da cota
 
 Após reinício inesperado, o runtime reconstrói um índice ativo corrompido a partir dos estados íntegros e preserva o original com hash. Se o recibo de envio estiver corrompido, o job fica com entrega `AMBIGUOUS`: conferir o chat de origem é obrigatório antes de qualquer reenvio. Os arquivos críticos são sincronizados antes da substituição atômica; isso reduz perda por interrupção, sem garantir a integridade de hardware ou energia.
@@ -378,7 +392,7 @@ Trabalho potencialmente demorado **DEVE preferir execução persistente assíncr
 1. Inicie **uma única vez** e preserve o `job_id`.
 2. NÃO mantenha chamada MCP síncrona aberta por longo período se houver persistência.
 3. NÃO faça polling automático/periódico nem consulte progresso por mera demora.
-4. Após iniciar, **encerre o processamento do supervisor** e informe apenas que o job local permanece em execução.
+4. Somente após recibo efetivo `RUNNING`, preserve o handoff mínimo, emita o aviso com os links e aplique a **compactação do supervisor após delegação** abaixo, imediatamente antes de encerrar o processamento.
 5. Consulte novamente **somente em interação posterior do usuário ou necessidade explícita**.
 
 Na consulta posterior:
@@ -389,7 +403,21 @@ Na consulta posterior:
 
 Fluxo preferencial:
 
-`local_start → encerrar turno → local_result em interação posterior → validação única`
+`local_start/RUNNING → handoff mínimo → aviso com links → compactação nativa do supervisor → encerrar turno → local_result em interação posterior → validação única`
+
+### Compactação global do supervisor após delegação — N7C
+
+Esta obrigação é **global**, para toda conversa nova ou retomada e todo repositório em que este supervisor delegar a um Worker. Não depende de solicitação por chat nem de agents.local.md do alvo. Aplica-se ao contexto do supervisor; não delegue ao Worker sua execução nem confunda com compactação do Ollama.
+
+Após a criação efetiva do job, comprovada pelo recibo `RUNNING`, e somente então:
+
+1. Preserve antes do aviso o handoff operativo mínimo: objetivo/restrições necessários, job_id/destino, artefatos/commits pertinentes, pendências e próximo passo. Preserve evidências já obtidas, sem duplicar exploração ou raciocínio privado.
+2. Emita no chat o aviso de que o job permanece em execução, com job_id, monitor_url e monitor_index_url quando fornecido. O aviso deve preceder a compactação; use mensagem de progresso se uma ação ainda precisar ser executada.
+3. **Imediatamente antes de encerrar**, compacte nativamente o **próprio contexto da mesma conversa**, pelo recurso suportado `/compactar`/Compactar ou ferramenta equivalente efetivamente exposta ao agente e ligada à instância viva. A compactação é a última ação operacional: não inicie outra unidade, consulte progresso ou realize manutenção depois dela. Encerre sem polling. Uma resposta final estritamente necessária ao protocolo não autoriza trabalho adicional.
+
+**Única exceção de ocupação:** não compacte se, e somente se, uma medição atual, autoritativa e vinculada à mesma conversa comprovar **contexto usado <10%**, e obtê-la/reutilizá-la tiver custo zero ou comprovadamente desprezível. Exatamente 10% não dispensa. Avalie previamente disponibilidade e custo; prefira telemetria já exposta. Não invente percentual por caracteres, soma histórica de tokens, limites da conta ou janela presumida. Não chame modelo/API de contagem, varra histórico, faça polling ou abra interface para procurar uma dispensa de benefício incerto. Sem medição barata comprovada, a exceção não é aplicável; a compactação permanece obrigatória.
+
+Disponibilidade do comando na UI não comprova que o agente possa acioná-lo. Sem ferramenta/rota suportada ligada ao contexto vivo, registre e informe **impedimento de compactação**; isso não cria nova dispensa nem permite afirmar cumprimento. Não contorne restrições de UI, abra/rearme Desktop, injete `/compactar` como mensagem/fila, altere SQLite/rollout ou compacte uma cópia em outro processo. Checkpoint em arquivo é preservação auxiliar, não compactação nativa. Uma solicitação aceita não comprova conclusão: confirme pelo retorno nativo ou evento contextCompaction/item/completed correspondente, quando exposto; aceite assíncrono sem confirmação fica não comprovado, sem reenvio cego. Nunca interrompa/reinicie o Worker ou altere modelo/esforço para satisfazer esta regra.
 
 ## Latência por worker
 
@@ -501,7 +529,7 @@ Para implementação ou edição obrigatória delegada, use `expect_changes: tru
 
 Se a conversa atual não puder ser identificada com segurança, NÃO inicie o job e explique a limitação.
 
-Ao receber `RUNNING`, informe o `job_id`, o `monitor_url` e, quando presente, o `monitor_index_url` para acompanhar o job ou navegar pelo histórico; encerre o turno sem polling. Abrir ou fechar a interface não altera o job. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
+Ao receber `RUNNING`, preserve o handoff mínimo e informe o `job_id`, o `monitor_url` e, quando presente, o `monitor_index_url` para acompanhar o job ou navegar pelo histórico. Após o aviso, cumpra a compactação global N7C imediatamente antes de encerrar o turno, com sua única exceção de ocupação e diagnóstico explícito de impedimento; sem polling. Abrir ou fechar a interface não altera o job. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
 
 O Worker é independente da escolha de modelo/esforço do supervisor. Preserve seleções da UI; esta instrução **NÃO troca modelo, esforço, provider, catálogo ou preferências do usuário**.
 ```
@@ -663,7 +691,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `67aac8aea0de83f1f2d11b547adc19a26dc043cd483909b610ea8139925fbff3` |
+| `src/agents.supervisor.md` | `e528c19a8e0a99fe0eaa91123822736a5cf29069cca887de493bb5f64b8a7e17` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

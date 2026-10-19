@@ -89,7 +89,7 @@ Trabalho potencialmente demorado **DEVE preferir execução persistente assíncr
 1. Inicie **uma única vez** e preserve o `job_id`.
 2. NÃO mantenha chamada MCP síncrona aberta por longo período se houver persistência.
 3. NÃO faça polling automático/periódico nem consulte progresso por mera demora.
-4. Após iniciar, **encerre o processamento do supervisor** e informe apenas que o job local permanece em execução.
+4. Somente após recibo efetivo `RUNNING`, preserve o handoff mínimo, emita o aviso com os links e aplique a **compactação do supervisor após delegação** abaixo, imediatamente antes de encerrar o processamento.
 5. Consulte novamente **somente em interação posterior do usuário ou necessidade explícita**.
 
 Na consulta posterior:
@@ -100,7 +100,21 @@ Na consulta posterior:
 
 Fluxo preferencial:
 
-`local_start → encerrar turno → local_result em interação posterior → validação única`
+`local_start/RUNNING → handoff mínimo → aviso com links → compactação nativa do supervisor → encerrar turno → local_result em interação posterior → validação única`
+
+### Compactação global do supervisor após delegação — N7C
+
+Esta obrigação é **global**, para toda conversa nova ou retomada e todo repositório em que este supervisor delegar a um Worker. Não depende de solicitação por chat nem de agents.local.md do alvo. Aplica-se ao contexto do supervisor; não delegue ao Worker sua execução nem confunda com compactação do Ollama.
+
+Após a criação efetiva do job, comprovada pelo recibo `RUNNING`, e somente então:
+
+1. Preserve antes do aviso o handoff operativo mínimo: objetivo/restrições necessários, job_id/destino, artefatos/commits pertinentes, pendências e próximo passo. Preserve evidências já obtidas, sem duplicar exploração ou raciocínio privado.
+2. Emita no chat o aviso de que o job permanece em execução, com job_id, monitor_url e monitor_index_url quando fornecido. O aviso deve preceder a compactação; use mensagem de progresso se uma ação ainda precisar ser executada.
+3. **Imediatamente antes de encerrar**, compacte nativamente o **próprio contexto da mesma conversa**, pelo recurso suportado `/compactar`/Compactar ou ferramenta equivalente efetivamente exposta ao agente e ligada à instância viva. A compactação é a última ação operacional: não inicie outra unidade, consulte progresso ou realize manutenção depois dela. Encerre sem polling. Uma resposta final estritamente necessária ao protocolo não autoriza trabalho adicional.
+
+**Única exceção de ocupação:** não compacte se, e somente se, uma medição atual, autoritativa e vinculada à mesma conversa comprovar **contexto usado <10%**, e obtê-la/reutilizá-la tiver custo zero ou comprovadamente desprezível. Exatamente 10% não dispensa. Avalie previamente disponibilidade e custo; prefira telemetria já exposta. Não invente percentual por caracteres, soma histórica de tokens, limites da conta ou janela presumida. Não chame modelo/API de contagem, varra histórico, faça polling ou abra interface para procurar uma dispensa de benefício incerto. Sem medição barata comprovada, a exceção não é aplicável; a compactação permanece obrigatória.
+
+Disponibilidade do comando na UI não comprova que o agente possa acioná-lo. Sem ferramenta/rota suportada ligada ao contexto vivo, registre e informe **impedimento de compactação**; isso não cria nova dispensa nem permite afirmar cumprimento. Não contorne restrições de UI, abra/rearme Desktop, injete `/compactar` como mensagem/fila, altere SQLite/rollout ou compacte uma cópia em outro processo. Checkpoint em arquivo é preservação auxiliar, não compactação nativa. Uma solicitação aceita não comprova conclusão: confirme pelo retorno nativo ou evento contextCompaction/item/completed correspondente, quando exposto; aceite assíncrono sem confirmação fica não comprovado, sem reenvio cego. Nunca interrompa/reinicie o Worker ou altere modelo/esforço para satisfazer esta regra.
 
 ## Latência por worker
 
@@ -212,6 +226,6 @@ Para implementação ou edição obrigatória delegada, use `expect_changes: tru
 
 Se a conversa atual não puder ser identificada com segurança, NÃO inicie o job e explique a limitação.
 
-Ao receber `RUNNING`, informe o `job_id`, o `monitor_url` e, quando presente, o `monitor_index_url` para acompanhar o job ou navegar pelo histórico; encerre o turno sem polling. Abrir ou fechar a interface não altera o job. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
+Ao receber `RUNNING`, preserve o handoff mínimo e informe o `job_id`, o `monitor_url` e, quando presente, o `monitor_index_url` para acompanhar o job ou navegar pelo histórico. Após o aviso, cumpra a compactação global N7C imediatamente antes de encerrar o turno, com sua única exceção de ocupação e diagnóstico explícito de impedimento; sem polling. Abrir ou fechar a interface não altera o job. Na retomada automática, consulte `local_result` uma única vez e valide proporcionalmente conforme estas regras.
 
 O Worker é independente da escolha de modelo/esforço do supervisor. Preserve seleções da UI; esta instrução **NÃO troca modelo, esforço, provider, catálogo ou preferências do usuário**.

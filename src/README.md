@@ -128,7 +128,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `67aac8aea0de83f1f2d11b547adc19a26dc043cd483909b610ea8139925fbff3` |
+| `src/agents.supervisor.md` | `e528c19a8e0a99fe0eaa91123822736a5cf29069cca887de493bb5f64b8a7e17` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Continuidade U6C
