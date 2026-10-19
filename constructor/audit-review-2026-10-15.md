@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 44 deles; não substitui o aceite dos outros 23.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 45 deles; não substitui o aceite dos outros 22.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os44 aceites/correções semânticos já registrados neste documento nem aceita os23 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os45 aceites/correções semânticos já registrados neste documento nem aceita os22 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -189,3 +189,16 @@ Auditor a0f95ed9-f473-460d-a702-0f5ec6168210: local_result uma vez; COMPLETED po
 | c08b2047 | WORKER_INCOMPLETE: resposta final sem inspeção; uma leitura e comando ruby exigidos, nenhum executado com aprovação. Zero ferramentas, sem implementação/teste comprovados. A causa não é automaticamente runner ausente ou hardware incapaz; modo write/expect_changes=true não é prova de alteração. |
 
 Os estados e error_kind foram distinguidos corretamente. As duas últimas falhas são ausência de inspeção/entrega; a primeira é perda de processo/heartbeat, não prova de causa física. Nenhum desses registros demonstra falta de autorização. Recuperações não presentes no pacote são indeterminadas, não inexistentes globalmente. EstadoFAILED antigo não determina defeito atual; headerGit não prova autoria/push/limpeza; QUEUED_TO_CHAT só fila. Não houve nova execução, forense ou plano de replay. Acumulado44 revisados/23 pendentes nessa captura.
+
+
+## Segmento 14 — 19/10/2026
+
+Auditor f76c4cb8-873c-4491-b2bb-5b9a1c1a8681: local_result uma vez; runtime COMPLETED/error_kind=null, análise exclusiva da evidência fornecida, nenhuma ferramenta/escrita/commit. Parecer semanticamente incompleto: omitiu inteiramente o segundo registro7951fc49 e não cumpriu tabela/limite solicitados. Não reclassificar silenciosamente o estado persistido. Aceite parcial de apenas um registro abaixo; o omitido permanece pendente. Git determinístico main...origin/main limpo refere-se ao auditor, não dev/ahead7 histórico.
+
+| ID | Fato comprovado e revisão proporcional |
+| --- | --- |
+| 9ca23c77 | Quatorze read_file aprovadas nos eventos11/18/26/33/41/49/57/65/74/80/88/96/104/112; nenhuma mutação ou comando aprovado/erro registrado. WORKER_INCOMPLETE/CONTRACT_UNFULFILLED no evento120: test_accessible pendente. Não é zero inspeção; alteração/validação pedidas não entregues. Sem argumentos/hashes das leituras no pacote, não afirmar todas idênticas nem ausência de repetição improdutiva. |
+
+A frase “strategy_blocked não se aplica, não houve repetição sem progresso” não está demonstrada: falta de evento nesse recorte não prova a negação causal. Rejeitar pedido de nova autorização: test_accessible já estava autorizado/exigido, não existe evidência de permissão faltante. Sucessor7818e441, já aceito no segmento10 e explicitamente informado, aprovou patch/test_accessible com accessible_reading=ok; a pendência histórica não prova bloqueio atual. HeaderGit não prova autoria/push/limpeza; QUEUED_TO_CHAT só fila.
+
+Localização da omissão: geração do parecer depois da entrega do pacote de dois registros; não há evidência de perda de transporte ou de erro de ferramenta. Causa interna do modelo indeterminada; tarefa de comparação com dois itens não produziu cobertura integral. Correção de contexto/delegação: preservar9ca já revisto, reduzir a continuação exclusivamente ao item omitido7951fc49, com resposta factual curta e identidade explícita. Novo job deve referenciar esta falha e não reanalisar9ca ou sucessores já aceitos. Isto não refaz o negócio nem repete a análise entregue. Acumulado45 revisados/22 pendentes nessa captura.
