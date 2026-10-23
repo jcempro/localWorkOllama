@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 58 deles; não substitui o aceite dos outros 9.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 59 deles; não substitui o aceite dos outros 8.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os58 aceites/correções semânticos já registrados neste documento nem aceita os9 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os59 aceites/correções semânticos já registrados neste documento nem aceita os8 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -307,3 +307,17 @@ Auditor e83a9a13-5edf-4474-8606-5a430fcce80c: local_result uma vez; COMPLETED, q
 Corrigir a conclusão do auditor sobre nil:28 contém node.text.to_s; to_s aplica-se ao retorno de node.text, não protege um receptor node nulo. No chamador105, caption && !compact_text(caption).empty? já impede a chamada quando caption é nil. Rejeitar proposta histórica de acrescentar esse mesmo guard como se ausente. A regra de caption também tem exceção role=presentation95 e só cria caption100–103 quando ausente e metadata não vazia; não afirmar criação incondicional com metadata. Nenhum desses fatos autoriza editar o plugin atual.
 
 O diagnóstico histórico atribuiu falha de ff4dda85 a carregamento/config/permissão/build sem prova; ff já aceito no segmento01 falhou por leituras obrigatórias não executadas. Ausência de comandos/build/leitura de _config.yml não pode virar diagnóstico de Jekyll nem recomendação obrigatória de configuração. O trecho233 referencia document.site.config, mas não comprova leitura/validação externa de arquivo. Hooks301–314 não foram fornecidos na leitura histórica; não afirmar sua inexistência no plugin. Git sem diferença local não demonstra que um arquivo não mudou recentemente. Parecer limitado à leitura estática, sem validação runtime ou diagnóstico completo. QUEUED_TO_CHAT só fila; header não prova autoria/push/limpeza. Acumulado58 revisados/9 pendentes nesta captura.
+
+## Segmento22 — efeitos preservados, teste falho e limite explícito
+
+Auditor dcaf458a-f429-4299-96ec-15fcac6145a2: local_result uma vez; COMPLETED por extração de evidência fornecida, nenhuma ferramenta/escrita/commit próprios. Aceite parcial com correções factuais, não falha de transporte comprovada. Git determinístico do auditor main...origin/main limpo em23/10/2026 07:20:06UTC não descreve o blog histórico. Fonte006 SHA256b6f95dca21efc0a6cf8241320334f56b1f5e6bf5ebd18fe860dd82ca9b87ee65 conferida antes da delegação; sem nova leitura viva ou replay.
+
+| ID | Efeito, falha e limite de aceite |
+| --- | --- |
+| 00621c72 | FAILED/WORKER_INCOMPLETE, limite de40 ciclos explicitamente atingido e21 compactações registradas. create46 aprovado; oito mutações diretas81/120/142/165/218/240/261/284, nove efeitos mutantes contando create. test foi executado e falhou sete vezes88/127/150/173/225/248/292; nenhum aprovado. Primeiro stderr: TypeError ao atribuir getVoices a receptor undefined, arquivo:36. Último: SyntaxError de import fora de módulo em Window.eval, arquivo:52. |
+
+Corrigir a afirmação de ausência de alteração líquida: o erro fornecido diz “caminhos obrigatórios inalterados: nenhum”; não contém change_requirement.no_net_git_change=true. Sucessos de escrita não provam isoladamente toda diferença líquida, mas tampouco autorizam negar os efeitos comprovados. A unidade ficou incompleta pelo teste ainda falho e limite explícito, não por ausência de execução. Evento269 é edit_file falho por âncora ausente/não única; depois houve edição284 e último test292. Âncoras falharam também103/186. Não agrupar261/269 como sétimo teste nem inventar stderr intermediário não fornecido.
+
+O limite40 está literal no erro desta execução; rejeitar “não é teto configurado” neste caso. Isso não transforma reported_step/max_logged_step dos demais jobs em orçamento. A ordem inicial pedida também não foi cumprida: leituras11/31 e file_info39 sobre destino inexistente antecederam create46; bloqueio30 recusou a estratégia sem mudança. Não foi provada causa física/RAM/permissão. Edições entre testes impedem tratar todas as tentativas como repetição idêntica; o contrato exige corrigir estratégia sem apagar as evidências.
+
+Recuperações delimitadas já revisadas permanecem válidas:7951fc49 tentou corrigir import/eval e ficou incompleto;6136638a aprovou patch de carregamento/sintaxe;5ffd962a aprovou asserções/teste table_speech. Não reexecutar esses sucessores nem declarar entrega universal retroativa. Header histórico dev...origin/dev [ahead10] não comprova autoria/push/limpeza; QUEUED_TO_CHAT só enfileiramento. Auditor excedeu a concisão pedida, sem justificar nova inferência para reformatar. Acumulado59 revisados/8 pendentes nesta captura.
