@@ -15,3 +15,9 @@ C8, exclusivamente supervisor: alteração de endpoint/runtime/contrato distribu
 ## Estado
 
 Contrato publicado em a5d5533. Endpoint agora tem fonte canônica server.mts, artefato gerado e seleção positiva nos instaladores/recuperações. Teste `node --experimental-strip-types constructor/test-monitor-status.mts` passou com MCP stdio real e filesystem isolado: estados RUNNING/COMPLETED, UI disponível/EACCES/timeout, uma tentativa por consulta, sem URL inventada/segredo/alteração de estado, erro de leitura preservado, local_monitor falha explícita e local_result/Q8S independentes. Sem inferência, callback ou negócio executados. Instalação real pendente; defeito próprio do produto, núcleo upstream intocado.
+
+## Instalação e aceite
+
+Implementação67029d2 publicada. Instalação oficial via Windows PowerShell5.1 concluída; Worker e duas recuperações conferem fonte/artefato/manifesto, inclusive server.mts/server.mjs. Prova privada `audit-private/s6d-install-5959fa2f-db36-478b-bea8-f10a7f8f4a8a/installed-proof.json`, SHA256 `5eb50faf9c1b3c667d3550a0f1922d12d866a33c444b2a620324fa1f24936325`,2026-10-23T18:29:28.8475155Z. Configurações e autorizações ACTIVE/EXPLICIT_RESUME e PAUSED/EXPLICIT_PAUSE preservadas, sem boot/logon/wake/catchup ou envio/inferência/rearme durante instalação.
+
+Consulta única de verificação pela ponte instalada retornou COMPLETED/monitor_status AVAILABLE e links válidos para ec68b9b2, mantendo entrega PAUSED_USER; não repetiu local_result nem inferência. Falhas da UI verificadas por injeção no adaptador da fixture, não por interrupção do painel do usuário. S6D aceita no escopo. Catálogo residente antigo pode continuar executando módulos anteriores até recarga; usar ponte atualizada, sem reabrir aplicativo encerrado ou modificar intenção humana. A causa física do timeout residente não foi provada; acoplamento do endpoint foi removido para todas as falhas da tentativa de recuperação, sem ocultá-las.
