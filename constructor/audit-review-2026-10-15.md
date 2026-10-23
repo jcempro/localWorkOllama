@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 51 deles; não substitui o aceite dos outros 16.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 53 deles; não substitui o aceite dos outros 14.
 
 ## Segmento 01
 
@@ -237,4 +237,16 @@ Auditor 47d485d0-6849-424a-998e-dbf511c026ce: local_result uma vez; COMPLETED po
 | e12c3b2b | Leitura11; ruby18 aprovado antes de alterar. Evento25 change_requirement contém missing_paths do alvo e no_net_git_change=true: ainda não havia mudança líquida exigida no conteúdo Git. Leitura31, edit_file38 aprovado, ruby46 aprovado depois da edição. Guarda operou, não estava ausente; nada nesse campo informa rede. Aceita edição/teste delimitados de HTML existente; sem hunks, não provar toda contagem/asserção de caption só pelo relato final. |
 | b7d4115e | patch/tts exit0, eventos3/6; PATCH_APPLIED e table_speech=ok. Aceita fixture/teste real delimitados de headers múltiplos, TH de dados e tfoot. Stub CSS.escape para IDs simples não valida escaping geral. Não é gate global ou cobertura universal. |
 
-Rejeitar “guarda não gerada por ausência de rede”: a própria guarda existe no evento25, e no_net_git_change é ausência de diferença líquida de conteúdo Git, não ausência de rede. Causa de comunicação identificada: a tarefa do supervisor abreviou o campo para “missing/no_net”, expressão ambígua; o modelo ampliou-a para causa inventada. Correção generalista na preparação de evidência: constructor/audit-field-semantics.json define campos potencialmente ambíguos e deve acompanhar os próximos pacotes como dados auxiliares, com nomes completos e significado literal, sem acrônimos soltos. Não alterar runtime, permissões ou rede por essa interpretação. Os números7/8/3 na coluna limite do parecer eram passos observados, não limites de ciclo/aceite; substituídos pelos limites reais acima. Avaliação histórica de risco não é adotada. QUEUED_TO_CHAT só fila. Acumulado51 revisados/16 pendentes nessa captura.
+Rejeitar “guarda não gerada por ausência de rede”: a própria guarda existe no evento25, e no_net_git_change é ausência de diferença líquida de conteúdo Git, não ausência de rede. Causa de comunicação identificada: a tarefa do supervisor abreviou o campo para “missing/no_net”, expressão ambígua; o modelo ampliou-a para causa inventada. Correção generalista na preparação de evidência: constructor/audit-field-semantics.json define campos potencialmente ambíguos e deve acompanhar os próximos pacotes como dados auxiliares, com nomes completos e significado literal, sem acrônimos soltos. Não alterar runtime, permissões ou rede por essa interpretação. Os números7/8/3 na coluna limite do parecer eram passos observados, não limites de ciclo/aceite; substituídos pelos limites reais acima. Avaliação histórica de risco não é adotada. QUEUED_TO_CHAT só fila. Acumulado53 revisados/14 pendentes nessa captura.
+
+
+## Segmento 17 — 22/10/2026
+
+Auditor 4b7daa79-9622-45aa-9328-623f3689ea10: local_result uma vez; COMPLETED, análise dos dois recibos fornecidos, nenhuma ferramenta/escrita/commit; entrega PAUSED_USER preservada. Cobertura dos dois IDs aceita com correções factuais. Git determinístico main...origin/main limpo descreve o auditor, não os headers históricos dev/ahead10.
+
+| ID | Fato comprovado e limite |
+| --- | --- |
+| f604c51c | WORKER_INCOMPLETE/CONTRACT_UNFULFILLED: oito leituras aprovadas, ENOENT do destino novo no evento7; bloqueios36/45 e recusas37/46; table_speech pendente54. Nenhuma mutação ou comando aprovado, script/teste não entregues. Passo6 é posição observada, não teto. |
+| a98bd4cf | Leitura11 aprovada; leitura13 do destino novo falhou ENOENT; test15 FOI executado e falhou exit1, stdout vazio/stderr782 caracteres; permanece pendente23. Nenhuma mutação ou comando aprovado. Passo4 não é limite. |
+
+Corrigir a tabela do parecer: zero comandos aprovados não significa zero executados em a98. ENOENT é observação histórica, não prova de inexistência atual, raiz errada ou permissões insuficientes. Sem stderr completo, causa exata do teste permanece indeterminada; Node24 citado na tarefa não comprova versão real. Rejeitar proposta de criar/testar novamente: sucessores6136638a/5ffd962a já aceitos cobrem recuperação delimitada; não reabrir negócio por falha antiga. Não transformar ausência de mutações em prova universal de ausência de diferença Git sem checkpoint correspondente. QUEUED_TO_CHAT só fila, header não autoria/push/limpeza. Acumulado53 revisados/14 pendentes nesta captura.
