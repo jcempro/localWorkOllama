@@ -19,3 +19,11 @@ Testes puros passaram com hash opcional/alterado. Suíte Q8S completa com MCP re
 Instaladores/update/recuperações incluem o novo módulo, fonte/artefatos/documentação sincronizados. Instalação real e ensaio nativo permanecem próximos passos; não concluir a FT integral antes deles.
 
 Teste adicional do gate passou: ferramenta inesperada na correção foi recusada antes de qualquer execução e seus nomes foram preservados no artefato público; sequência determinística com saída acima do limite terminou RESPONSE_CONTRACT após executar o comando uma vez, sem inferência/replay. A suíte completa foi reexecutada após consolidar o helper de persistência; execução anterior já em andamento foi coletada separadamente, sem usar seu resultado como validação de código posteriormente alterado.
+
+## Instalação real
+
+Windows PowerShell5.1 executou os instaladores oficiais: Worker e duas recuperações conferem com fontes/artefatos/manifestos, incluindo core, política/hash e módulo R8V. Prova privada `audit-private/r8v-install-3ea52f4f-714e-48c4-aeff-667eb57e6603/installed-proof.json`, SHA256 `0577f05e8d58a4f9a1042b1fcf234ecbb0a694d9d507a2b057d35521a2fa6093`,2026-10-23T17:59:41.8636393Z. Configuração Worker/Codex e controles ACTIVE/EXPLICIT_RESUME deste chat e PAUSED/EXPLICIT_PAUSE do outro alvo preservados, sem boot/logon/wake/catchup, mensagens ou inferência/retomada durante a instalação.
+
+GlobalRulesOnly instalou R8V preservando Q8S e o hash do conteúdo externo ao bloco gerenciado. Nenhuma troca de modelo/esforço/contexto ou relaxamento de recursos/permissões. A disponibilidade nativa do schema no modelo atual ainda exige o ensaio real seguinte; testes simulados não comprovam o decoder real.
+
+Ensaio preparado em `audit-private/r8v-native-9f95912f-8ad0-4b06-a666-eb9549fcd750.json`,547 caracteres, SHA256 `330bf4a559a4fb64a18b40362e0baa678d360efa7159c017d109aa1ef8198ad9`. Três fatos já conferidos (501 unidades observadas,limite220,citação do diff_check histórico), sem nota/risco/reescrita/reexecução histórica. Contrato nativo de JSON≤70 unidades com citação vinculada; C5/júnior, escopo `566488c5bb7d81e15237051df64eccc085b3f0dfc2372951c8fdd3bdc6bfb42b`. Serve para validar alteração definitiva, não para alegar capacidade cognitiva geral. No callback, obter uma vez pela ponte atualizada, conferir corpo/fatos/recibo formal/Git e só depois atribuir Q8S real.

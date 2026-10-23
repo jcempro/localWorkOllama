@@ -17,3 +17,7 @@ Continua Q8S/auditoria; não reinicia6d395cf9 nem os históricos. C=8 na manuten
 2. MCP/hash/runner/Ollama/gate, testes de integração simulada, invariantes legados e preservação de saída/erro.
 3. Instalação oficial em Windows PowerShell5.1, hashes/configurações/controles preservados; teste real pequeno de unidade materialmente diferente, não reanálise dos mesmos históricos. Checkpoint proporcional e Q8S após retorno, sem polling.
 4. Prosseguir auditoria usando automação determinística para fatos recuperáveis e inferência somente no microescopo necessário; somente supervisor atribui qualidade/aceite final. Cobertura integral segue pendente, CANCELLED excluídos.
+
+## Estado corrente
+
+Validador puro79484e4 e integração563e972 publicados. Suítes puras, MCP/Q8S e execução simulada passaram; gates de forma/vínculo, uma correção sem ferramentas, preservação e ausência de replay comprovados. Instalação oficial/recuperações/norma global conferidas em Windows PowerShell5.1, dados/controles preservados. Falta ensaio do decoder real e respectivo checkpoint. Auditoria histórica tem16 casos específicos revistos no incremento189; as demais pendências permanecem, sem pontuação/aceite mecânicos. O retorno6d395cf9 foi avaliado2/10, não será reiniciado.
