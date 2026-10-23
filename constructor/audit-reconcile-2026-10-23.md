@@ -22,6 +22,10 @@ O supervisor fixou C=5/júnior para essa coleta determinística. Não há infer�
 
 Os limites pontuais dos comandos protegem contra espera de filesystem/SQLite indefinida; não mudam prazo, modelo, contexto ou esforço do Worker/Ollama. A captura não é atomicamente global: seu próprio coletor poderá aparecer `RUNNING`, a conferir pelo recibo final, sem criar auditoria recursiva.
 
+## Handoff da coleta
+
+Job `ead75a90-3670-469f-b8fb-0408d29d086b`, iniciado com recibo `RUNNING`. Sequência: `capture`, `facts`, `interactions`. Identificador exclusivo da captura: `4e5d0fe9-72fd-4b84-9ffb-0402cf381c83`; saídas em `audit-private/2026-10-23-capture-4e5d0fe9-72fd-4b84-9ffb-0402cf381c83/`. O próprio coletor pode constar da nova captura, sem que isso autorize auditoria recursiva.
+
 ## Aceite ainda pendente
 
 Conferir os recibos, hashes, diagnósticos e contagens antes de reutilizar revisões existentes e segmentar lacunas reais. Não publicar artefatos privados, inferir sucesso por `COMPLETED` ou repetir tarefas de negócio. Falhas de chamada, callbacks e causas temporárias exigem correlação factual antes de qualquer correção funcional.
