@@ -279,3 +279,9 @@ Rejeitar atribuição de commits0 a0ceda154: esse contador aparece em845 e tamb�
 Auditor b432b20b-659f-4f17-b898-859d828990bc: local_result uma vez; runtime COMPLETED/error_kind=null, sem ferramentas/escrita/commit; Git determinístico main...origin/main limpo em23/10/2026 04:46:14UTC. Retorno reproduz o parecer2da3cc2a, inclusive26% e totais inferidos de @@, em vez da auditoria pedida. Não aceitar cobertura semântica nem incrementar contador. Falha de interpretação/saída, não WORKER_INFRA_ERROR comprovado; não modificar classificação persistida do runtime para esconder a divergência. QUEUED_TO_CHAT só fila.
 
 Preservados pacote/resultado e negócio histórico. Investigação/correção de fronteira de evidência em FT-EVIDENCE-BOUNDARY-P2D, C8/exclusivo, constructor/provided-evidence-boundary-plan.md. Nova unidade deve ser materialmente menor, com contexto corrigido, não replay do parecer inteiro nem reexecução editorial no supervisor. Auditoria permanece56/67,11 pendentes.
+
+### Segmento20b — avaliação incorreta, sem aceite
+
+Auditor0a92affc-842a-48db-b42c-2e80a29fbc7d: local_result uma vez; runtime COMPLETED/error_kind=null, step1, nenhuma ferramenta/efeito. Git determinístico main...origin/main limpo em23/10/2026 05:06:11UTC. Avaliou A/B/C, mas as sustentou com interpretações inválidas ou citação da própria alegação. Não aceitar nem incrementar contador. A ordem P2D está corrigida/instalada, porém o ensaio real não comprovou precisão semântica; não declarar P2D suficiente nem atribuir falha a RAM/HTTP. Recibo de fila não é aceite.
+
+Nova estratégia D9F: extrair determinística e objetivamente fatos de unified diff e manter proveniência literal separada, em vez de repetir julgamento livre do modelo. Plano constructor/diff-facts-plan.md. Preservar56/67 e os dois auditores rejeitados; nenhum replay ou inventário editorial no supervisor.
