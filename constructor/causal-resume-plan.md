@@ -1,0 +1,11 @@
+# FT-CONTINUITY-C9R — suspensão causal sem revogação
+
+Fonte: pedido humano deste chat em22/10/2026, “PROMPT BLOQUEANTE — RETOMADA AUTOMÁTICA · DISTINÇÃO CAUSAL × INTERRUPÇÃO INTENCIONAL · SEM REGRESSÕES”. Autoriza investigação, correção, instalação e validação, depois da unidade em andamento. Segmento17 concluído em84fbdb9; auditoria histórica permanece53/67, sem abandono ou declaração de aceite global.
+
+Contrato de aceite: esgotamento verificável não cancela solicitação ainda autorizada; recuperação automática conserva sessão/instância/turno/destino. Cancelamento, pausa explícita, fechamento/reabertura e mudança da sessão do SO continuam impedindo retomada. Boot não autoriza nem rearma. Sem reenvio aceito/ambíguo, duplicação de inferência ou falso COMPLETED. Preservar recuperação, confirmação real, observabilidade e demais contratos. Validar quota→restauração, pausa/cancelamento, boot, concorrência, persistência e idempotência; distinguir ensaio isolado de incidente real da conta.
+
+Diagnóstico comprovado: callbackReasonU6C emlocalworker/continuity.mts rejeita indiscriminadamente failed/interrupted. SR-001 reconhece failed + error.codexErrorInfo=usageLimitExceeded, mas callback usa ORIGIN_TURN_STOPPED para o mesmo evento. Classificação conflita com o motivo verificável. Código/erro estruturado, nunca texto livre ou saldo baixo, fundamenta exceção causal. Não permitir failed genérico ou interrupted, nem interpretar erro de processo como intenção humana.
+
+Criticidade C=8, execução exclusiva pelo supervisor: afeta autorização/envio automático e consequências entre conversas. Worker não avalia risco nem modifica esta unidade. Escopo: guarda compartilhada, chamadores SR/callback necessários, testes dirigidos, espelhos e instalação existente; sem novo serviço, abertura do Desktop, boot trigger, SQL mutante ou credenciais. Pausas reais/legadas de intenção incerta não são rearmadas por instalação. Novos achados exigem evidência e reavaliação antes de ampliar.
+
+Sequência: registrar FT; corrigir causa/classificação comum e testar; conferir cópias generalistas e documentação; commit/push; instalar pelos mecanismos existentes e comparar hashes/estado. Pendências não comprováveis em máquina em uso permanecem explícitas. Pedido atual autoriza continuidade nesta conversa aberta, não libera outras conversas pausadas.
