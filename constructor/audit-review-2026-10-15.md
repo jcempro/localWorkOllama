@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 53 deles; não substitui o aceite dos outros 14.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 54 deles; não substitui o aceite dos outros 13.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os51 aceites/correções semânticos já registrados neste documento nem aceita os16 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os54 aceites/correções semânticos já registrados neste documento nem aceita os13 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -250,3 +250,13 @@ Auditor 4b7daa79-9622-45aa-9328-623f3689ea10: local_result uma vez; COMPLETED, a
 | a98bd4cf | Leitura11 aprovada; leitura13 do destino novo falhou ENOENT; test15 FOI executado e falhou exit1, stdout vazio/stderr782 caracteres; permanece pendente23. Nenhuma mutação ou comando aprovado. Passo4 não é limite. |
 
 Corrigir a tabela do parecer: zero comandos aprovados não significa zero executados em a98. ENOENT é observação histórica, não prova de inexistência atual, raiz errada ou permissões insuficientes. Sem stderr completo, causa exata do teste permanece indeterminada; Node24 citado na tarefa não comprova versão real. Rejeitar proposta de criar/testar novamente: sucessores6136638a/5ffd962a já aceitos cobrem recuperação delimitada; não reabrir negócio por falha antiga. Não transformar ausência de mutações em prova universal de ausência de diferença Git sem checkpoint correspondente. QUEUED_TO_CHAT só fila, header não autoria/push/limpeza. Acumulado53 revisados/14 pendentes nesta captura.
+
+## Segmento 18 — 23/10/2026
+
+Auditor 7a94a05e-0c51-46c4-9de8-d862b1f1f6d6: local_result uma vez; COMPLETED, análise exclusiva do recibo fornecido, nenhuma ferramenta/escrita/commit. Aceite parcial com correções semânticas, sem reexecutar negócio ou análise histórica. Git determinístico do auditor em23/10/2026 04:16:14UTC: main...origin/main limpo; não descreve o header histórico dev/ahead8.
+
+| ID | Efeito/validação comprovados e limite |
+| --- | --- |
+| f6aee59a | Três leituras aprovadas7/11/13; ENOENT9 do alvo ainda não criado. test_tables20 executado e falho exit1; write_file28 criou scripts/test_markdown_tables.rb; test_tables34 executado novamente e falho exit1. completion_blocked41 mantém test_tables pendente; WORKER_INCOMPLETE/CONTRACT_UNFULFILLED. Script criado não equivale a fixture validada. |
+
+Corrigir “não executar test_tables”: ambos os comandos foram executados, nenhum aprovado; um antes e outro depois da escrita. Passo6 é posição observada, não teto nem prova de ausência de progresso: houve criação no evento28. Sem evento change_requirement no pacote, rejeitar a declaração de que missing_paths não se aplica; esse campo trata de alteração líquida exigida, não simples existência do arquivo. Stderr fornecido apenas como contagem102/34 caracteres: conteúdo, causa exata e cobertura funcional são indeterminados. Não inferir truncamento pelo runtime nem falta de permissão. NEEDS_SUPERVISOR textual não altera error_kind, não exige nova autorização e não justifica replay. O pacote não demonstra recuperação universal; tampouco FAILED histórico prova defeito atual. QUEUED_TO_CHAT é enfileiramento, não resposta/aceite. Acumulado54 revisados/13 pendentes nesta captura.
