@@ -1,3 +1,5 @@
+// Endpoint MCP canônico. Artefato server.mjs gerado por sync-src; S6D limita
+// a falha recuperável da UI à projeção dos links, preservando estado/erros do job.
 import { McpServer } from "@modelcontextprotocol/server";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import * as z from "zod/v4";
@@ -129,8 +131,19 @@ server.registerTool("local_status", {
   try {
     await reconcileJob(job_id);
     const snapshot = await monitorSnapshot(job_id);
-    const monitor = await ensureMonitor();
-    return reply({ ...snapshot.state, delivery: snapshot.delivery.status, activity: snapshot.activity, progress: snapshot.progress, monitor_url: monitorUrl(monitor, job_id), monitor_index_url: monitorIndexUrl(monitor) });
+    let monitorFieldsS6D;
+    try {
+      const monitor = await ensureMonitor();
+      monitorFieldsS6D = {monitor_status:'AVAILABLE',monitor_url:monitorUrl(monitor,job_id),monitor_index_url:monitorIndexUrl(monitor)};
+    } catch (error) {
+      // A UI é recuperável; sua indisponibilidade não invalida o snapshot do job.
+      // Não retornar erro bruto: pode conter paths ou capabilities locais.
+      const codeS6D = ['EACCES','EPERM','EADDRINUSE','ENOENT'].includes(error?.code) ? error.code :
+        /não (iniciou|concluiu) em \d+ segundos/.test(String(error?.message ?? '')) ? 'START_TIMEOUT' : 'UNAVAILABLE';
+      monitorFieldsS6D = {monitor_status:'UNAVAILABLE',monitor_url:null,monitor_index_url:null,
+        monitor_error:{code:codeS6D,message:'Painel indisponível; estado do job preservado. Consulte local_monitor para tentar recuperar a interface.'}};
+    }
+    return reply({ ...snapshot.state, delivery: snapshot.delivery.status, activity: snapshot.activity, progress: snapshot.progress, ...monitorFieldsS6D });
   } catch (error) { return errorReply(error); }
 });
 

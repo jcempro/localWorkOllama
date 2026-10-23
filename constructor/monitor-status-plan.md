@@ -14,4 +14,4 @@ C8, exclusivamente supervisor: alteração de endpoint/runtime/contrato distribu
 
 ## Estado
 
-Planejamento/contrato preparados. Implementação, teste e instalação pendentes. Defeito próprio do produto, sem alteração do núcleo upstream gerenciado.
+Contrato publicado em a5d5533. Endpoint agora tem fonte canônica server.mts, artefato gerado e seleção positiva nos instaladores/recuperações. Teste `node --experimental-strip-types constructor/test-monitor-status.mts` passou com MCP stdio real e filesystem isolado: estados RUNNING/COMPLETED, UI disponível/EACCES/timeout, uma tentativa por consulta, sem URL inventada/segredo/alteração de estado, erro de leitura preservado, local_monitor falha explícita e local_result/Q8S independentes. Sem inferência, callback ou negócio executados. Instalação real pendente; defeito próprio do produto, núcleo upstream intocado.
