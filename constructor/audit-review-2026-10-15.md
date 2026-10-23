@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 66 deles; não substitui o aceite dos outros 1.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 66 deles; não substitui o aceite do último.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os66 aceites/correções semânticos já registrados neste documento nem aceita o1 restante. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os66 aceites/correções semânticos já registrados neste documento nem aceita o último restante. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
