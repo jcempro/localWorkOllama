@@ -161,3 +161,11 @@ Os vínculos preservam a origem/metadados do perfil, inclusive correspondência 
 Job `0681cf3a-11d2-46b0-9243-30f97e24c94c`, recibo `RUNNING`, somente leitura de evidência fornecida sobre fac0a332/ffb788f5. Duas tarefas/contratos integrais, recibos e argv do patch histórico; código atual e comandos completos de build/test não fornecidos. Recortes/omissões explícitos. Pacote privado `2026-10-23-qr-chain-146ecf6c-bb00-4ce3-bdbf-0c2e8d7ae339.json`,10373 caracteres, SHA256 `1340138122066fb759f6cf149536d09f9e90f40d311401409ee85768f27143e8`. C=5/júnior, escopo `f6702c3c6227a46b62e8864b0bfddca8e2350d2deff4bc9ba91852c0993209c3`.
 
 Parecer limitado a160 palavras: distinguir alegação da tarefa corretiva de prova operacional, descrever mudança literal e limites do recibo, com citação do mesmo ID/campo. Sem ferramentas, escrita, execução QR, julgamento de risco ou aceite de FT. No callback, consultar uma vez e conferir proporcionalmente; não tomar inferência concluída como conclusão correta nem refazer negócio.
+
+## Handoff — contrato do módulo após compilação
+
+Job `28566331-8ee8-4069-a106-8db6432dee0d`, recibo `RUNNING`, analisa somente22017882/d1b03e0d/e6f48d2b, sem ferramentas, escrita, negócio ou risco. C=5/júnior; escopo `9b130d6647b2874b5223d8803df9db78af8cef8d7ab3a32388cc48a5cb8813a7`. Tarefas/contratos completos, recibos e recortes fornecidos; fonte atual, diff, testes e argv não foram fornecidos. Não simular inspeção deles.
+
+Pacote privado `2026-10-23-contract-chain-8fe41308-a650-45f0-a342-a9912e97e251.json`,10836 caracteres, SHA256 `9ebde99aac8a9308f05879dbb02718119f8af40003f725a346fbcdb988423c9c`. Preparação inicial13957 foi recusada antes de criar job; redução conservou tarefas/contratos e declarou omissão de listas Git/campos vazios, mantendo cabeçalhos exatos e hashes. Parecer até180 palavras, um item porID com citação literal correspondente e limite final.
+
+No callback, obter resultado uma vez e conferir requisitos/recibos/citações proporcionalmente; distinguir alegação histórica de contrato inventado da evidência operacional. Não promover compilação/teste a aceite de conteúdo ou FT. Cadeia QR anterior revista e registrada em `audit-review-2026-10-23.md`, com a correção de que contadores de eventos omitidos não medem testes/cobertura.
