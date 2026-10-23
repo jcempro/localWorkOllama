@@ -20,4 +20,6 @@ Conclusão exige efeito bem-sucedido e mudança em todos os alvos declarados. Es
 
 ## Instalação
 
-Pendente nesta unidade: instalador existente, conferência de Worker e duas recuperações/manifestos, configurações e autorizações preservadas, sem abrir/rearmar chat. A instalação D2C já foi comprovada separadamente. Não usar mudança de metadados para declarar este passo concluído.
+Instalação concluída e conferida em 23/10 às 12:13:00 UTC. Worker e duas recuperações/manifestos possuem worker-core SHA256 acima e context-manager D2C `addcc0cf78334908092424403b930782430a2e411fafd79ae64ff3cd43433f6d`. Configuração global/Worker preservadas. Root continua ACTIVE/EXPLICIT_RESUME; outro chat PAUSED/EXPLICIT_PAUSE, hashes de controle preservados, sem boot/logon/wake/catchup, mensagem real, inferência ou retomada durante a instalação.
+
+A primeira tentativa concluiu o Worker e foi recusada no SR por mutex ocupado. A espera inicial de30s não obteve a trava; a tarefa depois registrou resultado0/estado pronto e o status do monitor avançou. A recuperação aguardou a liberação por mutex com margem de90s e repetiu somente as instalações SR pendentes, preservando controles; não reinstalou Worker, não matou processo, não roubou/ignorou lock. Verificação final comparou a configuração com o backup anterior à atualização. Prova privada: `audit-private/declared-change-install-332eae60-6e6e-4b1f-9c02-876b7c8698e9/installed-proof.json`, SHA256 `e7418e96cb695af264af24a73d11e37962960e01b264ba2a627b5f50c7036fb5`.
