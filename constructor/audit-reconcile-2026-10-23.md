@@ -133,3 +133,11 @@ Agrupamento literal dos46 diagnósticos, sem inferir causa física, risco ou rec
 | Capacidade contextual | 1 | 8e440f03: D2C corrigiu redundância Markdown atual; não prova igualdade byte a byte dos retornos históricos nem que o prompt original passaria. Documento único irredutível exige segmentação. |
 
 O agrupamento cobre todos os diagnósticos dessa projeção e apoia a investigação; não é aceite semântico dos46 trabalhos. A coleta e a revisão dos142 registros `COMPLETED` do incremento permanecem distintas;40 são desta manutenção/auditoria e devem reutilizar seus recibos existentes,102 pertencem ao alvo de teste. O registro `RUNNING` do corte corresponde ao próprio coletor original, cujo recibo posterior já foi conferido; não criar execução recursiva para atualizar a fotografia histórica.
+
+## Handoff F8E — registros concluídos
+
+Job `622f02c0-c347-40fc-bb66-0743997f45c3`, recibo `RUNNING`, sequência `collect_completions` sem inferência. Nova seleção dos142COMPLETED entre189 perfis da mesma captura; não repete a coleta das46 falhas. Implementação exclusiva do supervisor em `75945c4`, nove testes aprovados, API anterior preservada. Mantém bloqueios anteriores e recibos operacionais, sem presumir qualidade semântica.
+
+Saída privada exclusiva `audit-private/2026-10-23-f8e-completed-cc7019ac-c25d-44d9-9305-4868fd683496/completions.json`, vinculada ao request_idcc7019ac-c25d-44d9-9305-4868fd683496 e a este job. C=5/júnior, escopo `22a84754f64fb413d9b08453c902b796ecf055eb0e979dc6d9047ca4375249a8`; dois inputs e três dependências por hash, precondições de contagem, argv conferido sintaticamente, saída sem sobrescrita e SHA pós-escrita. Heap256MiB e prazo90s limitam somente esse IO pontual. `expect_changes=false`/commit pelo supervisor, por ser coleta ignorada e não implementação do Worker.
+
+No callback: `local_result` uma vez, conferir exit/hash/contagem142 e inferência0; reutilizar recibos já revistos dos40 registros de manutenção/auditoria e tratar102 do alvo sem nova execução de negócio. Não tomar `completion_verified`, menção em documentação ou `COMPLETED` como aceite semântico. Não iniciar captura recursiva para substituir o corte histórico.
