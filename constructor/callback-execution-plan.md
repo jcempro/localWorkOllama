@@ -1,0 +1,11 @@
+# FT-CALLBACK-EXECUTION-T3P — término técnico da execução
+
+Origem: auditoria Supervisor–Worker vigente, evidência nos callbacks de b49ff347 e f37c1a11: ambos command_sequence sem modelo, mas queueMessage em delivery.mjs afirma que COMPLETED significa término de inferência. O runtime e Q8S comprovam execução determinística. Correção necessária é semântica do aviso, sem alterar autorização, estado técnico ou entrega.
+
+Supervisor fixa **C8/exclusivo**, por alcançar mensagem global de retomada e suas interpretações em futuras operações. Não usar Worker para implementação, avaliação de risco ou testes desta manutenção. Scripts triviais autorizados são executados pelo supervisor; não contornam fronteiras. A unidade anterior P4K está encerrada; não repetir seus resultados.
+
+Contrato: callback deve dizer que COMPLETED registra término técnico da execução; command_sequence não usa inferência. Preservar integralmente mensagem restante, pedido de revisão proporcional/Q8S, consulta única, Git determinístico, limites, recuperação e proibição de replay. Nenhuma mudança de fila, destinatário, timer, intenção, boot, interface, modelos/esforço ou serviços. Revisão semântica continua necessária; término técnico não prova solicitação atendida.
+
+Implementação mínima: delivery.mts como fonte TypeScript canônica, delivery.mjs derivado pelo gerador já existente. Converter somente esse legado ao tocá-lo; não reescrever lógica nem outros módulos. Seleções positivas de fonte/instalação/recuperação/prova devem incluir o par. src, RCF e howto acompanham contrato real. Node atual permanece suportado, sem upgrade global.
+
+Validação proporcional: comparar código derivado com baseline Git explícita, permitindo somente troca da frase; conferir mensagem COMPLETED/FAILED, job/destino e preservação dos demais elementos sem envio a chat. Verificar equivalência fonte→artefato e manifestos. Instalar pelo fluxo oficial existente, conferir hashes nas três cópias, configurações/controles e ausência de novos envios ou autorizações de boot. Não executar callback real só para testar texto nem criar inferência. Aceite só após testes, instalação e prova; cada unidade própria com commit/push imediato.
