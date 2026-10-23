@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 61 deles; não substitui o aceite dos outros 6.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 62 deles; não substitui o aceite dos outros 5.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os61 aceites/correções semânticos já registrados neste documento nem aceita os6 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os62 aceites/correções semânticos já registrados neste documento nem aceita os5 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -345,3 +345,15 @@ Auditor36e4b3ef-0cfa-41b4-b0b4-43076413b163: local_result uma vez; COMPLETED por
 Aceite parcial com qualificações: rejeitar o padrão obrigatório alegado no parecer original, sublinhado como padrão em Markdown Jekyll, pois não há norma/configuração demonstrando-o. Compatibilidade geral de delimitadores não comprova convenção local nem demanda novo build por si só. O auditor atual não repetiu esse padrão como fato local, mas tampouco o refutou explicitamente; a correção fica nesta revisão, sem nova inferência. Hunk4 comprova linha vazia removida, não a localização exata entre parágrafos nem efeito de renderização, porque pares omitem contexto. Declaração de cobertura exata limita-se aos blocos removed/added fornecidos; não aos arquivos completos ou conteúdo contextual dos hunks.
 
 O valor de added2 recebido contém escapes antes das aspas; preservar a representação capturada e distinguir serialização de código efetivamente renderizado. Não declarar sintaxe IAL válida/inválida, legenda materializada ou falha atual apenas por esse artefato. Origem literal cita corpo-deltas-01.json extraído do delta e versionado em2314f8284a; não prova fontes externas verificadas, autoria ou arquivo evidence.jsonl commitado. Metadado pode exigir suporte, mas sua validação não ocorreu nesta unidade; não afirmar ausência geral de validação prévia. Demais hunks/fontes/tabelas/integração continuam fora do aceite. Não reescrever ou restaurar artigo. QUEUED_TO_CHAT só fila. Acumulado61 revisados/6 pendentes nesta captura.
+
+## Segmento25 — delimitadores nos hunks5/6/8 e conclusão restrita
+
+Auditoreb329794-68ab-41a2-ad12-01be292d4db2: local_result uma vez; COMPLETED por comparação de evidência fornecida, nenhuma ferramenta/escrita/commit próprios. Git determinístico main...origin/main limpo em23/10/2026 07:46:00UTC é do auditor; header histórico do blog dev...origin/dev é distinto. Request/result originais SHA256b5a3c0311f4cfcf45349f675f7ed1fa57f6f5d61a0cd5174de58c0acd9d4043e e99f837520f7d3dc61ced06d55ba948bef9323131ebc232776649b123c15c5caf conferidos contra captura antes da delegação. Pares completos fornecidos; sem leitura viva do artigo.
+
+| ID | Aceite e limite de cobertura |
+| --- | --- |
+| b8d8a59b | Hunk5 troca delimitador de O Grande Conflito no parágrafo sobre modo de agir; hunk6 faz a mesma troca na nota egitoroma; hunk8 troca delimitador de Church Manual na nota ordemlocal. Em cada par, substituir o título entre asteriscos pelo mesmo título entre sublinhados reproduz added integralmente. Demais caracteres, referências, URL e texto preservados nesses pares. |
+
+Aceite do inventário literal com qualificação: o parecer original contém expressamente não há fontes/integração/tabela pendentes neste lote; não negar a existência dessa frase, como sugere a generalização atual de que o parecer não avança conclusões. Sua leitura admissível é estritamente local: nenhuma diferença adicional detectada nesses três pares, não verificação de fontes ou conclusão das pendências globais. O comando original também deixava hunk7 para outra unidade. Não validar conteúdo citado ou interpretação teológica por equivalência lexical, não inventar convenção obrigatória de Markdown e não reabrir negócio para demonstrar mera troca de delimitador.
+
+As citações curtas do auditor no hunk5 são substrings identificadoras, não a totalidade do campo removed/added, que contém um parágrafo completo. Campos iguais não são removidos semanticamente só porque pertencem ao bloco removed. Sem autoria demonstrada, build/render ou comprovação externa nesta unidade. Resposta excedeu o limite de150 palavras pedido; correção não exige nova inferência para reformatar. QUEUED_TO_CHAT só fila; não prova resposta/aceite. Acumulado62 revisados/5 pendentes nesta captura.
