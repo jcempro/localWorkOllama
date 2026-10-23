@@ -84,3 +84,13 @@ Pendente: aplicar a reatribuição corrigida aos itens da captura existente e co
 ## Handoff A7R — recontagem congelada
 
 Job `5d9ab9eb-9859-4e0d-83c6-dda9ad70ffaf`, iniciado com recibo `RUNNING`. Sequência `reconcile`, `summarize`, sem inferência; reutiliza somente os itens da captura existente, por hash. Diretório privado exclusivo `audit-private/2026-10-23-a7r-4f047a82-0157-4dbc-b6db-3050e26c7982/`, com `interactions-a7r.json` e `delta.json`. Pedido e saídas vinculados ao identificador `4f047a82-0157-4dbc-b6db-3050e26c7982`; C=5/júnior, escopo `d033598b87f9cf3319837a5d1cc687d27eb0269e62fac5bd8a99df5eb17c4b00`. Não altera a captura antiga, jobs ou chats. Próximo passo: conferir recibo e diferenças, sem polling ou nova consulta a resultados históricos.
+
+## Recibo A7R — recontagem conferida
+
+Resultado de `5d9ab9eb-9859-4e0d-83c6-dda9ad70ffaf` consultado uma vez: `reconcile` e `summarize` exit0. Os mesmos 453 jobs, 63 conversas e 2.639 itens congelados foram reconciliados, sem novos turnos nem execução de negócio. SHA256 de `interactions-a7r.json`: `1be2afbcdb970c1443852ecf33cb96c907139f934b640f5b1e29778ffb356998`; de `delta.json`: `0d9fb4a0de1bba5f100e886429a6d80bf3d10b160e87b60cfd58d58b21dc8415`. Ambos conferem com os arquivos persistidos.
+
+Dos 18 candidatos antigos a consulta repetida, 17 eram falsos positivos por menção histórica. Cada um passou a uma chamada com resultado terminal correspondente. Resta `87fcc955`: duas consultas realmente destinadas a esse ID, em conversas diferentes, com o mesmo hash de resposta; a primeira pertence a turno que falhou por `usageLimitExceeded`, a segunda a turno concluído. Isso comprova duas leituras, mas não basta para afirmar reenvio automático indevido ou causa da recuperação entre conversas. A falha de execução desse job e seus efeitos parciais já foram revistos em `audit-report.md`; não repetir a tarefa.
+
+Os 16 candidatos de quota e 102 de ausência de callback permanecem iguais; os 102 pertencem aos fixtures já identificados, não demonstram falha operacional nova. Ausência de `finding` não significa aceite semântico. O Git determinístico de 23/10 às 09:24:59 UTC registra `main...origin/main` limpo, coerente com coleta privada ignorada e `commit_policy=supervisor`; não houve implementação ou commit exigido do Worker.
+
+A correção A7R está validada em dados reais. A reconciliação semântica dos registros posteriores continua pendente; os recibos de manutenção/auditoria já tratados neste chat devem ser reutilizados, sem auditoria recursiva nem repetição do negócio. Próximo caso delimitado: `8e440f03`, falha `CONTEXT_CAPACITY` com zero compactações; comparar pedido, eventos e política de preservação atual antes de decidir correção.
