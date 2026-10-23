@@ -1,0 +1,9 @@
+# E9P — validação
+
+Correção exclusiva do supervisor C=8, conforme `evidence-provenance-plan.md`. O prompt agora distingue inspeção obrigatória de análise com base fornecida, sem dispensar requisitos explícitos. Recibos históricos e execução própria têm proveniências diferentes; execução não é aceite semântico. O template padrão admite formato/limite expresso da tarefa, sem omitir limitações/impedimentos reais. Nenhuma permissão ou guarda de conclusão foi alterada; P2D e ordem dados→tarefa permanecem.
+
+`TEST_REPO_PATH` apontou somente para o alvo autorizado; `node localworker/test-execution-contract.mjs` passou. Servidor Ollama simulado, sem inferência real ou alteração de negócio: contexto do prompt capturado nas duas rotas, P2D/normalização mantidos, resposta JSON candidata preservada antes do rodapé nativo. Recusas por leitura obrigatória ausente e ausência de inspeção sem evidência continuam passando. A suíte também aprovou sequência/ordem/argv multiline, falha sem repetição, comandos obrigatórios, recibos e propriedade de commit.
+
+A primeira execução foi bloqueada pela sandbox ao conectar ao próprio servidor loopback (`EACCES`); não era defeito do Ollama/modelo. A mesma suíte, sem mudança no código, passou com a permissão de execução necessária. Isso não valida obediência semântica do modelo real; o ensaio pequeno após instalação permanece pendente.
+
+Espelhos/documentação atualizados pelo sincronizador. A explicação do uso fica no parágrafo autoral de `howto.md`; a reprodução literal do AGENTS não é editada manualmente. RCF/README recebem somente hashes gerados. Próximas etapas: commit/push, instalação oficial com conferência de configurações/autorizações e hashes, depois teste real delimitado com recibo histórico já verificado. Não repetir a cadeia do contrato nem alterar o módulo de negócio.

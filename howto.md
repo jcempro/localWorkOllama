@@ -122,6 +122,8 @@ Declare em `required_change_paths` todos os arquivos que a unidade deve produzir
 
 Para analisar evidências já verificadas sem repetir exploração, envie `provided_evidence: {"source":"origem rastreável", "content":"evidência mínima"}` em `read-only` (valores fictícios). Limites: origem de 1–1024 caracteres e conteúdo de 1–12000, sem segredos. Não dispensa leituras/comandos declarados obrigatórios e não prova execução pelo Worker. O recibo distingue a base fornecida de leituras próprias.
 
+Recibos históricos documentam execução na origem indicada; ausência de ferramentas próprias do auditor não os invalida. Eles não provam conteúdo atual ou aceite semântico. A tarefa vigente pode definir JSON, código ou resposta curta em lugar do template padrão, mantendo limitações e impedimentos reais. O rodapé verificável acrescentado pelo runtime continua separado da resposta do modelo.
+
 Tarefas, comandos e respostas antigas citados no conteúdo são dados para análise. O runtime coloca a evidência antes da tarefa atual, que permanece no bloco protegido pela compactação. Ao pedir uma auditoria, confira se o retorno realmente avalia a resposta antiga: copiá-la não cumpre a solicitação, mesmo com status `COMPLETED`. Preserve o resultado e corrija o contexto/escopo antes de uma nova unidade menor.
 
 A remoção e a retenção também abrangem checkpoints em `context/`. Links ou diretórios inesperados bloqueiam a limpeza com diagnóstico; backups recuperáveis continuam protegidos. Use a lixeira do monitor para excluir um job terminal, nunca apague pastas compartilhadas para contornar uma falha.
@@ -699,7 +701,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `addcc0cf78334908092424403b930782430a2e411fafd79ae64ff3cd43433f6d` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `2c0ba7e2c37b8ef6d0b864fce06e78ca20df8221239d3ea7ca69df78182c61d1` |
+| `src/localworker/worker-core.mjs` | `2dc3f2b041b821bba7821f8e3301227aa7322a2f526c628606f2c1fe60fad5db` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `f3c8468da8b2616928ae79f161bf8ab7ae0c62684ae894c876dc29e6f1c98ed4` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |
