@@ -245,6 +245,8 @@ export async function monitorSnapshot(id) {
 }
 
 const inventoryCacheM7Q = new Map();
+// Inventário precisa da nota atual; histórico completo é exclusivo do detalhe.
+async function qualitySummaryQ8S(id){const {history,...summary}=await reviewSnapshotQ8S(id);return {...summary,revision_count:history.length};}
 const gitRootCacheM7Q = new Map();
 async function repoGroupM7Q(request) {
   if (request.git_root) return request.git_root;
@@ -270,7 +272,7 @@ export async function inventorySnapshot({ repo = "", status = "", sort = "time",
   for (const cachedId of inventoryCacheM7Q.keys()) if (!ids.includes(cachedId)) inventoryCacheM7Q.delete(cachedId);
   for (const id of ids) {
     const cached = inventoryCacheM7Q.get(id);
-    if (cached) { rows.push({...cached,quality:await reviewSnapshotQ8S(id)}); continue; }
+    if (cached) { rows.push({...cached,quality:await qualitySummaryQ8S(id)}); continue; }
     try {
       const dir = jobDir(id);
       const [state, request, delivery] = await Promise.all([getState(id),
@@ -282,7 +284,7 @@ export async function inventorySnapshot({ repo = "", status = "", sort = "time",
         repo: await repoGroupM7Q(request), project_id: request.project_id ?? null,
         task: String(request.task ?? "").slice(0, 240), mode: request.mode ?? null,
         delivery: delivery.status ?? "UNKNOWN" };
-      rows.push({...row,quality:await reviewSnapshotQ8S(id)});
+      rows.push({...row,quality:await qualitySummaryQ8S(id)});
       if (["COMPLETED", "FAILED", "CANCELLED"].includes(state.status) && delivery.status === "QUEUED_TO_CHAT") inventoryCacheM7Q.set(id, row);
     } catch (error) {
       const info = await fs.stat(jobDir(id)).catch(() => null);

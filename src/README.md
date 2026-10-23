@@ -124,7 +124,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `bc76c5febe876d1e148168a3494995e5b71bdc30b93a87a81cf95a06cb3f7c26` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |
-| `src/localworker/monitor.mjs` | `3537305f2b207fa886d6e96f099fed87c59cde2b4dd8f2e9a4b28a253911d2d0` |
+| `src/localworker/monitor.mjs` | `188a30bda9e7c367ff7773bb2e9144e03cf27160f2a844b473e30d4b8701f2c6` |
 | `src/localworker/monitor-page.mjs` | `762ca8da196a1af84e340e785ee60064a88a015bb2322becc495b2a590c64967` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `2f1e2823a4b05a741997f3b345b0da40303e06ed71747635e14c6edc881fe01e` |

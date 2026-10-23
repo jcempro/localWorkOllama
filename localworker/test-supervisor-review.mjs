@@ -115,8 +115,8 @@ try{
   assert.equal(projected.assessment.score,8);
   await q.recordReviewQ8S({...make(ui,ru,9,'Revisão posterior desta fixture.'),expected_revision:1});
   projected=(await monitor.inventorySnapshot({limit:100})).jobs.find(j=>j.job_id===ui).quality;
-  assert.equal(projected.assessment.score,9);assert.equal(projected.history.length,2);
-  const detail=await monitor.monitorSnapshot(ui);assert.equal(detail.quality.assessment.score,9);
+  assert.equal(projected.assessment.score,9);assert.equal(projected.revision_count,2);assert.equal(projected.history,undefined);
+  const detail=await monitor.monitorSnapshot(ui);assert.equal(detail.quality.assessment.score,9);assert.equal(detail.quality.history.length,2);
   assert.ok(!JSON.stringify(detail.quality).includes(ru.review.receipt_token));
   await fs.appendFile(path.join(s.jobDir(ui),'result.md'),' mudança posterior');
   assert.equal((await monitor.inventorySnapshot({limit:100})).jobs.find(j=>j.job_id===ui).quality.status,'STALE');
@@ -130,10 +130,10 @@ try{
   const sandbox={document:{createElement:element},byId,put:(k,v)=>{byId(k).textContent=String(v);},fmtDate:v=>v};
   vm.createContext(sandbox);
   new vm.Script(page.slice(page.indexOf('const qualityLabel='),page.indexOf('const resourceLabels='))).runInContext(sandbox);
-  sandbox.quality=projected;new vm.Script('renderQuality(quality)').runInContext(sandbox);
+  sandbox.quality=detail.quality;new vm.Script('renderQuality(quality)').runInContext(sandbox);
   assert.equal(byId('qualityScore').textContent,'9/10');assert.equal(byId('qualityHistory').children.length,2);
   assert.equal(byId('qualityHistory').children[1].children[1].textContent,' — <script>não executar</script> Evidência de fixture.');
-  sandbox.quality={status:'STALE',history:projected.history};new vm.Script('renderQuality(quality)').runInContext(sandbox);
+  sandbox.quality={status:'STALE',history:detail.quality.history};new vm.Script('renderQuality(quality)').runInContext(sandbox);
   assert.equal(byId('qualityScore').textContent,'Revisão pendente');assert.equal(byId('qualityScore').dataset.band,'none');
   sandbox.quality={status:'UNAVAILABLE',error:'Registro inválido',history:[]};new vm.Script('renderQuality(quality)').runInContext(sandbox);
   assert.equal(byId('qualityScore').textContent,'Indisponível');assert.equal(byId('qualityHistoryBox').hidden,true);

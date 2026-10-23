@@ -29,3 +29,7 @@ O teste concorrente identificou que a varredura inicial da retenção ainda esta
 Recebimentos anteriores a Q8S não têm token. A rota explícita `local_review.legacy_received` valida hashes UTF-8/status/error_kind/origem declarados contra artefatos, exige revisão0/registro ausente e grava recibo+nota em uma única operação sob lock. Não chama local_result novamente, não repete análise e não cria nota pelo status. Retry idêntico confirma a primeira importação; alteração ou revisão existente recusa. Não comprova exame cognitivo do declarante nem isola adversário com o mesmo usuário.
 
 Suíte completa passou com MCP real stdio/SQLite isolado: importação de falha, divergência de resultado/status/error_kind, origem vazia sem arquivo parcial, retry idêntico e recusa de sobrescrita. Fixtures não são avaliações reais. Instrução global/howto/README/RCF refletem o contrato. Pendem instalação, migração real de revisão suficiente e auditoria restante.
+
+## Projeção econômica do inventário
+
+Inventário transporta somente nota/motivo atuais, estado e contagem de revisões. O histórico completo permanece no detalhe, evitando multiplicá-lo por50–100 linhas a cada atualização. Teste garante ausência de `history` na listagem e presença das revisões no detalhe; renderização testa a projeção correta de cada superfície. O limite de registro e a consulta futura continuam preservados.
