@@ -22,6 +22,6 @@ As execuções iniciais das suítes unitárias sob sandbox falharam; as mesmas s
 
 ## Instalação e limites
 
-Instalação ainda pendente nesta unidade. Atualizar pelo instalador existente, conferir Worker e cópias de recuperação/manifestos e preservar configurações, controles de autorização e ausência de triggers de boot/logon. Não abrir Desktop, rearmar conversas ou enviar mensagens durante instalação.
+Instalação concluída pelo mecanismo existente em 23/10 às 11:48:33 UTC. Worker e duas cópias de recuperação/manifestos conferem com o SHA256 de src acima. Configuração do Worker e config global preservadas; chat desta manutenção continua ACTIVE/EXPLICIT_RESUME e o outro permanece PAUSED/EXPLICIT_PAUSE, com hashes de controle preservados. Sem boot/logon, wake/catchup, mensagem real, inferência real ou retomada durante instalação. Prova privada: `audit-private/context-duplicates-install-5d3b0994-dddb-4640-af08-2e926a7d684a/installed-proof.json`, SHA256 `340c9ac6f1b1369d410fa52f5597da27dbf3eb72143ec54ad26e108460928cd3`. A tentativa anterior foi recusada antes da execução por indisponibilidade da revisão automática por quota; só foi repetida após a restauração verificada, sem contornar a revisão.
 
 D2C elimina redundância literal comprovada. Documentos únicos, instruções, decisões e bases irredutíveis permanecem protegidos; sua continuidade pode exigir segmentação. O ensaio não comprova que o prompt histórico caberia após esta correção, não altera seus resultados e não promete ausência de toda falha contextual futura.
