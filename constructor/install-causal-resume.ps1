@@ -1,6 +1,7 @@
 param([Parameter(Mandatory=$true)][string]$ProjectRoot,[switch]$VerifyOnly,[string]$BeforeConfigBackup)
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot 'worker-config-invariant.ps1')
+. (Join-Path $PSScriptRoot 'native-installer-result.ps1')
 $projectC9R=(Resolve-Path -LiteralPath $ProjectRoot).Path
 $proofRootC9R=Join-Path $projectC9R 'constructor/audit-private'
 $tasksC9R=@(Get-ScheduledTask | Where-Object TaskName -Like 'CodexSupervisorResume-*')
@@ -31,8 +32,7 @@ if($VerifyOnly){
 $globalConfigC9R=Join-Path $targetsC9R[0].config.codexHome 'config.toml'
 $globalHashC9R=(Get-FileHash -LiteralPath $globalConfigC9R).Hash
 if(-not $VerifyOnly){
-  & $psC9R -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $projectC9R 'src/install.ps1') -WorkerHome $workerC9R -CodexHome $targetsC9R[0].config.codexHome -CodexExe $cliC9R -SkipPrerequisites -SkipModel -SkipWatchdog -SkipGlobalRules -WaitForIdle *> (Join-Path $proofRootC9R 'c9r-worker-install.log')
-  if($LASTEXITCODE -ne 0){throw 'WORKER_INSTALL_FAILED_SEE_PRIVATE_LOG'}
+  Invoke-NativeInstallerC9R -Program $psC9R -ArgumentList @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',(Join-Path $projectC9R 'src/install.ps1'),'-WorkerHome',$workerC9R,'-CodexHome',$targetsC9R[0].config.codexHome,'-CodexExe',$cliC9R,'-SkipPrerequisites','-SkipModel','-SkipWatchdog','-SkipGlobalRules','-WaitForIdle') -LogPath (Join-Path $proofRootC9R 'c9r-worker-install.log')
 }
 $filesC9R=@('continuity.mts','continuity.mjs','delivery.mjs','watchdog.mjs','job-store.mjs')
 foreach($nameC9R in $filesC9R){
@@ -43,8 +43,7 @@ $supervisorFilesC9R=@('continuity.mts','continuity.mjs','core.mts','core.mjs','r
 foreach($targetC9R in $targetsC9R){
   $cfgC9R=$targetC9R.config
   if(-not $VerifyOnly){
-    & $psC9R -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $projectC9R 'src/supervisor/install.ps1') -ThreadId $cfgC9R.threadId -RepoPath $cfgC9R.repoPath -Target $targetC9R.dir -CodexHome $cfgC9R.codexHome -WorkerHome $cfgC9R.workerHome -NodeExe $nodeC9R -CodexExe $cliC9R -OllamaExe $cfgC9R.ollama -ScanMinutes $cfgC9R.scanMinutes *> (Join-Path $proofRootC9R ('c9r-supervisor-'+$cfgC9R.threadId+'.log'))
-    if($LASTEXITCODE -ne 0){throw 'SUPERVISOR_INSTALL_FAILED_SEE_PRIVATE_LOG'}
+    Invoke-NativeInstallerC9R -Program $psC9R -ArgumentList @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',(Join-Path $projectC9R 'src/supervisor/install.ps1'),'-ThreadId',$cfgC9R.threadId,'-RepoPath',$cfgC9R.repoPath,'-Target',$targetC9R.dir,'-CodexHome',$cfgC9R.codexHome,'-WorkerHome',$cfgC9R.workerHome,'-NodeExe',$nodeC9R,'-CodexExe',$cliC9R,'-OllamaExe',$cfgC9R.ollama,'-ScanMinutes',[string]$cfgC9R.scanMinutes) -LogPath (Join-Path $proofRootC9R ('c9r-supervisor-'+$cfgC9R.threadId+'.log'))
   }
   if((Get-FileHash -LiteralPath (Join-Path $targetC9R.dir 'continuity.json')).Hash -ne $targetC9R.controlHash){throw 'AUTHORIZATION_CHANGED_BY_INSTALL'}
   foreach($nameC9R in $supervisorFilesC9R){
