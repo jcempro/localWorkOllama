@@ -85,20 +85,20 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 
 | Artefato portável | SHA-256 |
 | --- | --- |
-| `src/supervisor/continuity.mts` | `0c443c0a3b990e181e8f84207dd2b4ac967fedd360a4edc4995c934ed7633f60` |
-| `src/supervisor/continuity.mjs` | `2ad31342463bb21d1442690406bfd92fcf2733fd62587a44e617a6366893af9d` |
+| `src/supervisor/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
+| `src/supervisor/continuity.mjs` | `739301ccb005e09927875cfdd4ca0199099978895ecdbf6abfbf9d39968e682c` |
 | `src/supervisor/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
-| `src/supervisor/core.mts` | `397c4867755a354622a9be2640566f6634ad654be337fbd349733f537493e749` |
-| `src/supervisor/core.mjs` | `574a5ee0ec2285123945c57d8a2c70494e51bf0ec6719da8ca7f1576e8db708e` |
+| `src/supervisor/core.mts` | `bec3617f334ba3717949940a79319d9a300448b0da04df913aab2ed5fda76ecd` |
+| `src/supervisor/core.mjs` | `97e4c2946119517cfefea3aed0e80ed6b8a27d1a21dc9d450f2f31578afee5fc` |
 | `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
 | `src/supervisor/rpc.mjs` | `6745f678c8c2c629c9cc27f42f0a162ad26b7608310a84a7676924d6dbe23fe0` |
 | `src/supervisor/receipts.mts` | `fda754fe4058f2ef35ed513958fe7f46f12a7269593c7815bf4482216dd354e3` |
 | `src/supervisor/receipts.mjs` | `9ae5ed4a69248385ababcafc8c53c0d08963c54e000bbd8b662c5a57621a7955` |
-| `src/supervisor/run.mts` | `94ebc0f7d7af856ebcca672c491c1b3e77f491628514a6517b5fc1a74087cab9` |
-| `src/supervisor/run.mjs` | `eba7478a81edaa9e5c492117380765c0e2a50e75306ebb1b429f93bd97181a88` |
+| `src/supervisor/run.mts` | `701dbfdb05be26aa6e9841a515444b38c5fabb711a19f20f021d87cea7d31f86` |
+| `src/supervisor/run.mjs` | `4abf09e8e35f809274b423cfdb9338de9bb78fdc1e0d0a89f55dd2c40fefcded` |
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
 | `src/supervisor/install.ps1` | `31f15f1cf8ca0e2606c9c77fff8d685c01d512446d7f013c257b6daf749cdd54` |
-| `src/supervisor/README.md` | `9ca62c7f099a9b498e085359300ffa49fabaa06dc7ff3ef7bcb174c55f611144` |
+| `src/supervisor/README.md` | `3d0efcbb5bbe212d7ef45da60d7fc9b08bfc6f5a40b5a6cdf5e1895dff7e7cc4` |
 | `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
@@ -106,8 +106,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/server.mjs` | `b184e17df90d43600f92e007a4d81f4d09fb13f8524d5d785a9cd5c917538f8d` |
 | `src/localworker/delegation-policy.mts` | `d7f1eed4081eb23983c7a26ca1a29e7e646ce0ae23550ff4fc1c84ea6bdb115d` |
 | `src/localworker/delegation-policy.mjs` | `8370a671d03257175895e65864f3ae1e9836023b7566f928dda470c1c35feeae` |
-| `src/localworker/continuity.mts` | `0c443c0a3b990e181e8f84207dd2b4ac967fedd360a4edc4995c934ed7633f60` |
-| `src/localworker/continuity.mjs` | `2ad31342463bb21d1442690406bfd92fcf2733fd62587a44e617a6366893af9d` |
+| `src/localworker/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
+| `src/localworker/continuity.mjs` | `739301ccb005e09927875cfdd4ca0199099978895ecdbf6abfbf9d39968e682c` |
 | `src/localworker/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `9dbb88b2e49582b1529b61b86382fefc176778a66850ce1aa36c0eab978de725` |
@@ -116,7 +116,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `dbb09fe19b60fd8042a891be21bd8c14d0b9c21815a64579d60f712a6c280ef8` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
-| `src/localworker/delivery.mjs` | `c89da83a39f4b1ece4f14498a748dfcaa6b7049c0a4a6fa7254df5b91dd1b71d` |
+| `src/localworker/delivery.mjs` | `f3c8468da8b2616928ae79f161bf8ab7ae0c62684ae894c876dc29e6f1c98ed4` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |
 | `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
 | `src/localworker/monitor-page.mjs` | `c9f7b66a1afc7134a406bb3670e3c0e1a7832af57edd493d9234523f3c88ac8f` |

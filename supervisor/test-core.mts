@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { detect, advance, responseEvidence, planCycles, planQuotaFailure, dispatchDecisionC9R } from './core.mts';
-import { callbackReasonU6C } from './continuity.mts';
+import { detect, advance, responseEvidence, planCycles, planQuotaFailure, planServiceFailureC9R, dispatchDecisionC9R } from './core.mts';
+import { callbackReasonU6C,causalSuspensionC9R,quotaSuspensionC9R } from './continuity.mts';
 const now = 2_000_000;
 const target = { accountKey: 'test', threadId: 'thread-a', repoPath: 'repo' };
 const quota = (used = 90, reset = now / 1000 + 100) => ({ rateLimitsByLimitId: { codex: { primary: { usedPercent: used, resetsAt: reset } } } });
@@ -148,3 +148,29 @@ queueBusyC9R=false;
 assert.equal((await advance(JSON.parse(JSON.stringify(queuedWaitC9R)),dispatchIoC9R,queuedWaitC9R.nextAttemptAt)).status,'SENT');
 assert.equal(dispatchesC9R,2);
 console.log('PASS C9R: duas janelas/origem, reserva persistida/ambigua, isolamento e fila pendente/liberada sem duplicacao');
+
+const serviceTurnC9R={...incident,error:{codexErrorInfo:'serverOverloaded'}};
+assert.equal(causalSuspensionC9R(serviceTurnC9R),'SERVICE_OVERLOAD');assert.equal(quotaSuspensionC9R(serviceTurnC9R),false);
+assert.equal(callbackReasonU6C({...sessionC9R,originTurnId:serviceTurnC9R.id},sessionC9R,serviceTurnC9R),null);
+for(const code of ['other','toString','__proto__'])assert.equal(causalSuspensionC9R({...serviceTurnC9R,error:{codexErrorInfo:code}}),null);
+assert.equal(causalSuspensionC9R({...serviceTurnC9R,status:'interrupted'}),null);
+assert.equal(causalSuspensionC9R({...serviceTurnC9R,error:{message:'serverOverloaded'}}),null);
+let serviceEventC9R=planServiceFailureC9R(target,serviceTurnC9R,[],now,'generation-a')[0];
+assert.equal(serviceEventC9R.dueAt,serviceTurnC9R.completedAt*1000+30_000);
+assert.equal(serviceEventC9R.scheduleReason,'STRUCTURED_SERVICE_BACKOFF');
+assert.equal(planServiceFailureC9R(target,serviceTurnC9R,[serviceEventC9R],now,'generation-a').length,0);
+const unconfirmedServiceC9R=Array.from({length:8},(_,i)=>({...serviceEventC9R,id:'prior-'+i,interruptedTurnId:'prior-origin-'+i,
+  sendStartedAt:now-50_000,continuity:{generation:'generation-a'},status:'RESPONSE_ERROR'}));
+assert.equal(planServiceFailureC9R(target,serviceTurnC9R,unconfirmedServiceC9R,now,'generation-a')[0].recoveryDelayMs,900_000);
+assert.equal(planServiceFailureC9R(target,serviceTurnC9R,unconfirmedServiceC9R,now,'new-generation')[0].recoveryDelayMs,30_000);
+assert.equal(planServiceFailureC9R(target,{...serviceTurnC9R,status:'interrupted'},[],now,'generation-a').length,0);
+assert.equal(planServiceFailureC9R(target,incident,[],now,'generation-a').length,0);
+let serviceSendsC9R=0;
+const serviceIoC9R={...io,incidentCurrent:async()=>true,turns:async()=>[],send:async()=>{serviceSendsC9R++;return {messageId:'service-receipt'};}};
+await advance(serviceEventC9R,serviceIoC9R,serviceEventC9R.dueAt-1);assert.equal(serviceSendsC9R,0);
+serviceEventC9R=await advance(serviceEventC9R,serviceIoC9R,serviceEventC9R.dueAt);
+assert.equal(serviceEventC9R.status,'SENT');assert.equal(serviceSendsC9R,1);
+await advance(serviceEventC9R,serviceIoC9R,serviceEventC9R.nextAttemptAt);assert.equal(serviceSendsC9R,1);
+const quotaBlockedServiceC9R=await advance(planServiceFailureC9R(target,serviceTurnC9R,[],now,'generation-a')[0],{...serviceIoC9R,quota:async()=>quota(100)},now+60_000);
+assert.equal(quotaBlockedServiceC9R.status,'WAITING_QUOTA');assert.equal(serviceSendsC9R,1);
+console.log('PASS C9R: sobrecarga estruturada distinta de quota, backoff limitado, incidente unico, bloqueio de erros genericos/interrupcao e sem reenvio');

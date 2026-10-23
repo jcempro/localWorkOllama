@@ -5,9 +5,9 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { connect } from './rpc.mts';
-import { planCycles, planQuotaFailure, advance, digest, responseEvidence, dispatchDecisionC9R } from './core.mts';
+import { planCycles, planQuotaFailure, planServiceFailureC9R, advance, digest, responseEvidence, dispatchDecisionC9R } from './core.mts';
 import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn, latestTurn, pendingQueue, hasQueuedInputC9R } from './receipts.mts';
-import { observeContinuityU6C, sessionReasonU6C, quotaSuspensionC9R } from './continuity.mts';
+import { observeContinuityU6C, sessionReasonU6C, causalSuspensionC9R } from './continuity.mts';
 import { randomUUID } from 'node:crypto';
 
 const ROOT_S8R = path.dirname(fileURLToPath(import.meta.url));
@@ -88,7 +88,7 @@ async function main() {
         if(!/^[a-f0-9]{64}\.json$/.test(name))continue;
         const file=path.join(ROOT_S8R,'events',name),event=await readJson(file);
         if(event.status==='PAUSED_USER' && !event.sendStartedAt && event.originTurnId===origin?.id &&
-            quotaSuspensionC9R(origin)){
+            causalSuspensionC9R(origin)){
           await atomic(file,{...event,status:'SCHEDULED',continuity:{generation:control.generation},reauthorizedAt:Date.now()});
         }
       }
@@ -103,7 +103,7 @@ async function main() {
       const latest=latestTurn(config);
       if(!latest || latest.id!==event.originTurnId)reason='NEWER_TURN_SUPERSEDES_EVENT';
       else if(latest.status==='completed' || latest.status==='interrupted')reason='ORIGIN_TURN_FINISHED_OR_STOPPED';
-      else if(latest.status==='failed' && !quotaSuspensionC9R(latest))reason='ORIGIN_TURN_FAILED_WITHOUT_QUOTA_CAUSE';
+      else if(latest.status==='failed' && !causalSuspensionC9R(latest))reason='ORIGIN_TURN_FAILED_WITHOUT_RECOVERABLE_CAUSE';
     }
     if(!reason && event?.sendStartedAt){
       const latest=latestTurn(config);
@@ -140,7 +140,7 @@ async function main() {
     const turn=correlatedTurn(config,event.messageClientId);
     if(turn){
       const evidence=responseEvidence(event,[turn]);
-      if(['RECEIVED','COMPLETED'].includes(evidence.status))await atomic(file,{...event,...evidence,updatedAt:Date.now(),confirmationSource:'persisted-client-id'});
+      if(['RECEIVED','COMPLETED','RESPONSE_ERROR'].includes(evidence.status))await atomic(file,{...event,...evidence,updatedAt:Date.now(),confirmationSource:'persisted-client-id'});
     }
   }
   const rpc = await connect(config);
@@ -222,10 +222,10 @@ async function main() {
     try {
       const snapshot=await io.quota();
       const origin=latestTurn(config);
-      const pending=origin && (origin.status==='inProgress' || origin.status==='in_progress' || quotaSuspensionC9R(origin));
+      const pending=origin && (origin.status==='inProgress' || origin.status==='in_progress' || causalSuspensionC9R(origin));
       detected=pending?planCycles(snapshot,target,ledger,existing,now):[];
       const merged=[...existing.filter(e=>!detected.some(d=>d.id===e.id)),...detected];
-      for(const recovery of pending?planQuotaFailure(snapshot,target,origin,merged,now):[]){
+      for(const recovery of pending?[...planQuotaFailure(snapshot,target,origin,merged,now),...planServiceFailureC9R(target,origin,merged,now,control.generation)]:[]){
         detected=detected.filter(e=>e.id!==recovery.id);detected.push(recovery);
       }
       detected=detected.filter(e=>!existing.some(p=>p.id===e.id && (p.status==='PAUSED_USER'||p.continuity?.generation!==control.generation)));

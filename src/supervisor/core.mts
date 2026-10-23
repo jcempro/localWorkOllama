@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { quotaSuspensionC9R } from './continuity.mts';
+import { quotaSuspensionC9R,causalSuspensionC9R } from './continuity.mts';
 
 export const POLICY_S8R = Object.freeze({ threshold: 90, delayMs: 60_000, retryMs: 30_000, maxRetryMs: 900_000 });
 export const digest = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -80,6 +80,23 @@ export function planQuotaFailure(snapshot: any,target: any,turn: any,existing: a
     interruptedTurnId:turn.id,incidentCompletedAt:turn.completedAt*1000,dueAt,detectedAt:now,
     status:'SCHEDULED',attempts:0,scheduleReason:limited.length?'VERIFIED_RESET_PLUS_60':'RECOVERED_QUOTA_CATCH_UP'}];
 }
+// Sem API de prontidão do serviço: retentativa é continuação real, com backoff,
+// nunca declaração de que a capacidade foi restabelecida.
+export function planServiceFailureC9R(target:any,turn:any,existing:any[],now:number,generation:string) {
+  if(causalSuspensionC9R(turn)!=='SERVICE_OVERLOAD'||!Number.isFinite(turn.completedAt))return [];
+  if(typeof generation!=='string'||!generation)throw Error('AUTHORIZATION_UNVERIFIABLE');
+  const sameTarget=(e:any)=>e.target?.threadId===target.threadId&&e.target?.repoPath===target.repoPath&&e.target?.accountKey===target.accountKey;
+  const scoped=existing.filter(sameTarget);
+  if(scoped.some(e=>e.interruptedTurnId===turn.id||Number.isFinite(e.sendStartedAt)&&e.sendStartedAt>=turn.completedAt*1000))return [];
+  const unconfirmed=scoped.filter(e=>e.recoveryCause==='SERVICE_OVERLOAD'&&e.continuity?.generation===generation&&
+    Number.isFinite(e.sendStartedAt)&&!['COMPLETED','RESOLVED_EXTERNALLY'].includes(e.status)).length;
+  const recoveryAttempt=unconfirmed+1;
+  const delay=Math.min(POLICY_S8R.maxRetryMs,POLICY_S8R.retryMs*2**Math.min(unconfirmed,5));
+  return [{schema:1,id:digest([target,'service-overload',turn.id]),target,window:{serviceFailure:true},
+    interruptedTurnId:turn.id,incidentCompletedAt:turn.completedAt*1000,
+    dueAt:Math.max(now,turn.completedAt*1000+delay),detectedAt:now,status:'SCHEDULED',attempts:0,
+    recoveryCause:'SERVICE_OVERLOAD',recoveryAttempt,scheduleReason:'STRUCTURED_SERVICE_BACKOFF',recoveryDelayMs:delay}];
+}
 export function responseEvidence(event: any, turns: any[]) {
   const candidates = turns.filter(t => !event.baselineTurns.includes(t.id) && t.startedAt * 1000 >= event.sendStartedAt - 1000 &&
     t.items?.some((i: any) => i.type === 'userMessage' && userText(i) === 'continue' &&
@@ -147,7 +164,7 @@ export async function advance(event: any, io: any, now: number) {
       return event;
     }
     const original = windows(quota).find(w => w.bucketId === event.window.bucketId && w.name === event.window.name);
-    if (!event.window.test && !event.window.quotaFailure && (!original || (original.resetsAt === event.window.resetsAt && original.usedPercent >= POLICY_S8R.threshold))) {
+    if (!event.window.test && !event.window.quotaFailure && !event.window.serviceFailure && (!original || (original.resetsAt === event.window.resetsAt && original.usedPercent >= POLICY_S8R.threshold))) {
       await save({status:'WAITING_QUOTA',nextAttemptAt:now+POLICY_S8R.retryMs,diagnostic:'RESET_NOT_YET_OBSERVED'});
       return event;
     }

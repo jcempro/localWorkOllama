@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { jobDir, getState, readJson, readDelivery, atomicJson, atomicText } from "./job-store.mjs";
 import { withJobControl } from "./job-control.mjs";
-import { observeContinuityU6C, latestContinuityTurnU6C, callbackReasonU6C, captureContinuityU6C, quotaSuspensionC9R } from "./continuity.mjs";
+import { observeContinuityU6C, latestContinuityTurnU6C, callbackReasonU6C, captureContinuityU6C, causalSuspensionC9R } from "./continuity.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 export async function codexCommand() {
@@ -109,15 +109,18 @@ async function deliverLocked(id) {
     const current = await readDelivery(id);
     if (current.status !== "PENDING" && !causalDeliveryCandidateC9R(current)) return current;
     const request = await readJson(path.join(dir, "request.json"));
+    let causalRecovery=current.causal_recovery;
     if (causalDeliveryCandidateC9R(current)) {
       // Não confundir uma falha de quota com autorização nova. Conferir o vínculo
       // original ainda vivo e o último turno, sem copiar permissões de outro chat.
       if (current.thread_id !== request.thread_id) return current;
       const turn = latestContinuityTurnU6C(codexHomeU6C(), request.thread_id, request.repoPath);
-      if (!quotaSuspensionC9R(turn)) return current;
+      const cause=causalSuspensionC9R(turn);
+      if (!cause) return current;
       try { await assertCallbackU6C(request,id); } catch { return current; }
-      await atomicJson(deliveryFile, { status:"PENDING", recovered_from:"CAUSAL_QUOTA_MISCLASSIFICATION",
-        recovered_at:new Date().toISOString(), prior_delivery:current });
+      causalRecovery={cause,recovered_at:new Date().toISOString(),previous_reason:current.reason,
+        previous_status:current.status,not_sent:current.not_sent,count:(current.causal_recovery?.count??0)+1};
+      await atomicJson(deliveryFile, { status:"PENDING", causal_recovery:causalRecovery });
     }
     if (!/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(request.thread_id ?? "")) {
       await atomicText(path.join(dir, "delivery-error.txt"), "thread_id ausente ou inválido; retomada na UI indisponível.\n");
@@ -128,24 +131,25 @@ async function deliverLocked(id) {
     try { await assertCallbackU6C(request,id); }
     catch(error) {
       if(error.code!=="USER_PAUSED")throw error;
-      const paused={status:"PAUSED_USER",paused_at:new Date().toISOString(),reason:error.message,thread_id:request.thread_id,not_sent:true};
+      const paused={status:"PAUSED_USER",causal_recovery:causalRecovery,paused_at:new Date().toISOString(),reason:error.message,thread_id:request.thread_id,not_sent:true};
       await atomicJson(deliveryFile,paused);return paused;
     }
-    await atomicJson(deliveryFile, { status: "STARTED", started_at: new Date().toISOString(), pid: process.pid, thread_id: request.thread_id });
+    await atomicJson(deliveryFile, { status: "STARTED", causal_recovery:causalRecovery,started_at: new Date().toISOString(), pid: process.pid, thread_id: request.thread_id });
     try {
       const acknowledgement = await queueInChat(request, id, state);
-      await atomicJson(deliveryFile, { status: "QUEUED_TO_CHAT", queued_at: new Date().toISOString(), thread_id: request.thread_id, acknowledgement });
+      await atomicJson(deliveryFile, { status: "QUEUED_TO_CHAT", causal_recovery:causalRecovery,queued_at: new Date().toISOString(), thread_id: request.thread_id, acknowledgement });
       await notify("localWorker concluído", `Job ${id}: retomada enviada ao chat de origem.`);
       return { status: "QUEUED_TO_CHAT" };
     } catch (error) {
       if(error.code==="USER_PAUSED") {
-        const paused={status:"PAUSED_USER",paused_at:new Date().toISOString(),reason:error.message,thread_id:request.thread_id,not_sent:true};
+        const paused={status:"PAUSED_USER",causal_recovery:causalRecovery,paused_at:new Date().toISOString(),reason:error.message,thread_id:request.thread_id,not_sent:true};
         await atomicJson(deliveryFile,paused);return paused;
       }
       await atomicText(path.join(dir, "delivery-error.txt"), String(error?.stack ?? error) + "\n");
       const definitelyNotSent = error?.code === "ENOENT";
       await atomicJson(deliveryFile, {
         status: definitelyNotSent ? "BLOCKED_CLI" : "AMBIGUOUS",
+        causal_recovery:causalRecovery,
         failed_at: new Date().toISOString(), thread_id: request.thread_id,
         reason: definitelyNotSent ? "codex.exe ausente; mensagem não enviada" : "envio ao chat pode ter iniciado; sem repetição automática",
       });

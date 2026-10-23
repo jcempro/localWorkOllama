@@ -8,6 +8,7 @@ import { DatabaseSync } from 'node:sqlite';
 const execU6C = promisify(execFile);
 const ROOT_U6C = path.dirname(fileURLToPath(import.meta.url));
 const WINDOWS_ROOT_U6C = process.env.SystemRoot ?? process.env.WINDIR;
+const CAUSAL_CODES_C9R=Object.freeze({usageLimitExceeded:'QUOTA',serverOverloaded:'SERVICE_OVERLOAD'});
 export async function observeContinuityU6C() {
   if (process.platform !== 'win32') return {schema:1,bootId:null,desktopInstance:null,reason:'PLATFORM_OBSERVATION_UNAVAILABLE'};
   if(!WINDOWS_ROOT_U6C)throw Error('WINDOWS_ROOT_UNAVAILABLE');
@@ -40,17 +41,21 @@ export function sessionReasonU6C(lease:any, observation:any) {
   if(lease.desktopInstance!==observation.desktopInstance) return 'DESKTOP_INSTANCE_CHANGED';
   return null;
 }
-// C9R: status terminal não informa intenção. Só a causa estruturada comprovada
-// de quota preserva a autorização; texto livre e interrupted nunca a concedem.
+// C9R: códigos estruturados comprovados; texto livre/interrupted não autorizam.
+export function causalSuspensionC9R(turn:any) {
+  const code=turn?.error?.codexErrorInfo;
+  if(turn?.status!=='failed'||typeof code!=='string'||!Object.hasOwn(CAUSAL_CODES_C9R,code))return null;
+  return CAUSAL_CODES_C9R[code];
+}
 export function quotaSuspensionC9R(turn:any) {
-  return turn?.status==='failed' && turn.error?.codexErrorInfo==='usageLimitExceeded';
+  return causalSuspensionC9R(turn)==='QUOTA';
 }
 export function callbackReasonU6C(lease:any, observation:any, turn:any) {
   const reason=sessionReasonU6C(lease,observation);
   if(reason) return reason;
   if(!lease.originTurnId || !turn) return 'ORIGIN_TURN_UNVERIFIABLE';
   if(turn.id!==lease.originTurnId) return 'NEWER_TURN_SUPERSEDES_CALLBACK';
-  if(turn.status==='interrupted' || turn.status==='failed' && !quotaSuspensionC9R(turn)) return 'ORIGIN_TURN_STOPPED';
+  if(turn.status==='interrupted' || turn.status==='failed' && !causalSuspensionC9R(turn)) return 'ORIGIN_TURN_STOPPED';
   return null;
 }
 export async function captureContinuityU6C(request:any,codexHome:string) {

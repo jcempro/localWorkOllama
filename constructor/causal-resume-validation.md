@@ -32,3 +32,10 @@ VerifyOnly reconciliou os efeitos já aplicados sem repetir instalação: cinco 
 ## Arbitragem por origem
 
 Core/test-core e receipts/test-receipts aprovados: duas janelas da mesma origem reservam somente um envio; SEND_AMBIGUOUS também suprime repetição; outra origem/destino permanece independente. Entrada pendente no mesmo chat produz WAITING_QUEUED_INPUT, sem envio; removida a entrada, nova passagem persiste SENDING antes do efeito. Query SQLite real em fixture cobre vazia/ocupada/outrochat/liberada sem ler payload. Runtime integra a decisão ao mutex canônico e revalida autorização depois da consulta. Sem armazenamento paralelo, inferência ou mensagem real nesses ensaios. Artefatos/documentos espelhados pelo sync44. Instalação desta unidade aguarda junto à continuação de causas temporárias.
+
+
+## Causas temporárias estruturadas
+
+Schema capturado do app-server e metadados reais confirmam serverOverloaded. Classificação positiva compartilhada agora distingue QUOTA e SERVICE_OVERLOAD; failed genérico, texto livre, interrupted e propriedades herdadas como toString/__proto__ não concedem autorização. SR registra incidente/tentativa/atraso; backoff30s até15min cresce por tentativas de serviço sem sucesso na mesma autorização, não é verificação paga de progresso nem prazo do Worker. Cota100 ainda bloqueia serviço. Erro correlacionado por clientId é persistido como RESPONSE_ERROR, sem COMPLETED. Recibo de callback legado recuperado conserva causa/data/contagem nas transições finais, sem cópias recursivas.
+
+Testes core e receipts aprovados; ensaio de entrega em processos reais com sensores/CLI/SQLite isolados aprovou sobrecarga, envio único e guardas U6C anteriores. Leitura do recibo final confirmou recuperação QUOTA/count1. Sem mensagem real, inferência paga/local ou edição do alvo nos ensaios. Espelhos44 e diff/sintaxe consistentes. Instalação desta unidade e arbitragem anterior será conferida pelos mecanismos existentes, preservando pausas; exaustão real da conta e reboot físico continuam não provocados.
