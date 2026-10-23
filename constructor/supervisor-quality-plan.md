@@ -22,3 +22,9 @@ Demanda integral preservada em `supervisor-quality-request.md`. Integra a audito
 6. Atribuir notas somente onde houver revisão suficiente comprovada; aprofundar casos com inconsistência material, manter pendências explícitas nos demais. Registrar limites e não declarar atendimento global com cobertura parcial.
 
 Cada unidade funcional completa exige commit/push. RCF/howto/src devem acompanhar a implementação testada; dados privados/capturas de desenvolvimento permanecem fora da distribuição.
+
+## Contrato aprovado pelo supervisor
+
+Escala/recibo/API/concorrência/limites especificados em RCF Q8S após descoberta. Sem convenção de qualidade preexistente; escala inteira0–10 é nova e distinta de C. C=8 para implementação e integração do produto, exclusivamente supervisor. Efeitos limitados à nova persistência de revisão, projeção/UI e instalação; preservar conteúdo do resultado, estado técnico, permissões do Worker, callback/intenção humana, seleção de modelo/esforço e descarte por ID. Usar lock canônico também na retirada por retenção para impedir recriação concorrente. Não prometer prova técnica de exame cognitivo: a confirmação é declaração do supervisor autenticada pelo recibo disponível somente na rota de resultado.
+
+Fases seguintes já autorizadas pelo pedido integral: módulo/endpoint com testes isolados; UI e instruções; instalação/teste real; auditoria incremental sem CANCELLED. Falta do estado/índice de recusas mencionados pelo upstream foi constatada nesta árvore; preservar a governança recebida e usar este plano explícito, sem inventar arquivos históricos nem presumir aceites.
