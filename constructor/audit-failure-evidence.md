@@ -9,3 +9,9 @@ Todos os IDs dos perfis são vinculados à captura, conferindo identidade única
 Não é classificador de causas, risco ou aceite: todos os registros continuam `NOT_ASSESSED`. Não executar novamente os jobs, não reconstruir conteúdo ausente e não usar ausência de evento como prova absoluta de ausência de efeito. O método substitui inferência desnecessária para coletar fatos, mantendo revisão e decisão no supervisor. O parecer do segmento32 demonstrou que citações exatas não impedem conclusões incorretas.
 
 Validação: `node --experimental-strip-types --test constructor/audit-failure-evidence.test.mts constructor/audit-evidence-excerpt.test.mts`: oito testes passaram. Os três novos grupos cobrem vínculo/status/identidade, contratos completos, filtragem explícita, exclusão de raciocínio privado, não mutação, determinismo, hashes e recusa de entrada inválida. A execução sobre a captura real é etapa separada; seu recibo deve registrar hashes, contagens e o fato de não ter ocorrido inferência.
+
+## Recibo real conferido
+
+Job625696e0-715b-4044-84ec-4aa405942f2c: resultado obtido uma vez, comando `collect_failures` exit0, stderr vazio, zero chamadas de inferência. Vínculo dos189 perfis conferido;46 registros `FAILED` projetados, todos `NOT_ASSESSED`. SHA256 do arquivo privado `failures.json`: `97b40188121c2267e155d253879f43ba4ec9be6e7d71f9cce9f0ccb170c00a58`, conferido pelo supervisor. Hashes de entrada correspondem aos selados no pedido. Não houve implementação exigida nem commit do Worker.
+
+Git determinístico do job em23/10/2026 às12:49:02 UTC: `main...origin/main` limpo. Isso corresponde à coleta privada ignorada; não substitui os estados históricos dos jobs coletados. `QUEUED_TO_CHAT` comprova enfileiramento; o presente checkpoint registra a consulta/revisão efetiva.

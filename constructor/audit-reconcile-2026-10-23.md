@@ -114,3 +114,22 @@ Job `625696e0-715b-4044-84ec-4aa405942f2c`, recibo `RUNNING`. Sequência única 
 Saída privada exclusiva `audit-private/2026-10-23-f8e-36fb9b8c-9848-41d8-84bb-14f0f574f019/failures.json`, vinculada ao request_id36fb9b8c-9848-41d8-84bb-14f0f574f019 e a este job. Precondições conferem os189 IDs; projeção espera46FAILED, preservando tarefas/contratos, metadados selecionados e recortes verificáveis. Saída sem sobrescrita e hash conferido. `expect_changes=false`/`commit_policy=supervisor`: coleta ignorada, sem implementação exigida do Worker. Limite90s é de IO pontual, não prazo total de job.
 
 No callback, obter resultado uma vez e conferir exit, hashes, contagens e ausência de inferência. Projeção mantém `NOT_ASSESSED`; não promover registros a aceite nem interpretar ausência de evento como ausência absoluta de efeito. Usar o consolidado para reconciliar falhas com as nove linhas já revistas e recibos de manutenção anteriores, sem auditoria recursiva. Segmento32 revisto com correções em `audit-review-2026-10-23.md`; citações exatas não legitimaram conclusões incorretas.
+
+## Recibo F8E e diagnósticos observados
+
+Resultado625696e0 consultado uma vez: `collect_failures` exit0, stderr vazio, inferência0. Arquivo privado conferido por SHA256 `97b40188121c2267e155d253879f43ba4ec9be6e7d71f9cce9f0ccb170c00a58`;189 perfis vinculados,46FAILED, nenhum promovido a aceite. Git do auditor em23/10 às12:49:02 UTC: `main...origin/main` limpo, coerente com saída ignorada e commit pelo supervisor. Não confundir com os cabeçalhos Git históricos ou execução/aceite de negócio.
+
+Agrupamento literal dos46 diagnósticos, sem inferir causa física, risco ou recuperação posterior:
+
+| Diagnóstico literal | Quantidade | Tratamento e limites da revisão |
+| --- | ---: | --- |
+| Ausência de progresso verificável | 16 | Guarda interrompe estratégia repetitiva. Inclui leituras repetidas, pré-condições e comandos; não são16 falhas de leitura idênticas. Reaproveitar efeitos/evidência e mudar materialmente o meio antes de continuar. A3F já recuperou sua cadeia por unidades determinísticas; não remover a guarda para aceitar o restante. |
+| Comando determinístico falhou | 15 | Preservar comandos anteriores aprovados. Inclui testes/assertivas do domínio, ambiguidade de fontes, licença não localizada, sintaxe inválida e harness; não classificar todo o grupo como infraestrutura. Casos2a1993a4/31dde8cc/7d6a26de têm revisão específica. D4S/0391cd14 e A3F/77407022 têm recuperação documentada e aceite delimitado. |
+| Contrato obrigatório pendente | 8 | Há comando obrigatório sem sucesso comprovado. Não equivale necessariamente a ausência de escrita ou tentativa: a30ed9fd/cc734101/faa4d815 têm efeitos de escrita registrados; não repetir patches. A3F/a46b6c8a/eefc722e têm checkpoints e recuperação já documentados. |
+| Resposta final sem inspeção | 3 | Recusa preserva o contrato, não indica indisponibilidade física por si só.3658c4fb/cc874702 já revistos;9b080038 registra leitura/comando com erro e não pode ser descrito como caso sem ferramentas. |
+| Prova de alteração recusada | 1 | 06e2c115: causa geral corrigida em F7P; não repetir a produção do relatório. |
+| Limite de40 ciclos | 1 | 1fcd7db4: houve3 mutações, não ausência total de trabalho. Cadeia A3F posteriormente recuperada; testes e segmentos preservados. Não retirar limite ou reiniciar cegamente. |
+| Runner ausente | 1 | 6a4534fd: detecção após heartbeat vencido, sem ferramentas observadas. Causa física não demonstrada; a cadeia foi recuperada sem reiniciar esse job. Não inventar OOM nem afirmar causa física definitivamente corrigida. |
+| Capacidade contextual | 1 | 8e440f03: D2C corrigiu redundância Markdown atual; não prova igualdade byte a byte dos retornos históricos nem que o prompt original passaria. Documento único irredutível exige segmentação. |
+
+O agrupamento cobre todos os diagnósticos dessa projeção e apoia a investigação; não é aceite semântico dos46 trabalhos. A coleta e a revisão dos142 registros `COMPLETED` do incremento permanecem distintas;40 são desta manutenção/auditoria e devem reutilizar seus recibos existentes,102 pertencem ao alvo de teste. O registro `RUNNING` do corte corresponde ao próprio coletor original, cujo recibo posterior já foi conferido; não criar execução recursiva para atualizar a fotografia histórica.
