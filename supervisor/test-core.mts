@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { detect, advance, responseEvidence, planCycles, planQuotaFailure } from './core.mts';
+import { detect, advance, responseEvidence, planCycles, planQuotaFailure, dispatchDecisionC9R } from './core.mts';
 import { callbackReasonU6C } from './continuity.mts';
 const now = 2_000_000;
 const target = { accountKey: 'test', threadId: 'thread-a', repoPath: 'repo' };
@@ -128,3 +128,23 @@ originC9R=incident;
 await advance(stoppedC9R,causalIo,seed.dueAt+999999); // Restored quota never rearms manual pause.
 assert.equal(stoppedC9R.status,'PAUSED_USER');assert.equal(sendsC9R,1);
 console.log('PASS C9R: causa tipada preservada, quota esgotada/restaurada, persistencia, envio unico, resposta confirmada e interrupcao sem rearme');
+
+const dispatchSeedC9R={...seed,originTurnId:'shared-origin',window:{test:true}};
+let persistedEventsC9R:any[]=[];let queueBusyC9R=false,dispatchesC9R=0;
+const dispatchIoC9R={...io,turns:async()=>[],
+  save:async(e:any)=>{persistedEventsC9R=[...persistedEventsC9R.filter(x=>x.id!==e.id),JSON.parse(JSON.stringify(e))];},
+  dispatchGuard:async(e:any)=>dispatchDecisionC9R(e,persistedEventsC9R,queueBusyC9R),
+  send:async()=>{dispatchesC9R++;assert.ok(persistedEventsC9R.some(e=>e.status==='SENDING'));return {messageId:'one-only'};}};
+const firstDispatchC9R=await advance({...dispatchSeedC9R,id:'window-one'},dispatchIoC9R,seed.dueAt);
+const secondDispatchC9R=await advance({...dispatchSeedC9R,id:'window-two'},dispatchIoC9R,seed.dueAt);
+assert.equal(firstDispatchC9R.status,'SENT');assert.equal(secondDispatchC9R.status,'RESOLVED_EXTERNALLY');assert.equal(dispatchesC9R,1);
+assert.equal(dispatchDecisionC9R({...dispatchSeedC9R,id:'third'},[{...firstDispatchC9R,status:'SEND_AMBIGUOUS'}],false).allowed,false);
+assert.equal(dispatchDecisionC9R({...dispatchSeedC9R,id:'third',originTurnId:'other-origin'},[firstDispatchC9R],false).allowed,true);
+assert.equal(dispatchDecisionC9R({...dispatchSeedC9R,id:'third',target:{...target,threadId:'other'}},[firstDispatchC9R],false).allowed,true);
+persistedEventsC9R=[];queueBusyC9R=true;
+const queuedWaitC9R=await advance({...dispatchSeedC9R,id:'queue-wait'},dispatchIoC9R,seed.dueAt);
+assert.equal(queuedWaitC9R.status,'WAITING_QUEUED_INPUT');assert.equal(dispatchesC9R,1);
+queueBusyC9R=false;
+assert.equal((await advance(JSON.parse(JSON.stringify(queuedWaitC9R)),dispatchIoC9R,queuedWaitC9R.nextAttemptAt)).status,'SENT');
+assert.equal(dispatchesC9R,2);
+console.log('PASS C9R: duas janelas/origem, reserva persistida/ambigua, isolamento e fila pendente/liberada sem duplicacao');

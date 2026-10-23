@@ -5,8 +5,8 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { connect } from './rpc.mjs';
-import { planCycles, planQuotaFailure, advance, digest, responseEvidence } from './core.mjs';
-import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn, latestTurn, pendingQueue } from './receipts.mjs';
+import { planCycles, planQuotaFailure, advance, digest, responseEvidence, dispatchDecisionC9R } from './core.mjs';
+import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn, latestTurn, pendingQueue, hasQueuedInputC9R } from './receipts.mjs';
 import { observeContinuityU6C, sessionReasonU6C, quotaSuspensionC9R } from './continuity.mjs';
 import { randomUUID } from 'node:crypto';
 
@@ -153,6 +153,11 @@ async function main() {
     const io = {
       now:Date.now, save: (e     )=>atomic(path.join(ROOT_S8R,'events',`${e.id}.json`),e),
       continuity,
+      dispatchGuard:async(event    )=>{
+        const names=(await fs.readdir(path.join(ROOT_S8R,'events'))).filter(n=>/^[a-f0-9]{64}\.json$/.test(n));
+        const existing=await Promise.all(names.map(n=>readJson(path.join(ROOT_S8R,'events',n))));
+        return dispatchDecisionC9R(event,existing,hasQueuedInputC9R(config));
+      },
       identity:async(t     )=>{if(JSON.stringify(t)!==JSON.stringify(target))throw new Error('TARGET_CHANGED');assertThread(config);},
       quota:()=>rpc.read('account/rateLimits/read'),
       incidentCurrent:async(id        )=>latestTurn(config)?.id===id,

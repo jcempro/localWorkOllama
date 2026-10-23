@@ -3,6 +3,12 @@ import path from 'node:path';
 import { watch } from 'node:fs';
 
 const UUID_R8S = /^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i;
+// Apenas existência de entrada no destino; não lê texto nem infere sua autoria.
+export function hasQueuedInputC9R(config:any) {
+  const db=new DatabaseSync(path.join(config.codexHome,'queue_1.sqlite'),{readOnly:true});
+  try{return !!db.prepare('SELECT id FROM queued_items WHERE thread_id=? LIMIT 1').get(config.threadId);}
+  finally{db.close();}
+}
 export function parseQueueReceipt(output: string, threadId: string) {
   const match = /^Queued message ([a-f0-9-]{36}) for thread ([a-f0-9-]{36})\.$/i.exec(output.trim());
   if (!match || match[2] !== threadId || !UUID_R8S.test(match[1])) return null;

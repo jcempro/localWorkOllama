@@ -3,7 +3,7 @@ import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { parseQueueReceipt, clientIds, observeQueue, persistedTurn, correlatedTurn, latestTurn, pendingQueue } from './receipts.mts';
+import { parseQueueReceipt, clientIds, observeQueue, persistedTurn, correlatedTurn, latestTurn, pendingQueue, hasQueuedInputC9R } from './receipts.mts';
 import { responseEvidence } from './core.mts';
 const thread='11111111-1111-4111-8111-111111111111';
 const queue='22222222-2222-4222-8222-222222222222';
@@ -16,8 +16,11 @@ let observer:any,db:DatabaseSync|undefined;
 try{
   db=new DatabaseSync(path.join(root,'queue_1.sqlite'));
   db.exec('CREATE TABLE queued_items(id TEXT PRIMARY KEY,thread_id TEXT,payload_json TEXT)');
+  assert.equal(hasQueuedInputC9R({codexHome:root,threadId:thread}),false);
   observer=observeQueue({codexHome:root,threadId:thread});
   db.prepare('INSERT INTO queued_items VALUES(?,?,?)').run(queue,thread,JSON.stringify({clientId:client}));
+  assert.equal(hasQueuedInputC9R({codexHome:root,threadId:thread}),true);
+  assert.equal(hasQueuedInputC9R({codexHome:root,threadId:queue}),false);
   await new Promise(r=>setTimeout(r,150));
   assert.equal(observer.messageClientId(queue),client);
   const pendingEvent={queueId:queue,messageClientId:client};
@@ -26,6 +29,7 @@ try{
   assert.equal(pendingQueue({codexHome:root,threadId:thread},{...pendingEvent,messageClientId:queue}),false);
   assert.equal(pendingQueue({codexHome:root,threadId:thread},{...pendingEvent,messageClientId:null}),false);
   db.prepare('DELETE FROM queued_items WHERE id=?').run(queue);
+  assert.equal(hasQueuedInputC9R({codexHome:root,threadId:thread}),false);
   assert.equal(pendingQueue({codexHome:root,threadId:thread},pendingEvent),false);
   observer.close();observer=null;db.close();
   db=new DatabaseSync(path.join(root,'thread_history_1.sqlite'));

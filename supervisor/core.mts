@@ -95,6 +95,18 @@ export function responseEvidence(event: any, turns: any[]) {
   return { status: matchingReceipt ? 'COMPLETED' : 'RESPONSE_OBSERVED_UNCORRELATED', turnId: turn.id, responseId: final.id, responseHash: digest(final.text), reason: matchingReceipt ? null : 'TRANSPORT_HAS_NO_VERIFIABLE_MESSAGE_RECEIPT' };
 }
 
+// Sob o mutex canônico: eventos/janelas da mesma origem não reservam dois envios.
+// Reserva incerta também prevalece; não representa conclusão do trabalho.
+export function dispatchDecisionC9R(event:any, existing:any[], queuePending:boolean) {
+  if(typeof event.originTurnId!=='string' || !event.originTurnId)return {allowed:false,status:'PAUSED_USER',reason:'ORIGIN_TURN_UNVERIFIABLE'};
+  const claimed=existing.some(e=>e.id!==event.id && e.originTurnId===event.originTurnId &&
+    e.target?.threadId===event.target.threadId && e.target?.repoPath===event.target.repoPath &&
+    e.target?.accountKey===event.target.accountKey && Number.isFinite(e.sendStartedAt));
+  if(claimed)return {allowed:false,status:'RESOLVED_EXTERNALLY',reason:'ORIGIN_DISPATCH_ALREADY_RESERVED'};
+  if(queuePending)return {allowed:false,status:'WAITING_QUEUED_INPUT',reason:'EXISTING_INPUT_HAS_PRECEDENCE'};
+  return {allowed:true};
+}
+
 // Todas as mutações passam por save antes de efeitos não idempotentes.
 export async function advance(event: any, io: any, now: number) {
   if (['COMPLETED','RESOLVED_EXTERNALLY','PAUSED_USER'].includes(event.status)) return event;
@@ -147,6 +159,13 @@ export async function advance(event: any, io: any, now: number) {
     }
     const baselineTurns = (await io.turns(event.target)).map((t: any) => t.id);
     if(!await allowed())return event;
+    if(io.dispatchGuard){
+      const decision=await io.dispatchGuard(event);
+      if(!decision.allowed){
+        await save({status:decision.status,diagnostic:decision.reason,nextAttemptAt:now+POLICY_S8R.retryMs});return event;
+      }
+      if(!await allowed())return event;
+    }
     stage='send';
     await save({ status: 'SENDING', baselineTurns, dispatchObservedAt: now, sendStartedAt: io.now(),
       attempts: event.attempts + 1,sendAttempts:(event.sendAttempts??0)+1 });

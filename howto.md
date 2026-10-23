@@ -38,6 +38,8 @@ Com autorização U6C vigente, se o último turno falhou com o código verificá
 
 A guarda compartilhada C9R distingue essa falha de quota de cancelamento. Um callback antigo recusado como `ORIGIN_TURN_STOPPED`, comprovadamente não enviado, é recuperável na mesma sessão/instância/turno se a causa estruturada continuar sendo quota. O watchdog revalida esse caso; não repete recibos aceitos/ambíguos, não libera pausas explícitas nem abre o Desktop. Para retomada após a quota, SR-001 precisa estar instalado e autorizado **naquela conversa**; atualizar arquivos não remove uma pausa anterior. Os ensaios isolados de quota/restauração não esgotam a conta real nem comprovam um reboot físico.
 
+Eventos de restauração para a mesma origem não enviam duas continuações: a reserva persistida de outro evento prevalece, inclusive quando incerta. Se já há entrada na fila do chat, `WAITING_QUEUED_INPUT` aguarda seu processamento sem mensagem adicional, ativação ou inferência paga de monitoramento. O diagnóstico distingue espera de conclusão; mensagem já aceita pela plataforma não pode ser revogada por uma API inexistente.
+
 ```powershell
 $ConversaS8R = Read-Host 'ID confirmado da conversa original no Codex Desktop'
 $RepositorioS8R = Read-Host 'Caminho absoluto do projeto associado a essa conversa'
@@ -659,17 +661,17 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/continuity.mts` | `0c443c0a3b990e181e8f84207dd2b4ac967fedd360a4edc4995c934ed7633f60` |
 | `src/supervisor/continuity.mjs` | `2ad31342463bb21d1442690406bfd92fcf2733fd62587a44e617a6366893af9d` |
 | `src/supervisor/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
-| `src/supervisor/core.mts` | `b27b45ea1d0b44ae6200a51594baf66cab87399c7f540d78129d25be685698f5` |
-| `src/supervisor/core.mjs` | `b5d03af3185c33070a7ab9a887db0431eb1643d98023890c6c3e46ba15307bb3` |
+| `src/supervisor/core.mts` | `397c4867755a354622a9be2640566f6634ad654be337fbd349733f537493e749` |
+| `src/supervisor/core.mjs` | `574a5ee0ec2285123945c57d8a2c70494e51bf0ec6719da8ca7f1576e8db708e` |
 | `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
 | `src/supervisor/rpc.mjs` | `6745f678c8c2c629c9cc27f42f0a162ad26b7608310a84a7676924d6dbe23fe0` |
-| `src/supervisor/receipts.mts` | `472334c7fb986d5aed3023aea120477f0954e6cd611b4aea413a781adb402b5d` |
-| `src/supervisor/receipts.mjs` | `168438d24b63e9fa0bd2fd54a6466b2ed655cffc1303186b9b395a9c00a51d1d` |
-| `src/supervisor/run.mts` | `e1c3b534976dcd76f6fdcc7af20353e60cec3570e93888aa06e07df1e0588eaf` |
-| `src/supervisor/run.mjs` | `f7419a45a02e3dc0ffc1d60381aac381c0df2f6d9473a756e441e63289fa247c` |
+| `src/supervisor/receipts.mts` | `fda754fe4058f2ef35ed513958fe7f46f12a7269593c7815bf4482216dd354e3` |
+| `src/supervisor/receipts.mjs` | `9ae5ed4a69248385ababcafc8c53c0d08963c54e000bbd8b662c5a57621a7955` |
+| `src/supervisor/run.mts` | `94ebc0f7d7af856ebcca672c491c1b3e77f491628514a6517b5fc1a74087cab9` |
+| `src/supervisor/run.mjs` | `eba7478a81edaa9e5c492117380765c0e2a50e75306ebb1b429f93bd97181a88` |
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
 | `src/supervisor/install.ps1` | `31f15f1cf8ca0e2606c9c77fff8d685c01d512446d7f013c257b6daf749cdd54` |
-| `src/supervisor/README.md` | `1735920e1664184fec48310d1915334b2a92e77fd613b6f4eeece9dc48e2d624` |
+| `src/supervisor/README.md` | `9ca62c7f099a9b498e085359300ffa49fabaa06dc7ff3ef7bcb174c55f611144` |
 | `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
