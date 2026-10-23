@@ -4,6 +4,8 @@
 
 Esta sequência é o **modus operandi obrigatório** do supervisor, definido no AGENTS global; não é preciso repeti-la em cada pedido. Uma promessa de compactar não comprova a ação.
 
+**Compactar antes de continuar (S2Q): ainda impedido no cliente verificado.** A sequência desejada é `/compactar` nativo e, cerca de1s depois, o prompt completo, na fila do mesmo chat. A ferramenta de mensagem testada entregou o comando como texto ao supervisor; não confirmou compactação. Não configure duas mensagens comuns nem um temporizador como substitutos. A automação só pode ser habilitada quando o cliente oferecer acionamento nativo e fila comprovada; sem fila segura, o prompt deve aguardar confirmação nativa. Instalar esta norma não cria essa capacidade. Os callbacks atuais preservam suas instruções e controles de intenção. Usar manualmente o comando da UI continua possível, mas não comprova automação nem dispensa os testes de sequência/retentativa. Não alterar banco de histórico ou criar outra instância para compactar a conversa viva.
+
 A norma global instalada exige: recibo `RUNNING` → preservar o mínimo necessário à retomada → avisar no chat com links → compactar o contexto do supervisor → encerrar. Vale para todas as conversas/repositórios, sem configurar agents.local.md em cada um. Somente uso **<10%**, comprovado por medida atual obtida sem custo ou com custo desprezível, dispensa compactar; 10% ou percentual indisponível não dispensam.
 
 O Desktop oferece **Compactar** no menu `/` (`/compactar` em pt-BR). A ação automática depende de o cliente expor esse recurso ao agente na conversa viva. Um botão disponível para o usuário não garante essa interface programática. Na sessão verificada, ela não está exposta: a obrigação global fica instalada, mas a execução automática permanece **impedida**, não concluída. O supervisor deve informar esse limite. Usar manualmente o comando é uma alternativa humana; não é prova da automação solicitada. Não enviar o texto `/compactar` como mensagem comum, editar bancos de histórico ou compactar uma cópia da conversa.
@@ -477,6 +479,10 @@ Após a criação efetiva do job, comprovada pelo recibo `RUNNING`, e somente en
 
 Disponibilidade do comando na UI não comprova que o agente possa acioná-lo. Sem ferramenta/rota suportada ligada ao contexto vivo, registre e informe **impedimento de compactação**; isso não cria nova dispensa nem permite afirmar cumprimento. Não contorne restrições de UI, abra/rearme Desktop, injete `/compactar` como mensagem/fila, altere SQLite/rollout ou compacte uma cópia em outro processo. Checkpoint em arquivo é preservação auxiliar, não compactação nativa. Uma solicitação aceita não comprova conclusão: confirme pelo retorno nativo ou evento contextCompaction/item/completed correspondente, quando exposto; aceite assíncrono sem confirmação fica não comprovado, sem reenvio cego. Nunca interrompa/reinicie o Worker ou altere modelo/esforço para satisfazer esta regra.
 
+### Compactação antes de continuação — S2Q
+
+Quando um fluxo de retomada exigir compactação, preservar o prompt efetivo integral e o mesmo destino. O contrato é `/compactar` nativo → aproximadamente1s → prompt, como duas operações independentes, sem aguardar conclusão somente se a fila do cliente comprovadamente impedir execução antecipada. Texto comum entregue ao modelo não comprova comando nativo. Sem rota/fila suportada e verificada, declarar impedimento; não instalar temporizador cego, repetir envio aceito/incerto, substituir instrução específica por continue ou alegar compactação por eco/recibo. Se o cliente não assegurar fila durante compactação, preservar o prompt até confirmação nativa é o fallback mínimo. Conferir sequência, conteúdo, identidade, unicidade e resposta real; testes simulados não provam comportamento do Desktop. Preservar N7C, callbacks legítimos, locks, intenção humana, modelo e esforço; boot/fechamento não autoriza nenhuma etapa. Esta norma não afirma disponibilidade da capacidade no cliente.
+
 ## Latência por worker
 
 No localWorker instalado, `latency.json` é mantido automaticamente pelo runner com até 100 amostras. Consulte esse mecanismo; não crie arquivo paralelo nem adicione novamente a duração ao retomar o chat. Entrega `QUEUED_TO_CHAT` confirma enfileiramento, não que o supervisor concluiu: limite da conta, interrupção do turno e aceite semântico são condições distintas, sem justificar reenvio cego ou duplicação de trabalho.
@@ -766,7 +772,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `31f3b2f994c698136c0f65ce6ae065e1d52da0acbf3f1e88545e87db4ec2e252` |
+| `src/agents.supervisor.md` | `d5ea9a099062a3713ee9fa207569afb78a7b75f87b1c663e4416ed903e8c9e07` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

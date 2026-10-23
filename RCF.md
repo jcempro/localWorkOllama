@@ -30,6 +30,12 @@ Migração legada explícita: retorno já recebido/examinado antes de Q8S pode u
 
 `response_contract` v1 opcional contém limite de palavras por whitespace, JSON Schema limitado e vínculos de citação por pointer saída→evidência JSON. Validação ocorre antes da criação e antes de COMPLETED. JSON estruturado usa `format` nativo somente na rota de análise read-only fornecida sem ferramentas/comandos exigidos; demais fluxos conservam capacidades quando o recurso não é solicitado. Uma correção orientada; segunda falha preserva saída e termina WORKER_INCOMPLETE/RESPONSE_CONTRACT, sem replay do job ou liberação silenciosa do contrato. Sequência determinística não é reexecutada para corrigir forma: recusa preserva seus efeitos. Schema/vínculo formal não comprovam interpretação, verdade semântica, nota ou aceite. Hash da manutenção inclui contrato somente quando presente, preservando vínculos legados. Recibo RUNNING confirma versão aceita; ausência dessa confirmação exige reconciliar antes de novo envio, nunca presumir aplicação por servidor antigo. Fonte/limites/aceite em `constructor/response-contract-plan.md` e validação em `constructor/response-contract-validation.md`; instalação/testes simulados comprovados, ensaio do decoder real pendente até retorno.
 
+## Compactação e continuação sequencial — S2Q
+
+Nos fluxos que necessitem compactar antes de continuar, o contrato solicitado é: duas operações independentes no mesmo chat, `/compactar` e, aproximadamente1s depois, o prompt efetivo integral. Somente uma rota comprovadamente nativa e uma fila que impeça execução antecipada permitem enviar a segunda operação sem esperar a conclusão da primeira. Nunca substituir instrução específica por continue, alterar modelo/esforço, inverter ordem, perder conteúdo, repetir envio aceito/incerto ou inferir nova autorização por boot/fechamento. Persistir destino, conteúdo/hash, etapas e recibos sob o controle de intenção/locks existente; sucesso exige processamento sequencial real e confirmação nativa, não eco ou recibo de fila. Na ausência de fila segura, preservar o prompt até a confirmação da compactação é o fallback mínimo compatível; não simular comandos.
+
+**Capacidade operacional pendente nesta instalação.** A ferramenta de mensagem testada entregou `/compactar` como texto codex_delegation; não comprovou comando nativo. Proxy oficial não conectou à instância viva e o catálogo não expõe compactação. Não habilitar automaticamente a dupla por temporizador sobre mensagens comuns. Preservar callbacks legítimos existentes e sua instrução completa; ausência de nova compactação não autoriza suprimir retomadas permitidas. Contrato e limitação não alteram N7C, controles de intenção ou autorização. Fonte, plano e evidências: constructor/sequential-compaction-request.md, sequential-compaction-plan.md e sequential-compaction-validation.md. Aceite global não concluído.
+
 ## Compactação global do supervisor após delegação — N7C
 
 N7C constitui **modus operandi obrigatório, permanente e explícito** do supervisor, distribuído pelo AGENTS global: não depende de repetição no prompt, não é recomendação e promessa textual não satisfaz execução. Este reforço institui a obrigação, sem criar capacidade técnica nem dispensar confirmação.
@@ -247,7 +253,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `31f3b2f994c698136c0f65ce6ae065e1d52da0acbf3f1e88545e87db4ec2e252` |
+| `src/agents.supervisor.md` | `d5ea9a099062a3713ee9fa207569afb78a7b75f87b1c663e4416ed903e8c9e07` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Evidência fornecida e autoria da verificação
