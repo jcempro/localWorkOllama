@@ -87,6 +87,8 @@ No monitor, **Todos os jobs** mostra barras de CPU, GPU, RAM e VRAM globais da m
 
 O runtime instalado inclui `progress-guard.mjs`: repetições determinísticas são bloqueadas antes de executar; quatro ações sem progresso verificável encerram a unidade com diagnóstico. O log `strategy_blocked` registra classes e hashes de ações/estados. Para continuar, corrija a pré-condição, use alternativa autorizada ou conceda ao Worker somente o acesso exato necessário. Não aumente o teto de ciclos para mascarar loops. Retries transitórios seguros continuam limitados; uma falha de validação permanece pendente até passar.
 
+Na atualização pelo instalador do supervisor (`src/supervisor/install.ps1`), `-WaitForIdle` permite aguardar o mutex ocupado sem interromper seu titular; `-IdleWaitSeconds` configura essa espera técnica (padrão180s, entre1 e3600). Sem a opção, a recusa continua imediata. Se o prazo terminar, a instalação não assume aquisição nem sucesso. Essa espera não limita a duração do Worker, não reinicia o runtime e não autoriza retomada de conversa.
+
 ## Manutenção do próprio Worker
 
 O modo híbrido é exclusivo do próprio produto; outros repositórios conservam seu regime. O supervisor avalia risco e decide: C≤5 usa o mesmo Worker como júnior; 5<C≤7 permite escolha fundamentada entre supervisor exclusivo, júnior ou estagiário; C>7 exige supervisor exclusivo. Scripts/Skills inequivocamente triviais, determinísticos e seguros, com procedência, imutabilidade/integridade e proteção previamente comprovadas, são preferidos em qualquer criticidade; acima de7 são executados pelo supervisor. Nome/hash isolado não comprova segurança. Incerteza material impede delegação até esclarecimento.
@@ -684,8 +686,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/run.mts` | `ef7e9567e2752fd367f9409d98dbdfdbe1598a401fe5ad85fa29d7a0808cd92b` |
 | `src/supervisor/run.mjs` | `31e04f1acce617c42a76d81c350e3e3edfe2ef6e49a8f890ca44798846c1afee` |
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
-| `src/supervisor/install.ps1` | `31f15f1cf8ca0e2606c9c77fff8d685c01d512446d7f013c257b6daf749cdd54` |
-| `src/supervisor/README.md` | `cf2f44edc87aaed74d1d0085f05579f417ea63a1cf48ac108b998407d59fe641` |
+| `src/supervisor/install.ps1` | `a85bc56f7a0dc722265b1650e3d89be11c9ff775a4c2b38d4500b0b45a94c57d` |
+| `src/supervisor/README.md` | `ee132ea9b60d76ac7462c8a14560320a3c71d35ca9533a649f91fc39ecf6d272` |
 | `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |

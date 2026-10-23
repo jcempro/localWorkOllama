@@ -192,8 +192,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/run.mts` | `ef7e9567e2752fd367f9409d98dbdfdbe1598a401fe5ad85fa29d7a0808cd92b` |
 | `src/supervisor/run.mjs` | `31e04f1acce617c42a76d81c350e3e3edfe2ef6e49a8f890ca44798846c1afee` |
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
-| `src/supervisor/install.ps1` | `31f15f1cf8ca0e2606c9c77fff8d685c01d512446d7f013c257b6daf749cdd54` |
-| `src/supervisor/README.md` | `cf2f44edc87aaed74d1d0085f05579f417ea63a1cf48ac108b998407d59fe641` |
+| `src/supervisor/install.ps1` | `a85bc56f7a0dc722265b1650e3d89be11c9ff775a4c2b38d4500b0b45a94c57d` |
+| `src/supervisor/README.md` | `ee132ea9b60d76ac7462c8a14560320a3c71d35ca9533a649f91fc39ecf6d272` |
 | `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |

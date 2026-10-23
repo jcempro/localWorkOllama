@@ -7,9 +7,16 @@ param(
   [string]$NodeExe,
   [string]$CodexExe,
   [string]$OllamaExe,
-  [ValidateRange(1,60)][int]$ScanMinutes=2
+  [ValidateRange(1,60)][int]$ScanMinutes=2,
+  [switch]$WaitForIdle,
+  [ValidateRange(1,3600)][int]$IdleWaitSeconds=180
 )
 $ErrorActionPreference='Stop'
+function Enter-InstallationMutexI6W {
+  param([Parameter(Mandatory=$true)][Threading.Mutex]$Mutex,[switch]$WaitForIdle,[ValidateRange(1,3600)][int]$IdleWaitSeconds=180)
+  $waitMillisecondsI6W=if($WaitForIdle){$IdleWaitSeconds*1000}else{0}
+  try{return $Mutex.WaitOne($waitMillisecondsI6W)}catch [Threading.AbandonedMutexException]{return $true}
+}
 if($ThreadId -notmatch '^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$'){throw 'ThreadId invalido.'}
 if(-not $Target){$Target=Join-Path $env:USERPROFILE ('.codex-supervisor-resume\'+$ThreadId)}
 if(-not $CodexHome){$CodexHome=if($env:CODEX_HOME){$env:CODEX_HOME}else{Join-Path $env:USERPROFILE '.codex'}}
@@ -53,8 +60,8 @@ $utfS8R=New-Object Text.UTF8Encoding($false)
 $installMutexS8R=New-Object Threading.Mutex($false,('Local\CodexSupervisorResume-'+$ThreadId))
 $ownsS8R=$false
 try{
-  try{$ownsS8R=$installMutexS8R.WaitOne(0)}catch [Threading.AbandonedMutexException]{$ownsS8R=$true}
-  if(-not $ownsS8R){throw 'Runtime ativo; instalacao pode ser repetida depois sem interrupcao.'}
+  $ownsS8R=Enter-InstallationMutexI6W -Mutex $installMutexS8R -WaitForIdle:$WaitForIdle -IdleWaitSeconds $IdleWaitSeconds
+  if(-not $ownsS8R){throw 'Runtime ativo; mutex nao adquirido no prazo solicitado; instalacao pode ser repetida depois sem interrupcao.'}
   [IO.File]::WriteAllText((Join-Path $Target 'install-owner.json'),(@{threadId=$ThreadId;repoPath=[IO.Path]::GetFullPath($RepoPath)}|ConvertTo-Json),$utfS8R)
 $filesS8R=@('continuity.mts','continuity.mjs','continuity.ps1','core.mjs','core.mts','rpc.mjs','rpc.mts','receipts.mjs','receipts.mts','run.mjs','run.mts','platform.ps1','install.ps1')
 foreach($nameS8R in $filesS8R){
