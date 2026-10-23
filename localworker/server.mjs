@@ -15,6 +15,7 @@ import { cancelJob, deleteJob } from "./job-control.mjs";
 import { authorizeMaintenanceS4W, MaintenancePolicyError } from "./delegation-policy.mjs";
 import { captureContinuityU6C } from "./continuity.mjs";
 import { issueReviewReceiptQ8S, recordReviewQ8S } from './supervisor-review.mjs';
+import { prepareResponseContractR8V, ResponseContractErrorR8V } from './response-contract.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await fs.readFile(path.join(root, "config.json"), "utf8"));
@@ -42,6 +43,9 @@ server.registerTool("local_analyze", {
     required_change_paths: z.array(z.string().min(1)).max(32).default([]).describe("Arquivos relativos que devem apresentar alteração líquida neste job; use quando a unidade tem alvos conhecidos"),
     required_read_paths: z.array(z.string().min(1)).max(32).default([]).describe("Arquivos cujo conteúdo deve ser lido antes da conclusão; Git não substitui essa prova"),
     provided_evidence: z.object({ source: z.string().trim().min(1).max(1024), content: z.string().trim().min(1).max(12000) }).optional().describe("Evidência verificada fornecida pelo supervisor, com origem rastreável; somente análise read-only, não dispensa requisitos explícitos"),
+    response_contract:z.object({version:z.literal(1),max_words:z.number().int().min(1).max(2000).optional(),
+      json_schema:z.record(z.string(),z.unknown()).optional(),citations:z.array(z.object({output_pointer:z.string().max(256),source_pointer:z.string().max(256)}).strict()).max(16).optional()}).strict().optional()
+      .describe('R8V opcional: limite formal por whitespace, JSON Schema limitado e vínculos de citação. JSON somente para provided_evidence read-only sem comandos/inspeções adicionais; não valida verdade semântica.'),
     required_command_ids: z.array(z.string().min(1)).max(32).default([]).describe("IDs autorizados cuja execução com código zero é requisito de conclusão"),
     command_sequence: z.array(z.string().min(1)).max(32).default([]).describe("Sequência determinística explícita: executa cada ID uma vez, sem inferência; falha interrompe sem retry de mutação"),
     commit_policy: z.enum(["worker", "supervisor"]).default("worker").describe("Responsável pelo commit da unidade: supervisor somente quando ele assumirá o commit imediato após revisar"),
@@ -63,7 +67,7 @@ server.registerTool("local_analyze", {
       timeout_ms: z.number().int().min(1000).max(300000).optional(),
     })).max(32).default([]).describe("Comandos exatos pré-aprovados; em read-only somente comandos explicitamente de leitura, sem shell livre"),
   }),
-}, async ({ repoPath, task, mode, expect_changes, required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy, provided_evidence, maintenance_supervision }) => {
+}, async ({ repoPath, task, mode, expect_changes, required_change_paths, thread_id, authorized_commands, required_read_paths, required_command_ids, command_sequence, commit_policy, provided_evidence, response_contract, maintenance_supervision }) => {
   try {
     if (expect_changes && mode !== "write") throw new RequestRejected("expect_changes exige mode=write");
     if (provided_evidence && mode !== "read-only") throw new RequestRejected("provided_evidence exige read-only; não comprova execução ou alteração");
@@ -84,7 +88,8 @@ server.registerTool("local_analyze", {
       }
     }
     const intent = {repoPath:repo,task,mode,expect_changes:expect_changes ?? (mode==='write'),required_change_paths,thread_id,
-      authorized_commands,required_read_paths,required_command_ids,command_sequence,commit_policy,provided_evidence,maintenance_supervision};
+      authorized_commands,required_read_paths,required_command_ids,command_sequence,commit_policy,provided_evidence,response_contract,maintenance_supervision};
+    try{prepareResponseContractR8V(response_contract,intent);}catch(error){if(error instanceof ResponseContractErrorR8V)throw new RequestRejected(error.message);throw error;}
     try { await authorizeMaintenanceS4W(intent,config); }
     catch(error) { if(error instanceof MaintenancePolicyError) throw new RequestRejected(error.message); throw error; }
     try { assertTargetThread(thread_id, repo); }
@@ -113,7 +118,7 @@ server.registerTool("local_analyze", {
       } catch {}
     });
     child.unref();
-    return reply({ job_id: created.job_id, status: "RUNNING", monitor_url: monitorUrl(monitor, created.job_id), monitor_index_url: monitorIndexUrl(monitor) });
+    return reply({ job_id: created.job_id, status: "RUNNING", ...(response_contract?{response_contract_version:1}:{}), monitor_url: monitorUrl(monitor, created.job_id), monitor_index_url: monitorIndexUrl(monitor) });
   } catch (error) { return errorReply(error); }
 });
 

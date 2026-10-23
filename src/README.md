@@ -8,7 +8,7 @@
 
 Migração de retorno já recebido/examinado sem recibo: `legacy_received` substitui os dois campos de credencial com origem rastreável, status/error_kind e hashes UTF-8 do resultado/final recebidos. Exige revisão0 e nenhum registro existente; não altera nota anterior e só admite retry idêntico da primeira importação. O confronto não executa inferência ou nova consulta local_result. O procedimento completo e as limitações estão em `../howto.md`.
 
-`localworker/response-contract.mts` é a fonte do validador puro R8V; `.mjs` é gerado. Integração MCP/runtime ainda depende de validação específica, não é presumida pelo arquivo. Parâmetros do contrato v1: `max_words`, `json_schema`, `citations[{output_pointer,source_pointer}]`. Limites centralizados no topo: schema8192 caracteres/64 nós/profundidade8,2000 palavras,16 vínculos, pointer256 caracteres/profundidade12, string4000 caracteres,32 itens/campos/valores enum, descrição240, nome120 e magnitude numérica1e12. Schema raiz objeto, propriedades adicionais proibidas; tipos simples/objetos/arrays limitados, sem regex/ref remota. Não há path físico ou segredo configurável nesse módulo. Alterar limites requer fonte/regeneração/testes, não edição manual do destino.
+`localworker/response-contract.mts` é a fonte R8V; `.mjs` é gerado. Parâmetro opcional `response_contract` de `local_analyze`: `{version:1,max_words?,json_schema?,citations?:[{output_pointer,source_pointer}]}`; ao menos tamanho ou schema é obrigatório. Limites centralizados no topo: schema8192 caracteres/64 nós/profundidade8,2000 palavras,16 vínculos, pointer256 caracteres/profundidade12, string4000 caracteres,32 itens/campos/valores enum, descrição240, nome120 e magnitude numérica1e12. Schema raiz objeto, propriedades adicionais proibidas; tipos simples/objetos/arrays limitados, sem regex/ref remota. Não há path físico ou segredo configurável nesse módulo. `worker-core.mjs` limita correção a duas saídas recusadas e artefato final16000 caracteres, sem repetir comandos ou truncar JSON validado. Alterar limites requer fonte/regeneração/testes, não edição manual do destino. JSON estruturado exige provided_evidence read-only sem comandos/inspeções adicionais; tamanho textual também compõe os fluxos existentes. Forma/vínculo validados não são aceite semântico. A versão aceita aparece no recibo RUNNING.
 
 `localworker/mcp-config.mjs` registra e revalida o MCP pelo CLI do Codex, com backup. O instalador e o atualizador o executam; o watchdog agendado restaura um registro perdido. `codex_config` no `config.json` instalado aponta para o arquivo efetivo, descoberto a partir de `-CodexHome`/`CODEX_HOME`.
 
@@ -103,19 +103,19 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/run.mts` | `ef7e9567e2752fd367f9409d98dbdfdbe1598a401fe5ad85fa29d7a0808cd92b` |
 | `src/supervisor/run.mjs` | `31e04f1acce617c42a76d81c350e3e3edfe2ef6e49a8f890ca44798846c1afee` |
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
-| `src/supervisor/install.ps1` | `dcab7709f17cd70ed67bad1a4058838fec929bb24ac5495fc36faeffec0715a1` |
+| `src/supervisor/install.ps1` | `34c105d85ba5913dd39534674a6836ff190803a2cda41a024fb721fb89424747` |
 | `src/supervisor/README.md` | `ee132ea9b60d76ac7462c8a14560320a3c71d35ca9533a649f91fc39ecf6d272` |
-| `src/localworker/AGENTS.md` | `3fd0303e26cdc03eb745cc0568bd9d5d9d4ca9d107bfa4434faa9ab60bf200d0` |
+| `src/localworker/AGENTS.md` | `a5eabadb61c8c0f561b4bdd926cf75bf6b51e3d6fb77350312ac6d75856fe80f` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `51ca4796a8512cd3c1491615fc5d5bec832a027bec505e5331da29c06f8eb2da` |
+| `src/localworker/server.mjs` | `ae64257d9e4a3c3fca915c6dcf1fdf00263d799e92dc566d0385af64c5120dc6` |
 | `src/localworker/response-contract.mts` | `27bc1ffbf52e32b5758e30922aa400f6e15480db8f50adfc937f770ad226c19e` |
 | `src/localworker/response-contract.mjs` | `17457d13030387d9413523fe40179197e08c6cd9e1133da4ccd4e3604791e1ab` |
 | `src/localworker/supervisor-review.mts` | `3293b645f10bc9270fe5b01ff69b315a72a20a8fce7024c462b3b230209b1d89` |
 | `src/localworker/supervisor-review.mjs` | `53210647454bd3b062f1425749ee19054cd9ede5cdcb2446410cf8fc55988576` |
-| `src/localworker/delegation-policy.mts` | `d7f1eed4081eb23983c7a26ca1a29e7e646ce0ae23550ff4fc1c84ea6bdb115d` |
-| `src/localworker/delegation-policy.mjs` | `8370a671d03257175895e65864f3ae1e9836023b7566f928dda470c1c35feeae` |
+| `src/localworker/delegation-policy.mts` | `450ac2416ff1fb87f45e4d98f64a5c2a5ab2d63745b335257beca5d0d57940c9` |
+| `src/localworker/delegation-policy.mjs` | `9d424dbe6ab0dc0640ce2ef98364f6d2ab73c3fcc92d0239f9aa3930f1ec534d` |
 | `src/localworker/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
 | `src/localworker/continuity.mjs` | `739301ccb005e09927875cfdd4ca0199099978895ecdbf6abfbf9d39968e682c` |
 | `src/localworker/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
@@ -124,7 +124,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `addcc0cf78334908092424403b930782430a2e411fafd79ae64ff3cd43433f6d` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `2dc3f2b041b821bba7821f8e3301227aa7322a2f526c628606f2c1fe60fad5db` |
+| `src/localworker/worker-core.mjs` | `cd06ef97f0843f4fa6ec330b643065be34570c02b7337d1486593dcff314df29` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `bc76c5febe876d1e148168a3494995e5b71bdc30b93a87a81cf95a06cb3f7c26` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |
@@ -133,12 +133,12 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `2f1e2823a4b05a741997f3b345b0da40303e06ed71747635e14c6edc881fe01e` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
-| `src/localworker/install.ps1` | `537ce12d9a663c82adf8071928128ef39d1a35b89a64a82b05423a50172ceaec` |
-| `src/localworker/update-installed.ps1` | `98b66b7fa8d0c138efcc8e2b37431d1e7369f9b70f74cea84a6384c1896f34f7` |
+| `src/localworker/install.ps1` | `60bef2640c641a0dc0c9010579e706eec131762e19a680ec1ef49f2f5e9122de` |
+| `src/localworker/update-installed.ps1` | `da5f2fc06aaaa639532d8e3a18373d27e07492be2504ec4182b34322daeb70aa` |
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `e131b7a07fbe97b3418ca0307c57dfd70e169b15d297e1884307a42a8276975c` |
+| `src/agents.supervisor.md` | `31f3b2f994c698136c0f65ce6ae065e1d52da0acbf3f1e88545e87db4ec2e252` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Continuidade U6C

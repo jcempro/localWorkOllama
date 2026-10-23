@@ -8,17 +8,21 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 const repo=process.env.TEST_REPO_PATH;
 if(!repo || path.basename(path.resolve(repo)).toLowerCase()!=='jeancarloem.com.blog')throw Error('Use o repositório de teste autorizado');
-let scenario='missing', calls=0, lastModelMessages=[];
+let scenario='missing', calls=0, lastModelMessages=[],lastModelBody=null,eventsR8V=[];
 const server=createServer(async(req,res)=>{
   const chunks=[];for await(const chunk of req)chunks.push(chunk);
   if(req.url==='/api/ps'){res.end('{"models":[]}');return;}
-  const body=Buffer.concat(chunks).toString('utf8');if(body){const parsed=JSON.parse(body);if(parsed.messages)lastModelMessages=parsed.messages;}
+  const body=Buffer.concat(chunks).toString('utf8');if(body){const parsed=JSON.parse(body);if(parsed.messages){lastModelMessages=parsed.messages;lastModelBody=parsed;}}
   calls++;
   let fn=null;
   if(calls===1 && !scenario.startsWith('supplied')) fn=scenario==='read'?{name:'read_file',arguments:{path:'package.json',startLine:1,endLine:5}}:
     scenario==='repeat'?{name:'run_authorized_command',arguments:{id:'once'}}:{name:'git_status',arguments:{}};
   if(scenario==='repeat'&&calls===2)fn={name:'run_authorized_command',arguments:{id:'once'}};
-  res.end(JSON.stringify({message:{role:'assistant',content:fn?'':scenario==='supplied-json'?'{"historical_execution":"documented","own_execution":false}':'RESULTADO: resposta candidata.',...(fn?{tool_calls:[{function:fn}]}:{})}}));
+  if(scenario==='supplied-r8v-effect'&&calls===2)fn={name:'git_status',arguments:{}};
+  const validR8V='{"quote":"diff_check; exit_code=0","kind":"historical"}';
+  const answer=['supplied-r8v-once','supplied-r8v-effect'].includes(scenario)&&calls===1?'```json\n'+validR8V+'\n```':scenario==='supplied-r8v-bad'?'{"quote":"git_status","kind":"historical"}':
+    scenario.startsWith('supplied-r8v')?validR8V:scenario==='supplied-json'?'{"historical_execution":"documented","own_execution":false}':'RESULTADO: resposta candidata.';
+  res.end(JSON.stringify({message:{role:'assistant',content:fn?'':answer,...(fn?{tool_calls:[{function:fn}]}:{})}}));
 });
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 process.env.OLLAMA_URL=`http://127.0.0.1:${server.address().port}`;
@@ -27,12 +31,38 @@ const id=randomUUID(),dir=jobDir(id);
 process.env.LOCAL_WORKER_JOB_ID=id;
 await fs.mkdir(dir,{recursive:true});
 const {runLocalAnalysis,committedUnitSince}=await import('./worker-core.mjs');
-const run=(commands,contract,mode='write',task='Teste de contrato; nenhuma alteração funcional.')=>runLocalAnalysis(repo,task,mode,()=>{},commands,false,[],false,0,12,contract);
+const run=(commands,contract,mode='write',task='Teste de contrato; nenhuma alteração funcional.')=>runLocalAnalysis(repo,task,mode,e=>eventsR8V.push(e),commands,false,[],false,0,12,contract);
 try {
+  const r8vSchema={type:'object',properties:{quote:{type:'string',maxLength:180},kind:{type:'string',maxLength:20,enum:['historical']}},required:['quote','kind'],additionalProperties:false};
+  const r8v={provided_evidence:{source:'recibo controlado R8V',content:'{"receipt":"diff_check; exit_code=0"}'},response_contract:{version:1,max_words:30,json_schema:r8vSchema,citations:[{output_pointer:'/quote',source_pointer:'/receipt'}]}};
+  scenario='supplied-r8v-valid';calls=0;eventsR8V=[];
+  const validR8V=await run([],r8v,'read-only');assert.equal(calls,1);assert.deepEqual(lastModelBody.format,r8vSchema);
+  assert.equal(lastModelBody.options.temperature,0);assert.deepEqual(lastModelBody.tools,[]);
+  assert.doesNotMatch(lastModelMessages[0].content,/FORMATO FINAL PADRÃO/);
+  assert.deepEqual(JSON.parse(validR8V.split('\n\nEXECUÇÃO COMPROVADA')[0]),{quote:'diff_check; exit_code=0',kind:'historical'});
+  assert.equal(eventsR8V.find(e=>e.phase==='completion_verified').response_contract_verified.citations_verified,1);
+  scenario='supplied-r8v-once';calls=0;eventsR8V=[];
+  await run([],r8v,'read-only');assert.equal(calls,2);assert.equal(eventsR8V.filter(e=>e.phase==='response_contract_rejected').length,1);
+  scenario='supplied-r8v-bad';calls=0;eventsR8V=[];
+  await assert.rejects(()=>run([],r8v,'read-only'),/WORKER_INCOMPLETE: RESPONSE_CONTRACT/);assert.equal(calls,2);
+  assert.equal(eventsR8V.some(e=>e.phase==='completion_verified'),false);
+  const rejected=JSON.parse(await fs.readFile(path.join(dir,'response-contract-rejections.json'),'utf8'));
+  assert.equal(rejected.rejections.length,2);assert.equal(rejected.rejections[0].candidate,'{"quote":"git_status","kind":"historical"}');
+  scenario='supplied-r8v-effect';calls=0;eventsR8V=[];
+  await assert.rejects(()=>run([],r8v,'read-only'),/ferramentas não disponibilizadas/);assert.equal(calls,2);
+  assert.equal(eventsR8V.some(e=>e.phase==='tool'),false);assert.deepEqual(lastModelBody.tools,[]);
+  const unexpected=JSON.parse(await fs.readFile(path.join(dir,'response-contract-rejections.json'),'utf8'));
+  assert.deepEqual(unexpected.rejections[1].attempted_tools,['git_status']);
+  scenario='sequence';calls=0;eventsR8V=[];
+  await assert.rejects(()=>run([{id:'r8v_seq',program:process.execPath,args:['-e','console.log("R8V_SEQUENCE_ONCE")'],mode:'read-only'}],
+    {command_sequence:['r8v_seq'],required_command_ids:['r8v_seq'],response_contract:{version:1,max_words:1}},'read-only'),/WORKER_INCOMPLETE: RESPONSE_CONTRACT/);
+  assert.equal(calls,0);assert.equal(eventsR8V.filter(e=>e.phase==='tool_result'&&e.outcome==='ok').length,1);
+  calls=0;await assert.rejects(()=>run([], {...r8v,required_read_paths:['package.json']},'read-only'),/RESPONSE_CONTRACT/);assert.equal(calls,0);
   scenario='supplied';calls=0;
   const supplied={provided_evidence:{source:'checkpoint verificado pelo supervisor',content:'O teste X retornou exit_code=0.'}};
   assert.match(await run([],supplied,'read-only'),/Base fornecida pelo supervisor: "checkpoint/);
   assert.equal(calls,1);
+  assert.equal(lastModelBody.format,undefined,'Legado não passa a usar decoder estruturado');assert.equal(lastModelBody.options.temperature,0.1);
   const evidenceSystemE9P=lastModelMessages[0].content;
   assert.match(evidenceSystemE9P,/PROVENIÊNCIA E9P/);
   assert.match(evidenceSystemE9P,/Ausência de ferramentas próprias não apaga os recibos fornecidos/);

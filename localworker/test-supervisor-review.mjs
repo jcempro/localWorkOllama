@@ -18,6 +18,9 @@ try{
   db.prepare('INSERT INTO threads VALUES(?,0,?)').run(reviewer,source);db.close();
   const env={...process.env,CODEX_HOME:home,LOCAL_CODEX_HOME:home};delete env.LOCAL_WORKER_JOB_ID;
   const {callLocalWorker}=await load('mcp-call.mjs');
+  const beforeRequests=await fs.readdir(s.JOBS).catch(()=>[]);
+  await assert.rejects(()=>callLocalWorker({name:'local_analyze',args:{repoPath:source,thread_id:reviewer,task:'Fixture sem efeito',mode:'read-only',provided_evidence:{source:'fixture',content:'{"ok":true}'},response_contract:{version:1,json_schema:{type:'object',properties:{},required:[],additionalProperties:true}}},serverPath:path.join(fixture,'server.mjs'),env}),/WORKER_REQUEST_REJECTED: RESPONSE_CONTRACT/);
+  assert.deepEqual(await fs.readdir(s.JOBS).catch(()=>[]),beforeRequests,'Contrato inválido não cria job/monitor');
   const {queueMessage}=await load('delivery.mjs');
   const callback=queueMessage(randomUUID(),{status:'COMPLETED'});
   assert.match(callback,/Consulte local_result uma única vez/);assert.match(callback,/local_review/);

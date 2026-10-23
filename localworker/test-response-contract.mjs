@@ -1,11 +1,16 @@
 import assert from 'node:assert/strict';
 import {prepareResponseContractR8V as prepare,ResponseContractErrorR8V} from './response-contract.mjs';
+import {scopeHashS4W} from './delegation-policy.mjs';
 const evidence={cases:[{id:'a',text:'Requisito original A. Não declarar aprovação.'},{id:'b',text:'diff_check; exit_code=0'}],escaped:{'a/b~c':'Aspas "literais" e ação.'}};
 const request={mode:'read-only',provided_evidence:{source:'fixture explícita',content:JSON.stringify(evidence)}};
 const schema={type:'object',properties:{quote:{type:'string',maxLength:180},conclusion:{type:'string',enum:['LIMITED','REVIEW_REQUIRED'],maxLength:40}},required:['quote','conclusion'],additionalProperties:false};
 const contract={version:1,json_schema:schema,max_words:30,citations:[{output_pointer:'/quote',source_pointer:'/cases/1/text'}]};
 const p=prepare(contract,request);
 assert.equal(prepare(undefined,request),null);
+const base={repoPath:process.cwd(),task:'Fixture de hash',thread_id:'00000000-0000-4000-8000-000000000000'};
+assert.equal(scopeHashS4W(base),scopeHashS4W({...base,response_contract:undefined}));
+assert.notEqual(scopeHashS4W(base),scopeHashS4W({...base,response_contract:contract}));
+assert.notEqual(scopeHashS4W({...base,response_contract:contract}),scopeHashS4W({...base,response_contract:{...contract,max_words:31}}));
 assert.deepEqual(p.format,schema);
 assert.match(p.prompt,/sem cercas Markdown/);
 assert.deepEqual(p.validate('{"quote":"diff_check; exit_code=0","conclusion":"LIMITED"}'),{words:2,json_schema_verified:true,citations_verified:1,semantic_acceptance:'NOT_ASSESSED'});

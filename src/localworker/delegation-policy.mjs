@@ -42,6 +42,7 @@ export function scopeHashS4W(request     )         {
     required_change_paths: request.required_change_paths ?? [], required_read_paths: request.required_read_paths ?? [],
     required_command_ids: request.required_command_ids ?? [], command_sequence: request.command_sequence ?? [],
     provided_evidence: normalizedEvidenceS4W(request.provided_evidence),
+    ...(request.response_contract!==undefined?{response_contract:request.response_contract}:{}),
     assessment: request.maintenance_supervision ? Object.fromEntries(Object.entries(request.maintenance_supervision).filter(([k]) => k !== 'scope_sha256')) : undefined,
     authorized_commands: (request.authorized_commands ?? []).map((c     ) => ({ ...c, mode: c.mode ?? 'write', network: c.network ?? false, repeatable: c.repeatable ?? false })) };
   return createHash('sha256').update(canonicalS4W(material)).digest('hex');
