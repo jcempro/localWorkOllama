@@ -36,6 +36,8 @@ Atualizações do Desktop podem mudar o caminho versionado de `codex.exe`: a ins
 
 Com autorização U6C vigente, se o último turno falhou com o código verificável `usageLimitExceeded`, a recuperação também cobre esse incidente: aguarda reset+60s se a cota continuar limitada, ou retoma na próxima passagem se a restauração já ocorreu. Essa recuperação tardia fica identificada no evento e não é apresentada como disparo pontual no passado. Um turno novo iniciado manualmente antes do envio resolve a pendência sem outro `continue`.
 
+Se a cota voltar antes do prazo previsto, o mesmo evento ainda não enviado é replanejado; não se cria outra solicitação. Com as janelas observadas abaixo do limiar, conserva o prazo anterior quando mais próximo; caso contrário, usa a observação+60s e retira espera de quota obsoleta. `OBSERVED_QUOTA_RECOVERY` registra essa decisão. Consultas seguintes não adiam o horário. A consulta não revela o instante exato de uma restauração manual; esta alternativa é verificável, mas não promete precisão temporal impossível. Pausas e envios já iniciados/ambíguos continuam protegidos.
+
 A guarda compartilhada C9R distingue essa falha de quota de cancelamento. Um callback antigo recusado como `ORIGIN_TURN_STOPPED`, comprovadamente não enviado, é recuperável na mesma sessão/instância/turno se a causa estruturada continuar sendo quota. O watchdog revalida esse caso; não repete recibos aceitos/ambíguos, não libera pausas explícitas nem abre o Desktop. Para retomada após a quota, SR-001 precisa estar instalado e autorizado **naquela conversa**; atualizar arquivos não remove uma pausa anterior. Os ensaios isolados de quota/restauração não esgotam a conta real nem comprovam um reboot físico.
 
 Eventos de restauração para a mesma origem não enviam duas continuações: a reserva persistida de outro evento prevalece, inclusive quando incerta. Se já há entrada na fila do chat, `WAITING_QUEUED_INPUT` aguarda seu processamento sem mensagem adicional, ativação ou inferência paga de monitoramento. O diagnóstico distingue espera de conclusão; mensagem já aceita pela plataforma não pode ser revogada por uma API inexistente.
@@ -665,17 +667,17 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
 | `src/supervisor/continuity.mjs` | `739301ccb005e09927875cfdd4ca0199099978895ecdbf6abfbf9d39968e682c` |
 | `src/supervisor/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
-| `src/supervisor/core.mts` | `997728c730cd2dbda8ebafce9bef250657ba2ab3a4586b298273a5f938e13fc2` |
-| `src/supervisor/core.mjs` | `a49f5c8f7f08a1ef42fe85a86316ae5b072c99d968eacc3a3192090682a068e9` |
+| `src/supervisor/core.mts` | `08aa52f224acdfa92206f0f5792a600be79debae7a3c7034cf680167bf352769` |
+| `src/supervisor/core.mjs` | `95a30716e050eaae40fa2dec77e06c29bdbadf762f36dd4d2aedfb6a88b61ed9` |
 | `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
 | `src/supervisor/rpc.mjs` | `6745f678c8c2c629c9cc27f42f0a162ad26b7608310a84a7676924d6dbe23fe0` |
 | `src/supervisor/receipts.mts` | `fda754fe4058f2ef35ed513958fe7f46f12a7269593c7815bf4482216dd354e3` |
 | `src/supervisor/receipts.mjs` | `9ae5ed4a69248385ababcafc8c53c0d08963c54e000bbd8b662c5a57621a7955` |
-| `src/supervisor/run.mts` | `e836270071788a6bb00bbe16742687d876c932ed902db791198c721ced86e737` |
-| `src/supervisor/run.mjs` | `0cdbb471c749816ba7a5d89bac2926f80b23d401e00fa3462846b68b2db82f98` |
+| `src/supervisor/run.mts` | `ef7e9567e2752fd367f9409d98dbdfdbe1598a401fe5ad85fa29d7a0808cd92b` |
+| `src/supervisor/run.mjs` | `31e04f1acce617c42a76d81c350e3e3edfe2ef6e49a8f890ca44798846c1afee` |
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
 | `src/supervisor/install.ps1` | `31f15f1cf8ca0e2606c9c77fff8d685c01d512446d7f013c257b6daf749cdd54` |
-| `src/supervisor/README.md` | `25a5a89785a9fd45a3b64e44c69056077761e01a8dbc226950fec9c77478314d` |
+| `src/supervisor/README.md` | `cf2f44edc87aaed74d1d0085f05579f417ea63a1cf48ac108b998407d59fe641` |
 | `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |

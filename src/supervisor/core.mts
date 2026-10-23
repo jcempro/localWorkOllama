@@ -71,14 +71,27 @@ const userText = (item: any) => (item.content ?? []).map((c: any) => c.type === 
 // Catch-up de instalacao/reparo apos o incidente. Nunca inferir cota de texto livre.
 export function planQuotaFailure(snapshot: any,target: any,turn: any,existing: any[],now: number) {
   if(!quotaSuspensionC9R(turn)||!Number.isFinite(turn.completedAt))return [];
-  if(existing.some(e=>e.interruptedTurnId===turn.id))return [];
+  const scoped=existing.filter(e=>e.target?.accountKey===target.accountKey&&e.target?.threadId===target.threadId&&e.target?.repoPath===target.repoPath);
+  const incident=scoped.find(e=>e.interruptedTurnId===turn.id);
+  // Recibo/pausa/erro de outra etapa não pode ser rearmado pela observação de quota.
+  if(scoped.some(e=>Number.isFinite(e.sendStartedAt)&&e.sendStartedAt>=turn.completedAt*1000))return [];
+  if(incident&&(Number.isFinite(incident.sendStartedAt)||!['SCHEDULED','WAITING_QUOTA'].includes(incident.status)))return [];
   const available=windows(snapshot);if(!available.length)throw new Error('QUOTA_UNAVAILABLE');
   const limited=available.filter(w=>w.usedPercent>=POLICY_S8R.threshold);
+  if(incident){
+    if(limited.length)return [];
+    // Restauração antecipada observada: conservar ID e prazo oficial se anterior;
+    // observação não revela o instante físico da restauração. Nunca deslizar o prazo.
+    const dueAt=Math.min(incident.dueAt,now+POLICY_S8R.delayMs);
+    const nextAttemptAt=Math.min(incident.nextAttemptAt??dueAt,dueAt);
+    if(dueAt===incident.dueAt&&nextAttemptAt===(incident.nextAttemptAt??dueAt))return [];
+    return [{...incident,dueAt,nextAttemptAt,status:'SCHEDULED',quotaRecoveryObservedAt:now,
+      scheduleReason:'OBSERVED_QUOTA_RECOVERY',diagnostic:'QUOTA_RESTORED_BEFORE_RETRY'}];
+  }
   if(limited.some(w=>!Number.isFinite(w.resetsAt)||w.resetsAt*1000<=now))throw new Error('RESET_TIME_UNAVAILABLE');
   const dueAt=limited.length?Math.max(...limited.map(w=>w.resetsAt*1000+POLICY_S8R.delayMs)):now;
   // Um envio posterior ao incidente ja cobre a retomada: nao criar outro.
-  if(existing.some(e=>e.sendStartedAt>=turn.completedAt*1000))return [];
-  const pending=existing.filter(e=>!e.sendStartedAt&&!['COMPLETED','RESOLVED_EXTERNALLY','PAUSED_USER'].includes(e.status)&&e.dueAt<=dueAt).sort((a,b)=>a.dueAt-b.dueAt)[0];
+  const pending=scoped.filter(e=>!Number.isFinite(e.sendStartedAt)&&!['COMPLETED','RESOLVED_EXTERNALLY','PAUSED_USER'].includes(e.status)&&e.dueAt<=dueAt).sort((a,b)=>a.dueAt-b.dueAt)[0];
   if(pending)return [{...pending,interruptedTurnId:turn.id}];
   return [{schema:1,id:digest([target,'usage-limit-failure',turn.id]),target,window:{quotaFailure:true},
     interruptedTurnId:turn.id,incidentCompletedAt:turn.completedAt*1000,dueAt,detectedAt:now,

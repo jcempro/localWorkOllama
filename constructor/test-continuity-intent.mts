@@ -133,7 +133,7 @@ try{
   const account={type:'chatgpt',id:'isolated-test'};
   const cfg={schema:1,threadId:thread,repoPath:repo,codexHome:home,accountKey:digest(account),mutexName:'test-only',powershell:path.join(process.env.SystemRoot!,'System32/WindowsPowerShell/v1.0/powershell.exe')};
   await fs.writeFile(path.join(sr,'config.json'),JSON.stringify(cfg));await fs.mkdir(path.join(sr,'events'));
-  await fs.writeFile(path.join(sr,'rpc.mjs'),`import fs from'node:fs/promises';import path from'node:path';import{fileURLToPath}from'node:url';const root=path.dirname(fileURLToPath(import.meta.url));export async function connect(){await fs.appendFile(path.join(root,'rpc.log'),'connect\\n');return{read:async(name)=>{if(name==='account/read')return{account:${JSON.stringify(account)}};if(name==='account/rateLimits/read')return{rateLimits:{primary:{usedPercent:95,resetsAt:Math.ceil(Date.now()/1000)+100}}};throw Error('UNEXPECTED_RPC:'+name)},close(){}}}`);
+  await fs.writeFile(path.join(sr,'rpc.mjs'),`import fs from'node:fs/promises';import path from'node:path';import{fileURLToPath}from'node:url';const root=path.dirname(fileURLToPath(import.meta.url));export async function connect(){await fs.appendFile(path.join(root,'rpc.log'),'connect\\n');return{read:async(name)=>{if(name==='account/read')return{account:${JSON.stringify(account)}};if(name==='account/rateLimits/read'){try{return JSON.parse(await fs.readFile(path.join(root,'quota.json'),'utf8'))}catch(e){if(e.code!=='ENOENT')throw e;return{rateLimits:{primary:{usedPercent:95,resetsAt:Math.ceil(Date.now()/1000)+100}}}}}throw Error('UNEXPECTED_RPC:'+name)},close(){}}}`);
   await fs.writeFile(path.join(sr,'platform.ps1'),`param([string]$Action,[string]$Config,[string]$EventId,[long]$DueAt)\nif($Action -notin @('Unschedule','Schedule')){throw 'FORBIDDEN_EFFECT'}\nAdd-Content -LiteralPath (Join-Path $PSScriptRoot 'platform.log') -Value $Action\n`);
   const tick=async(...args:string[])=>exec(process.execPath,[path.join(sr,'run.mjs'),...args],{env:{...env,SUPERVISOR_MUTEX_S8R:'test-only'},windowsHide:true,timeout:20_000});
   for(const sensor of [{...snapshot,bootId:'boot-b'},{...snapshot,desktopInstance:null},{...snapshot,desktopInstance:'app-b'}]){
@@ -183,6 +183,24 @@ try{
   const serviceRecoveryC9R=serviceEventsC9R.filter(e=>e.originTurnId==='service-failure-c9r'&&e.status==='SCHEDULED');
   assert.equal(serviceRecoveryC9R.length,1);assert.equal(serviceRecoveryC9R[0].recoveryDelayMs,240000);
   assert.equal(serviceRecoveryC9R[0].window.serviceFailure,true);
+  // Replan real do runtime: dueAt intacto, só nextAttemptAt de quota é obsoleto.
+  const earlyOriginC9R='early-quota-c9r',earlyAtC9R=Date.now();
+  history.prepare('UPDATE thread_turns SET turn_id=?,status=?,error_json=?,completed_at=?').run(earlyOriginC9R,'failed',JSON.stringify({codexErrorInfo:'usageLimitExceeded'}),earlyAtC9R/1000);
+  await fs.writeFile(path.join(sr,'quota.json'),JSON.stringify({rateLimits:{primary:{usedPercent:0,resetsAt:Math.ceil(earlyAtC9R/1000)+3600}}}));
+  const earlyIdC9R=digest(['early-quota-existing']);
+  const earlyEventC9R={schema:1,id:earlyIdC9R,target:c9rTarget,status:'WAITING_QUOTA',
+    originTurnId:earlyOriginC9R,interruptedTurnId:earlyOriginC9R,continuity:{generation:'new-generation-c9r'},
+    dueAt:earlyAtC9R+50_000,nextAttemptAt:earlyAtC9R+3_600_000,detectedAt:earlyAtC9R-1000,window:{quotaFailure:true},attempts:0};
+  await fs.writeFile(path.join(sr,'events',earlyIdC9R+'.json'),JSON.stringify(earlyEventC9R));
+  await tick();await tick();
+  const restoredEventC9R=JSON.parse(await fs.readFile(path.join(sr,'events',earlyIdC9R+'.json'),'utf8'));
+  assert.equal(restoredEventC9R.status,'SCHEDULED');assert.equal(restoredEventC9R.dueAt,earlyEventC9R.dueAt);
+  assert.equal(restoredEventC9R.nextAttemptAt,earlyEventC9R.dueAt);
+  assert.equal(restoredEventC9R.scheduleReason,'OBSERVED_QUOTA_RECOVERY');
+  assert.ok(restoredEventC9R.quotaRecoveryObservedAt>=earlyAtC9R);
+  const earlyEventsC9R=await Promise.all((await fs.readdir(path.join(sr,'events'))).map(async name=>JSON.parse(await fs.readFile(path.join(sr,'events',name),'utf8'))));
+  assert.equal(earlyEventsC9R.filter(e=>e.originTurnId===earlyOriginC9R).length,1);
+  console.log('PASS C9R runtime: retry de quota replanejado e persistido sem novo evento ou envio');
   history.close();history=undefined;
   console.log('PASS U6C: boot/app/legacy/pause/turn/close-during-send; actual isolated delivery and explicit resume; no real sends or target edits');
 }finally{

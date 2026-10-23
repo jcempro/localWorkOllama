@@ -191,3 +191,33 @@ const causalPriorityC9R={...dispatchSeedC9R,id:'service-recovery',interruptedTur
 assert.equal(dispatchDecisionC9R({...dispatchSeedC9R,id:'proactive-quota'},[causalPriorityC9R],false).reason,'ORIGIN_HAS_CAUSAL_RECOVERY');
 assert.equal(dispatchDecisionC9R(causalPriorityC9R,[causalPriorityC9R],false).allowed,true);
 assert.equal(dispatchDecisionC9R({...dispatchSeedC9R,id:'other-context',continuity:{generation:'fresh'}},[{...causalPriorityC9R,continuity:{generation:'old'}}],false).allowed,true);
+
+// Restauração antes do prazo persistido deve replanejar o MESMO incidente.
+const earlyQuotaC9R=planQuotaFailure(quota(100),target,incident,[],now)[0];
+const earlyObservedC9R=now+10_000;
+const earlyRecoveredC9R=planQuotaFailure(quota(0),target,incident,[earlyQuotaC9R],earlyObservedC9R)[0];
+assert.ok(earlyRecoveredC9R,'restauracao antecipada nao pode desaparecer por incidente ja existente');
+assert.equal(earlyRecoveredC9R.id,earlyQuotaC9R.id);
+assert.equal(earlyRecoveredC9R.dueAt,earlyObservedC9R+60_000);
+assert.equal(earlyRecoveredC9R.nextAttemptAt,earlyRecoveredC9R.dueAt);
+assert.equal(earlyRecoveredC9R.scheduleReason,'OBSERVED_QUOTA_RECOVERY');
+assert.equal(planQuotaFailure(quota(0),target,incident,[earlyRecoveredC9R],earlyObservedC9R+1000).length,0);
+for(const status of ['PAUSED_USER','COMPLETED','RESOLVED_EXTERNALLY','SEND_AMBIGUOUS','RETRY']){
+  assert.equal(planQuotaFailure(quota(0),target,incident,[{...earlyQuotaC9R,status}],earlyObservedC9R).length,0);
+}
+assert.equal(planQuotaFailure(quota(0),target,incident,[{...earlyQuotaC9R,sendStartedAt:now}],earlyObservedC9R).length,0);
+assert.equal(planQuotaFailure(quota(95),target,incident,[earlyQuotaC9R],earlyObservedC9R).length,0);
+assert.throws(()=>planQuotaFailure({},target,incident,[earlyQuotaC9R],earlyObservedC9R),/QUOTA_UNAVAILABLE/);
+assert.equal(planQuotaFailure(quota(0),target,incident,[{...earlyQuotaC9R,target:{...target,threadId:'other-chat'}}],earlyObservedC9R)[0].scheduleReason,'RECOVERED_QUOTA_CATCH_UP');
+// Deadline oficial já próximo não é adiado; só um retry de quota obsoleto é retirado.
+const waitingEarlyC9R={...earlyQuotaC9R,status:'WAITING_QUOTA',nextAttemptAt:earlyQuotaC9R.dueAt+3_600_000};
+const restoredWaitingC9R=planQuotaFailure(quota(0),target,incident,[waitingEarlyC9R],earlyQuotaC9R.dueAt-10_000)[0];
+assert.equal(restoredWaitingC9R.dueAt,earlyQuotaC9R.dueAt);
+assert.equal(restoredWaitingC9R.nextAttemptAt,earlyQuotaC9R.dueAt);
+let earlySendsC9R=0;
+const earlyIoC9R={...io,turns:async()=>[],incidentCurrent:async()=>true,send:async()=>{earlySendsC9R++;return {messageId:'early-receipt'};}};
+await advance(structuredClone(earlyRecoveredC9R),earlyIoC9R,earlyRecoveredC9R.dueAt-1);assert.equal(earlySendsC9R,0);
+const earlySentC9R=await advance(JSON.parse(JSON.stringify(earlyRecoveredC9R)),earlyIoC9R,earlyRecoveredC9R.dueAt);
+assert.equal(earlySentC9R.status,'SENT');assert.equal(earlySendsC9R,1);
+await advance(earlySentC9R,earlyIoC9R,earlySentC9R.nextAttemptAt);assert.equal(earlySendsC9R,1);
+console.log('PASS C9R: restauracao antecipada, deadline/retry persistidos sem deslizar, pausa/envio preservados e continuacao unica');

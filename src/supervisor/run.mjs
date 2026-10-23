@@ -244,7 +244,7 @@ async function main() {
     for(const event of detected){
       const file=path.join(ROOT_S8R,'events',`${event.id}.json`);
       const previous=existing.find(e=>e.id===event.id);
-      if(!previous||(!previous.sendStartedAt&&(event.dueAt!==previous.dueAt||event.interruptedTurnId!==previous.interruptedTurnId)))await io.save(event);
+      if(!previous||(!previous.sendStartedAt&&(event.dueAt!==previous.dueAt||event.nextAttemptAt!==previous.nextAttemptAt||event.interruptedTurnId!==previous.interruptedTurnId)))await io.save(event);
     }
     await atomic(ledgerPath,ledger); // Evento existe antes da referencia persistida.
     const summary=[];
