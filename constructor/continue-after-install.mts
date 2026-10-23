@@ -37,13 +37,17 @@ try{
       try{proof=JSON.parse(await fs.readFile(stateC9R.proofFile,'utf8'));}catch{}
       const success=proof&&Date.parse(proof.timestamp_utc)>=stateC9R.armedAt&&
         proof.global_config_preserved===true&&proof.worker_config_preserved===true&&
-        proof.installations?.every((x:any)=>x.control_preserved&&x.hashes_and_manifest_match&&!x.boot_logon&&!x.wake_or_catchup);
+        Array.isArray(proof.installations)&&proof.installations.some((x:any)=>x.thread_id===stateC9R.config.threadId)&&
+        proof.installations.every((x:any)=>x.control_preserved&&x.hashes_and_manifest_match&&!x.boot_logon&&!x.wake_or_catchup);
       // Continue é apenas handoff: o supervisor deve validar prova ou corrigir falha.
       await saveC9R({installation:success?'VERIFIED':'NEEDS_DIAGNOSIS'});
       const beforeSend=await reasonC9R();
       if(beforeSend)await saveC9R({status:'PAUSED_USER',reason:beforeSend});
       else{
         const codex=await resolveCodex(stateC9R.config);
+        const finalReason=await reasonC9R();
+        if(finalReason){await saveC9R({status:'PAUSED_USER',reason:finalReason});}
+        else{
         phaseC9R='SEND';await saveC9R({status:'SENDING',sendStartedAt:Date.now()});
         const observer=observeQueue(stateC9R.config);
         try{
@@ -53,6 +57,7 @@ try{
           await saveC9R({status:'QUEUED_TO_CHAT',queueId,messageClientId:queueId?observer.messageClientId(queueId):null,
             acknowledgement:receipt.stdout.trim().slice(0,1000)});
         }finally{observer.close();}
+        }
       }
     }
   }
