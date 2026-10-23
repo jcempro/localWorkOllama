@@ -215,6 +215,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `51ca4796a8512cd3c1491615fc5d5bec832a027bec505e5331da29c06f8eb2da` |
+| `src/localworker/response-contract.mts` | `27bc1ffbf52e32b5758e30922aa400f6e15480db8f50adfc937f770ad226c19e` |
+| `src/localworker/response-contract.mjs` | `17457d13030387d9413523fe40179197e08c6cd9e1133da4ccd4e3604791e1ab` |
 | `src/localworker/supervisor-review.mts` | `3293b645f10bc9270fe5b01ff69b315a72a20a8fce7024c462b3b230209b1d89` |
 | `src/localworker/supervisor-review.mjs` | `53210647454bd3b062f1425749ee19054cd9ede5cdcb2446410cf8fc55988576` |
 | `src/localworker/delegation-policy.mts` | `d7f1eed4081eb23983c7a26ca1a29e7e646ce0ae23550ff4fc1c84ea6bdb115d` |
