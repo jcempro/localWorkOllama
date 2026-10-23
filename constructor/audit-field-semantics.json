@@ -6,5 +6,9 @@
   "tool_counts.direct_mutation_ok": "Sucessos das ferramentas diretas de mutação; não inclui efeitos mutantes de comandos autorizados.",
   "tool_counts.authorized_command_ok": "Quantidade de comandos autorizados com exit_code=0; não prova commit, cobertura universal ou ausência de tentativas falhas.",
   "QUEUED_TO_CHAT": "Recibo de enfileiramento, não confirmação de resposta/aceite do supervisor.",
-  "git_header": "Header histórico do Git; ahead não comprova autoria, push ou árvore limpa."
+  "git_header": "Header histórico do Git; ahead não comprova autoria, push ou árvore limpa.",
+  "commits_verified": "Contador do mecanismo automático de commit; zero não nega commit explícito demonstrado pelo stdout de comando Git autorizado.",
+  "git_create_mode": "Arquivo novo rastreado naquele commit; não prova que o job criou fisicamente o arquivo, que pode ter sido preexistente e não rastreado.",
+  "git_hunk_header": "@@ -inicio,quantidade +inicio,quantidade @@ informa intervalos do hunk, não tamanho total do arquivo ou percentual de cobertura do fragmento.",
+  "diff_context": "Prefixo espaço é contexto inalterado; '-' é remoção e '+' adição. Normas fornecidas separadamente antes do diff não são alvos de alteração."
 }

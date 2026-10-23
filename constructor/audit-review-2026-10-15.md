@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 54 deles; não substitui o aceite dos outros 13.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 56 deles; não substitui o aceite dos outros 11.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os54 aceites/correções semânticos já registrados neste documento nem aceita os13 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os56 aceites/correções semânticos já registrados neste documento nem aceita os11 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -260,3 +260,16 @@ Auditor 7a94a05e-0c51-46c4-9de8-d862b1f1f6d6: local_result uma vez; COMPLETED, a
 | f6aee59a | Três leituras aprovadas7/11/13; ENOENT9 do alvo ainda não criado. test_tables20 executado e falho exit1; write_file28 criou scripts/test_markdown_tables.rb; test_tables34 executado novamente e falho exit1. completion_blocked41 mantém test_tables pendente; WORKER_INCOMPLETE/CONTRACT_UNFULFILLED. Script criado não equivale a fixture validada. |
 
 Corrigir “não executar test_tables”: ambos os comandos foram executados, nenhum aprovado; um antes e outro depois da escrita. Passo6 é posição observada, não teto nem prova de ausência de progresso: houve criação no evento28. Sem evento change_requirement no pacote, rejeitar a declaração de que missing_paths não se aplica; esse campo trata de alteração líquida exigida, não simples existência do arquivo. Stderr fornecido apenas como contagem102/34 caracteres: conteúdo, causa exata e cobertura funcional são indeterminados. Não inferir truncamento pelo runtime nem falta de permissão. NEEDS_SUPERVISOR textual não altera error_kind, não exige nova autorização e não justifica replay. O pacote não demonstra recuperação universal; tampouco FAILED histórico prova defeito atual. QUEUED_TO_CHAT é enfileiramento, não resposta/aceite. Acumulado54 revisados/13 pendentes nesta captura.
+
+## Segmento 19 — 23/10/2026
+
+Auditor a0fc59cc-4590-4141-b103-bc2a0a2f17c7: local_result uma vez; COMPLETED, comparação de evidência fornecida sem ferramentas/escrita/commit próprios. Ambos os recibos cobertos; aceite parcial com correções factuais e de atribuição. Git determinístico do auditor em23/10/2026 04:37:37UTC: main...origin/main limpo, distinto do Git histórico do blog.
+
+| ID | Efeito/validação comprovados e limite |
+| --- | --- |
+| 0ceda154 | delta/history aprovados7/9. Leitura obrigatória de AGENTS.md, agents.local.md e contexto FT112 pendente15. Aviso11 estimou32853 tokens; resposta14 informou prompt18925/output13843, sem equivaler à estimativa anterior. Requisição19 recusada com32848>32768; WORKER_INCOMPLETE/CONTEXT_CAPACITY, sem relatório final de inventário. Sem prova de cobertura de todos os hunks ou autoria editorial. |
+| 845e8f16 | Sequência register/stage/commit aprovada3/6/9; register usa Node, stage/commit usam Git. Stdout REGISTERED e commit df79982595, dois arquivos novos rastreados,76 inserções. completion_verified11 conta commits0 porque o commit ocorreu no comando autorizado, não na ferramenta de commit automática. Aceite delimitado ao registro inicial FT113; sem implementação de plugin ou conclusão FT114/115. |
+
+Corrigir “falhou antes da geração de saída”: delta/history tiveram exit0 e alimentaram a execução; seus stdout não estão neste pacote público, o que não prova ausência de saída original. Não confundir recusa de contexto com falta de RAM/permissão nem afirmar impossibilidade geral de truncamento: o contrato preserva conteúdo e usa truncate:false; nenhuma redução segura foi comprovada naquele ponto. C7M posteriormente corrigiu checkpoint do rascunho recusado, não demonstra entrega retroativa do inventário editorial.
+
+Rejeitar atribuição de commits0 a0ceda154: esse contador aparece em845 e também no auditor atual; não invalida stdout explícito de df79982595. “Create mode” comprova arquivos novos no commit, não criação física de ambos por845: register lê/altera master preexistente e stage inclui prompt já presente. O script register foi fornecido, embora não todo o conteúdo final dos dois arquivos. Não são três comandos Git. A comparação ahead0→ahead7 não tem cronologia demonstrada no pacote e é retirada; header não prova autoria/push/limpeza. Passos3/4 são posições, não teto. QUEUED_TO_CHAT é apenas fila. Não executar novamente o negócio nem reclassificar falha histórica como defeito atual. Acumulado56 revisados/11 pendentes nesta captura.
