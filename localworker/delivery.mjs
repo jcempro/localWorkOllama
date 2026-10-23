@@ -43,6 +43,7 @@ export function queueMessage(id, state) {
   return [
     `Retome a tarefa original neste mesmo chat. O localWorker do job ${id} ${status}.`,
     "Consulte local_result uma única vez e faça revisão proporcional ao risco. COMPLETED significa que a inferência terminou; confira se a solicitação foi de fato executada antes de concluir o chat.",
+    "Após receber e concluir a revisão, registre a qualidade Q8S por local_review com o recibo retornado, sem nova inferência; nota não deriva do status. Sem exame suficiente ou recibo, preserve pendência explícita, sem nota inventada nem repetir local_result.",
     "Se uma implementação obrigatória terminou sem alterações, segmente a execução pendente e use expect_changes=true na nova delegação; preserve a exploração já registrada.",
     "Compare afirmações sobre o estado Git com a seção ESTADO GIT DETERMINÍSTICO do resultado e corrija qualquer divergência.",
     `Se o transporte MCP estiver fechado, leia apenas os artefatos persistidos em ${dir} (state.json e result.md ou error.txt) para obter o resultado, sem reiniciar a análise.`,

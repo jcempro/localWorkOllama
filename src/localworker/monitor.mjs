@@ -25,8 +25,8 @@ const WATCHDOG_INTERVAL_MS_M7Q = 60_000;
 const execFileAsync = promisify(execFile);
 
 async function sourceHashM7Q() {
-  const sources = await Promise.all(["monitor.mjs", "monitor-page.mjs", "job-control.mjs"].map(name => fs.readFile(path.join(ROOT_M7Q, name))));
-  return createHash("sha256").update(sources[0]).update(sources[1]).update(sources[2]).digest("hex");
+  const sources = await Promise.all(["monitor.mjs", "monitor-page.mjs", "job-control.mjs", "supervisor-review.mjs", "job-store.mjs"].map(name => fs.readFile(path.join(ROOT_M7Q, name))));
+  const hash=createHash('sha256');for(const bytes of sources)hash.update(bytes);return hash.digest('hex');
 }
 
 async function health(descriptor) {

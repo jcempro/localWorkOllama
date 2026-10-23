@@ -18,6 +18,11 @@ try{
   db.prepare('INSERT INTO threads VALUES(?,0,?)').run(reviewer,source);db.close();
   const env={...process.env,CODEX_HOME:home,LOCAL_CODEX_HOME:home};delete env.LOCAL_WORKER_JOB_ID;
   const {callLocalWorker}=await load('mcp-call.mjs');
+  const {queueMessage}=await load('delivery.mjs');
+  const callback=queueMessage(randomUUID(),{status:'COMPLETED'});
+  assert.match(callback,/Consulte local_result uma única vez/);assert.match(callback,/local_review/);
+  assert.match(callback,/sem nova inferência/);assert.match(callback,/sem nota inventada nem repetir local_result/);
+  assert.match(await fs.readFile(path.join(source,'AGENTS.md'),'utf8'),/somente o supervisor atribui\/confirma nota/i);
   async function add(status='COMPLETED',det=false){
     const id=randomUUID(),dir=s.jobDir(id),now=new Date().toISOString();await fs.mkdir(dir,{recursive:true});
     await s.setState(id,{job_id:id,status,created_at:now,completed_at:now});
@@ -74,7 +79,9 @@ try{
   await assert.rejects(()=>q.recordReviewQ8S(make(deleting,rd)),/ENOENT/);
   const expired=await add(),re=await q.issueReviewReceiptQ8S(expired);
   await s.setState(expired,{...(await s.getState(expired)),completed_at:'2000-01-01T00:00:00.000Z'});
-  await Promise.allSettled([s.pruneJobHistory({force:true}),q.recordReviewQ8S(make(expired,re))]);
+  const retired=await Promise.allSettled([s.pruneJobHistory({force:true}),q.recordReviewQ8S(make(expired,re))]);
+  assert.equal(retired[0].status,'fulfilled');
+  assert.ok(!retired[0].value.errors.some(e=>e.job_id===expired),JSON.stringify(retired[0].value.errors));
   assert.equal(await fs.stat(s.jobDir(expired)).then(()=>true,()=>false),false);
   const api=await add('FAILED');
   const received=JSON.parse(await callLocalWorker({name:'local_result',args:{job_id:api},serverPath:path.join(fixture,'server.mjs'),env}));

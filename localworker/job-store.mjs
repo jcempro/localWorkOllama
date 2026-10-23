@@ -237,13 +237,15 @@ export async function pruneJobHistory({ force = false, now = Date.now() } = {}) 
     for (const id of await listJobs()) {
       const dir = jobDir(id);
       try {
+        await withJobControl(id,async()=>{
         const [state, delivery, bytes] = await Promise.all([
           getState(id), readJson(path.join(dir, "delivery.json")), safeJobBytesJ4R(dir),
         ]);
-        if (state.job_id !== id || !TERMINAL.has(state.status) || !resolvedForRetentionU6C(delivery)) continue;
+        if (state.job_id !== id || !TERMINAL.has(state.status) || !resolvedForRetentionU6C(delivery)) return;
         const completed = Date.parse(state.completed_at ?? "");
-        if (!Number.isFinite(completed) || completed > now) continue;
+        if (!Number.isFinite(completed) || completed > now) return;
         eligible.push({ id, dir, completed, bytes });
+        });
       } catch (error) { errors.push({ job_id: id, error: String(error?.message ?? error).slice(0, 200) }); }
     }
     eligible.sort((a, b) => b.completed - a.completed);

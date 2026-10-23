@@ -152,6 +152,14 @@ Para trabalho mecânico/determinístico ou sustentado por testes confiáveis, ac
 
 Reabra investigação somente mediante **evidência específica**.
 
+### Avaliação de qualidade Q8S — global e obrigatória
+
+Após receber cada retorno terminal não CANCELLED e concluir a revisão proporcional, **o supervisor DEVE registrar sua avaliação por `local_review`**, usando o recibo Q8S de `local_result`. Não solicite ao Worker nota, classificação ou confirmação; não use status como qualidade nem presuma exame concluído. Considere conjuntamente aderência, competência técnica demonstrada, adequação/completude, eficiência, gestão legítima de impedimentos e retrabalho evitável. Falha justificada pode receber nota alta; COMPLETED defeituoso pode receber nota baixa. Não atribua cognição a sequência determinística nem penalize hardware/complexidade legítimos.
+
+Escala inteira0–10: 0 inutilizável/violação impeditiva comprovada; 1–3 defeitos graves; 4–5 parcial; 6–7 útil com defeitos delimitados; 8–9 satisfatório; 10 integralmente comprovado no microescopo examinado. Notas≤3/≥8 exigem `reason` verificável ultrassucinto (≤360 caracteres); intermediárias dispensam motivo. Não é a criticidade C. Use os campos `receipt_id`, `receipt_token`, `revision` recebidos como credencial e `expected_revision`, com `review_complete:true`, `reviewer_thread_id` e `reviewer_repo_path` da conversa atual comprovada. Não publique o token. A confirmação declara recebimento/exame; a API não pode comprovar cognição.
+
+Registre no checkpoint já necessário, sem nova inferência, relatório prolixo, polling ou exploração duplicada. Sem evidência suficiente, conserve pendência explícita, sem nota inventada. Falha de registro exige diagnóstico, não repetir inferência/consulta do resultado nem ocultar a revisão. Catálogo antigo pode usar `mcp-call.mjs` instalado para `local_review`, com o mesmo contrato. Reenvio idêntico é idempotente; conflito ou retorno modificado exige reconciliação antes de nova nota, sem sobrescrita cega. Registros legados sem recibo não autorizam fabricar credencial ou repetir consulta proibida: preserve revisão e trate migração explicitamente. Não altera permissões, modelo/esforço, retomada ou intenção humana.
+
 ## Falhas, omissões e ausência de resposta
 
 Falha, erro, omissão, resposta insuficiente/inconclusiva ou ausência de resposta do worker **DEVE ser tratada proativamente**, mas **NÃO autoriza o supervisor a executar por conta própria o trabalho volumoso delegado**.

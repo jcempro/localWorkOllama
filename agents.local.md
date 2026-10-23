@@ -37,6 +37,8 @@ Esta regra aplica-se exclusivamente ao repositório que contém este arquivo, qu
 
 ## Governança local de acompanhamento e recuperação
 
+- Aplicar avaliação de qualidade Q8S do RCF no checkpoint normal, exclusivamente pelo supervisor após recebimento/exame. Não confundir nota com criticidade C, status técnico ou inferência de competência de sequência determinística. Distribuir a norma por `src/agents.supervisor.md`, sem exportar este arquivo local. Persistência por job com recibo/versionamento, projeção pública sem credenciais, ausência explícita de nota e retenção/exclusão coerentes são invariantes; auditoria mantém exclusão dos CANCELLED e não fabrica avaliações históricas.
+
 - Distribuir a norma global de compactação pós-delegação N7C por src/agents.supervisor.md e pelo instalador GlobalRulesOnly, nunca copiando este agents.local.md a outros repositórios. Preservar a ordem RUNNING→handoff→aviso/links→compactação nativa→encerramento e a exceção estrita de uso<10% barato/comprovado; ausência de ferramenta/confirmação é impedimento explícito, não dispensa ou sucesso. A capacidade manual da UI não comprova acionamento pelo agente. Sem polling, interferência em jobs, reabertura de Desktop ou mutação direta de histórico.
 
 - Intenção humana prevalece sobre fail-safe: boot/logon, app ausente, quota baixa e pendência histórica não autorizam retomar chat/monitor nem reabrir Desktop. Aplicar FT-CONTINUITY-U6C do RCF: vincular autorização a sessão/instância/destino/turno, pausar em fechamento, interrupção, substituição ou incerteza; somente retomada explícita rearma. Preservar resultados/recibos e recuperação silenciosa compatível, sem replay nem falso sucesso. Não presumir API de distinção crash/fechamento ou revogação de fila nativa.

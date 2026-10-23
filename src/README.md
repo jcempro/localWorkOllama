@@ -101,7 +101,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
 | `src/supervisor/install.ps1` | `dcab7709f17cd70ed67bad1a4058838fec929bb24ac5495fc36faeffec0715a1` |
 | `src/supervisor/README.md` | `ee132ea9b60d76ac7462c8a14560320a3c71d35ca9533a649f91fc39ecf6d272` |
-| `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
+| `src/localworker/AGENTS.md` | `3fd0303e26cdc03eb745cc0568bd9d5d9d4ca9d107bfa4434faa9ab60bf200d0` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -114,15 +114,15 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/continuity.mjs` | `739301ccb005e09927875cfdd4ca0199099978895ecdbf6abfbf9d39968e682c` |
 | `src/localworker/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `3416dd48a5f2d1a1330710cb31ffa87f0075d5c294fab50a418c33b527756ec3` |
+| `src/localworker/job-store.mjs` | `e61fc8c102cc8fa5850fdc112043f0ef220d87a96d772489ac85bca270a26c15` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `addcc0cf78334908092424403b930782430a2e411fafd79ae64ff3cd43433f6d` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `2dc3f2b041b821bba7821f8e3301227aa7322a2f526c628606f2c1fe60fad5db` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
-| `src/localworker/delivery.mjs` | `f3c8468da8b2616928ae79f161bf8ab7ae0c62684ae894c876dc29e6f1c98ed4` |
+| `src/localworker/delivery.mjs` | `bc76c5febe876d1e148168a3494995e5b71bdc30b93a87a81cf95a06cb3f7c26` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |
-| `src/localworker/monitor.mjs` | `ea2e528421c055f3dd079c37ef2e58e9f39721a1908d7c255637ad69c4f9a7f1` |
+| `src/localworker/monitor.mjs` | `3537305f2b207fa886d6e96f099fed87c59cde2b4dd8f2e9a4b28a253911d2d0` |
 | `src/localworker/monitor-page.mjs` | `762ca8da196a1af84e340e785ee60064a88a015bb2322becc495b2a590c64967` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `2f1e2823a4b05a741997f3b345b0da40303e06ed71747635e14c6edc881fe01e` |
@@ -132,7 +132,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `4db4ce27af892924c367ab5ea8f638a4e1d9e76a9e2f637228809bdd6de0f79c` |
+| `src/agents.supervisor.md` | `027c64a9125813c4facad67ba4af2310ec14c0b70baa51ea53f9593b9344899f` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Continuidade U6C

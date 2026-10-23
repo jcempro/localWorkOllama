@@ -126,7 +126,7 @@ Escala inteira0–10: 0 inutilizável/violação impeditiva; 1–3 defeitos grav
 
 O recibo vincula pedido e retorno por hashes; emiti-lo não comprova recebimento/exame. O supervisor os confirma expressamente ao registrar. Uma nota só é aceita para retorno terminal inalterado, com credencial e versão válidas. Reenvio idêntico é idempotente; divergência concorrente exige conferir a revisão atual, sem sobrescrever cegamente. O histórico fica em `jobs/<job_id>/supervisor-review.json`, acompanha retenção/exclusão desse job e limita-se a16 retornos distintos/32 revisões por retorno, sem descarte silencioso ao atingir o limite. Esses controles não isolam processos do mesmo usuário do SO. Instale/atualize pelo procedimento deste artigo para distribuir o módulo; sessões antigas podem usar a ponte instalada.
 
-No monitor, a coluna **Qualidade** mostra a nota atual ou ausência explícita de avaliação. Abra o job para consultar motivo, horário e histórico de revisões. Retorno modificado fica **Revisão pendente**; registro ilegível fica **Indisponível**, sem nota presumida. As atualizações usam o fluxo automático existente, sem reload, e nunca atribuem nota. O painel não expõe credenciais nem oferece atribuição pelo Worker. A instrução global/callback e a instalação real ainda precisam da validação de integração Q8S.
+No monitor, a coluna **Qualidade** mostra a nota atual ou ausência explícita de avaliação. Abra o job para consultar motivo, horário e histórico de revisões. Retorno modificado fica **Revisão pendente**; registro ilegível fica **Indisponível**, sem nota presumida. As atualizações usam o fluxo automático existente, sem reload, e nunca atribuem nota. O painel não expõe credenciais nem oferece atribuição pelo Worker. A regra global reproduzida abaixo exige avaliação no checkpoint normal, e o callback lembra essa etapa; a efetiva revisão/atribuição continua sendo responsabilidade do supervisor. Ausência de recibo em versão antiga é limitação explícita: não fabrique token nem repita consulta proibida.
 
 `command_sequence` não carrega política GPU nem prepara/compacta contexto: não depende do Ollama ou do teto de ciclos de inferência. Cada comando mantém seu timeout técnico, autorização, evidência e validação; a sequência tem no máximo 32 IDs distintos e para no primeiro erro. Se os comandos passarem, mas faltar a alteração, validação ou commit exigido pelo contrato, o resultado informa essa pendência específica, sem repetir comandos nem alegar esgotamento de ciclos. Recursos consumidos pelo executável autorizado ainda precisam ser avaliados pelo supervisor antes da delegação.
 
@@ -489,6 +489,14 @@ Para trabalho mecânico/determinístico ou sustentado por testes confiáveis, ac
 
 Reabra investigação somente mediante **evidência específica**.
 
+### Avaliação de qualidade Q8S — global e obrigatória
+
+Após receber cada retorno terminal não CANCELLED e concluir a revisão proporcional, **o supervisor DEVE registrar sua avaliação por `local_review`**, usando o recibo Q8S de `local_result`. Não solicite ao Worker nota, classificação ou confirmação; não use status como qualidade nem presuma exame concluído. Considere conjuntamente aderência, competência técnica demonstrada, adequação/completude, eficiência, gestão legítima de impedimentos e retrabalho evitável. Falha justificada pode receber nota alta; COMPLETED defeituoso pode receber nota baixa. Não atribua cognição a sequência determinística nem penalize hardware/complexidade legítimos.
+
+Escala inteira0–10: 0 inutilizável/violação impeditiva comprovada; 1–3 defeitos graves; 4–5 parcial; 6–7 útil com defeitos delimitados; 8–9 satisfatório; 10 integralmente comprovado no microescopo examinado. Notas≤3/≥8 exigem `reason` verificável ultrassucinto (≤360 caracteres); intermediárias dispensam motivo. Não é a criticidade C. Use os campos `receipt_id`, `receipt_token`, `revision` recebidos como credencial e `expected_revision`, com `review_complete:true`, `reviewer_thread_id` e `reviewer_repo_path` da conversa atual comprovada. Não publique o token. A confirmação declara recebimento/exame; a API não pode comprovar cognição.
+
+Registre no checkpoint já necessário, sem nova inferência, relatório prolixo, polling ou exploração duplicada. Sem evidência suficiente, conserve pendência explícita, sem nota inventada. Falha de registro exige diagnóstico, não repetir inferência/consulta do resultado nem ocultar a revisão. Catálogo antigo pode usar `mcp-call.mjs` instalado para `local_review`, com o mesmo contrato. Reenvio idêntico é idempotente; conflito ou retorno modificado exige reconciliação antes de nova nota, sem sobrescrita cega. Registros legados sem recibo não autorizam fabricar credencial ou repetir consulta proibida: preserve revisão e trate migração explicitamente. Não altera permissões, modelo/esforço, retomada ou intenção humana.
+
 ## Falhas, omissões e ausência de resposta
 
 Falha, erro, omissão, resposta insuficiente/inconclusiva ou ausência de resposta do worker **DEVE ser tratada proativamente**, mas **NÃO autoriza o supervisor a executar por conta própria o trabalho volumoso delegado**.
@@ -587,6 +595,8 @@ O instalador copia `src/localworker/AGENTS.md` para `$WorkerHome\AGENTS.md`. O a
 FT-CONTINUITY-U6C: fechamento do Desktop, reboot, interrupção/pausa humana ou mudança do turno não autorizam reabrir app/conversa. Preserve resultados; callbacks exigem autorização de sessão/instância/turno válida. Não rearme nem contorne pausa, não infira intenção pela ausência de processo. Inferência em curso e monitorização silenciosa seguem contratos próprios; a entrega não autoriza novo trabalho após revogação.
 
 Worker subordinado ao supervisor. Execute estritamente a tarefa recebida, somente dentro de sua alçada.
+
+Q8S: somente o supervisor atribui/confirma nota de qualidade após receber e examinar o retorno. Não se autoavalie, não invoque `local_review`, não leia/edite credenciais ou registros de avaliação para alterar sua nota. Forneça resultado e evidências verificáveis do microescopo; status técnico não comprova aceite semântico. Essa reserva não reduz autonomia técnica autorizada na tarefa.
 
 Você é executor especializado de uma unidade pequena, autocontida e verificável; não amplie uma unidade para a FT inteira. Estimativa, segmentação e controle de escopo cabem ao supervisor. Se evidências mostrarem contexto/escopo incompatível, preserve resultados parciais, indique a fronteira encontrada e o próximo passo delimitado; não explore indefinidamente. Prefira automação determinística existente e autorizada à execução manual equivalente; cumpra comando, parâmetros, sequência e aceite recebidos, diagnosticando incompatibilidade antes de improvisar.
 
@@ -698,7 +708,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
 | `src/supervisor/install.ps1` | `dcab7709f17cd70ed67bad1a4058838fec929bb24ac5495fc36faeffec0715a1` |
 | `src/supervisor/README.md` | `ee132ea9b60d76ac7462c8a14560320a3c71d35ca9533a649f91fc39ecf6d272` |
-| `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
+| `src/localworker/AGENTS.md` | `3fd0303e26cdc03eb745cc0568bd9d5d9d4ca9d107bfa4434faa9ab60bf200d0` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
@@ -711,15 +721,15 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/continuity.mjs` | `739301ccb005e09927875cfdd4ca0199099978895ecdbf6abfbf9d39968e682c` |
 | `src/localworker/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
-| `src/localworker/job-store.mjs` | `3416dd48a5f2d1a1330710cb31ffa87f0075d5c294fab50a418c33b527756ec3` |
+| `src/localworker/job-store.mjs` | `e61fc8c102cc8fa5850fdc112043f0ef220d87a96d772489ac85bca270a26c15` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `addcc0cf78334908092424403b930782430a2e411fafd79ae64ff3cd43433f6d` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `2dc3f2b041b821bba7821f8e3301227aa7322a2f526c628606f2c1fe60fad5db` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
-| `src/localworker/delivery.mjs` | `f3c8468da8b2616928ae79f161bf8ab7ae0c62684ae894c876dc29e6f1c98ed4` |
+| `src/localworker/delivery.mjs` | `bc76c5febe876d1e148168a3494995e5b71bdc30b93a87a81cf95a06cb3f7c26` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |
-| `src/localworker/monitor.mjs` | `ea2e528421c055f3dd079c37ef2e58e9f39721a1908d7c255637ad69c4f9a7f1` |
+| `src/localworker/monitor.mjs` | `3537305f2b207fa886d6e96f099fed87c59cde2b4dd8f2e9a4b28a253911d2d0` |
 | `src/localworker/monitor-page.mjs` | `762ca8da196a1af84e340e785ee60064a88a015bb2322becc495b2a590c64967` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `2f1e2823a4b05a741997f3b345b0da40303e06ed71747635e14c6edc881fe01e` |
@@ -729,7 +739,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `4db4ce27af892924c367ab5ea8f638a4e1d9e76a9e2f637228809bdd6de0f79c` |
+| `src/agents.supervisor.md` | `027c64a9125813c4facad67ba4af2310ec14c0b70baa51ea53f9593b9344899f` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI
