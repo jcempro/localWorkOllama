@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { detect, advance, responseEvidence, planCycles, planQuotaFailure } from './core.mts';
+import { callbackReasonU6C } from './continuity.mts';
 const now = 2_000_000;
 const target = { accountKey: 'test', threadId: 'thread-a', repoPath: 'repo' };
 const quota = (used = 90, reset = now / 1000 + 100) => ({ rateLimitsByLimitId: { codex: { primary: { usedPercent: used, resetsAt: reset } } } });
@@ -97,3 +98,33 @@ pending=await advance(structuredClone(seed),restoreFailure,seed.dueAt);
 assert.equal(pending.status,'CONFIRMATION_RETRY');assert.equal(pending.sendAttempts,1);
 await advance(pending,activationIo,pending.nextAttemptAt);assert.equal(pending.sendAttempts,1);
 console.log('PASS: conversa autorizada ativada uma vez, nova instancia pausada, falha rastreavel e sem reenvio');
+
+// C9R: quota esgotada -> estado persistido -> restauração -> envio único -> resposta.
+const sessionC9R={schema:1,bootId:'same-boot',desktopInstance:'same-app'};
+const leaseC9R={...sessionC9R,originTurnId:incident.id};
+let originC9R:any={...incident}, usedC9R=100, sendsC9R=0, receivedC9R:any[]=[];
+let persistedC9R:any;
+const causalIo={...io,now:()=>seed.dueAt,quota:async()=>quota(usedC9R),
+  continuity:async()=>{const reason=callbackReasonU6C(leaseC9R,sessionC9R,originC9R);return {allowed:!reason,reason};},
+  incidentCurrent:async(id:string)=>originC9R.id===id,
+  save:async(value:any)=>{persistedC9R=JSON.parse(JSON.stringify(value));},turns:async()=>receivedC9R,
+  send:async(_target:any,text:string)=>{assert.equal(text,'continue');sendsC9R++;return {messageId:'causal-receipt'};}};
+await advance(planQuotaFailure(quota(100),target,incident,[],now)[0],causalIo,seed.dueAt);
+assert.equal(persistedC9R.status,'WAITING_QUOTA');assert.equal(sendsC9R,0);
+usedC9R=0;
+await advance(structuredClone(persistedC9R),causalIo,persistedC9R.nextAttemptAt);
+assert.equal(persistedC9R.status,'SENT');assert.equal(sendsC9R,1);
+await advance(structuredClone(persistedC9R),causalIo,persistedC9R.nextAttemptAt);
+assert.equal(persistedC9R.status,'AWAITING_RESPONSE');assert.equal(sendsC9R,1);
+receivedC9R=[{id:'response-c9r',startedAt:seed.dueAt/1000,status:'completed',items:[
+  {type:'userMessage',id:'causal-receipt',content:[{type:'text',text:'continue'}]},
+  {type:'agentMessage',id:'actual-response-c9r',phase:'final',text:'Continuação efetivamente executada'}]}];
+await advance(structuredClone(persistedC9R),causalIo,persistedC9R.nextAttemptAt);
+assert.equal(persistedC9R.status,'COMPLETED');assert.equal(sendsC9R,1);
+originC9R={...incident,status:'interrupted'};
+const stoppedC9R=await advance(structuredClone(catchup),causalIo,seed.dueAt);
+assert.equal(stoppedC9R.status,'PAUSED_USER');assert.equal(sendsC9R,1);
+originC9R=incident;
+await advance(stoppedC9R,causalIo,seed.dueAt+999999); // Restored quota never rearms manual pause.
+assert.equal(stoppedC9R.status,'PAUSED_USER');assert.equal(sendsC9R,1);
+console.log('PASS C9R: causa tipada preservada, quota esgotada/restaurada, persistencia, envio unico, resposta confirmada e interrupcao sem rearme');

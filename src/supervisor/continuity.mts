@@ -40,12 +40,17 @@ export function sessionReasonU6C(lease:any, observation:any) {
   if(lease.desktopInstance!==observation.desktopInstance) return 'DESKTOP_INSTANCE_CHANGED';
   return null;
 }
+// C9R: status terminal não informa intenção. Só a causa estruturada comprovada
+// de quota preserva a autorização; texto livre e interrupted nunca a concedem.
+export function quotaSuspensionC9R(turn:any) {
+  return turn?.status==='failed' && turn.error?.codexErrorInfo==='usageLimitExceeded';
+}
 export function callbackReasonU6C(lease:any, observation:any, turn:any) {
   const reason=sessionReasonU6C(lease,observation);
   if(reason) return reason;
   if(!lease.originTurnId || !turn) return 'ORIGIN_TURN_UNVERIFIABLE';
   if(turn.id!==lease.originTurnId) return 'NEWER_TURN_SUPERSEDES_CALLBACK';
-  if(['interrupted','failed'].includes(turn.status)) return 'ORIGIN_TURN_STOPPED';
+  if(turn.status==='interrupted' || turn.status==='failed' && !quotaSuspensionC9R(turn)) return 'ORIGIN_TURN_STOPPED';
   return null;
 }
 export async function captureContinuityU6C(request:any,codexHome:string) {

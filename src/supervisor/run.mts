@@ -7,7 +7,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { connect } from './rpc.mts';
 import { planCycles, planQuotaFailure, advance, digest, responseEvidence } from './core.mts';
 import { observeQueue, parseQueueReceipt, persistedTurn, correlatedTurn, latestTurn, pendingQueue } from './receipts.mts';
-import { observeContinuityU6C, sessionReasonU6C } from './continuity.mts';
+import { observeContinuityU6C, sessionReasonU6C, quotaSuspensionC9R } from './continuity.mts';
 import { randomUUID } from 'node:crypto';
 
 const ROOT_S8R = path.dirname(fileURLToPath(import.meta.url));
@@ -88,7 +88,7 @@ async function main() {
         if(!/^[a-f0-9]{64}\.json$/.test(name))continue;
         const file=path.join(ROOT_S8R,'events',name),event=await readJson(file);
         if(event.status==='PAUSED_USER' && !event.sendStartedAt && event.originTurnId===origin?.id &&
-            origin?.status==='failed' && origin.error?.codexErrorInfo==='usageLimitExceeded'){
+            quotaSuspensionC9R(origin)){
           await atomic(file,{...event,status:'SCHEDULED',continuity:{generation:control.generation},reauthorizedAt:Date.now()});
         }
       }
@@ -103,7 +103,7 @@ async function main() {
       const latest=latestTurn(config);
       if(!latest || latest.id!==event.originTurnId)reason='NEWER_TURN_SUPERSEDES_EVENT';
       else if(latest.status==='completed' || latest.status==='interrupted')reason='ORIGIN_TURN_FINISHED_OR_STOPPED';
-      else if(latest.status==='failed' && latest.error?.codexErrorInfo!=='usageLimitExceeded')reason='ORIGIN_TURN_FAILED_WITHOUT_QUOTA_CAUSE';
+      else if(latest.status==='failed' && !quotaSuspensionC9R(latest))reason='ORIGIN_TURN_FAILED_WITHOUT_QUOTA_CAUSE';
     }
     if(!reason && event?.sendStartedAt){
       const latest=latestTurn(config);
@@ -217,7 +217,7 @@ async function main() {
     try {
       const snapshot=await io.quota();
       const origin=latestTurn(config);
-      const pending=origin && (origin.status==='inProgress' || origin.status==='in_progress' || origin.status==='failed'&&origin.error?.codexErrorInfo==='usageLimitExceeded');
+      const pending=origin && (origin.status==='inProgress' || origin.status==='in_progress' || quotaSuspensionC9R(origin));
       detected=pending?planCycles(snapshot,target,ledger,existing,now):[];
       const merged=[...existing.filter(e=>!detected.some(d=>d.id===e.id)),...detected];
       for(const recovery of pending?planQuotaFailure(snapshot,target,origin,merged,now):[]){

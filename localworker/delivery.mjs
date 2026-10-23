@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { jobDir, getState, readJson, readDelivery, atomicJson, atomicText } from "./job-store.mjs";
 import { withJobControl } from "./job-control.mjs";
-import { observeContinuityU6C, latestContinuityTurnU6C, callbackReasonU6C, captureContinuityU6C } from "./continuity.mjs";
+import { observeContinuityU6C, latestContinuityTurnU6C, callbackReasonU6C, captureContinuityU6C, quotaSuspensionC9R } from "./continuity.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 export async function codexCommand() {
@@ -85,6 +85,11 @@ export async function deliver(id) {
   return withJobControl(id, () => deliverLocked(id));
 }
 
+// Somente a recusa causal antiga comprovadamente anterior ao envio é elegível.
+// Pausa explícita, legado sem causa, recibo aceito/ambíguo nunca são rearmados.
+export const causalDeliveryCandidateC9R = value => value?.status === "PAUSED_USER" &&
+  value.not_sent === true && value.reason === "ORIGIN_TURN_STOPPED";
+
 async function deliverLocked(id) {
   const dir = jobDir(id);
   const state = await getState(id);
@@ -102,8 +107,18 @@ async function deliverLocked(id) {
     await lock.writeFile(JSON.stringify({ pid: process.pid }));
     await lock.sync();
     const current = await readDelivery(id);
-    if (current.status !== "PENDING") return current;
+    if (current.status !== "PENDING" && !causalDeliveryCandidateC9R(current)) return current;
     const request = await readJson(path.join(dir, "request.json"));
+    if (causalDeliveryCandidateC9R(current)) {
+      // Não confundir uma falha de quota com autorização nova. Conferir o vínculo
+      // original ainda vivo e o último turno, sem copiar permissões de outro chat.
+      if (current.thread_id !== request.thread_id) return current;
+      const turn = latestContinuityTurnU6C(codexHomeU6C(), request.thread_id, request.repoPath);
+      if (!quotaSuspensionC9R(turn)) return current;
+      try { await assertCallbackU6C(request,id); } catch { return current; }
+      await atomicJson(deliveryFile, { status:"PENDING", recovered_from:"CAUSAL_QUOTA_MISCLASSIFICATION",
+        recovered_at:new Date().toISOString(), prior_delivery:current });
+    }
     if (!/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(request.thread_id ?? "")) {
       await atomicText(path.join(dir, "delivery-error.txt"), "thread_id ausente ou inválido; retomada na UI indisponível.\n");
       await atomicJson(deliveryFile, { status: "BLOCKED_NO_THREAD", reason: "thread_id ausente ou inválido" });

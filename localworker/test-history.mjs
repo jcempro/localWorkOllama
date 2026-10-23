@@ -56,10 +56,13 @@ try {
   const paused = await add(100,"FAILED","PAUSED_USER");
   await store.atomicJson(path.join(store.jobDir(paused),"delivery.json"),{status:"PAUSED_USER",not_sent:true});
   const uncertainPaused = await add(100,"FAILED","PAUSED_USER");
+  const causalPaused = await add(100,"FAILED","PAUSED_USER");
+  await store.atomicJson(path.join(store.jobDir(causalPaused),"delivery.json"),{status:"PAUSED_USER",not_sent:true,reason:"ORIGIN_TURN_STOPPED"});
   const pausedRetention=await store.pruneJobHistory({force:true,now});
   assert.equal(pausedRetention.removed_count,1);
   assert.equal(await fs.stat(store.jobDir(paused)).then(()=>true).catch(()=>false),false);
   assert.equal(await fs.stat(store.jobDir(uncertainPaused)).then(()=>true).catch(()=>false),true);
+  assert.equal(await fs.stat(store.jobDir(causalPaused)).then(()=>true).catch(()=>false),true);
   console.log(JSON.stringify({ status: "ok", removed: first.removed_count + recovered.removed_count + pausedRetention.removed_count,
     retained: (await store.listJobs()).length,
     active_preserved: true, ambiguous_preserved: true, nonregular_preserved: true, stale_lock_recovered: true,

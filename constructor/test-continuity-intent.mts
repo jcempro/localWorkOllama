@@ -7,7 +7,7 @@ import {randomUUID} from 'node:crypto';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {DatabaseSync} from 'node:sqlite';
-import {sessionReasonU6C,callbackReasonU6C} from '../localworker/continuity.mts';
+import {sessionReasonU6C,callbackReasonU6C,quotaSuspensionC9R} from '../localworker/continuity.mts';
 import {advance,digest} from '../supervisor/core.mts';
 const exec=promisify(execFile), base=path.resolve('constructor/audit-private'),root=path.join(base,`continuity-${randomUUID()}`);
 const snapshot={schema:1,bootId:'boot-a',desktopInstance:'app-a'},lease={...snapshot,originTurnId:'turn-a'};
@@ -16,6 +16,15 @@ for(const [value,reason] of [[{...snapshot,bootId:'boot-b'},'OS_SESSION_CHANGED'
 assert.equal(callbackReasonU6C(lease,snapshot,{id:'turn-a',status:'completed'}),null);
 assert.equal(callbackReasonU6C(lease,snapshot,{id:'turn-b',status:'completed'}),'NEWER_TURN_SUPERSEDES_CALLBACK');
 assert.equal(callbackReasonU6C(lease,snapshot,{id:'turn-a',status:'interrupted'}),'ORIGIN_TURN_STOPPED');
+const causal={id:'turn-a',status:'failed',error:{codexErrorInfo:'usageLimitExceeded'}};
+assert.equal(quotaSuspensionC9R(causal),true);
+assert.equal(callbackReasonU6C(lease,snapshot,causal),null);
+for(const turn of [{...causal,status:'interrupted'},{...causal,error:{message:'usageLimitExceeded'}},{...causal,error:{codexErrorInfo:'other'}}]){
+  assert.equal(quotaSuspensionC9R(turn),false);
+  assert.equal(callbackReasonU6C(lease,snapshot,turn),'ORIGIN_TURN_STOPPED');
+}
+assert.equal(callbackReasonU6C(lease,{...snapshot,bootId:'boot-b'},causal),'OS_SESSION_CHANGED');
+assert.equal(callbackReasonU6C(lease,{...snapshot,desktopInstance:null},causal),'DESKTOP_CLOSED_OR_UNAVAILABLE');
 assert.equal(sessionReasonU6C(null,snapshot),'AUTHORIZATION_MISSING');
 const event={status:'SCHEDULED',dueAt:0,attempts:0,target:{},window:{test:true}};
 for(const reason of ['EXPLICIT_PAUSE','OS_SESSION_CHANGED','DESKTOP_CLOSED_OR_UNAVAILABLE','DESKTOP_INSTANCE_CHANGED','EVENT_AUTHORIZATION_EXPIRED','ORIGIN_TURN_FINISHED_OR_STOPPED','NEWER_TURN_SUPERSEDES_EVENT']){
@@ -32,7 +41,7 @@ let history:DatabaseSync|undefined;
 try{
   for(const name of ['delivery.mjs','job-store.mjs','job-control.mjs'])await fs.copyFile(path.join('localworker',name),path.join(root,name));
   const source=pathToFileURL(path.resolve('localworker/continuity.mjs')).href;
-  await fs.writeFile(path.join(root,'continuity.mjs'),`import fs from 'node:fs/promises';import {fileURLToPath}from'node:url';import path from'node:path';import{callbackReasonU6C,latestContinuityTurnU6C}from${JSON.stringify(source)};export{callbackReasonU6C,latestContinuityTurnU6C};export{sessionReasonU6C}from${JSON.stringify(source)};const root=path.dirname(fileURLToPath(import.meta.url));let calls=0;export async function observeContinuityU6C(){const s=JSON.parse(await fs.readFile(path.join(root,'sensor.json')));return s.closeOnSecond&&++calls>=2?{...s,desktopInstance:null}:s}export async function captureContinuityU6C(r,h){return{...await observeContinuityU6C(),originTurnId:latestContinuityTurnU6C(h,r.thread_id,r.repoPath)?.id}}`);
+  await fs.writeFile(path.join(root,'continuity.mjs'),`import fs from 'node:fs/promises';import {fileURLToPath}from'node:url';import path from'node:path';import{callbackReasonU6C,latestContinuityTurnU6C}from${JSON.stringify(source)};export{callbackReasonU6C,latestContinuityTurnU6C};export{sessionReasonU6C,quotaSuspensionC9R}from${JSON.stringify(source)};const root=path.dirname(fileURLToPath(import.meta.url));let calls=0;export async function observeContinuityU6C(){const s=JSON.parse(await fs.readFile(path.join(root,'sensor.json')));return s.closeOnSecond&&++calls>=2?{...s,desktopInstance:null}:s}export async function captureContinuityU6C(r,h){return{...await observeContinuityU6C(),originTurnId:latestContinuityTurnU6C(h,r.thread_id,r.repoPath)?.id}}`);
   await fs.writeFile(path.join(root,'fake-cli.mjs'),`import fs from'node:fs';fs.appendFileSync(process.env.CONTINUITY_TEST_QUEUE_U6C,'queued\\n');console.log('fake receipt');`);
   await fs.writeFile(path.join(root,'invoke.mjs'),`import{deliver,resumeDelivery}from'./delivery.mjs';console.log(JSON.stringify(await(process.argv[3]==='resume'?resumeDelivery:deliver)(process.argv[2])));`);
   await fs.writeFile(path.join(root,'config.json'),JSON.stringify({codex_command:process.execPath}));
@@ -71,6 +80,39 @@ try{
   const paused=await make(null);assert.equal((await invoke(paused)).status,'PAUSED_USER');assert.equal((await invoke(paused,'resume')).status,'QUEUED_TO_CHAT');
   const cancelled=await make(lease,'CANCELLED');assert.equal((await invoke(cancelled)).status,'SUPPRESSED_CANCELLED');
   assert.equal((await fs.readFile(path.join(root,'queue.log'),'utf8')).trim().split('\n').length,2);
+  // C9R: actual delivery processes, SQLite history and persistent receipts; no inference.
+  history.prepare('UPDATE thread_turns SET status=?,error_json=?').run('failed',JSON.stringify({codexErrorInfo:'usageLimitExceeded'}));
+  const causalJob=await make();
+  const concurrent=await Promise.all([invoke(causalJob),invoke(causalJob),invoke(causalJob)]);
+  assert.ok(concurrent.every(v=>v.status==='QUEUED_TO_CHAT'));
+  let queueLines=(await fs.readFile(path.join(root,'queue.log'),'utf8')).trim().split('\n').length;
+  assert.equal(queueLines,3); // Exactly one additional callback despite three callers.
+  const legacy=await make();
+  const legacyReceipt={status:'PAUSED_USER',not_sent:true,reason:'ORIGIN_TURN_STOPPED',thread_id:thread};
+  await fs.writeFile(path.join(root,'jobs',legacy,'delivery.json'),JSON.stringify(legacyReceipt));
+  assert.equal((await invoke(legacy)).status,'QUEUED_TO_CHAT');
+  assert.equal((await invoke(legacy)).status,'QUEUED_TO_CHAT');
+  queueLines=(await fs.readFile(path.join(root,'queue.log'),'utf8')).trim().split('\n').length;
+  assert.equal(queueLines,4);
+  for(const [receipt,sensor] of [
+    [{...legacyReceipt,reason:'EXPLICIT_PAUSE'},snapshot],
+    [{...legacyReceipt,not_sent:false},snapshot],
+    [{...legacyReceipt,thread_id:randomUUID()},snapshot],
+    [legacyReceipt,{...snapshot,bootId:'boot-b'}],
+    [legacyReceipt,{...snapshot,desktopInstance:null}],
+    [legacyReceipt,{...snapshot,desktopInstance:'app-b'}],
+    [{status:'AMBIGUOUS'},snapshot],
+    [{status:'QUEUED_TO_CHAT'},snapshot],
+  ]){
+    const blocked=await make();
+    await fs.writeFile(path.join(root,'sensor.json'),JSON.stringify(sensor));
+    await fs.writeFile(path.join(root,'jobs',blocked,'delivery.json'),JSON.stringify(receipt));
+    assert.equal((await invoke(blocked)).status,receipt.status);
+  }
+  assert.equal((await fs.readFile(path.join(root,'queue.log'),'utf8')).trim().split('\n').length,4);
+  await fs.writeFile(path.join(root,'sensor.json'),JSON.stringify(snapshot));
+  assert.equal((await invoke(await make(lease,'CANCELLED'))).status,'SUPPRESSED_CANCELLED');
+  history.prepare('UPDATE thread_turns SET status=?,error_json=NULL').run('completed');
   // Full SR runtime, isolated RPC/sensor/platform: boot/close paths must not connect or launch.
   history.exec('ALTER TABLE thread_turns ADD COLUMN completed_at INTEGER');
   const sr=path.join(root,'supervisor');await fs.mkdir(sr);

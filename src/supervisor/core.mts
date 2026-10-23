@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { quotaSuspensionC9R } from './continuity.mts';
 
 export const POLICY_S8R = Object.freeze({ threshold: 90, delayMs: 60_000, retryMs: 30_000, maxRetryMs: 900_000 });
 export const digest = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -65,7 +66,7 @@ export function detect(snapshot: any, target: any, now: number) {
 const userText = (item: any) => (item.content ?? []).map((c: any) => c.type === 'text' ? c.text : '').join('');
 // Catch-up de instalacao/reparo apos o incidente. Nunca inferir cota de texto livre.
 export function planQuotaFailure(snapshot: any,target: any,turn: any,existing: any[],now: number) {
-  if(turn?.status!=='failed'||turn.error?.codexErrorInfo!=='usageLimitExceeded'||!Number.isFinite(turn.completedAt))return [];
+  if(!quotaSuspensionC9R(turn)||!Number.isFinite(turn.completedAt))return [];
   if(existing.some(e=>e.interruptedTurnId===turn.id))return [];
   const available=windows(snapshot);if(!available.length)throw new Error('QUOTA_UNAVAILABLE');
   const limited=available.filter(w=>w.usedPercent>=POLICY_S8R.threshold);

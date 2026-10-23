@@ -21,6 +21,8 @@ $ConfigU6C = Join-Path $DestinoU6C 'config.json'
 
 ## Contrato SR-001, versão 1
 
+C9R conserva a autorização diante de falha estruturada de quota (`failed` + `error.codexErrorInfo=usageLimitExceeded`), usando a mesma classificação do callback. Isso não vale para `interrupted`, erros genéricos/texto livre, cancelamento ou sessão/instância diferente. O status `PAUSED_USER` de pausa explícita permanece persistente; instalar/atualizar não executa Resume. Recebimento e resposta real continuam obrigatórios para COMPLETED. A cobertura continua por conversa instalada/autorizada, não global por inferência.
+
 O CLI configurado é preservado enquanto existir como arquivo executável regular. Quando uma atualização remove seu diretório versionado, `rpc.mts` reutiliza `codexCommand` do runtime instalado, com descoberta por configuração, PATH e instalação Desktop; se o Worker estiver ausente, usa a cópia íntegra de recuperação. O caminho resolvido vale para todas as operações daquela passagem, inclusive MCP e envio. O instalador aplica a mesma descoberta antes de validar paths. Ausência de alternativa válida gera `CODEX_CLI_UNAVAILABLE`, sem novo envio; teste dirigido: `node supervisor/test-rpc.mts`.
 
 Cobertura é por conversa instalada, não por presença do Worker nem por conta. Repetir `install.ps1 -ThreadId <ID confirmado> -RepoPath <raiz confirmada>` registra outra conversa de forma independente, com diretório, mutex e tarefa próprios. Instalar uma conversa não monitora automaticamente as demais. O instalador imprime explicitamente o ID coberto; uma instalação só deve ser apresentada como global se houver mecanismo global efetivamente instalado.

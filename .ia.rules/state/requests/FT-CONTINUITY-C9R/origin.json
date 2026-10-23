@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "origin": "human-current-chat",
+  "thread_id": "01a0f301-afa6-7d61-8949-1d35b712f5ca",
+  "date": "2026-10-22",
+  "sha256": "dd55ebb089232857c81d805ffe45bc159cdf2c3fb349824d0d618c3ce046daca",
+  "ft": "FT-CONTINUITY-C9R",
+  "rcf": "RCF.md",
+  "plan": "constructor/causal-resume-plan.md",
+  "state": "IMPLEMENTED_PENDING_INSTALLATION"
+}

@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { listJobs, jobDir, getState, setState, alive, readJson, readDelivery, atomicText, atomicJson, pruneJobHistory } from "./job-store.mjs";
-import { deliver, notify } from "./delivery.mjs";
+import { deliver, notify, causalDeliveryCandidateC9R } from "./delivery.mjs";
 import { ensureMonitor } from "./monitor.mjs";
 import { ensureMcpRegistration } from "./mcp-config.mjs";
 
@@ -75,7 +75,7 @@ export async function reconcileJob(id) {
       await notify("localWorker: entrega ambígua", `Job ${id}: inspecione o chat antes de qualquer nova tentativa.`, "error");
       return { status: "AMBIGUOUS", reconciled: true };
     }
-    if (delivery.status !== "PENDING") return { status: delivery.status, reconciled: false };
+    if (delivery.status !== "PENDING" && !causalDeliveryCandidateC9R(delivery)) return { status: delivery.status, reconciled: false };
     const lock = path.join(dir, "delivery.lock");
     try {
       const held = await readJson(lock);

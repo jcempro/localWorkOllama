@@ -6,7 +6,8 @@ import { randomUUID, createHash } from "node:crypto";
 export const ROOT = path.dirname(fileURLToPath(import.meta.url));
 export const JOBS = path.join(ROOT, "jobs");
 export const TERMINAL = new Set(["COMPLETED", "FAILED", "CANCELLED"]);
-const resolvedForRetentionU6C = delivery => delivery.status === "QUEUED_TO_CHAT" || delivery.status === "PAUSED_USER" && delivery.not_sent === true;
+const resolvedForRetentionU6C = delivery => delivery.status === "QUEUED_TO_CHAT" || delivery.status === "PAUSED_USER" &&
+  delivery.not_sent === true && delivery.reason !== "ORIGIN_TURN_STOPPED"; // C9R: recusa causal antiga ainda pode estar pendente.
 const JOB_ID_J4R = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 const HISTORY_DAYS_J4R = Number(process.env.LOCAL_WORKER_HISTORY_DAYS ?? 90);
 const HISTORY_MAX_JOBS_J4R = Number(process.env.LOCAL_WORKER_HISTORY_MAX_JOBS ?? 500);
