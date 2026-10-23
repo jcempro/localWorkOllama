@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 63 deles; não substitui o aceite dos outros 4.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 64 deles; não substitui o aceite dos outros 3.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os63 aceites/correções semânticos já registrados neste documento nem aceita os4 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os64 aceites/correções semânticos já registrados neste documento nem aceita os3 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -379,3 +379,15 @@ Evidências concretas: -- Evitar aglutinações e os cabeçalhos -###6.3/-###6.4
 A linha menos isolada no hunk -411,7 +277,6 representa uma linha vazia, não um parágrafo de conteúdo. Números dos headers não são linhas do artefato de evidência nem extensão de uma seção. Parte-03.txt é a origem versionada em1826ada374, extraída de evidence.jsonl de0ceda154; não inferir commit de todo evidence.jsonl. Resposta atual também excedeu a concisão pedida. QUEUED_TO_CHAT só fila; reticências em NEEDS_SUPERVISOR não constituem pedido concreto de acesso.
 
 Causa demonstrável do desvio: inferência do parecer sem correlacionar prefixo e cobertura truncada, acompanhada de cópia de atribuições antigas. Não há prova de causa física/modelo interno ou permissão faltante. Correção de estratégia geral: reutilizar D9F já testado, com entrada selada e command_sequence sem inferência, para os headers/contagens/completude visíveis. Prefixo sem header e região com hunks separados sem recompor conteúdo omitido; preservar dados e resultados anteriores. Nova unidade27b materialmente diferente, não replay. Aceite deb212 permanece pendente até revisão do recibo mecânico.
+
+### Segmento27b — extração determinística e revisão corrigida
+
+Job343255f1-67fc-4d3f-939c-7e2a04ea81c2: local_result uma vez; COMPLETED, prefix_facts/hunks_facts exit0 por command_sequence, sem inferência/mutação/commit. InputSHA2568a476ab522240d7c7366dd1d6690c3283ad52fae040f7c090ead8edd21be0463 coincide com preflight e arquivo preservado. PrefixSHAf49deef6cfc816274f8a82e487dd34a65e722ff075d060829850f5af0a1e4e81 e hunksSHA9f6d307134807fcdeb5b575be655168f51fa90dbf1f130537c7014a400e40dba também conferidos. A concatenação dos dois recortes é idêntica ao fragmento original; nenhum conteúdo omitido foi completado.
+
+| ID | Revisão fundamentada e limite |
+| --- | --- |
+| b212e6dd | Prefixo sem header: NO_HUNK_HEADER, sem intervalo/completude de hunk inferíveis. Trechos removidos visíveis abrangem fim6.2,6.3 Bíblia e início6.4 Blockquotes; prefixos menos são exclusão, não contexto. Primeiro hunk visível old411/count7,new277/count6: seis linhas de contexto e uma linha vazia removida, completo. Segundo old540/count7,new405/count7: quatro linhas antigas/três novas observadas, três contextos e uma linha removida, incompleto. |
+
+Parecer original revisto com correções, sem aceitar a auditoria27 rejeitada. Parágrafos Essa vitória e Os anjos com prefixo espaço permanecem contexto; não são conclusões de6.2 excluídas. No último hunk, contraparte adicionada não consta deste fragmento truncado; removed isolado não comprova exclusão semântica integral do parágrafo. Par completo do hunk5 já aceito no segmento25 mostra troca de delimitador; não refazer essa comparação. Faixas de headers não são posições no evidence.jsonl ou tamanho de seção. Campos whole_file_sizes e fragment_coverage_percent permanecem null, hunk_counts_complete=false para a região de hunks; indisponibilidade do prefixo não significa ausência de mudança.
+
+Origem literal preserva parte-03.txt versionada em1826ada374 e derivada da evidência de0ceda154, sem atribuir commit de todo evidence.jsonl. Base fornecida=não no recibo indica ausência do campo provided_evidence; os comandos leram JSON persistido, embora Leituras=[] se refira à ferramenta read_file. Git determinístico main...origin/main limpo em23/10/2026 08:05:58UTC pertence ao executor desta auditoria; não prova autoria/push/limpeza históricos do blog. QUEUED_TO_CHAT só fila. Recuperação do método concluída para esta unidade com reutilização de D9F testado; não demonstra precisão semântica geral do modelo, aceite editorial global ou restauração do artigo. Acumulado64 revisados/3 pendentes nesta captura.
