@@ -7,5 +7,10 @@
   "ft": "FT-CONTINUITY-C9R",
   "rcf": "RCF.md",
   "plan": "constructor/causal-resume-plan.md",
-  "state": "IMPLEMENTED_PENDING_INSTALLATION"
+  "state": "IMPLEMENTED_TESTED_INSTALLED",
+  "pending_real_incidents": [
+    "account-exhaustion-restoration",
+    "physical-reboot"
+  ],
+  "validation": "constructor/causal-resume-validation.md"
 }
