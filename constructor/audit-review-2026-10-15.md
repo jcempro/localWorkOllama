@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 66 deles; não substitui o aceite do último.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa os 67 registros incrementais desta captura, com aceites parciais e correções discriminados; não equivale ao aceite funcional global dos trabalhos históricos.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os66 aceites/correções semânticos já registrados neste documento nem aceita o último restante. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção factual não substitui as revisões e correções semânticas dos67 registros discriminadas neste documento. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -419,3 +419,17 @@ Corrigir header.image/header.image_description: payloads image e image_descripti
 O inventário de placeholders também omitiu <adicionar foot notes>,presente após a passagem sobre repreensão pública de Pedro. Outros cinco identificadores preservados: <adiciona foot note de referencia>,<adicionar footnote de referenciar>,<adicionar footnote refeencia>,<adicionar foot note de João 16:8-1>,<recitar a referncia anterior>. São pendências editoriais,não referências verificadas ou autorização para completá-las por memória. Resumo de argumentos não comprova exatidão das citações ou validação externa.
 
 O auditor atribuiu ao parecer antigo as regras Origens/digests não podem trocar de artefato,Header não prova autoria/push/limpeza e QUEUED_TO_CHAT só fila;elas pertencem às instruções/contexto desta auditoria,não ao parecer. Ausência dessas frases no diff não as refuta. HeaderGit não é header de diff. Origem literal: complemento02 versionado em4d7692d2f6,delta integral recuperado do Git;AGENTS/agents.local fornecidos antes do fragmento não são arquivos alterados nem primeiro hunk desses arquivos. Parte2/3 não prova por si só linha cortada ou hunk incompleto em contagens;apenas cobertura parcial. Nenhuma mutação/pesquisa/artigo refeito. Parecer original permanece revisto com essas correções e limitações;retorno atual não prova precisão semântica geral. Resposta excedeu180 palavras;sem nova inferência de formatação. QUEUED_TO_CHAT só fila. Acumulado66 revisados/1 pendente nesta captura.
+
+## Segmento30 — complemento03 e fechamento desta captura
+
+Auditor6027f41c-3d01-47cc-aa87-ffd2cb0bd3d3: local_result uma vez; runtime COMPLETED/error_kind=null,sem ferramentas/escrita/commit. Git determinístico main...origin/main limpo em23/10/2026 08:37:13UTC é do auditor. Request/result originais SHA2564c10c0ccea1a8ab0a91ee5bb47deb7a66cf7e6389f6c4d544a7a7cc44c92f0eb e ac1790fab0e21ab272bbeaa72c493e9546cd1ddcba568ba23a5d332d0f562544 conferidos contra captura antes da delegação. Evidência30 continha apenas dados,com regras fora na tarefa;isso não bastou para impedir inversão entre adição e contexto. Revisão dirigida corrige fatos,sem alegar solução geral da precisão semântica.
+
+| ID | Revisão fundamentada e limite |
+| --- | --- |
+| 48b4c5ac | Complemento3/3:quatro linhas adicionadas são dois parágrafos e duas linhas vazias. Primeiro parágrafo contém está escrito,citação atribuída a autora americana não nomeada,duas marcações footnote de Testemunhos para a igreja/p23 e ressalva de não reivindicar revelação profética. Segundo contém autoexame,distinção entre discernir/repreender e condenar,e dois pedidos adicionar footnote. Três contextos são parágrafo sobre santificação/Ap14:12,linha vazia e relato de18 anos/Pirassununga/rótulos teológicos. Zero remoções. |
+
+Corrigir a inversão do auditor: a citação da autora americana é adição;os argumentos sobre santificação,perfeccionismo/pós-lapsarianismo e experiência local são contexto,não novas linhas. Quatro linhas adicionadas não são quatro unidades temáticas nem quatro footnotes implementadas. Pedidos adicionar footnote permanecem placeholders;marcações footnote existentes no texto não comprovam fontes conferidas,renderização ou integração. Alegações bíblicas/doutrinais são conteúdo inventariado,não fatos externos validados. Não acrescentar referências por memória nem inferir identidade da autora.
+
+O parecer original inventariou tópicos do fragmento,mas não separou suficientemente os prefixos;aceite fica corrigido por essa classificação literal. A expressão Voltarei a falar sobre isso mais adiante é remissão textual,não prova por si só de um placeholder técnico ou trecho faltante. O complemento pode começar em linha cortada conforme descritor;isso não comprova falta em cada linha nem alteração de governança. AGENTS/agents.local anteriores ao fragmento não são alvos do diff.
+
+Origem literal:complemento03 versionado em4d7692d2f6,extraído do delta-integral.patch sem truncamento,normalização CRLF→LF. O identificador4d7692d2f6 é commit,não linha do patch ou digest de conteúdo do fragmento. Header histórico dev...origin/dev [ahead1] não é o Git do auditor e não prova autoria/push/limpeza. QUEUED_TO_CHAT só fila. Resposta excedeu150 palavras;sem nova inferência para reformatar. Nenhum artigo foi refeito ou restaurado. Acumulado67 revisados/0 pendentes nesta captura de15/10;capturas posteriores e aceite global permanecem separados.
