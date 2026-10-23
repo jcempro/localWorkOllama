@@ -93,6 +93,8 @@ O runtime instalado inclui `progress-guard.mjs`: repetições determinísticas s
 
 Na atualização pelo instalador do supervisor (`src/supervisor/install.ps1`), `-WaitForIdle` permite aguardar o mutex ocupado sem interromper seu titular; `-IdleWaitSeconds` configura essa espera técnica (padrão180s, entre1 e3600). Sem a opção, a recusa continua imediata. Se o prazo terminar, a instalação não assume aquisição nem sucesso. Essa espera não limita a duração do Worker, não reinicia o runtime e não autoriza retomada de conversa.
 
+O instalador do supervisor carrega explicitamente `Microsoft.PowerShell.Utility` do `$PSHOME` do processo antes das verificações SHA-256. Assim, não depende da autodescoberta de `Get-FileHash` por um `PSModulePath` herdado de outra edição do PowerShell; nenhum perfil ou caminho global de módulos é alterado. Módulo nativo ausente ou inválido interrompe antes dos efeitos de instalação, com erro explícito.
+
 ## Manutenção do próprio Worker
 
 O modo híbrido é exclusivo do próprio produto; outros repositórios conservam seu regime. O supervisor avalia risco e decide: C≤5 usa o mesmo Worker como júnior; 5<C≤7 permite escolha fundamentada entre supervisor exclusivo, júnior ou estagiário; C>7 exige supervisor exclusivo. Scripts/Skills inequivocamente triviais, determinísticos e seguros, com procedência, imutabilidade/integridade e proteção previamente comprovadas, são preferidos em qualquer criticidade; acima de7 são executados pelo supervisor. Nome/hash isolado não comprova segurança. Incerteza material impede delegação até esclarecimento.
@@ -740,7 +742,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/run.mts` | `ef7e9567e2752fd367f9409d98dbdfdbe1598a401fe5ad85fa29d7a0808cd92b` |
 | `src/supervisor/run.mjs` | `31e04f1acce617c42a76d81c350e3e3edfe2ef6e49a8f890ca44798846c1afee` |
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
-| `src/supervisor/install.ps1` | `ffd8d6d0c8e822efaca4964040cbb4db04aa33ebb9f8415c20b70a25cfc0900d` |
+| `src/supervisor/install.ps1` | `72c4a1599bdfecb98ac88d00eefdd353dd018310a6a65c5c8d1342152a9f6585` |
 | `src/supervisor/README.md` | `ee132ea9b60d76ac7462c8a14560320a3c71d35ca9533a649f91fc39ecf6d272` |
 | `src/localworker/AGENTS.md` | `a5eabadb61c8c0f561b4bdd926cf75bf6b51e3d6fb77350312ac6d75856fe80f` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |

@@ -1,5 +1,8 @@
 param([Parameter(Mandatory=$true)][string]$ProjectRoot,[switch]$VerifyOnly,[string]$BeforeConfigBackup,[switch]$SkipWorkerInstall,[string[]]$SupervisorThreadIds=@())
 $ErrorActionPreference='Stop'
+# Importacao explicita evita autodescoberta ambigua entre Windows PowerShell e pwsh.
+Import-Module ([IO.Path]::Combine($PSHOME,'Modules/Microsoft.PowerShell.Utility/Microsoft.PowerShell.Utility.psd1')) -ErrorAction Stop
+$null=Get-Command Microsoft.PowerShell.Utility\Get-FileHash -ErrorAction Stop
 . (Join-Path $PSScriptRoot 'worker-config-invariant.ps1')
 . (Join-Path $PSScriptRoot 'native-installer-result.ps1')
 . (Join-Path $PSScriptRoot 'supervisor-installation-tasks.ps1')

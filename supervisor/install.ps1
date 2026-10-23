@@ -12,6 +12,9 @@ param(
   [ValidateRange(1,3600)][int]$IdleWaitSeconds=180
 )
 $ErrorActionPreference='Stop'
+# Use o modulo do processo atual, sem depender do PSModulePath herdado de outro host.
+Import-Module ([IO.Path]::Combine($PSHOME,'Modules/Microsoft.PowerShell.Utility/Microsoft.PowerShell.Utility.psd1')) -ErrorAction Stop
+$null=Get-Command Microsoft.PowerShell.Utility\Get-FileHash -ErrorAction Stop
 function Enter-InstallationMutexI6W {
   param([Parameter(Mandatory=$true)][Threading.Mutex]$Mutex,[switch]$WaitForIdle,[ValidateRange(1,3600)][int]$IdleWaitSeconds=180)
   $waitMillisecondsI6W=if($WaitForIdle){$IdleWaitSeconds*1000}else{0}
