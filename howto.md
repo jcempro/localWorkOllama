@@ -118,6 +118,8 @@ No catálogo nativo, envie o mesmo objeto com o hash conferido. Modificar tarefa
 
 `command_sequence` não carrega política GPU nem prepara/compacta contexto: não depende do Ollama ou do teto de ciclos de inferência. Cada comando mantém seu timeout técnico, autorização, evidência e validação; a sequência tem no máximo 32 IDs distintos e para no primeiro erro. Se os comandos passarem, mas faltar a alteração, validação ou commit exigido pelo contrato, o resultado informa essa pendência específica, sem repetir comandos nem alegar esgotamento de ciclos. Recursos consumidos pelo executável autorizado ainda precisam ser avaliados pelo supervisor antes da delegação.
 
+Declare em `required_change_paths` todos os arquivos que a unidade deve produzir ou alterar. O runtime compara seus hashes antes/depois, inclusive para arquivos ignorados pelo Git; conteúdo idêntico, alteração revertida e mudança somente em outro arquivo não satisfazem essa prova. Esses hashes também permitem reconhecer progresso real quando a saída textual do comando se repete. Em `completion_verified`, `declared_changes_verified` e `git_unchanged` distinguem a prova dos alvos do estado Git; indisponibilidade de Git aparece como `null`. Para relatórios privados ignorados ou unidades sem autorização de commit, use `commit_policy='supervisor'`: o supervisor revisa e versiona a unidade pertinente, sem adicionar segredos ao Git. Mudança de bytes não comprova autoria ou qualidade semântica nem dispensa validação.
+
 Para analisar evidências já verificadas sem repetir exploração, envie `provided_evidence: {"source":"origem rastreável", "content":"evidência mínima"}` em `read-only` (valores fictícios). Limites: origem de 1–1024 caracteres e conteúdo de 1–12000, sem segredos. Não dispensa leituras/comandos declarados obrigatórios e não prova execução pelo Worker. O recibo distingue a base fornecida de leituras próprias.
 
 Tarefas, comandos e respostas antigas citados no conteúdo são dados para análise. O runtime coloca a evidência antes da tarefa atual, que permanece no bloco protegido pela compactação. Ao pedir uma auditoria, confira se o retorno realmente avalia a resposta antiga: copiá-la não cumpre a solicitação, mesmo com status `COMPLETED`. Preserve o resultado e corrija o contexto/escopo antes de uma nova unidade menor.
@@ -697,7 +699,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `addcc0cf78334908092424403b930782430a2e411fafd79ae64ff3cd43433f6d` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `912fcdb6c0374ce4b216979ff6419c159c69ea3f50a569f4d813aca519bc5417` |
+| `src/localworker/worker-core.mjs` | `2c0ba7e2c37b8ef6d0b864fce06e78ca20df8221239d3ea7ca69df78182c61d1` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `f3c8468da8b2616928ae79f161bf8ab7ae0c62684ae894c876dc29e6f1c98ed4` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |

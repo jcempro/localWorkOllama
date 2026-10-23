@@ -1593,6 +1593,12 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
   const requiredHashes = new Map();
   for (const requiredPath of requiredChangePaths) requiredHashes.set(requiredPath, await fileFingerprint(repo, requiredPath));
   const startingGitFingerprint = expectChanges ? await gitChangeFingerprint(repo) : null;
+  const actionStateFingerprint = async () => {
+    const git = await gitChangeFingerprint(repo);
+    if (!expectChanges || !requiredHashes.size) return git;
+    const targets = await Promise.all([...requiredHashes.keys()].map(async p => [p, await fileFingerprint(repo, p)]));
+    return createHash("sha256").update(JSON.stringify({git, targets})).digest("hex");
+  };
   const unchangedRequiredPaths = async () => {
     const unchanged = [];
     for (const [requiredPath, initialHash] of requiredHashes) {
@@ -1708,9 +1714,10 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
         continue;
       }
       const missingPaths = expectChanges ? await unchangedRequiredPaths() : [];
-      const noNetGitChange = expectChanges && startingGitFingerprint &&
-        await gitChangeFingerprint(repo) === startingGitFingerprint;
-      if (expectChanges && (successfulMutations === 0 || missingPaths.length || noNetGitChange)) {
+      const endingGitFingerprint = expectChanges && startingGitFingerprint ? await gitChangeFingerprint(repo) : null;
+      const noNetGitChange = expectChanges && startingGitFingerprint && endingGitFingerprint === startingGitFingerprint;
+      const declaredChangesVerified = requiredHashes.size > 0 && missingPaths.length === 0;
+      if (expectChanges && (successfulMutations === 0 || missingPaths.length || (noNetGitChange && !declaredChangesVerified))) {
         if (forcedImplementation || commandSequence.length) {
           throw new WorkerIncompleteError(`WORKER_INCOMPLETE: alteração obrigatória não comprovada; caminhos inalterados: ${missingPaths.join(", ") || "nenhum"}; Git sem mudança líquida: ${Boolean(noNetGitChange)}. Última resposta: ${compact(finalText, 3000)}`);
         }
@@ -1745,6 +1752,9 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
 
       await onProgress({phase:"completion_verified",reads:[...completedReads],commands:[...completedCommands],
         evidence_basis:suppliedEvidence ? "supervisor_provided" : "tools",
+        ...(expectChanges ? {declared_changes_verified:declaredChangesVerified,required_change_paths:[...requiredHashes.keys()],
+          git_unchanged:startingGitFingerprint && endingGitFingerprint ? Boolean(noNetGitChange) : null,
+          ...(noNetGitChange && declaredChangesVerified ? {summary:`Alteração líquida por SHA256 nos ${requiredHashes.size} alvos declarados; Git inalterado. Evidência não comprova autoria ou qualidade semântica.`} : {})} : {}),
         mutations:successfulMutations,commits:commitContext.commits,commit_policy:requireCommits?"worker":"supervisor",
         verification:"Evidência operacional; qualidade semântica sujeita ao aceite do supervisor."});
       return compact(finalText, MAX_FINAL_CHARS) + `\n\nEXECUÇÃO COMPROVADA PELO RUNTIME\nBase fornecida pelo supervisor: ${suppliedEvidence ? JSON.stringify(suppliedEvidence.source) : "não"}\nLeituras: ${JSON.stringify([...completedReads])}\nComandos com exit_code=0: ${JSON.stringify([...completedCommands])}\nCommits verificados: ${commitContext.commits}. Qualidade semântica sujeita ao aceite do supervisor.`;
@@ -1767,7 +1777,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
         ? `autorizado:${args.id}`
         : toolName === "run_command" && ["node", "npm"].includes(args.program)
           ? `comando:${JSON.stringify([args.program, args.args])}` : null;
-      const beforeAction = await gitChangeFingerprint(repo);
+      const beforeAction = await actionStateFingerprint();
       const blockedReason = progressGuard.before(toolName, args, beforeAction);
       let actionError = null;
 
@@ -1786,7 +1796,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
         if (blockedReason) throw new ToolRejected(blockedReason);
         const beforeHead = toolName === "run_authorized_command" && requireCommits && expectChanges
           ? (await execFileAsync("git", ["-C", repo, "rev-parse", "HEAD"], {windowsHide:true,timeout:5000})).stdout.trim() : null;
-        const beforeCommand = toolName === "run_authorized_command" && expectChanges ? await gitChangeFingerprint(repo) : null;
+        const beforeCommand = toolName === "run_authorized_command" && expectChanges ? beforeAction : null;
         if (toolName === "context_recall") {
           result = await contextManager.recall(args.checkpoint_id, args.entry_index, args.char_offset ?? 0);
         } else if (toolName === "delegate_readonly_subagent") {
@@ -1813,7 +1823,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
         }
 
         toolExecutions++;
-        const afterCommand = beforeCommand ? await gitChangeFingerprint(repo) : null;
+        const afterCommand = beforeCommand ? await actionStateFingerprint() : null;
         if (new Set(["write_file", "edit_file", "move_file", "delete_file"]).has(toolName) ||
             (beforeCommand && afterCommand && afterCommand !== beforeCommand)) successfulMutations++;
         if (["write_file", "edit_file", "delete_file"].includes(toolName) && typeof args.path === "string") commitContext.touched.add(ownedPath(args.path));
@@ -1834,7 +1844,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
         if (error?.code === "ENOENT" && typeof args.path === "string") result += await missingPathHint(repo,args.path);
         result += ` Classe: ${failureClassP6R(error, outcome === "rejected")}. Não repita sem mudança verificável; investigue a causa com ferramentas de leitura, corrija a pré-condição ou escolha alternativa autorizada. Sem capacidade suficiente, informe NEEDS_SUPERVISOR com o mecanismo/acesso exato.`;
       }
-      const afterAction = await gitChangeFingerprint(repo);
+      const afterAction = await actionStateFingerprint();
       if (contextDirectory) {
         // Evidência operacional privada do job, nunca chain-of-thought nem payload do monitor.
         const evidence = JSON.stringify({at:new Date().toISOString(),step:step+1,tool:toolName,args,
