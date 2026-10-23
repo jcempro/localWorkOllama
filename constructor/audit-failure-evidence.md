@@ -15,3 +15,11 @@ Validação: `node --experimental-strip-types --test constructor/audit-failure-e
 Job625696e0-715b-4044-84ec-4aa405942f2c: resultado obtido uma vez, comando `collect_failures` exit0, stderr vazio, zero chamadas de inferência. Vínculo dos189 perfis conferido;46 registros `FAILED` projetados, todos `NOT_ASSESSED`. SHA256 do arquivo privado `failures.json`: `97b40188121c2267e155d253879f43ba4ec9be6e7d71f9cce9f0ccb170c00a58`, conferido pelo supervisor. Hashes de entrada correspondem aos selados no pedido. Não houve implementação exigida nem commit do Worker.
 
 Git determinístico do job em23/10/2026 às12:49:02 UTC: `main...origin/main` limpo. Isso corresponde à coleta privada ignorada; não substitui os estados históricos dos jobs coletados. `QUEUED_TO_CHAT` comprova enfileiramento; o presente checkpoint registra a consulta/revisão efetiva.
+
+## Projeção dos registros concluídos
+
+`collectCompletionEvidenceF8E(captureText, profilesText)` reutiliza o mesmo núcleo, com seleção separada de `COMPLETED`, schema `audit-completion-evidence/v1` e contador `completed_jobs`. A API anterior continua selecionando somente falhas, com o mesmo schema, contador e metadados; nenhum dado antigo é convertido ou regravado.
+
+A nova projeção preserva também eventos `completion_blocked` e `completion_verified`, com linhas, leituras, comandos, mutações, commits, política e ressalva de verificação operacional. Bloqueio anterior não significa pendência final quando há conclusão posterior. Resultados textuais continuam sujeitos aos recortes E6T e a truncamentos anteriores da captura; `NOT_ASSESSED` permanece para qualidade semântica.
+
+Validação da extensão: a mesma suíte passou com nove testes, incluindo o novo caso de bloqueio anterior/conclusão posterior, preservação de recibo, seleção isolada e compatibilidade da API antiga. A execução sobre os142 registros concluídos do incremento é unidade posterior; não inferir seu aceite por essa contagem.

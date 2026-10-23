@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {createHash} from 'node:crypto';
-import {collectFailureEvidenceF8E} from './audit-failure-evidence.mts';
+import {collectFailureEvidenceF8E, collectCompletionEvidenceF8E} from './audit-failure-evidence.mts';
 
 const A = '11111111-1111-4111-8111-111111111111';
 const B = '22222222-2222-4222-8222-222222222222';
@@ -45,4 +45,27 @@ test('entradas malformadas e requisitos não textuais são recusados', () => {
 	assert.throws(() => project([j]), /MALFORMED/);
 	delete j.request;
 	assert.throws(() => project([j]), /MALFORMED/);
+});
+
+test('COMPLETED separado preserva bloqueio anterior, recibo e limitações sem promover a aceite', () => {
+	const j: any = job(B, 'COMPLETED');
+	j.events.push({line: 4, phase: 'completion_blocked', reason: 'test pendente'},
+		{line: 5, phase: 'completion_verified', reads: ['alvo'], commands: ['test'],
+			evidence_basis: 'tools', mutations: 1, commits: 0, commit_policy: 'supervisor',
+			verification: 'Aceite semântico pendente.'});
+	const capture = JSON.stringify({jobs: [job(), j]});
+	const profiles = JSON.stringify({rows: [{id: A, source_status: 'FAILED'}, {id: B, source_status: 'COMPLETED'}]});
+	const out = collectCompletionEvidenceF8E(capture, profiles);
+	assert.equal(out.schema, 'audit-completion-evidence/v1');
+	assert.equal(out.completed_jobs, 1); assert.equal('failed_jobs' in out, false);
+	assert.deepEqual(out.rows.map(r => r.id), [B]);
+	assert.deepEqual(out.rows[0].events.map(e => e.line), [1, 3, 4, 5]);
+	assert.deepEqual(out.rows[0].events.at(-1)?.commands, ['test']);
+	assert.equal(out.rows[0].semantic_acceptance, 'NOT_ASSESSED');
+	const legacy = collectFailureEvidenceF8E(JSON.stringify({jobs: [j]}),
+		JSON.stringify({rows: [{id: B, source_status: 'COMPLETED'}]}));
+	assert.equal(legacy.failed_jobs, 0); assert.equal('completed_jobs' in legacy, false);
+	assert.equal(legacy.schema, 'audit-failure-evidence/v1');
+	assert.throws(() => collectCompletionEvidenceF8E(capture,
+		JSON.stringify({rows: [{id: B, source_status: 'FAILED'}]})), /MALFORMED/);
 });

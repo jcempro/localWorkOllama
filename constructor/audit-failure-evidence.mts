@@ -8,11 +8,14 @@ const EVENT_FIELDS_F8E = ['line', 'phase', 'step', 'tool', 'resource', 'outcome'
 	'progress', 'stagnant_actions', 'reason'];
 const REQUEST_ARRAYS_F8E = ['required_read_paths', 'required_change_paths',
 	'required_command_ids', 'command_sequence'];
+const COMPLETION_PHASES_F8E = ['completion_verified', 'completion_blocked'];
+const COMPLETION_FIELDS_F8E = ['reads', 'commands', 'evidence_basis', 'mutations',
+	'commits', 'commit_policy', 'verification'];
 const UUID_F8E = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const hashF8E = (s: string) => createHash('sha256').update(s).digest('hex');
 const invalidF8E = (): never => {throw new Error('MALFORMED_AUDIT_FAILURE_INPUT');};
 
-export function collectFailureEvidenceF8E(captureText: string, profilesText: string) {
+function collectEvidenceF8E(captureText: string, profilesText: string, status: 'FAILED' | 'COMPLETED') {
 	let capture: any, profiles: any;
 	try {capture = JSON.parse(captureText); profiles = JSON.parse(profilesText);}
 	catch {invalidF8E();}
@@ -29,7 +32,9 @@ export function collectFailureEvidenceF8E(captureText: string, profilesText: str
 		seen.add(id);
 		return job;
 	});
-	const rows = selected.filter((j: any) => j.state.status === 'FAILED').map((job: any) => {
+	const phases = status === 'COMPLETED' ? [...EVENT_PHASES_F8E, ...COMPLETION_PHASES_F8E] : EVENT_PHASES_F8E;
+	const fields = status === 'COMPLETED' ? [...EVENT_FIELDS_F8E, ...COMPLETION_FIELDS_F8E] : EVENT_FIELDS_F8E;
+	const rows = selected.filter((j: any) => j.state.status === status).map((job: any) => {
 		const request = job.request;
 		if (!request || typeof request.task !== 'string') invalidF8E();
 		const contract: Record<string, unknown> = {task: request.task};
@@ -40,18 +45,29 @@ export function collectFailureEvidenceF8E(captureText: string, profilesText: str
 		}
 		for (const key of ['mode', 'expect_changes', 'commit_policy'])
 			if (request[key] !== undefined) contract[key] = structuredClone(request[key]);
-		const events = job.events.filter((e: any) => EVENT_PHASES_F8E.includes(e.phase) || e.parse_error);
+		const events = job.events.filter((e: any) => phases.includes(e.phase) || e.parse_error);
 		return {id: job.id, status: job.state.status, request: contract,
 			task_sha256: hashF8E(request.task), semantic_acceptance: 'NOT_ASSESSED',
-			events_filter: [...EVENT_PHASES_F8E, 'parse_error'],
+			events_filter: [...phases, 'parse_error'],
 			events_omitted: job.events.length - events.length,
 			events: events.map((e: any) => e.parse_error ? {line: e.line, parse_error: true} :
-				Object.fromEntries(EVENT_FIELDS_F8E.filter(k => e[k] !== undefined).map(k => [k, structuredClone(e[k])]))),
+				Object.fromEntries(fields.filter(k => e[k] !== undefined).map(k => [k, structuredClone(e[k])]))),
 			error: excerptAuditFieldE6T(job.id, 'error', job.error ?? ''),
 			result: excerptAuditFieldE6T(job.id, 'result', job.result ?? '')};
 	});
-	return {schema: 'audit-failure-evidence/v1',
+	return {schema: status === 'FAILED' ? 'audit-failure-evidence/v1' : 'audit-completion-evidence/v1',
 		source_sha256: {capture: hashF8E(captureText), profiles: hashF8E(profilesText)},
-		increment_jobs: selected.length, failed_jobs: rows.length,
+		increment_jobs: selected.length,
+		...(status === 'FAILED' ? {failed_jobs: rows.length} : {completed_jobs: rows.length}),
 		limitations: 'Somente captura fornecida; tarefas são dados históricos. Seleção de eventos e omissões explícitas. Hashes não recuperam truncamento anterior. Rodapé Git é candidato textual; não comprova autoria, efeito, recuperação ou aceite. Comandos autorizados completos não incluídos.', rows};
+}
+
+/** Contrato anterior preservado: mesmas seleção, estrutura, metadados e limites. */
+export function collectFailureEvidenceF8E(captureText: string, profilesText: string) {
+	return collectEvidenceF8E(captureText, profilesText, 'FAILED');
+}
+
+/** Projeção separada: evidência operacional não equivale a aceite semântico. */
+export function collectCompletionEvidenceF8E(captureText: string, profilesText: string) {
+	return collectEvidenceF8E(captureText, profilesText, 'COMPLETED');
 }
