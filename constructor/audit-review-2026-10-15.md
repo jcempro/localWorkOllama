@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 65 deles; não substitui o aceite dos outros 2.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 66 deles; não substitui o aceite dos outros 1.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os65 aceites/correções semânticos já registrados neste documento nem aceita os2 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os66 aceites/correções semânticos já registrados neste documento nem aceita o1 restante. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -405,3 +405,17 @@ Aceite parcial com correções: no recorte46, original---> é prefixoGit menos s
 A ausência de fechamento YAML na parte1/3 impede afirmar bloco completo/parse/build validados. Valores de datas/metadados foram inventariados, sem corrigi-los por inferência. O hash7230f3d3f6ca7ceca8931970d8a303c796c97ac666b812a61313a7fa12ac6533 pertence ao patch original segundo a origem fornecida; não reapresentá-lo como digest comprovado de complemento-cabecalho-01.txt. A origem declara extração direta via Git sem truncamento do delta-integral.patch; não se confunde com o recorte antigo truncado de b212. Normalização declarada CRLF→LF preservada.
 
 Normas AGENTS/agents.local antes do fragmento não são arquivos modificados. A remoção de instruções de um comentário histórico do draft não comprova perda de governança corrente nem autoriza restauro de texto. Nenhuma pesquisa de fontes, autoria, validação editorial global, render ou alteração do artigo foi executada. Resposta excedeu180 palavras; não gerar nova inferência para reformatar. QUEUED_TO_CHAT só fila; Git não prova autoria/push/limpeza históricos. Acumulado65 revisados/2 pendentes nesta captura.
+
+## Segmento29 — complemento02, contexto e limites de atribuição
+
+Auditor5aa2ad05-8948-4b35-ab97-ad34e5732b9f: local_result uma vez; runtime COMPLETED/error_kind=null, sem ferramentas/escrita/commit. Git determinístico main...origin/main limpo em23/10/2026 08:27:04UTC é do auditor. Aceite parcial dos fatos com correções na revisão dirigida; não aceitar como corretas todas as classificações do retorno. Request/result originais SHA25627cb86359fdcd50605b45584becbed741584dfe72cd8183c5a7b795730809eda e bedf81388e809b1457e2d63a0ac2a854a7a47e26f9eff2d7bcea5b8999431f77 conferidos contra captura antes de delegar. Fragmento/parecer completos fornecidos, sem inspeção viva do artigo.
+
+| ID | Evidência aceita e correções |
+| --- | --- |
+| f38692fc | Complemento2/3:28 linhas adicionadas,cinco contextos,zero removidas/não classificadas. Adições visíveis incluem campos de metadados/listas,fechamento---,títuloH1 e dois parágrafos sobre repreensão/Uzá/atribuição de responsabilidade,com placeholders. O parágrafo iniciado O que deve governar a Igreja,os espaços e AI-PROCESSED:START são contexto preservado,não corpo recém-adicionado. |
+
+Corrigir header.image/header.image_description: payloads image e image_description estão sem indentação após header:,não demonstram essa hierarquia. Não reparar YAML ou inventar estrutura do front-matter completo,parse/build/render validado. Bullets de categories/tags são payloads adicionados com prefixoGit mais, não remoções. Preservar source,styles,toc e valores literais; não validar URL/imagem ou fontes citadas. A leitura textual de sem negócio/artigo/fontes externas como ausência de links ou artigos no fragmento é inválida: a restrição operacional significa não executar o negócio nem pesquisar externamente; o próprio source contém HTTPS.
+
+O inventário de placeholders também omitiu <adicionar foot notes>,presente após a passagem sobre repreensão pública de Pedro. Outros cinco identificadores preservados: <adiciona foot note de referencia>,<adicionar footnote de referenciar>,<adicionar footnote refeencia>,<adicionar foot note de João 16:8-1>,<recitar a referncia anterior>. São pendências editoriais,não referências verificadas ou autorização para completá-las por memória. Resumo de argumentos não comprova exatidão das citações ou validação externa.
+
+O auditor atribuiu ao parecer antigo as regras Origens/digests não podem trocar de artefato,Header não prova autoria/push/limpeza e QUEUED_TO_CHAT só fila;elas pertencem às instruções/contexto desta auditoria,não ao parecer. Ausência dessas frases no diff não as refuta. HeaderGit não é header de diff. Origem literal: complemento02 versionado em4d7692d2f6,delta integral recuperado do Git;AGENTS/agents.local fornecidos antes do fragmento não são arquivos alterados nem primeiro hunk desses arquivos. Parte2/3 não prova por si só linha cortada ou hunk incompleto em contagens;apenas cobertura parcial. Nenhuma mutação/pesquisa/artigo refeito. Parecer original permanece revisto com essas correções e limitações;retorno atual não prova precisão semântica geral. Resposta excedeu180 palavras;sem nova inferência de formatação. QUEUED_TO_CHAT só fila. Acumulado66 revisados/1 pendente nesta captura.
