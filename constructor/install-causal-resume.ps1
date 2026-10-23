@@ -2,9 +2,10 @@ param([Parameter(Mandatory=$true)][string]$ProjectRoot,[switch]$VerifyOnly,[stri
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot 'worker-config-invariant.ps1')
 . (Join-Path $PSScriptRoot 'native-installer-result.ps1')
+. (Join-Path $PSScriptRoot 'supervisor-installation-tasks.ps1')
 $projectC9R=(Resolve-Path -LiteralPath $ProjectRoot).Path
 $proofRootC9R=Join-Path $projectC9R 'constructor/audit-private'
-$tasksC9R=@(Get-ScheduledTask | Where-Object TaskName -Like 'CodexSupervisorResume-*')
+$tasksC9R=@(Select-SupervisorInstallationTasksC9R -Tasks @(Get-ScheduledTask | Where-Object TaskName -Like 'CodexSupervisorResume-*'))
 $targetsC9R=@()
 foreach($taskC9R in $tasksC9R){
   if($taskC9R.Actions.Count -ne 1 -or $taskC9R.Actions[0].Arguments -notmatch '^//B //Nologo "(.+\\launch\.vbs)"$'){throw 'UNEXPECTED_SUPERVISOR_ACTION'}
