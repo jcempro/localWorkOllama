@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 59 deles; não substitui o aceite dos outros 8.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 60 deles; não substitui o aceite dos outros 7.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os59 aceites/correções semânticos já registrados neste documento nem aceita os8 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os60 aceites/correções semânticos já registrados neste documento nem aceita os7 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -321,3 +321,15 @@ Corrigir a afirmação de ausência de alteração líquida: o erro fornecido di
 O limite40 está literal no erro desta execução; rejeitar “não é teto configurado” neste caso. Isso não transforma reported_step/max_logged_step dos demais jobs em orçamento. A ordem inicial pedida também não foi cumprida: leituras11/31 e file_info39 sobre destino inexistente antecederam create46; bloqueio30 recusou a estratégia sem mudança. Não foi provada causa física/RAM/permissão. Edições entre testes impedem tratar todas as tentativas como repetição idêntica; o contrato exige corrigir estratégia sem apagar as evidências.
 
 Recuperações delimitadas já revisadas permanecem válidas:7951fc49 tentou corrigir import/eval e ficou incompleto;6136638a aprovou patch de carregamento/sintaxe;5ffd962a aprovou asserções/teste table_speech. Não reexecutar esses sucessores nem declarar entrega universal retroativa. Header histórico dev...origin/dev [ahead10] não comprova autoria/push/limpeza; QUEUED_TO_CHAT só enfileiramento. Auditor excedeu a concisão pedida, sem justificar nova inferência para reformatar. Acumulado59 revisados/8 pendentes nesta captura.
+
+## Segmento23 — gravação preservada e estagnação após verificação
+
+Auditor9af93b6f-39d8-4122-a311-9bd0d6f88892: local_result uma vez; COMPLETED por evidência fornecida, nenhuma ferramenta/escrita/commit próprios. Git determinístico main...origin/main limpo em23/10/2026 07:27:17UTC é deste auditor, não do blog histórico. Aceite parcial com correções de atribuição e cronologia. Fonte evidence.jsonl SHA25677d6eaa0a3e73daa0d4829c1c92eaef0f475ea459443191ec252474c5c57c01f conferida contra captura antes do envio; conteúdo gravado de29 linhas incluído no pacote, sem nova inspeção viva.
+
+| ID | Evidência e limite de aceite |
+| --- | --- |
+| be54a370 | FAILED/WORKER_INCOMPLETE por quatro ações sem progresso, não teto de12 ciclos. Leitura obrigatória11 satisfeita; write_file37 gravou master.md; file_info43 e read_file51 verificaram o artefato. Recusas run_command24/30/66 para mkdir, git rev-parse e git hash-object. Sequência sem progresso59/66/73/80, bloqueio79; efeito de escrita preservado. |
+
+Corrigir criação bem-sucedida para gravação comprovada: o recibo não fornece baseline de inexistência. No passo8/evento51 houve read_file, não file_info. A sequência terminal combinou file_info59, run_command66 rejeitado, read_file73 repetido e file_info80; não quatro file_info consecutivos sem progresso. file_info43 inicialmente contou como progresso. As recusas não comprovam falta de permissão de escrita: write_file37 foi aprovado. O pedido proibia Git e deixava commit ao supervisor por alterações herdadas; não ampliar Git nem exigir teste/commit que não pertenciam à unidade. O mkdir apontava .ia/rules/... enquanto o alvo escrito é .ia.rules/...; a chamada foi recusada antes de efeito, sem prova de pasta indevida criada.
+
+O master contém fonte/hash/data, planoA–F e estado Pending. A expressão Falha reproduzida remete ao relato de origem, não a reprodução executada por esse job; o relatório não pode atribuir build/teste próprios. O header histórico dev...origin/dev [ahead6] não comprova autoria, push, limpeza ou ausência de efeito; o pacote não fornece campo no_net_git_change=true. Não aceitar negação global de mudança líquida nem conclusão funcional das FTs113–115. Reticências em NEEDS_SUPERVISOR não são pedido de acesso concreto. Sucessor845e8f16 já revisado no segmento19 registrou/stageou/commitou df79982595; não repeti-lo. QUEUED_TO_CHAT só fila. Acumulado60 revisados/7 pendentes nesta captura.
