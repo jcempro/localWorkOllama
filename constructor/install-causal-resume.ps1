@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$ProjectRoot,[switch]$VerifyOnly,[string]$BeforeConfigBackup,[switch]$SkipWorkerInstall)
+param([Parameter(Mandatory=$true)][string]$ProjectRoot,[switch]$VerifyOnly,[string]$BeforeConfigBackup,[switch]$SkipWorkerInstall,[string[]]$SupervisorThreadIds=@())
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot 'worker-config-invariant.ps1')
 . (Join-Path $PSScriptRoot 'native-installer-result.ps1')
@@ -15,6 +15,10 @@ foreach($taskC9R in $tasksC9R){
   $targetsC9R+=@{dir=$dirC9R;config=$cfgC9R;controlHash=(Get-FileHash -LiteralPath (Join-Path $dirC9R 'continuity.json')).Hash}
 }
 if(-not $targetsC9R.Count){throw 'NO_VERIFIED_INSTALLATION'}
+if($SupervisorThreadIds.Count){
+  foreach($idC9R in $SupervisorThreadIds){if($idC9R -notmatch '^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$' -or -not @($targetsC9R|Where-Object{$_.config.threadId -eq $idC9R}).Count){throw 'UNKNOWN_SUPERVISOR_SCOPE'}}
+  $targetsC9R=@($targetsC9R|Where-Object{$_.config.threadId -in $SupervisorThreadIds})
+}
 $workersC9R=@($targetsC9R|ForEach-Object{$_.config.workerHome}|Select-Object -Unique)
 if($workersC9R.Count -ne 1){throw 'MULTIPLE_WORKER_INSTALLATIONS_REQUIRE_SCOPING'}
 $workerC9R=$workersC9R[0]
@@ -35,7 +39,7 @@ $globalHashC9R=(Get-FileHash -LiteralPath $globalConfigC9R).Hash
 if(-not $VerifyOnly -and -not $SkipWorkerInstall){
   Invoke-NativeInstallerC9R -Program $psC9R -ArgumentList @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',(Join-Path $projectC9R 'src/install.ps1'),'-WorkerHome',$workerC9R,'-CodexHome',$targetsC9R[0].config.codexHome,'-CodexExe',$cliC9R,'-SkipPrerequisites','-SkipModel','-SkipWatchdog','-SkipGlobalRules','-WaitForIdle') -LogPath (Join-Path $proofRootC9R 'c9r-worker-install.log')
 }
-$filesC9R=@('continuity.mts','continuity.mjs','delivery.mjs','watchdog.mjs','job-store.mjs')
+$filesC9R=@('continuity.mts','continuity.mjs','delivery.mjs','watchdog.mjs','job-store.mjs','job-control.mjs','server.mjs','supervisor-review.mts','supervisor-review.mjs','monitor.mjs','monitor-page.mjs','mcp-call.mjs','AGENTS.md')
 foreach($nameC9R in $filesC9R){
   if((Get-FileHash -LiteralPath (Join-Path $workerC9R $nameC9R)).Hash -ne (Get-FileHash -LiteralPath (Join-Path $projectC9R ('src/localworker/'+$nameC9R))).Hash){throw 'WORKER_HASH_MISMATCH'}
 }

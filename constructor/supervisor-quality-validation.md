@@ -33,3 +33,21 @@ Suíte completa passou com MCP real stdio/SQLite isolado: importação de falha,
 ## Projeção econômica do inventário
 
 Inventário transporta somente nota/motivo atuais, estado e contagem de revisões. O histórico completo permanece no detalhe, evitando multiplicá-lo por50–100 linhas a cada atualização. Teste garante ausência de `history` na listagem e presença das revisões no detalhe; renderização testa a projeção correta de cada superfície. O limite de registro e a consulta futura continuam preservados.
+
+## Instalação e avaliação reais
+
+Instalador oficial atualizou Worker e duas recuperações; verificador interno passou a conferir também módulo Q8S, servidor, monitor/página, ponte, norma Worker e controles. Prova inicial privada `audit-private/quality-install-33e5c622-9c06-46e6-af44-42bd2ea7c21d/installed-proof.json`, SHA256 `128b6644a460596c31784ac85fcc6e4d47e508112ca9b6b08451471f8b010e1b`,2026-10-23T17:08:39.4718074Z. Manifestos/hashes conferidos, configuração do Worker/Codex preservada; chat desta manutenção ACTIVE/EXPLICIT_RESUME e outro alvo PAUSED/EXPLICIT_PAUSE preservados. Sem gatilho de boot/logon, wake/catchup, mensagem real, inferência ou retomada durante instalação. Ajuste final econômico do inventário exige sincronização final, em curso neste checkpoint.
+
+GlobalRulesOnly instalou a norma Q8S no CODEX_HOME efetivo; hash do conteúdo externo ao bloco gerenciado permaneceu idêntico. Sem trocar modelo/esforço ou rearmar conversa.
+
+Retorno real `5df5c7cd-315a-4d91-8854-9df479049643`, anteriormente recebido uma única vez e revisado em `evidence-provenance-validation.md`, importado pela ponte MCP instalada como **7/10**, revisão1. Motivo: quatro fatos/proveniência corretos, mas JSON cercado por Markdown contrariamente ao formato requerido; sem repetição histórica/aceite inventado. Hashes calculados do recebimento preservado, comparados pela API antes da gravação. Prova privada `audit-private/q8s-e9p-real-review-proof.json`; não é nota sintética nem avaliação dos142 casos. HTTP real do monitor atualizado confirmou7/10 na listagem e no detalhe, sem credencial na projeção.
+
+Inspeção visual não comprovada: inicialização da ferramenta de navegador CUA falhou com `failed to write kernel assets`, caminho ausente. Não foi aberta/rearmada outra conversa nem contornado esse transporte. Testes reais HTTP e DOM das funções da página permanecem comprovados; não alegar screenshot/revisão visual inexistente. Cobertura histórica integral continua pendente.
+
+### Sincronização final e recuperação da etapa pendente
+
+A segunda rodada ficou bloqueada no orquestrador interno hospedado em PowerShell7 depois da primeira recuperação, sem filho instalador ativo. A hipótese de indisponibilidade do Agendador não se confirmou: consulta isolada em Windows PowerShell5.1 passou (CIM3651ms; COM1069ms). Não usar os campos nulos dessa primeira projeção XML COM como prova de configuração. Causa interna exata do bloqueio não comprovada; não atribuí-lo ao Worker/Ollama ou declarar correção universal de um defeito não localizado.
+
+Confronto independente mostrou apenas `monitor.mjs` desatualizado na segunda recuperação. Antes de encerrar exclusivamente o orquestrador próprio, conferidos PID, executável, linha vinculada à instalação, início e ausência de filhos além do console. Nenhum Worker, app, chat ou serviço foi encerrado. Verificador ganhou seleção explícita `SupervisorThreadIds` validada contra instalações descobertas, permitindo recuperação restrita sem reinstalar unidades concluídas. Windows PowerShell5.1 executou somente a etapa pendente; depois VerifyOnly verificou todas as instalações, configurações, manifestos e controles.
+
+Prova final `audit-private/quality-install-33e5c622-9c06-46e6-af44-42bd2ea7c21d/verified-final.json`, SHA256 `526c5a6a34b1446573eeee525f1ca5fa387d6dfd6187c9dbc39509f0487c29d4`,2026-10-23T17:24:16.8830406Z. Ambas as recuperações e Worker conferem com a fonte final; ACTIVE/EXPLICIT_RESUME e PAUSED/EXPLICIT_PAUSE preservados, sem boot/logon/wake/catchup ou retomada. Instalação humana geral já usa o PowerShell incluído no Windows; este helper é exclusivo do construtor, não novo componente do destino. `q8s-final-http-proof.json` registra a conferência HTTP final:7/10, revisão1, histórico somente no detalhe, sem token exposto.
