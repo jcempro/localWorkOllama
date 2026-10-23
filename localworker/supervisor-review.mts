@@ -8,6 +8,7 @@ import {withJobControl} from './job-control.mjs';
 const FILE_Q8S='supervisor-review.json', MAX_RETURNS_Q8S=16, MAX_REVISIONS_Q8S=32;
 const UUID_Q8S=/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i, HASH_Q8S=/^[a-f0-9]{64}$/;
 const hashQ8S=(v:string)=>createHash('sha256').update(v).digest('hex');
+const CACHE_MAX_Q8S=1000, snapshotCacheQ8S=new Map();
 type GradeQ8S={revision:number,score:number,reason:string,reviewer_thread_id:string,reviewed_at:string};
 type ReceiptQ8S={id:string,token:string,issued_at:string,status:string,request_sha256:string,result_sha256:string,
   final_sha256:string,execution_kind:string,revisions:GradeQ8S[]};
@@ -109,12 +110,21 @@ export async function recordReviewQ8S(input:ReviewInputQ8S){
 // Somente projeção pública: nunca expõe token nem escreve recibo/nota ao abrir o monitor.
 export async function reviewSnapshotQ8S(id:string){
   try{
-    const dir=await directoryQ8S(id),ledger=await ledgerQ8S(dir,id);
-    if(!ledger.receipts.length)return {status:'NOT_ASSESSED',assessment:null,history:[]};
+    const dir=await directoryQ8S(id);
+    const signatures=await Promise.all([FILE_Q8S,'state.json','request.json','result.md','error.txt','supervisor-final.md'].map(async name=>{
+      try{const s=await fs.lstat(path.join(dir,name));return [s.size,s.mtimeMs,s.ctimeMs,s.ino,s.isSymbolicLink(),s.nlink];}
+      catch(e){if(e.code==='ENOENT')return null;throw e;}
+    }));
+    const signature=JSON.stringify(signatures),cached=snapshotCacheQ8S.get(id);
+    if(cached?.signature===signature)return structuredClone(cached.value);
+    const keep=value=>{snapshotCacheQ8S.delete(id);snapshotCacheQ8S.set(id,{signature,value});
+      if(snapshotCacheQ8S.size>CACHE_MAX_Q8S)snapshotCacheQ8S.delete(snapshotCacheQ8S.keys().next().value);return structuredClone(value);};
+    const ledger=await ledgerQ8S(dir,id);
+    if(!ledger.receipts.length)return keep({status:'NOT_ASSESSED',assessment:null,history:[]});
     const t=await terminalQ8S(dir,id),current=ledger.receipts.find(r=>r.id===t.id),grade=current?.revisions.at(-1)??null;
     const history=ledger.receipts.flatMap(r=>r.revisions.map(g=>({...g,receipt_id:r.id,status:r.status,execution_kind:r.execution_kind})));
-    return {status:grade?'ASSESSED':current?'NOT_ASSESSED':'STALE',receipt_id:current?.id??null,
-      assessment:grade,execution_kind:t.execution_kind,history};
-  }catch(e){if(e.code==='ENOENT')return {status:'NOT_ASSESSED',assessment:null,history:[]};
+    return keep({status:grade?'ASSESSED':current?'NOT_ASSESSED':'STALE',receipt_id:current?.id??null,
+      assessment:grade,execution_kind:t.execution_kind,history});
+  }catch(e){snapshotCacheQ8S.delete(id);if(e.code==='ENOENT')return {status:'NOT_ASSESSED',assessment:null,history:[]};
     return {status:'UNAVAILABLE',assessment:null,history:[],error:String(e.message).slice(0,200)};}
 }

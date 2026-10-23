@@ -211,8 +211,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `867433bd006304958a2f7b5287534074389c25fe516caae52aa8e6da64cf2c32` |
-| `src/localworker/supervisor-review.mts` | `98b8d3e5f81a0cf2d69437bd8bc04e9169ffe57e050326bfa6a018c4a0b112e9` |
-| `src/localworker/supervisor-review.mjs` | `c533ae396de0d734116fee31f419a1eb44bef449a8c75893f238f3e8d4cd08e9` |
+| `src/localworker/supervisor-review.mts` | `8ef65563edef0491639ece480a0e0c84528e5f0648d0f35bd407010818bacab6` |
+| `src/localworker/supervisor-review.mjs` | `7733216e3cdcf39c73dba5f6d6617383349709c459ccf7baac081fe49481d5ee` |
 | `src/localworker/delegation-policy.mts` | `d7f1eed4081eb23983c7a26ca1a29e7e646ce0ae23550ff4fc1c84ea6bdb115d` |
 | `src/localworker/delegation-policy.mjs` | `8370a671d03257175895e65864f3ae1e9836023b7566f928dda470c1c35feeae` |
 | `src/localworker/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
@@ -227,8 +227,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `f3c8468da8b2616928ae79f161bf8ab7ae0c62684ae894c876dc29e6f1c98ed4` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |
-| `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
-| `src/localworker/monitor-page.mjs` | `c9f7b66a1afc7134a406bb3670e3c0e1a7832af57edd493d9234523f3c88ac8f` |
+| `src/localworker/monitor.mjs` | `ea2e528421c055f3dd079c37ef2e58e9f39721a1908d7c255637ad69c4f9a7f1` |
+| `src/localworker/monitor-page.mjs` | `762ca8da196a1af84e340e785ee60064a88a015bb2322becc495b2a590c64967` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `2f1e2823a4b05a741997f3b345b0da40303e06ed71747635e14c6edc881fe01e` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |

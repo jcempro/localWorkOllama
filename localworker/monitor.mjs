@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import { JOBS, jobDir, getState, listJobs, readJson, atomicJson, alive } from "./job-store.mjs";
 import { PAGE_M7Q } from "./monitor-page.mjs";
 import { cancelJob, deleteJob } from "./job-control.mjs";
+import { reviewSnapshotQ8S } from './supervisor-review.mjs';
 
 const ROOT_M7Q = path.dirname(fileURLToPath(import.meta.url));
 const DESCRIPTOR_M7Q = path.join(ROOT_M7Q, "monitor.json");
@@ -236,7 +237,8 @@ export async function monitorSnapshot(id) {
     context_compactions: state.context_compactions ?? events.filter(event => event.phase === "context_compacted" && event.checkpoint_id).length,
     api_cost: "Inferência Ollama local; custo de API zero, energia não medida." };
   const durationMs = Math.max(0, Date.parse(state.completed_at ?? new Date().toISOString()) - Date.parse(state.started_at ?? state.created_at));
-  return { state, request: { repoPath: request.repoPath ?? null, task: String(request.task ?? "").slice(0, 1000),
+  const quality=await reviewSnapshotQ8S(id);
+  return { state, quality, request: { repoPath: request.repoPath ?? null, task: String(request.task ?? "").slice(0, 1000),
     mode: request.mode ?? null, project_id: request.project_id ?? null }, delivery, events, resource, progress, metrics,
     duration_ms: Number.isFinite(durationMs) ? durationMs : null,
     activity: classifyActivity(state, events, resource, { result, error }), observed_at: new Date().toISOString() };
@@ -268,7 +270,7 @@ export async function inventorySnapshot({ repo = "", status = "", sort = "time",
   for (const cachedId of inventoryCacheM7Q.keys()) if (!ids.includes(cachedId)) inventoryCacheM7Q.delete(cachedId);
   for (const id of ids) {
     const cached = inventoryCacheM7Q.get(id);
-    if (cached) { rows.push(cached); continue; }
+    if (cached) { rows.push({...cached,quality:await reviewSnapshotQ8S(id)}); continue; }
     try {
       const dir = jobDir(id);
       const [state, request, delivery] = await Promise.all([getState(id),
@@ -280,7 +282,7 @@ export async function inventorySnapshot({ repo = "", status = "", sort = "time",
         repo: await repoGroupM7Q(request), project_id: request.project_id ?? null,
         task: String(request.task ?? "").slice(0, 240), mode: request.mode ?? null,
         delivery: delivery.status ?? "UNKNOWN" };
-      rows.push(row);
+      rows.push({...row,quality:await reviewSnapshotQ8S(id)});
       if (["COMPLETED", "FAILED", "CANCELLED"].includes(state.status) && delivery.status === "QUEUED_TO_CHAT") inventoryCacheM7Q.set(id, row);
     } catch (error) {
       const info = await fs.stat(jobDir(id)).catch(() => null);

@@ -4,6 +4,7 @@ import path from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {DatabaseSync} from 'node:sqlite';
+import vm from 'node:vm';
 const source=path.dirname(fileURLToPath(import.meta.url));
 const fixture=await fs.mkdtemp(path.join(source,'.q8s-fixture-')),canonical=await fs.realpath(fixture);
 try{
@@ -86,8 +87,38 @@ try{
   assert.equal(again.idempotent,true);
   await assert.rejects(()=>callLocalWorker({name:'local_review',args:{...args,reviewer_repo_path:fixture},serverPath:path.join(fixture,'server.mjs'),env}),/outro diretório/);
   await assert.rejects(()=>callLocalWorker({name:'local_review',args,serverPath:path.join(fixture,'server.mjs'),env:{...env,LOCAL_WORKER_JOB_ID:api}}),/supervisor/);
+  const monitor=await load('monitor.mjs');
+  const ui=await add(),ru=await q.issueReviewReceiptQ8S(ui);
+  assert.equal((await monitor.inventorySnapshot({limit:100})).jobs.find(j=>j.job_id===ui).quality.status,'NOT_ASSESSED');
+  await q.recordReviewQ8S(make(ui,ru,8,'<script>não executar</script> Evidência de fixture.'));
+  let projected=(await monitor.inventorySnapshot({limit:100})).jobs.find(j=>j.job_id===ui).quality;
+  assert.equal(projected.assessment.score,8);
+  await q.recordReviewQ8S({...make(ui,ru,9,'Revisão posterior desta fixture.'),expected_revision:1});
+  projected=(await monitor.inventorySnapshot({limit:100})).jobs.find(j=>j.job_id===ui).quality;
+  assert.equal(projected.assessment.score,9);assert.equal(projected.history.length,2);
+  const detail=await monitor.monitorSnapshot(ui);assert.equal(detail.quality.assessment.score,9);
+  assert.ok(!JSON.stringify(detail.quality).includes(ru.review.receipt_token));
+  await fs.appendFile(path.join(s.jobDir(ui),'result.md'),' mudança posterior');
+  assert.equal((await monitor.inventorySnapshot({limit:100})).jobs.find(j=>j.job_id===ui).quality.status,'STALE');
+  const {PAGE_M7Q:page}=await load('monitor-page.mjs');
+  for(const script of page.split('<script>').slice(1))new vm.Script(script.split('</script>')[0]);
+  assert.match(page,/<th>Qualidade<\/th>/);assert.match(page,/id="qualityHistory"/);
+  assert.match(page,/renderQuality\(x.quality\)/);assert.match(page,/job.quality/);
+  const nodes=new Map();
+  const element=()=>({textContent:'',dataset:{},children:[],hidden:false,append(...xs){this.children.push(...xs);},replaceChildren(){this.children=[];}});
+  const byId=name=>{if(!nodes.has(name))nodes.set(name,element());return nodes.get(name);};
+  const sandbox={document:{createElement:element},byId,put:(k,v)=>{byId(k).textContent=String(v);},fmtDate:v=>v};
+  vm.createContext(sandbox);
+  new vm.Script(page.slice(page.indexOf('const qualityLabel='),page.indexOf('const resourceLabels='))).runInContext(sandbox);
+  sandbox.quality=projected;new vm.Script('renderQuality(quality)').runInContext(sandbox);
+  assert.equal(byId('qualityScore').textContent,'9/10');assert.equal(byId('qualityHistory').children.length,2);
+  assert.equal(byId('qualityHistory').children[1].children[1].textContent,' — <script>não executar</script> Evidência de fixture.');
+  sandbox.quality={status:'STALE',history:projected.history};new vm.Script('renderQuality(quality)').runInContext(sandbox);
+  assert.equal(byId('qualityScore').textContent,'Revisão pendente');assert.equal(byId('qualityScore').dataset.band,'none');
+  sandbox.quality={status:'UNAVAILABLE',error:'Registro inválido',history:[]};new vm.Script('renderQuality(quality)').runInContext(sandbox);
+  assert.equal(byId('qualityScore').textContent,'Indisponível');assert.equal(byId('qualityHistoryBox').hidden,true);
   assert.ok(!(await fs.readdir(s.JOBS)).some(x=>x.endsWith('.lock')));
-  console.log('Q8S_OK: receipt, terminal, roles, explicit review, bounds, concurrency, stale, history, delete, retention, real MCP stdio/SQLite');
+  console.log('Q8S_OK: receipt, terminal, roles, explicit review, bounds, concurrency, stale, history, delete, retention, real MCP stdio/SQLite, monitor cached updates, DOM safe rendering');
 }finally{
   if((await fs.realpath(fixture).catch(()=>null))===canonical&&path.dirname(fixture)===source&&path.basename(fixture).startsWith('.q8s-fixture-'))
     await fs.rm(fixture,{recursive:true,force:true});

@@ -124,7 +124,9 @@ O status informa como a execução terminou; a nota informa a qualidade examinad
 
 Escala inteira0–10: 0 inutilizável/violação impeditiva; 1–3 defeitos graves; 4–5 parcial; 6–7 útil com defeitos delimitados; 8–9 satisfatório; 10 integralmente comprovado no escopo. Notas≤3 ou≥8 exigem motivo concreto de até360 caracteres. Considere aderência, competência demonstrada, adequação, eficiência, impedimentos legítimos e retrabalho evitável; falha justificada pode obter nota alta. Sequência determinística não demonstra cognição. Retorno não examinado permanece sem nota; CANCELLED é excluído.
 
-O recibo vincula pedido e retorno por hashes; emiti-lo não comprova recebimento/exame. O supervisor os confirma expressamente ao registrar. Uma nota só é aceita para retorno terminal inalterado, com credencial e versão válidas. Reenvio idêntico é idempotente; divergência concorrente exige conferir a revisão atual, sem sobrescrever cegamente. O histórico fica em `jobs/<job_id>/supervisor-review.json`, acompanha retenção/exclusão desse job e limita-se a16 retornos distintos/32 revisões por retorno, sem descarte silencioso ao atingir o limite. Esses controles não isolam processos do mesmo usuário do SO. Instale/atualize pelo procedimento deste artigo para distribuir o módulo; sessões antigas podem usar a ponte instalada. A integração visual e normativa global permanece pendente até sua validação específica.
+O recibo vincula pedido e retorno por hashes; emiti-lo não comprova recebimento/exame. O supervisor os confirma expressamente ao registrar. Uma nota só é aceita para retorno terminal inalterado, com credencial e versão válidas. Reenvio idêntico é idempotente; divergência concorrente exige conferir a revisão atual, sem sobrescrever cegamente. O histórico fica em `jobs/<job_id>/supervisor-review.json`, acompanha retenção/exclusão desse job e limita-se a16 retornos distintos/32 revisões por retorno, sem descarte silencioso ao atingir o limite. Esses controles não isolam processos do mesmo usuário do SO. Instale/atualize pelo procedimento deste artigo para distribuir o módulo; sessões antigas podem usar a ponte instalada.
+
+No monitor, a coluna **Qualidade** mostra a nota atual ou ausência explícita de avaliação. Abra o job para consultar motivo, horário e histórico de revisões. Retorno modificado fica **Revisão pendente**; registro ilegível fica **Indisponível**, sem nota presumida. As atualizações usam o fluxo automático existente, sem reload, e nunca atribuem nota. O painel não expõe credenciais nem oferece atribuição pelo Worker. A instrução global/callback e a instalação real ainda precisam da validação de integração Q8S.
 
 `command_sequence` não carrega política GPU nem prepara/compacta contexto: não depende do Ollama ou do teto de ciclos de inferência. Cada comando mantém seu timeout técnico, autorização, evidência e validação; a sequência tem no máximo 32 IDs distintos e para no primeiro erro. Se os comandos passarem, mas faltar a alteração, validação ou commit exigido pelo contrato, o resultado informa essa pendência específica, sem repetir comandos nem alegar esgotamento de ciclos. Recursos consumidos pelo executável autorizado ainda precisam ser avaliados pelo supervisor antes da delegação.
 
@@ -701,8 +703,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
 | `src/localworker/server.mjs` | `867433bd006304958a2f7b5287534074389c25fe516caae52aa8e6da64cf2c32` |
-| `src/localworker/supervisor-review.mts` | `98b8d3e5f81a0cf2d69437bd8bc04e9169ffe57e050326bfa6a018c4a0b112e9` |
-| `src/localworker/supervisor-review.mjs` | `c533ae396de0d734116fee31f419a1eb44bef449a8c75893f238f3e8d4cd08e9` |
+| `src/localworker/supervisor-review.mts` | `8ef65563edef0491639ece480a0e0c84528e5f0648d0f35bd407010818bacab6` |
+| `src/localworker/supervisor-review.mjs` | `7733216e3cdcf39c73dba5f6d6617383349709c459ccf7baac081fe49481d5ee` |
 | `src/localworker/delegation-policy.mts` | `d7f1eed4081eb23983c7a26ca1a29e7e646ce0ae23550ff4fc1c84ea6bdb115d` |
 | `src/localworker/delegation-policy.mjs` | `8370a671d03257175895e65864f3ae1e9836023b7566f928dda470c1c35feeae` |
 | `src/localworker/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
@@ -717,8 +719,8 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `f3c8468da8b2616928ae79f161bf8ab7ae0c62684ae894c876dc29e6f1c98ed4` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |
-| `src/localworker/monitor.mjs` | `2f6a43df26a421e2448debbdc3de42fe7cec4a7095eaacc81f60adf5424a1c91` |
-| `src/localworker/monitor-page.mjs` | `c9f7b66a1afc7134a406bb3670e3c0e1a7832af57edd493d9234523f3c88ac8f` |
+| `src/localworker/monitor.mjs` | `ea2e528421c055f3dd079c37ef2e58e9f39721a1908d7c255637ad69c4f9a7f1` |
+| `src/localworker/monitor-page.mjs` | `762ca8da196a1af84e340e785ee60064a88a015bb2322becc495b2a590c64967` |
 | `src/localworker/mcp-config.mjs` | `7fa6b853c9eb57b5fc3aa2c7ffeeb95818653874d6498955c98e0711906d1cdb` |
 | `src/localworker/mcp-call.mjs` | `2f1e2823a4b05a741997f3b345b0da40303e06ed71747635e14c6edc881fe01e` |
 | `src/localworker/notify.ps1` | `013280cd736de251f2e687f61fb3a83bbb6c9ee83a08eeec67cc22b9adef66cc` |
