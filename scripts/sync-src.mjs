@@ -11,7 +11,7 @@ const START_A3C = '<!-- LOCALWORKER_GENERATED_START -->';
 const END_A3C = '<!-- LOCALWORKER_GENERATED_END -->';
 const RUNTIME_A3C = [
   'AGENTS.md', 'config.json', 'package.json', 'package-lock.json',
-  'server.mjs', 'delegation-policy.mts', 'delegation-policy.mjs', 'continuity.mts', 'continuity.mjs', 'continuity.ps1', 'thread-check.mjs', 'job-store.mjs', 'job-control.mjs', 'context-manager.mjs','progress-guard.mjs', 'worker-core.mjs',
+  'server.mjs', 'supervisor-review.mts', 'supervisor-review.mjs', 'delegation-policy.mts', 'delegation-policy.mjs', 'continuity.mts', 'continuity.mjs', 'continuity.ps1', 'thread-check.mjs', 'job-store.mjs', 'job-control.mjs', 'context-manager.mjs','progress-guard.mjs', 'worker-core.mjs',
   'worker-runner.mjs', 'delivery.mjs', 'watchdog.mjs', 'monitor.mjs', 'monitor-page.mjs', 'mcp-config.mjs', 'mcp-call.mjs', 'notify.ps1',
   'install.ps1', 'update-installed.ps1', 'register-watchdog.ps1', 'watchdog-launch.vbs.template',
 ];
@@ -80,6 +80,8 @@ async function walk(relative) {
 }
 
 const inventory = [];
+const reviewSourceQ8S=await fs.readFile(path.join(ROOT_A3C,'localworker/supervisor-review.mts'),'utf8');
+await putOrCompare('localworker/supervisor-review.mjs',Buffer.from(stripTypeScriptTypes(reviewSourceQ8S,{mode:'strip'}).replace(/[ \t]+$/gm,'')));
 // Nova guarda: fonte TS é canônica; artefato instalado não recebe edição manual.
 const policySource = await fs.readFile(path.join(ROOT_A3C, 'localworker/delegation-policy.mts'), 'utf8');
 await putOrCompare('localworker/delegation-policy.mjs', Buffer.from(stripTypeScriptTypes(policySource, {mode:'strip'})));

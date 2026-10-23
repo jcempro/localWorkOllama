@@ -16,6 +16,7 @@ if (!safeFixture.toLowerCase().startsWith(path.resolve(os.tmpdir()).toLowerCase(
 try {
   process.env.LOCAL_WORKER_HISTORY_MAX_JOBS = "1";
   await fs.copyFile(source, path.join(fixture, "job-store.mjs"));
+  await fs.copyFile(path.join(path.dirname(source),'job-control.mjs'),path.join(fixture,'job-control.mjs'));
   const store = await import(pathToFileURL(path.join(fixture, "job-store.mjs")));
   const now = Date.now();
   const jobs = [];

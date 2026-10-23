@@ -214,6 +214,8 @@ export async function pruneJobHistory({ force = false, now = Date.now() } = {}) 
   }
   try {
     await lock.writeFile(JSON.stringify({ pid: process.pid, started_at: new Date(now).toISOString() }));
+    // Q8S: mesma exclusão mútua de STOP/delete/revisão; não recriar job retirado.
+    const {withJobControl}=await import('./job-control.mjs');
     const eligible = [];
     const errors = [];
     const removed = [];
@@ -221,13 +223,15 @@ export async function pruneJobHistory({ force = false, now = Date.now() } = {}) 
       const retiredId = /^\.retired-([0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12})$/i.exec(entry.name)?.[1];
       if (!retiredId) continue;
       try {
+        await withJobControl(retiredId,async()=>{
         const retiredDir = path.join(JOBS, entry.name);
         const [state, delivery] = await Promise.all([readJson(path.join(retiredDir, "state.json")),
           readJson(path.join(retiredDir, "delivery.json"))]);
-        if (state.job_id !== retiredId || !TERMINAL.has(state.status) || !resolvedForRetentionU6C(delivery)) continue;
+        if (state.job_id !== retiredId || !TERMINAL.has(state.status) || !resolvedForRetentionU6C(delivery)) return;
         await safeJobBytesJ4R(retiredDir);
         await fs.rm(retiredDir, { recursive: true, force: true });
         removed.push(retiredId);
+        });
       } catch (error) { errors.push({ job_id: retiredId, error: String(error?.message ?? error).slice(0, 200) }); }
     }
     for (const id of await listJobs()) {
@@ -249,8 +253,9 @@ export async function pruneJobHistory({ force = false, now = Date.now() } = {}) 
       const expired = now - item.completed > HISTORY_DAYS_J4R * 86400000;
       if (!expired && retained <= HISTORY_MAX_JOBS_J4R && totalBytes <= HISTORY_MAX_BYTES_J4R) continue;
       try {
+        await withJobControl(item.id,async()=>{
         const [state, delivery] = await Promise.all([getState(item.id), readJson(path.join(item.dir, "delivery.json"))]);
-        if (state.job_id !== item.id || !TERMINAL.has(state.status) || !resolvedForRetentionU6C(delivery)) continue;
+        if (state.job_id !== item.id || !TERMINAL.has(state.status) || !resolvedForRetentionU6C(delivery)) return;
         await safeJobBytesJ4R(item.dir);
         const retired = path.join(JOBS, `.retired-${item.id}`);
         await fs.rename(item.dir, retired);
@@ -258,6 +263,7 @@ export async function pruneJobHistory({ force = false, now = Date.now() } = {}) 
         removed.push(item.id);
         retained--;
         totalBytes -= item.bytes;
+        });
       } catch (error) { errors.push({ job_id: item.id, error: String(error?.message ?? error).slice(0, 200) }); }
     }
     const summary = { checked_at: new Date(now).toISOString(), removed_count: removed.length, retained_delivered_jobs: retained,

@@ -14,6 +14,7 @@ import { reconcileJob } from "./watchdog.mjs";
 import { cancelJob, deleteJob } from "./job-control.mjs";
 import { authorizeMaintenanceS4W, MaintenancePolicyError } from "./delegation-policy.mjs";
 import { captureContinuityU6C } from "./continuity.mjs";
+import { issueReviewReceiptQ8S, recordReviewQ8S } from './supervisor-review.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const config = JSON.parse(await fs.readFile(path.join(root, "config.json"), "utf8"));
@@ -152,8 +153,27 @@ server.registerTool("local_result", {
     const resultFile = state.status === "COMPLETED" ? "result.md" : "error.txt";
     const result = await fs.readFile(path.join(dir, resultFile), "utf8").catch(() => "");
     const final = await fs.readFile(path.join(dir, "supervisor-final.md"), "utf8").catch(() => "");
-    return reply({ job_id, status: state.status, error_kind: state.error_kind ?? null, delivery: delivery.status, result, supervisor_final: final });
+    let reviewReturn={result,supervisor_final:final};
+    if(['COMPLETED','FAILED'].includes(state.status)){
+      try{reviewReturn=await issueReviewReceiptQ8S(job_id);}
+      catch(error){reviewReturn.review={status:'UNAVAILABLE',error:String(error?.message??error).slice(0,240)};}
+    }
+    return reply({ job_id, status: state.status, error_kind: state.error_kind ?? null, delivery: delivery.status, ...reviewReturn });
   } catch (error) { return errorReply(error); }
+});
+
+server.registerTool('local_review', {
+  description:'Supervisor: registra nota0–10 somente após receber e examinar retorno terminal. Não infere qualidade pelo status; exige recibo local_result e confirmação de revisão.',
+  inputSchema:z.object({job_id:z.string(),receipt_id:z.string().regex(/^[a-f0-9]{64}$/),receipt_token:z.string().regex(/^[a-f0-9]{64}$/),
+    expected_revision:z.number().int().min(0).max(32),review_complete:z.literal(true),
+    reviewer_thread_id:z.string().uuid(),reviewer_repo_path:z.string().min(1),score:z.number().int().min(0).max(10),reason:z.string().trim().max(360).optional()}).strict(),
+},async ({reviewer_repo_path,...input})=>{
+  try{
+    if(process.env.LOCAL_WORKER_JOB_ID)throw new RequestRejected('Q8S: ferramenta exclusiva do supervisor');
+    if(!path.isAbsolute(reviewer_repo_path))throw new RequestRejected('Q8S: diretório do supervisor deve ser absoluto');
+    assertTargetThread(input.reviewer_thread_id,reviewer_repo_path);
+    return reply(await recordReviewQ8S(input));
+  }catch(error){return errorReply(error);}
 });
 
 server.registerTool("local_cancel", {

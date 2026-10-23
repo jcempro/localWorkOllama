@@ -7,7 +7,7 @@ const PROTOCOL_VERSION_R4B = "2025-11-25";
 const STARTUP_TIMEOUT_MS_R4B = 120_000;
 const CALL_TIMEOUT_MS_R4B = 120_000;
 const MAX_ARGUMENT_BYTES_R4B = 256 * 1024;
-const ALLOWED_TOOLS_R4B = new Set(["local_analyze", "local_status", "local_result", "local_monitor"]);
+const ALLOWED_TOOLS_R4B = new Set(["local_analyze", "local_status", "local_result", "local_monitor", "local_review"]);
 
 export async function callLocalWorker({ name, args = {}, serverPath = path.join(root, "server.mjs"), env = process.env }) {
   if (!ALLOWED_TOOLS_R4B.has(name)) throw new Error(`Ferramenta não permitida: ${name}`);
