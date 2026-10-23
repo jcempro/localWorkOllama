@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 57 deles; não substitui o aceite dos outros 10.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 58 deles; não substitui o aceite dos outros 9.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os57 aceites/correções semânticos já registrados neste documento nem aceita os10 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os58 aceites/correções semânticos já registrados neste documento nem aceita os9 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -295,3 +295,15 @@ Job c7063ad7-56d8-41d9-9100-69e836885d3e: local_result uma vez; COMPLETED, diff_
 | 2da3cc2a | Análise histórica read-only de evidência fornecida, sem inspeção/mutação próprias. Metadados confirmam rename e similaridade88%; não “redirecionamento parcial”. @@ declara intervalo antigo start1/count182 e novo start1/count47; não totais dos arquivos. No fragmento,53 linhas removidas e zero adicionadas/contexto observadas; hunk incompleto. whole_file_sizes e fragment_coverage_percent são null: rejeitar47 linhas preservadas/26% visíveis e remoção integral1–182. A origem literal informa parte-01.txt preservada no commit1826ada374 e extraída de evidence.jsonl de0ceda154; não prova que evidence.jsonl foi o arquivo commitado. |
 
 Aceite **parcial com correções** do parecer original: identificação dos grupos iniciais e renomeação permanece limitada ao fragmento; seção cortada e demais hunks continuam fora da cobertura. Não inferir autoria, tamanho total, conteúdo omitido, necessidade de ajuste de rotas ou conclusão do artigo. Os dois auditores inferenciais rejeitados não são convertidos retroativamente em sucesso. D9F forneceu extração objetiva verificável, com revisão proporcional; não demonstra competência semântica geral do modelo. QUEUED_TO_CHAT só fila. Recuperação do método concluída para esta unidade, sem replay do negócio. Acumulado57 revisados/10 pendentes nesta captura.
+
+## Segmento21 — leitura histórica delimitada e correções
+
+Auditor e83a9a13-5edf-4474-8606-5a430fcce80c: local_result uma vez; COMPLETED, quatro itens cobertos por evidência fornecida, sem ferramentas/execução/escrita próprias. Git determinístico main...origin/main limpo em23/10/2026 07:02:33UTC é do auditor. Artefato histórico evidence.jsonl SHA3f107efc16c9cddb6afcd9cfc71afa7157de6353ffa2503d1f6412369d226eb4 conferido com a captura antes do envio; não leitura viva do blog. Aceite parcial com correções de linha/comportamento.
+
+| ID | Evidência e limite de aceite |
+| --- | --- |
+| 855bbb2a | read_file11 entregou1–300 de314 linhas; completion_verified17 satisfez a leitura requerida. Nenhuma mutação/comando/build. Revisão atual recebeu58 linhas selecionadas16–17/23–30/94–126/229–243, não as300 integralmente. normalize_table94–117 altera atributos de tabela/TH; normalize_image119–125 atribui data-jcem-accessible-image na124, não na123 nem dentro de normalize_table. normalize_document230–231 verifica output_ext e conteúdo de document.output.to_s, não caminho do arquivo;236 substitui document.output por normalize_html. |
+
+Corrigir a conclusão do auditor sobre nil:28 contém node.text.to_s; to_s aplica-se ao retorno de node.text, não protege um receptor node nulo. No chamador105, caption && !compact_text(caption).empty? já impede a chamada quando caption é nil. Rejeitar proposta histórica de acrescentar esse mesmo guard como se ausente. A regra de caption também tem exceção role=presentation95 e só cria caption100–103 quando ausente e metadata não vazia; não afirmar criação incondicional com metadata. Nenhum desses fatos autoriza editar o plugin atual.
+
+O diagnóstico histórico atribuiu falha de ff4dda85 a carregamento/config/permissão/build sem prova; ff já aceito no segmento01 falhou por leituras obrigatórias não executadas. Ausência de comandos/build/leitura de _config.yml não pode virar diagnóstico de Jekyll nem recomendação obrigatória de configuração. O trecho233 referencia document.site.config, mas não comprova leitura/validação externa de arquivo. Hooks301–314 não foram fornecidos na leitura histórica; não afirmar sua inexistência no plugin. Git sem diferença local não demonstra que um arquivo não mudou recentemente. Parecer limitado à leitura estática, sem validação runtime ou diagnóstico completo. QUEUED_TO_CHAT só fila; header não prova autoria/push/limpeza. Acumulado58 revisados/9 pendentes nesta captura.
