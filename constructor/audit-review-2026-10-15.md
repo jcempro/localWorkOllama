@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 60 deles; não substitui o aceite dos outros 7.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 61 deles; não substitui o aceite dos outros 6.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os60 aceites/correções semânticos já registrados neste documento nem aceita os7 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os61 aceites/correções semânticos já registrados neste documento nem aceita os6 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -333,3 +333,15 @@ Auditor9af93b6f-39d8-4122-a311-9bd0d6f88892: local_result uma vez; COMPLETED por
 Corrigir criação bem-sucedida para gravação comprovada: o recibo não fornece baseline de inexistência. No passo8/evento51 houve read_file, não file_info. A sequência terminal combinou file_info59, run_command66 rejeitado, read_file73 repetido e file_info80; não quatro file_info consecutivos sem progresso. file_info43 inicialmente contou como progresso. As recusas não comprovam falta de permissão de escrita: write_file37 foi aprovado. O pedido proibia Git e deixava commit ao supervisor por alterações herdadas; não ampliar Git nem exigir teste/commit que não pertenciam à unidade. O mkdir apontava .ia/rules/... enquanto o alvo escrito é .ia.rules/...; a chamada foi recusada antes de efeito, sem prova de pasta indevida criada.
 
 O master contém fonte/hash/data, planoA–F e estado Pending. A expressão Falha reproduzida remete ao relato de origem, não a reprodução executada por esse job; o relatório não pode atribuir build/teste próprios. O header histórico dev...origin/dev [ahead6] não comprova autoria, push, limpeza ou ausência de efeito; o pacote não fornece campo no_net_git_change=true. Não aceitar negação global de mudança líquida nem conclusão funcional das FTs113–115. Reticências em NEEDS_SUPERVISOR não são pedido de acesso concreto. Sucessor845e8f16 já revisado no segmento19 registrou/stageou/commitou df79982595; não repeti-lo. QUEUED_TO_CHAT só fila. Acumulado60 revisados/7 pendentes nesta captura.
+
+## Segmento24 — pares literais dos hunks2–4
+
+Auditor36e4b3ef-0cfa-41b4-b0b4-43076413b163: local_result uma vez; COMPLETED por comparação de evidência fornecida, sem ferramentas/escrita/commit próprios. Git determinístico main...origin/main limpo em23/10/2026 07:36:23UTC pertence a esta auditoria; header histórico dev...origin/dev [ahead2] é distinto. Request/result originais conferidos contra captura: SHA256c7dddb8f3bbacbf05e8b90a5ac450dfd15a883d951f09812552eadb96b38dcd8 e bc5416afdfe52675013cbb66abfbf6e72f255aad75b1d1e900825caf4ca98e18. Pares originais completos incluídos, normas anteriores ao JSON excluídas por não serem alvos; sem leitura viva do artigo.
+
+| ID | Aceite fundamentado e limite |
+| --- | --- |
+| c47c35df | Hunk2 acrescenta uma linha data-jcem-caption com legenda sobre Mateus23/comparações retóricas; removed vazio. Hunk3 troca somente delimitadores de itálico em Obreiros Evangélicos e The Signs of the Times; substituições literais reproduzem added integralmente, preservando demais caracteres/referências/ênfases. Hunk4 remove uma linha vazia; added vazio. Inventário dessas diferenças aceito. |
+
+Aceite parcial com qualificações: rejeitar o padrão obrigatório alegado no parecer original, sublinhado como padrão em Markdown Jekyll, pois não há norma/configuração demonstrando-o. Compatibilidade geral de delimitadores não comprova convenção local nem demanda novo build por si só. O auditor atual não repetiu esse padrão como fato local, mas tampouco o refutou explicitamente; a correção fica nesta revisão, sem nova inferência. Hunk4 comprova linha vazia removida, não a localização exata entre parágrafos nem efeito de renderização, porque pares omitem contexto. Declaração de cobertura exata limita-se aos blocos removed/added fornecidos; não aos arquivos completos ou conteúdo contextual dos hunks.
+
+O valor de added2 recebido contém escapes antes das aspas; preservar a representação capturada e distinguir serialização de código efetivamente renderizado. Não declarar sintaxe IAL válida/inválida, legenda materializada ou falha atual apenas por esse artefato. Origem literal cita corpo-deltas-01.json extraído do delta e versionado em2314f8284a; não prova fontes externas verificadas, autoria ou arquivo evidence.jsonl commitado. Metadado pode exigir suporte, mas sua validação não ocorreu nesta unidade; não afirmar ausência geral de validação prévia. Demais hunks/fontes/tabelas/integração continuam fora do aceite. Não reescrever ou restaurar artigo. QUEUED_TO_CHAT só fila. Acumulado61 revisados/6 pendentes nesta captura.
