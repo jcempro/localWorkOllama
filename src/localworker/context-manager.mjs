@@ -54,21 +54,43 @@ function cutIndex(messages, recent = CONTEXT_RECENT_MESSAGES_C7M) {
 
 export class ContextOverflowC7M extends Error {}
 
-function preservedContext(messages, rejectedDrafts) {
+function literalMarkdown(message) {
+  return message.role === "tool" && message.tool_name === "read_file" &&
+    /\.md \[linhas \d+-\d+\/\d+\]/i.test(String(message.content ?? ""));
+}
+
+function preservedContext(messages, rejectedDrafts, retainedMessages = [], preservedRecords = new WeakMap()) {
+  // Somente igualdade integral de retornos de leitura: nenhuma normalização.
+  // Todas as ocorrências/ordem continuam no checkpoint; uma cópia fica literal ativa.
+  const markdown = new Set(retainedMessages.filter(literalMarkdown).map(message => String(message.content ?? "")));
+  let duplicates = 0;
+  const records = [];
+  const keep = (message, text) => {
+    // Proveniência interna mínima, sem argumentos, raciocínio privado ou saídas descartáveis.
+    records.push({ role: message.role, ...(message.tool_name ? { tool_name: message.tool_name } : {}), content: text });
+    return [text];
+  };
   // Decisões textuais e instruções recebidas depois do início não podem virar só um índice.
-  return messages.flatMap(message => {
+  const parts = messages.flatMap(message => preservedRecords.get(message) ?? [message]).flatMap(message => {
     const text = String(message.content ?? "");
     if (message.role === "assistant" && rejectedDrafts?.has(message)) return [];
     if (message.role === "user" && text.startsWith("CHECKPOINT DE CONTEXTO")) {
       const marker = "\n\nESTADO E INSTRUÇÕES PRESERVADOS:\n";
-      return text.includes(marker) ? [text.slice(text.indexOf(marker) + marker.length)] : [];
+      return text.includes(marker) ? keep(message, text.slice(text.indexOf(marker) + marker.length)) : [];
     }
-    if (message.role === "assistant" && text.trim()) return [text];
-    if (message.role === "user" && !text.startsWith("CHECKPOINT DE CONTEXTO")) return [text];
-    if (["run_authorized_command", "git_commit_unit"].includes(message.tool_name)) return [text];
-    if (message.tool_name === "read_file" && /\.md \[linhas \d+-\d+\/\d+\]/i.test(text)) return [text];
-    return [...text.matchAll(/--- INSTRUÇÃO DO REPOSITÓRIO:[\s\S]*?--- FIM DA INSTRUÇÃO ---/g)].map(match => match[0]);
-  }).join("\n\n");
+    if (message.role === "assistant" && text.trim()) return keep(message, text);
+    if (message.role === "user" && !text.startsWith("CHECKPOINT DE CONTEXTO")) return keep(message, text);
+    if (["run_authorized_command", "git_commit_unit"].includes(message.tool_name)) return keep(message, text);
+    if (literalMarkdown(message)) {
+      if (markdown.has(text)) { duplicates++; return []; }
+      markdown.add(text);
+      return keep(message, text);
+    }
+    // Preserva também os formatos legados sem role=tool, sem deduplicá-los.
+    if (message.tool_name === "read_file" && /\.md \[linhas \d+-\d+\/\d+\]/i.test(text)) return keep(message, text);
+    return [...text.matchAll(/--- INSTRUÇÃO DO REPOSITÓRIO:[\s\S]*?--- FIM DA INSTRUÇÃO ---/g)].flatMap(match => keep({role:"user"}, match[0]));
+  });
+  return { content: parts.join("\n\n"), duplicates, records };
 }
 
 function lowerContext(current, minimum, estimated) {
@@ -95,6 +117,7 @@ export class ContextManagerC7M {
     this.lastUnavailable = null;
     this.checkpointUnavailable = false;
     this.rejectedDrafts = new WeakSet();
+    this.preservedRecords = new WeakMap();
   }
 
   rejectedDraft(message) {
@@ -131,6 +154,7 @@ export class ContextManagerC7M {
       contextPressure && "janela de contexto próxima do limite"].filter(Boolean);
     const reason = reasons.join("; ");
     let proposed = null;
+    let proposedRecords = null;
     let after = before;
     let checkpoint = null;
     if (!this.checkpointUnavailable && this.directory) {
@@ -145,15 +169,18 @@ export class ContextManagerC7M {
         `Histórico anterior persistido neste job; checkpoints anteriores: ${previous}. ` +
         `O resumo abaixo é índice, não substitui as evidências. Use context_recall com checkpoint_id e entry_index para reidratar qualquer decisão, saída ou argumento antes de depender dele. ` +
         `Rascunho recusado não tem aceite; reidrate sua entrada antes de depender de dados dele. Estado atual de arquivos deve ser confirmado pelas ferramentas do repositório. Próximo passo: continue a tarefa original a partir das mensagens recentes, sem repetir trabalho já comprovado.\n${overview(removed, this.rejectedDrafts)}`;
-      const retained = preservedContext(removed, this.rejectedDrafts);
-      const candidate = [...messages.slice(0, 2), { role: "user", content: summary + (retained ? `\n\nESTADO E INSTRUÇÕES PRESERVADOS:\n${retained}` : "") }, ...messages.slice(cut)];
+      const retained = preservedContext(removed, this.rejectedDrafts, [...messages.slice(0, 2), ...messages.slice(cut)], this.preservedRecords);
+      const duplicateNotice = retained.duplicates ? `\nD2C: ${retained.duplicates} cópia(s) integralmente idêntica(s) de retorno Markdown omitida(s) do texto preservado; conteúdo literal ativo mantido. Cada ocorrência permanece íntegra no checkpoint e no índice.` : "";
+      const candidate = [...messages.slice(0, 2), { role: "user", content: summary + duplicateNotice + (retained.content ? `\n\nESTADO E INSTRUÇÕES PRESERVADOS:\n${retained.content}` : "") }, ...messages.slice(cut)];
       const candidateSize = estimateContextTokensC7M(candidate, tools);
       if (before - candidateSize < CONTEXT_MIN_SAVING_TOKENS_C7M || candidateSize >= after) continue;
       proposed = candidate;
+      proposedRecords = retained.records;
       after = candidateSize;
       checkpoint = { schema: "localworker-context-checkpoint/v1", id, created_at: new Date().toISOString(),
         entries: removed, rejected_draft_entries: removed.flatMap((message, index) => this.rejectedDrafts.has(message) ? [index] : []),
-        before_estimated_tokens: before, after_estimated_tokens: after };
+        before_estimated_tokens: before, after_estimated_tokens: after,
+        markdown_duplicates_deduplicated: retained.duplicates };
       if (after <= this.contextTokens * CONTEXT_TARGET_FRACTION_C7M) break;
       }
     }
@@ -176,6 +203,7 @@ export class ContextManagerC7M {
           }
         }
         messages.splice(0, messages.length, ...proposed);
+        this.preservedRecords.set(proposed[2], proposedRecords);
         this.checkpoints.push({ id: checkpoint.id, sha256: hash, entries: checkpoint.entries.length });
         this.count++;
       } catch (error) {
@@ -208,7 +236,9 @@ export class ContextManagerC7M {
     this.lastPromptTokens = null;
     this.lastUnavailable = null;
     const rejectedCount = checkpoint?.rejected_draft_entries?.length ?? 0;
-    const strategy = checkpoint ? rejectedCount ? "checkpoint íntegro de rascunho recusado + instruções/evidências preservadas" : "checkpoint íntegro + índice recuperável + histórico recente" : "redução controlada de num_ctx";
+    const duplicateCount = checkpoint?.markdown_duplicates_deduplicated ?? 0;
+    const strategy = (checkpoint ? rejectedCount ? "checkpoint íntegro de rascunho recusado + instruções/evidências preservadas" : "checkpoint íntegro + índice recuperável + histórico recente" : "redução controlada de num_ctx") +
+      (duplicateCount ? `; D2C: ${duplicateCount} cópia(s) Markdown idêntica(s), conteúdo literal ativo preservado` : "");
     await emit({ phase: "context_compacted", reason, strategy,
       checkpoint_id: checkpoint?.id ?? null, context_before_tokens: before, context_after_tokens: activeEstimate,
       context_limit_tokens: this.contextTokens, ram_before_bytes: ram?.ramAvailable ?? null,
@@ -217,7 +247,8 @@ export class ContextManagerC7M {
       vram_after_mib: resources?.sampleGpu ? (await resources.sampleGpu())?.freeMiB ?? null : null,
       compaction_count: this.count,
       rejected_drafts_archived: rejectedCount,
-      summary: `Estimativa de contexto ${before} → ${activeEstimate} tokens; janela ativa ${this.contextTokens}; checkpoint ${checkpoint?.id ?? "sem descarte"}.${rejectedCount ? ` Rascunhos recusados integralmente preservados: ${rejectedCount}.` : ""}` });
+      markdown_duplicates_deduplicated: duplicateCount,
+      summary: `Estimativa de contexto ${before} → ${activeEstimate} tokens; janela ativa ${this.contextTokens}; checkpoint ${checkpoint?.id ?? "sem descarte"}.${rejectedCount ? ` Rascunhos recusados integralmente preservados: ${rejectedCount}.` : ""}${duplicateCount ? ` D2C: ${duplicateCount} cópia(s) Markdown idêntica(s) omitida(s); conteúdo literal ativo e ocorrências integrais no checkpoint.` : ""}` });
     this.pendingEffect = { reason, strategy,
       count: this.count, before, after: activeEstimate, ram: ram?.ramAvailable ?? null, vram: gpu?.freeMiB ?? null };
     return true;

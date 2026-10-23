@@ -81,6 +81,8 @@ Não há garantia de pontualidade de um Windows desligado, sem logon ou sem rede
 
 A compactação preserva o último lote de respostas de ferramentas até o modelo examiná-lo, incluindo código. Uma conclusão recusada por requisito pendente é marcada como rascunho sem aceite: sob pressão, seu texto público fica integralmente em checkpoint verificado, com reidratação por `context_recall`, e o contexto ativo mantém a recusa/próximo passo. Normas, objetivo e decisões consolidadas não são descartados. O campo `rejected_drafts_archived` aparece no evento de compactação; `rejected_draft=true` identifica a entrada reidratada. Se o checkpoint falhar, o histórico ativo permanece íntegro; uma base irredutível ainda exige segmentação. Raciocínio privado não acompanha esse rascunho. Recibos de execução e commits permanecem no estado preservado; um retorno que não caiba com segurança exige segmentação, sem descarte silencioso. O Git comprova estado/versionamento, mas não substitui leitura dos arquivos necessários à análise.
 
+Quando a leitura de um documento Markdown produzir cópias integralmente idênticas, a compactação pode manter uma única cópia literal ativa. Todas as ocorrências e sua ordem continuam no checkpoint recuperável; instruções humanas, decisões e documentos diferentes permanecem protegidos. Nem um byte é normalizado para decidir igualdade. O evento mostra `D2C` e `markdown_duplicates_deduplicated`, sem expor o conteúdo do documento. O último retorno ainda não visto não é removido. Resumos antigos sem proveniência continuam preservados; não se promete que qualquer base documental caiba na janela disponível.
+
 No monitor, **Todos os jobs** mostra barras de CPU, GPU, RAM e VRAM globais da máquina, atualizadas automaticamente a cada dez segundos. A primeira leitura de CPU pode aparecer indisponível até haver duas amostras. GPU/VRAM exigem a fonte NVIDIA já usada pelo runtime; ausência aparece explicitamente. Abra um job para ver suas métricas e a timeline, com eventos mais recentes no topo; o histórico original permanece intacto.
 
 O runtime instalado inclui `progress-guard.mjs`: repetições determinísticas são bloqueadas antes de executar; quatro ações sem progresso verificável encerram a unidade com diagnóstico. O log `strategy_blocked` registra classes e hashes de ações/estados. Para continuar, corrija a pré-condição, use alternativa autorizada ou conceda ao Worker somente o acesso exato necessário. Não aumente o teto de ciclos para mascarar loops. Retries transitórios seguros continuam limitados; uma falha de validação permanece pendente até passar.
@@ -693,7 +695,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/thread-check.mjs` | `83683a14a1f451f20d2761eac851522241e870366b1b25be2582ccfeacddbb79` |
 | `src/localworker/job-store.mjs` | `9dbb88b2e49582b1529b61b86382fefc176778a66850ce1aa36c0eab978de725` |
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
-| `src/localworker/context-manager.mjs` | `6648d72a76cdac96b9d5f84a84fdb8f9a05c0047ac35af640f298ddda15a8d54` |
+| `src/localworker/context-manager.mjs` | `addcc0cf78334908092424403b930782430a2e411fafd79ae64ff3cd43433f6d` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
 | `src/localworker/worker-core.mjs` | `912fcdb6c0374ce4b216979ff6419c159c69ea3f50a569f4d813aca519bc5417` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
