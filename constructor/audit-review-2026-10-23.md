@@ -26,3 +26,7 @@ Resultado consultado uma vez: `COMPLETED`, sem ferramentas ou commits, conforme 
 A revisão proporcional recuperou somente a cauda capturada do erro de7d6a26de e conferiu a sintaxe do código autorizado, sem imports, execução do script, rede, novo job ou repetição de negócio. Identificou-se também falha na preparação do pacote: o recorte somente inicial ocultava a exceção depois do longo código ecoado pelo Node. Isso não permite presumir que toda evidência esteja íntegra na captura original.
 
 O Git determinístico do auditor, em23/10 às12:20:39 UTC, era `main...origin/main` limpo. É o estado deste repositório na auditoria, não substitui os três cabeçalhos históricos `dev` e não comprova escrita, commit ou push dos jobs examinados.
+
+## Handoff do segmento32
+
+Job `2363caae-3ac9-4da9-a9bf-7dd9a483c6ee`, recibo `RUNNING`, compara somente0091e651/03b87b5b com evidência fornecida, sem ferramentas ou negócio. Pacote privado `2026-10-23-segment32-8c4dd8fa-1bc0-42a1-80a9-d5f310dd71af.json`,10218 caracteres, SHA256 `05661c0ea06ff021e42331a0c2ee142d92cb334a2888fdf76fa5820fbe835bee`; gerado com E6T, tarefas/requisitos integrais, seleção de eventos e omissões explícitas. C=5/júnior; escopo `1bc50dfa61af67294276735fa42af5cb160cde87a2501bfd989427eb9d70b06f`. Exige dois objetos JSON com requisito não comprovado, linhas de eventos, erro literal do mesmo ID e limite;220 palavras. No callback, consultar resultado uma vez e conferir citações/contratos proporcionalmente, sem repetir tarefas ou transformar o parecer em aceite automático.
