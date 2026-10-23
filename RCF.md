@@ -24,6 +24,8 @@ Persistência exclusiva no diretório do job, atômica e sob lock canônico comp
 
 Monitor expõe nota atual, justificativa e histórico compacto, sem credenciais, pelo fluxo de atualização existente. Auditoria histórica reutiliza revisões/capturas e declara cobertura e limites; status/recibo operacional jamais bastam para aprovar semanticamente todos os casos. Fonte e demanda integral: `constructor/supervisor-quality-request.md`; implementação, instalação e validação permanecem pendentes até comprovação.
 
+Migração legada explícita: retorno já recebido/examinado antes de Q8S pode usar `local_review.legacy_received`, somente se ainda não existir registro Q8S daquele job, com revisão esperada0, confirmação de exame, origem rastreável e SHA-256 do resultado/final efetivamente recebidos e do status/error_kind. A API confronta-os com os artefatos persistidos antes de emitir recibo e gravar a nota, na mesma operação/lock. Divergência, origem ausente, CANCELLED ou registro existente recusa sem escrita. Não invoca local_result, não executa análise, não fabrica credencial nem aceita nota baseada apenas no status. A afirmação de recebimento permanece responsabilidade do supervisor; hashes comprovam correspondência, não cognição. Retry idêntico de importação pode confirmar exclusivamente a primeira revisão legada inalterada, com a mesma origem/hash/autor/conteúdo; não serve para alterar revisões posteriores.
+
 ## Compactação global do supervisor após delegação — N7C
 
 N7C constitui **modus operandi obrigatório, permanente e explícito** do supervisor, distribuído pelo AGENTS global: não depende de repetição no prompt, não é recomendação e promessa textual não satisfaz execução. Este reforço institui a obrigação, sem criar capacidade técnica nem dispensar confirmação.
@@ -210,9 +212,9 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `867433bd006304958a2f7b5287534074389c25fe516caae52aa8e6da64cf2c32` |
-| `src/localworker/supervisor-review.mts` | `8ef65563edef0491639ece480a0e0c84528e5f0648d0f35bd407010818bacab6` |
-| `src/localworker/supervisor-review.mjs` | `7733216e3cdcf39c73dba5f6d6617383349709c459ccf7baac081fe49481d5ee` |
+| `src/localworker/server.mjs` | `51ca4796a8512cd3c1491615fc5d5bec832a027bec505e5331da29c06f8eb2da` |
+| `src/localworker/supervisor-review.mts` | `3293b645f10bc9270fe5b01ff69b315a72a20a8fce7024c462b3b230209b1d89` |
+| `src/localworker/supervisor-review.mjs` | `53210647454bd3b062f1425749ee19054cd9ede5cdcb2446410cf8fc55988576` |
 | `src/localworker/delegation-policy.mts` | `d7f1eed4081eb23983c7a26ca1a29e7e646ce0ae23550ff4fc1c84ea6bdb115d` |
 | `src/localworker/delegation-policy.mjs` | `8370a671d03257175895e65864f3ae1e9836023b7566f928dda470c1c35feeae` |
 | `src/localworker/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
@@ -237,7 +239,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `027c64a9125813c4facad67ba4af2310ec14c0b70baa51ea53f9593b9344899f` |
+| `src/agents.supervisor.md` | `e131b7a07fbe97b3418ca0307c57dfd70e169b15d297e1884307a42a8276975c` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Evidência fornecida e autoria da verificação

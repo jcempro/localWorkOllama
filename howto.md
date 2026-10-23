@@ -128,6 +128,8 @@ O recibo vincula pedido e retorno por hashes; emiti-lo não comprova recebimento
 
 No monitor, a coluna **Qualidade** mostra a nota atual ou ausência explícita de avaliação. Abra o job para consultar motivo, horário e histórico de revisões. Retorno modificado fica **Revisão pendente**; registro ilegível fica **Indisponível**, sem nota presumida. As atualizações usam o fluxo automático existente, sem reload, e nunca atribuem nota. O painel não expõe credenciais nem oferece atribuição pelo Worker. A regra global reproduzida abaixo exige avaliação no checkpoint normal, e o callback lembra essa etapa; a efetiva revisão/atribuição continua sendo responsabilidade do supervisor. Ausência de recibo em versão antiga é limitação explícita: não fabrique token nem repita consulta proibida.
 
+**Migração de revisão já concluída antes de Q8S:** `local_review` também aceita `legacy_received:{source,status,error_kind,result_sha256,supervisor_final_sha256}` em lugar de `receipt_id`/`receipt_token`, com `expected_revision:0` e os demais campos normais. Calcule SHA-256 UTF-8 dos textos efetivamente recebidos e reutilize a revisão existente; `source` identifica o recebimento/checkpoint (12–512 caracteres, sem segredos). A API confere conteúdo/status persistidos e exige job sem registro Q8S. Divergência recusa sem escrita; retry absolutamente idêntico confirma apenas a primeira importação inalterada. Não é atalho para alterar avaliação existente nem prova técnica de exame cognitivo. Ausência da evidência recebida impede migração; mantenha pendência.
+
 `command_sequence` não carrega política GPU nem prepara/compacta contexto: não depende do Ollama ou do teto de ciclos de inferência. Cada comando mantém seu timeout técnico, autorização, evidência e validação; a sequência tem no máximo 32 IDs distintos e para no primeiro erro. Se os comandos passarem, mas faltar a alteração, validação ou commit exigido pelo contrato, o resultado informa essa pendência específica, sem repetir comandos nem alegar esgotamento de ciclos. Recursos consumidos pelo executável autorizado ainda precisam ser avaliados pelo supervisor antes da delegação.
 
 Declare em `required_change_paths` todos os arquivos que a unidade deve produzir ou alterar. O runtime compara seus hashes antes/depois, inclusive para arquivos ignorados pelo Git; conteúdo idêntico, alteração revertida e mudança somente em outro arquivo não satisfazem essa prova. Esses hashes também permitem reconhecer progresso real quando a saída textual do comando se repete. Em `completion_verified`, `declared_changes_verified` e `git_unchanged` distinguem a prova dos alvos do estado Git; indisponibilidade de Git aparece como `null`. Para relatórios privados ignorados ou unidades sem autorização de commit, use `commit_policy='supervisor'`: o supervisor revisa e versiona a unidade pertinente, sem adicionar segredos ao Git. Mudança de bytes não comprova autoria ou qualidade semântica nem dispensa validação.
@@ -495,7 +497,7 @@ Após receber cada retorno terminal não CANCELLED e concluir a revisão proporc
 
 Escala inteira0–10: 0 inutilizável/violação impeditiva comprovada; 1–3 defeitos graves; 4–5 parcial; 6–7 útil com defeitos delimitados; 8–9 satisfatório; 10 integralmente comprovado no microescopo examinado. Notas≤3/≥8 exigem `reason` verificável ultrassucinto (≤360 caracteres); intermediárias dispensam motivo. Não é a criticidade C. Use os campos `receipt_id`, `receipt_token`, `revision` recebidos como credencial e `expected_revision`, com `review_complete:true`, `reviewer_thread_id` e `reviewer_repo_path` da conversa atual comprovada. Não publique o token. A confirmação declara recebimento/exame; a API não pode comprovar cognição.
 
-Registre no checkpoint já necessário, sem nova inferência, relatório prolixo, polling ou exploração duplicada. Sem evidência suficiente, conserve pendência explícita, sem nota inventada. Falha de registro exige diagnóstico, não repetir inferência/consulta do resultado nem ocultar a revisão. Catálogo antigo pode usar `mcp-call.mjs` instalado para `local_review`, com o mesmo contrato. Reenvio idêntico é idempotente; conflito ou retorno modificado exige reconciliação antes de nova nota, sem sobrescrita cega. Registros legados sem recibo não autorizam fabricar credencial ou repetir consulta proibida: preserve revisão e trate migração explicitamente. Não altera permissões, modelo/esforço, retomada ou intenção humana.
+Registre no checkpoint já necessário, sem nova inferência, relatório prolixo, polling ou exploração duplicada. Sem evidência suficiente, conserve pendência explícita, sem nota inventada. Falha de registro exige diagnóstico, não repetir inferência/consulta do resultado nem ocultar a revisão. Catálogo antigo pode usar `mcp-call.mjs` instalado para `local_review`, com o mesmo contrato. Reenvio idêntico é idempotente; conflito ou retorno modificado exige reconciliação antes de nova nota, sem sobrescrita cega. Retorno legado sem recibo, já recebido/examinado, pode usar `legacy_received:{source,status,error_kind,result_sha256,supervisor_final_sha256}` em lugar das credenciais, somente sem registro Q8S e revisão0: hashes UTF-8 do retorno efetivamente recebido, origem rastreável, confirmação de exame e nota real. API confere os artefatos; ausência/divergência mantém pendência, sem fabricar credencial nem repetir consulta proibida. Não altera permissões, modelo/esforço, retomada ou intenção humana.
 
 ## Falhas, omissões e ausência de resposta
 
@@ -712,9 +714,9 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
 | `src/localworker/package-lock.json` | `1c1f7f1e2c68af0041ea911237d1dee9ff36bc604f3a7c52ba75de470110b91f` |
-| `src/localworker/server.mjs` | `867433bd006304958a2f7b5287534074389c25fe516caae52aa8e6da64cf2c32` |
-| `src/localworker/supervisor-review.mts` | `8ef65563edef0491639ece480a0e0c84528e5f0648d0f35bd407010818bacab6` |
-| `src/localworker/supervisor-review.mjs` | `7733216e3cdcf39c73dba5f6d6617383349709c459ccf7baac081fe49481d5ee` |
+| `src/localworker/server.mjs` | `51ca4796a8512cd3c1491615fc5d5bec832a027bec505e5331da29c06f8eb2da` |
+| `src/localworker/supervisor-review.mts` | `3293b645f10bc9270fe5b01ff69b315a72a20a8fce7024c462b3b230209b1d89` |
+| `src/localworker/supervisor-review.mjs` | `53210647454bd3b062f1425749ee19054cd9ede5cdcb2446410cf8fc55988576` |
 | `src/localworker/delegation-policy.mts` | `d7f1eed4081eb23983c7a26ca1a29e7e646ce0ae23550ff4fc1c84ea6bdb115d` |
 | `src/localworker/delegation-policy.mjs` | `8370a671d03257175895e65864f3ae1e9836023b7566f928dda470c1c35feeae` |
 | `src/localworker/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
@@ -739,7 +741,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `027c64a9125813c4facad67ba4af2310ec14c0b70baa51ea53f9593b9344899f` |
+| `src/agents.supervisor.md` | `e131b7a07fbe97b3418ca0307c57dfd70e169b15d297e1884307a42a8276975c` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {promises as fs} from 'node:fs';
 import path from 'node:path';
-import {randomUUID} from 'node:crypto';
+import {randomUUID,createHash} from 'node:crypto';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {DatabaseSync} from 'node:sqlite';
 import vm from 'node:vm';
@@ -92,6 +92,19 @@ try{
   assert.equal(response.assessment.score,7);
   const again=JSON.parse(await callLocalWorker({name:'local_review',args,serverPath:path.join(fixture,'server.mjs'),env}));
   assert.equal(again.idempotent,true);
+  const legacy=await add('FAILED'),hash=v=>createHash('sha256').update(v).digest('hex');
+  const importArgs={job_id:legacy,expected_revision:0,review_complete:true,reviewer_thread_id:reviewer,reviewer_repo_path:source,
+    score:8,reason:'Revisão legada desta fixture; não é nota real.',legacy_received:{source:'Fixture de retorno recebido antes de Q8S',status:'FAILED',error_kind:null,
+      result_sha256:hash('Fixture de retorno, não avaliação real.'),supervisor_final_sha256:hash('')}};
+  for(const patch of [{result_sha256:'b'.repeat(64)},{status:'COMPLETED'},{error_kind:'inventado'},{source:''}]){
+    await assert.rejects(()=>callLocalWorker({name:'local_review',args:{...importArgs,legacy_received:{...importArgs.legacy_received,...patch}},serverPath:path.join(fixture,'server.mjs'),env}));
+    assert.equal(await fs.stat(path.join(s.jobDir(legacy),'supervisor-review.json')).then(()=>true,()=>false),false);
+  }
+  const imported=JSON.parse(await callLocalWorker({name:'local_review',args:importArgs,serverPath:path.join(fixture,'server.mjs'),env}));
+  assert.equal(imported.assessment.score,8);
+  const importRetry=JSON.parse(await callLocalWorker({name:'local_review',args:importArgs,serverPath:path.join(fixture,'server.mjs'),env}));
+  assert.equal(importRetry.idempotent,true);
+  await assert.rejects(()=>callLocalWorker({name:'local_review',args:{...importArgs,score:9},serverPath:path.join(fixture,'server.mjs'),env}),/já possui/);
   await assert.rejects(()=>callLocalWorker({name:'local_review',args:{...args,reviewer_repo_path:fixture},serverPath:path.join(fixture,'server.mjs'),env}),/outro diretório/);
   await assert.rejects(()=>callLocalWorker({name:'local_review',args,serverPath:path.join(fixture,'server.mjs'),env:{...env,LOCAL_WORKER_JOB_ID:api}}),/supervisor/);
   const monitor=await load('monitor.mjs');

@@ -11,7 +11,7 @@ const hashQ8S=(v:string)=>createHash('sha256').update(v).digest('hex');
 const CACHE_MAX_Q8S=1000, snapshotCacheQ8S=new Map();
 type GradeQ8S={revision:number,score:number,reason:string,reviewer_thread_id:string,reviewed_at:string};
 type ReceiptQ8S={id:string,token:string,issued_at:string,status:string,request_sha256:string,result_sha256:string,
-  final_sha256:string,execution_kind:string,revisions:GradeQ8S[]};
+  final_sha256:string,execution_kind:string,revisions:GradeQ8S[],legacy_source?:string};
 type LedgerQ8S={schema:1,job_id:string,receipts:ReceiptQ8S[]};
 
 function supervisorQ8S(){if(process.env.LOCAL_WORKER_JOB_ID)throw Error('Q8S: atribuição/recibo reservados ao supervisor, não ao processo Worker');}
@@ -40,6 +40,7 @@ async function ledgerQ8S(dir:string,id:string):Promise<LedgerQ8S>{
     if(!HASH_Q8S.test(r.id)||ids.has(r.id)||!HASH_Q8S.test(r.token)||!['COMPLETED','FAILED'].includes(r.status)||
       ![r.request_sha256,r.result_sha256,r.final_sha256].every(x=>HASH_Q8S.test(x))||
       !['deterministic','inference'].includes(r.execution_kind)||!Number.isFinite(Date.parse(r.issued_at))||
+      (r.legacy_source!==undefined&&(typeof r.legacy_source!=='string'||r.legacy_source.trim().length<12||r.legacy_source.length>512))||
       !Array.isArray(r.revisions)||r.revisions.length>MAX_REVISIONS_Q8S)throw Error('Q8S: recibo inválido; preservado');
     ids.add(r.id);
     for(const [i,g] of r.revisions.entries()){
@@ -80,20 +81,39 @@ export async function issueReviewReceiptQ8S(id:string){
   });
 }
 
-export type ReviewInputQ8S={job_id:string,receipt_id:string,receipt_token:string,expected_revision:number,
-  review_complete:true,reviewer_thread_id:string,score:number,reason?:string};
+export type ReviewInputQ8S={job_id:string,receipt_id?:string,receipt_token?:string,expected_revision:number,
+  review_complete:true,reviewer_thread_id:string,score:number,reason?:string,
+  legacy_received?:{source:string,status:string,error_kind:string|null,result_sha256:string,supervisor_final_sha256:string}};
 export async function recordReviewQ8S(input:ReviewInputQ8S){
   supervisorQ8S();
-  const {job_id:id,receipt_id,receipt_token,expected_revision,review_complete,reviewer_thread_id,score}=input;
+  const {job_id:id,expected_revision,review_complete,reviewer_thread_id,score,legacy_received:legacy}=input;
+  let {receipt_id,receipt_token}=input;
   const reason=input.reason?.trim()??'';
-  if(!HASH_Q8S.test(receipt_id)||!HASH_Q8S.test(receipt_token)||review_complete!==true||!UUID_Q8S.test(reviewer_thread_id)||
+  if((legacy?(receipt_id!==undefined||receipt_token!==undefined||expected_revision!==0||typeof legacy.source!=='string'||legacy.source.trim().length<12||legacy.source.length>512||
+    !HASH_Q8S.test(legacy.result_sha256)||!HASH_Q8S.test(legacy.supervisor_final_sha256)||!['COMPLETED','FAILED'].includes(legacy.status)||
+    (legacy.error_kind!==null&&typeof legacy.error_kind!=='string')):(!HASH_Q8S.test(receipt_id??'')||!HASH_Q8S.test(receipt_token??'')))||review_complete!==true||!UUID_Q8S.test(reviewer_thread_id)||
     !Number.isSafeInteger(expected_revision)||expected_revision<0||!Number.isInteger(score)||score<0||score>10||
     typeof reason!=='string'||reason.length>360||((score<=3||score>=8)&&!reason))throw Error('Q8S: revisão concluída, nota inteira0–10 e justificativa dos extremos exigidas');
   return withJobControl(id,async()=>{
     const dir=await directoryQ8S(id),t=await terminalQ8S(dir,id),ledger=await ledgerQ8S(dir,id);
+    if(legacy){
+      if(legacy.status!==t.state.status||legacy.error_kind!==(t.state.error_kind??null)||legacy.result_sha256!==t.digest.result_sha256||legacy.supervisor_final_sha256!==t.digest.final_sha256)
+        throw Error('Q8S: recebimento legado diverge do retorno persistido; sem importação');
+      const priorReceipt=ledger.receipts.find(r=>r.id===t.id),priorGrade=priorReceipt?.revisions.at(-1);
+      if(ledger.receipts.length){
+        if(ledger.receipts.length===1&&priorReceipt?.legacy_source===legacy.source.trim()&&priorGrade?.revision===1&&
+          priorGrade.score===score&&priorGrade.reason===reason&&priorGrade.reviewer_thread_id===reviewer_thread_id)
+          return {job_id:id,receipt_id:t.id,assessment:priorGrade,idempotent:true};
+        throw Error('Q8S: job já possui registro; migração legada não altera revisão existente');
+      }
+      receipt_id=t.id;receipt_token=randomBytes(32).toString('hex');
+      ledger.receipts.push({id:t.id,token:receipt_token,issued_at:new Date().toISOString(),status:t.state.status,
+        request_sha256:t.digest.request_sha256,result_sha256:t.digest.result_sha256,final_sha256:t.digest.final_sha256,
+        execution_kind:t.execution_kind,legacy_source:legacy.source.trim(),revisions:[]});
+    }
     if(t.id!==receipt_id)throw Error('Q8S: retorno mudou; revisão obsoleta, sem nota aplicada');
     const receipt=ledger.receipts.find(r=>r.id===receipt_id);
-    if(!receipt||!timingSafeEqual(Buffer.from(receipt.token,'hex'),Buffer.from(receipt_token,'hex')))
+    if(!receipt||!timingSafeEqual(Buffer.from(receipt.token,'hex'),Buffer.from(receipt_token??'','hex')))
       throw Error('Q8S: recibo de resultado não emitido ou credencial divergente');
     const prior=receipt.revisions.at(-1);
     // Retry após perda de resposta: só a mesma revisão exata, nunca desfaz uma revisão posterior.

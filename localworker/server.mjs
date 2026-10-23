@@ -164,7 +164,8 @@ server.registerTool("local_result", {
 
 server.registerTool('local_review', {
   description:'Supervisor: registra nota0–10 somente após receber e examinar retorno terminal. Não infere qualidade pelo status; exige recibo local_result e confirmação de revisão.',
-  inputSchema:z.object({job_id:z.string(),receipt_id:z.string().regex(/^[a-f0-9]{64}$/),receipt_token:z.string().regex(/^[a-f0-9]{64}$/),
+  inputSchema:z.object({job_id:z.string(),receipt_id:z.string().regex(/^[a-f0-9]{64}$/).optional(),receipt_token:z.string().regex(/^[a-f0-9]{64}$/).optional(),
+    legacy_received:z.object({source:z.string().trim().min(12).max(512),status:z.enum(['COMPLETED','FAILED']),error_kind:z.string().max(120).nullable(),result_sha256:z.string().regex(/^[a-f0-9]{64}$/),supervisor_final_sha256:z.string().regex(/^[a-f0-9]{64}$/)}).strict().optional(),
     expected_revision:z.number().int().min(0).max(32),review_complete:z.literal(true),
     reviewer_thread_id:z.string().uuid(),reviewer_repo_path:z.string().min(1),score:z.number().int().min(0).max(10),reason:z.string().trim().max(360).optional()}).strict(),
 },async ({reviewer_repo_path,...input})=>{
