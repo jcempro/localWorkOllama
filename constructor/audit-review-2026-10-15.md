@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 56 deles; não substitui o aceite dos outros 11.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 57 deles; não substitui o aceite dos outros 10.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os56 aceites/correções semânticos já registrados neste documento nem aceita os11 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os57 aceites/correções semânticos já registrados neste documento nem aceita os10 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -285,3 +285,13 @@ Preservados pacote/resultado e negócio histórico. Investigação/correção de
 Auditor0a92affc-842a-48db-b42c-2e80a29fbc7d: local_result uma vez; runtime COMPLETED/error_kind=null, step1, nenhuma ferramenta/efeito. Git determinístico main...origin/main limpo em23/10/2026 05:06:11UTC. Avaliou A/B/C, mas as sustentou com interpretações inválidas ou citação da própria alegação. Não aceitar nem incrementar contador. A ordem P2D está corrigida/instalada, porém o ensaio real não comprovou precisão semântica; não declarar P2D suficiente nem atribuir falha a RAM/HTTP. Recibo de fila não é aceite.
 
 Nova estratégia D9F: extrair determinística e objetivamente fatos de unified diff e manter proveniência literal separada, em vez de repetir julgamento livre do modelo. Plano constructor/diff-facts-plan.md. Preservar56/67 e os dois auditores rejeitados; nenhum replay ou inventário editorial no supervisor.
+
+### Segmento20c — fatos determinísticos e aceite corrigido
+
+Job c7063ad7-56d8-41d9-9100-69e836885d3e: local_result uma vez; COMPLETED, diff_facts exit0, sem inferência/mutação/commit. SHA da entrada35dbb79a33d69efbe8eeb413ba9acd4cc31f71de369facd487c4c06ffe007809 coincide com o preflight; fragmentoae99679c7413d572cd803117e93c3f652ae1fc26267c02c368cfd505eec491fa. Git determinístico main...origin/main limpo em23/10/2026 06:47:37UTC é do executor desta auditoria, não do blog histórico. Base fornecida=não informa ausência do campo provided_evidence neste job; o comando leu o artefato persistido, sem read_file própria, não o repositório editorial.
+
+| ID | Revisão fundamentada e limite |
+| --- | --- |
+| 2da3cc2a | Análise histórica read-only de evidência fornecida, sem inspeção/mutação próprias. Metadados confirmam rename e similaridade88%; não “redirecionamento parcial”. @@ declara intervalo antigo start1/count182 e novo start1/count47; não totais dos arquivos. No fragmento,53 linhas removidas e zero adicionadas/contexto observadas; hunk incompleto. whole_file_sizes e fragment_coverage_percent são null: rejeitar47 linhas preservadas/26% visíveis e remoção integral1–182. A origem literal informa parte-01.txt preservada no commit1826ada374 e extraída de evidence.jsonl de0ceda154; não prova que evidence.jsonl foi o arquivo commitado. |
+
+Aceite **parcial com correções** do parecer original: identificação dos grupos iniciais e renomeação permanece limitada ao fragmento; seção cortada e demais hunks continuam fora da cobertura. Não inferir autoria, tamanho total, conteúdo omitido, necessidade de ajuste de rotas ou conclusão do artigo. Os dois auditores inferenciais rejeitados não são convertidos retroativamente em sucesso. D9F forneceu extração objetiva verificável, com revisão proporcional; não demonstra competência semântica geral do modelo. QUEUED_TO_CHAT só fila. Recuperação do método concluída para esta unidade, sem replay do negócio. Acumulado57 revisados/10 pendentes nesta captura.
