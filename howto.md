@@ -4,6 +4,8 @@
 
 Esta sequência é o **modus operandi obrigatório** do supervisor, definido no AGENTS global; não é preciso repeti-la em cada pedido. Uma promessa de compactar não comprova a ação.
 
+**Como ler o resultado:** um job Worker `COMPLETED` terminou sua execução técnica; uma sequência de comandos pode terminar sem usar modelo. Confira evidências e atendimento do pedido. Já a retomada SR-001 só fica `COMPLETED` após recebimento e resposta real confirmados.
+
 **Compactar antes de continuar (S2Q): ainda impedido no cliente verificado.** A sequência desejada é `/compactar` nativo e, cerca de1s depois, o prompt completo, na fila do mesmo chat. A ferramenta de mensagem entregou texto ao supervisor. Em teste separado, a fila CLI entregou os dois textos na ordem e preservou a instrução completa, mas `/compactar` abriu turno comum; não confirmou compactação nativa. Digitar o comando manualmente no composer é uma rota diferente e funcional segundo o desenvolvedor. Não configure duas mensagens comuns nem um temporizador como substitutos. A automação só pode ser habilitada quando o cliente oferecer acionamento nativo e fila comprovada; sem fila segura, o prompt deve aguardar confirmação nativa. Instalar esta norma não cria essa capacidade. Os callbacks atuais preservam suas instruções e controles de intenção. Usar manualmente o comando da UI não comprova automação nem dispensa os testes de sequência/retentativa. Não alterar banco de histórico ou criar outra instância para compactar a conversa viva.
 
 A norma global instalada exige: recibo `RUNNING` → preservar o mínimo necessário à retomada → avisar no chat com links → compactar o contexto do supervisor → encerrar. Vale para todas as conversas/repositórios, sem configurar agents.local.md em cada um. Somente uso **<10%**, comprovado por medida atual obtida sem custo ou com custo desprezível, dispensa compactar; 10% ou percentual indisponível não dispensam.
@@ -500,6 +502,8 @@ A média **NÃO autoriza polling** de jobs persistentes.
 
 ## Resultado e validação
 
+No resultado do **job Worker**, `COMPLETED` registra término técnico da execução; `command_sequence` não usa inferência. Confira o tipo realmente executado e o atendimento do pedido antes do aceite. O `COMPLETED` da retomada SR-001 continua exigindo recebimento e resposta real confirmada; não transferir a definição entre esses contextos.
+
 Mantenha relato humano ultrassucinto de cada delegação: objetivo, retorno efetivo, avaliação, evidência e próximo passo. Explicite causas e limitações materiais sem acompanhamento pago contínuo. Incapacidade estrutural real do Worker pode exigir atuação direta do supervisor; falta corrigível de ferramenta/permissão exige concessão proporcional e explícita, sem presumir acesso nem ampliar escopo automaticamente.
 
 Resultado do worker é **preliminar verificável**, não trabalho a ser refeito.
@@ -772,7 +776,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `d5ea9a099062a3713ee9fa207569afb78a7b75f87b1c663e4416ed903e8c9e07` |
+| `src/agents.supervisor.md` | `19209366b43e90c52157340ca255b96defe377561094ec276b38c25bcd02c769` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

@@ -14,6 +14,8 @@ O localWorker executa tarefas delegáveis em inferência Ollama local, com jobs 
 
 ## Avaliação do retorno pelo supervisor — FT-SUPERVISOR-QUALITY-Q8S
 
+Nos **jobs do Worker**, COMPLETED registra o término técnico da execução. command_sequence executa comandos sem inferência; avaliação deve reconhecer o tipo realmente executado, conferir evidências e pedido atendido, sem presumir qualidade pelo status. Essa definição não reduz o aceite da retomada SR-001: ali COMPLETED continua exigindo mensagem recebida e resposta real confirmada. O callback do Worker deve preservar essa distinção, consulta única, Q8S e demais instruções de recuperação.
+
 A nota de qualidade é independente do estado técnico e da criticidade C. Somente o supervisor a atribui/confirma, no checkpoint proporcional já necessário, após receber e examinar o retorno terminal. Considerar conjuntamente aderência, inteligência técnica demonstrada, adequação/completude, eficiência, gestão legítima de impedimentos e retrabalho evitável. Não penalizar hardware/complexidade legítimos, inventar cognição de sequência determinística ou transformar esta avaliação em nova inferência/polling. CANCELLED permanece excluído por decisão humana explícita; ausência de nota significa **não avaliado**, nunca zero.
 
 Escala inteira 0–10: 0 entrega inutilizável/violação impeditiva comprovada; 1–3 defeitos graves; 4–5 atendimento parcial; 6–7 entrega útil com defeitos materiais delimitados; 8–9 atendimento satisfatório sustentado por evidências; 10 atendimento integral comprovado no microescopo examinado. Não representa probabilidade, precisão estatística, capacidade geral do modelo ou ausência de risco. Notas ≤3 e ≥8 exigem justificativa verificável ultrassucinta; intermediárias admitem justificativa opcional. Falha justificada pode receber nota alta; COMPLETED inadequado deve receber nota menor. Evidência insuficiente mantém pendência de revisão, sem nota automática.
@@ -253,7 +255,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `d5ea9a099062a3713ee9fa207569afb78a7b75f87b1c663e4416ed903e8c9e07` |
+| `src/agents.supervisor.md` | `19209366b43e90c52157340ca255b96defe377561094ec276b38c25bcd02c769` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Evidência fornecida e autoria da verificação

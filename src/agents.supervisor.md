@@ -141,6 +141,8 @@ A média **NÃO autoriza polling** de jobs persistentes.
 
 ## Resultado e validação
 
+No resultado do **job Worker**, `COMPLETED` registra término técnico da execução; `command_sequence` não usa inferência. Confira o tipo realmente executado e o atendimento do pedido antes do aceite. O `COMPLETED` da retomada SR-001 continua exigindo recebimento e resposta real confirmada; não transferir a definição entre esses contextos.
+
 Mantenha relato humano ultrassucinto de cada delegação: objetivo, retorno efetivo, avaliação, evidência e próximo passo. Explicite causas e limitações materiais sem acompanhamento pago contínuo. Incapacidade estrutural real do Worker pode exigir atuação direta do supervisor; falta corrigível de ferramenta/permissão exige concessão proporcional e explícita, sem presumir acesso nem ampliar escopo automaticamente.
 
 Resultado do worker é **preliminar verificável**, não trabalho a ser refeito.
