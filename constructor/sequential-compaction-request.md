@@ -19,3 +19,5 @@ No gestor Supervisor–Worker local, ajuste cirurgicamente os fluxos de **retoma
 **VALIDAÇÃO BLOQUEANTE:** testar retomada e continuação, com prompts simples e completos, compactação demorada, enfileiramento, falhas e retentativas. Caso o comportamento esperado não seja suportado, identificar a limitação e corrigir com o menor ajuste compatível, sem inventar mecanismos nem degradar fluxos existentes.
 
 **ACEITE:** `/compactar` → ~1 s → prompt efetivo, com processamento sequencial correto, continuidade preservada e nenhuma regressão. Implementar e comprovar; cumprimento parcial NÃO constitui conclusão.
+
+Complementação humana posterior no mesmo chat: "quando eu envio o texto puro \"/compactar\" no prompt ele efetivamente processa compactando o contexto."
