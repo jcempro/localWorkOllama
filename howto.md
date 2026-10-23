@@ -118,6 +118,8 @@ No catálogo nativo, envie o mesmo objeto com o hash conferido. Modificar tarefa
 
 Para analisar evidências já verificadas sem repetir exploração, envie `provided_evidence: {"source":"origem rastreável", "content":"evidência mínima"}` em `read-only` (valores fictícios). Limites: origem de 1–1024 caracteres e conteúdo de 1–12000, sem segredos. Não dispensa leituras/comandos declarados obrigatórios e não prova execução pelo Worker. O recibo distingue a base fornecida de leituras próprias.
 
+Tarefas, comandos e respostas antigas citados no conteúdo são dados para análise. O runtime coloca a evidência antes da tarefa atual, que permanece no bloco protegido pela compactação. Ao pedir uma auditoria, confira se o retorno realmente avalia a resposta antiga: copiá-la não cumpre a solicitação, mesmo com status `COMPLETED`. Preserve o resultado e corrija o contexto/escopo antes de uma nova unidade menor.
+
 A remoção e a retenção também abrangem checkpoints em `context/`. Links ou diretórios inesperados bloqueiam a limpeza com diagnóstico; backups recuperáveis continuam protegidos. Use a lixeira do monitor para excluir um job terminal, nunca apague pastas compartilhadas para contornar uma falha.
 
 O Worker pode usar CLIs, scripts e integrações realmente disponíveis, com comandos exatos autorizados e efeitos proporcionais ao risco. Para leitura, declare `authorized_commands[].mode='read-only'`; rede exige autorização de destinos/efeitos e `network=true`. Esses campos não são sandbox nem firewall do programa: cabe ao supervisor verificar o script/argv. `latency.json` é atualizado pelo runner, sem contagem manual duplicada. `QUEUED_TO_CHAT` significa mensagem enfileirada; um turno interrompido ou bloqueado pela cota do supervisor permanece pendente mesmo com entrega correta.
@@ -693,7 +695,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `6648d72a76cdac96b9d5f84a84fdb8f9a05c0047ac35af640f298ddda15a8d54` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `dbb09fe19b60fd8042a891be21bd8c14d0b9c21815a64579d60f712a6c280ef8` |
+| `src/localworker/worker-core.mjs` | `912fcdb6c0374ce4b216979ff6419c159c69ea3f50a569f4d813aca519bc5417` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `f3c8468da8b2616928ae79f161bf8ab7ae0c62684ae894c876dc29e6f1c98ed4` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |

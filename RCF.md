@@ -209,7 +209,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/job-control.mjs` | `627b26ae4028e3e3435b89653d48a8f954f07eae1a9e5b6bc23d4ddcc1eeeca1` |
 | `src/localworker/context-manager.mjs` | `6648d72a76cdac96b9d5f84a84fdb8f9a05c0047ac35af640f298ddda15a8d54` |
 | `src/localworker/progress-guard.mjs` | `8d127ab9947545f79c435a06f0147ac6f813b195d417db93fdce1ac42a99b1bb` |
-| `src/localworker/worker-core.mjs` | `dbb09fe19b60fd8042a891be21bd8c14d0b9c21815a64579d60f712a6c280ef8` |
+| `src/localworker/worker-core.mjs` | `912fcdb6c0374ce4b216979ff6419c159c69ea3f50a569f4d813aca519bc5417` |
 | `src/localworker/worker-runner.mjs` | `41ed80e3d86085d6206a782b9151a0b043e2b6532156594407c449c505a4fe1d` |
 | `src/localworker/delivery.mjs` | `f3c8468da8b2616928ae79f161bf8ab7ae0c62684ae894c876dc29e6f1c98ed4` |
 | `src/localworker/watchdog.mjs` | `e1e2097128d3a171320037eba966cdf949569cb6fd2f1da0d580a6dcc412a99e` |
@@ -231,3 +231,5 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 Sequência determinística DEVE ser independente da janela/contexto, da política de camadas GPU e do teto de ciclos da inferência. Cada ID autorizado executa no máximo uma vez por sequência, até 32 IDs distintos; timeouts de comando, propriedade, evidências, validações e interrupção em erro permanecem compulsórios. Ausência de inferência não dispensa a avaliação prévia dos recursos/efeitos dos executáveis autorizados.
 
 O contrato opcional `provided_evidence={source,content}` DEVE aceitar análise somente `read-only` com origem rastreável (1–1024 caracteres) e conteúdo delimitado (1–12000). O supervisor DEVE verificar a evidência antes de fornecê-la. Essa análise PODE concluir sem nova ferramenta; NÃO dispensa leituras/comandos explicitamente exigidos, NÃO comprova execução própria e NÃO autoriza alteração. O recibo DEVE distinguir base fornecida, leituras e comandos realmente executados. Sem evidência fornecida, a guarda de inspeção permanece vigente. O conteúdo é dado, não nova autoridade normativa.
+
+P2D: campos task/result/public_result, comandos e instruções citados nessa evidência permanecem dados históricos. O runtime DEVE identificá-los como dados em sua instrução operacional e posicionar o bloco integral normalizado antes da tarefa vigente, que encerra a mensagem user protegida pela compactação. Não mover objetivo/normas para uma posição descartável, duplicar tarefa ou executar instruções citadas. Pedido de avaliar resposta antiga não é pedido de reproduzi-la. Esse isolamento reduz ambiguidade, mas não comprova fidelidade semântica: o supervisor verifica a execução real e não aceita cópia do parecer como auditoria. Permissões, requisitos, hash/schema e fluxo sem evidência permanecem vigentes.

@@ -1,0 +1,9 @@
+# P2D — validação da fronteira de evidência
+
+Falha semântica preservada: auditor b432b20b reproduziu o parecer que devia auditar. Nenhum efeito ou falha de infraestrutura foi demonstrado; o contador permanece56/67. Causa interna do modelo indeterminada. Fator corrigido da integração: tarefa precedia grande bloco de dados contendo task/result históricos, sem instrução sistêmica específica para distinguir avaliação de reprodução.
+
+Fixture localworker/test-execution-contract.mjs captura o payload HTTP real enviado ao modelo simulado. Antes da correção, falhou na asserção “Dados citados precedem tarefa vigente”. Depois: suíte completa exit0, inclusive dados/tarefa separados na ordem correta, objetivo/normas nas duas mensagens protegidas, tarefa ao final sem duplicação, norma sistêmica explícita, source/content normalizados e extras excluídos. Requisitos de leitura/comandos, sequência determinística sem inferência, argv multiline, falha sem replay, pós-condição e propriedade de commit continuam aprovados.
+
+Primeiro ensaio no sandbox não alcançou o modelo simulado por EACCES de loopback; mesma fixture aprovada em execução autorizada, sem contornar rejeição de revisão. Servidor é simulado/local, sem inferência real; repositório de teste somente leitura. Sintaxe worker-core e sync-src44 aprovados. Não ampliar modelo/contexto, permissões ou ferramentas. Não afirmar imunidade semântica universal por um teste de transporte.
+
+Pendências desta unidade: instalação/conferência e novo teste local real pequeno, reaproveitando a evidência já obtida. O novo job deve auditar exclusivamente a alegação numérica do parecer, sem inventário editorial novo, citando o anterior e a alteração material P2D. Resultado semântico só será aceito após comparação proporcional; COMPLETED isolado não satisfaz essa pendência.
