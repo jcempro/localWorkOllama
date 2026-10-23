@@ -8,7 +8,7 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {DatabaseSync} from 'node:sqlite';
 import {sessionReasonU6C,callbackReasonU6C,quotaSuspensionC9R,causalSuspensionC9R} from '../localworker/continuity.mts';
-import {advance,digest} from '../supervisor/core.mts';
+import {advance,digest,planCycles} from '../supervisor/core.mts';
 const exec=promisify(execFile), base=path.resolve('constructor/audit-private'),root=path.join(base,`continuity-${randomUUID()}`);
 const snapshot={schema:1,bootId:'boot-a',desktopInstance:'app-a'},lease={...snapshot,originTurnId:'turn-a'};
 assert.equal(sessionReasonU6C(lease,snapshot),null);
@@ -134,7 +134,7 @@ try{
   const cfg={schema:1,threadId:thread,repoPath:repo,codexHome:home,accountKey:digest(account),mutexName:'test-only',powershell:path.join(process.env.SystemRoot!,'System32/WindowsPowerShell/v1.0/powershell.exe')};
   await fs.writeFile(path.join(sr,'config.json'),JSON.stringify(cfg));await fs.mkdir(path.join(sr,'events'));
   await fs.writeFile(path.join(sr,'rpc.mjs'),`import fs from'node:fs/promises';import path from'node:path';import{fileURLToPath}from'node:url';const root=path.dirname(fileURLToPath(import.meta.url));export async function connect(){await fs.appendFile(path.join(root,'rpc.log'),'connect\\n');return{read:async(name)=>{if(name==='account/read')return{account:${JSON.stringify(account)}};if(name==='account/rateLimits/read')return{rateLimits:{primary:{usedPercent:95,resetsAt:Math.ceil(Date.now()/1000)+100}}};throw Error('UNEXPECTED_RPC:'+name)},close(){}}}`);
-  await fs.writeFile(path.join(sr,'platform.ps1'),`param([string]$Action,[string]$Config,[string]$EventId)\nif($Action -ne 'Unschedule'){throw 'FORBIDDEN_EFFECT'}\nAdd-Content -LiteralPath (Join-Path $PSScriptRoot 'platform.log') -Value $Action\n`);
+  await fs.writeFile(path.join(sr,'platform.ps1'),`param([string]$Action,[string]$Config,[string]$EventId,[long]$DueAt)\nif($Action -notin @('Unschedule','Schedule')){throw 'FORBIDDEN_EFFECT'}\nAdd-Content -LiteralPath (Join-Path $PSScriptRoot 'platform.log') -Value $Action\n`);
   const tick=async(...args:string[])=>exec(process.execPath,[path.join(sr,'run.mjs'),...args],{env:{...env,SUPERVISOR_MUTEX_S8R:'test-only'},windowsHide:true,timeout:20_000});
   for(const sensor of [{...snapshot,bootId:'boot-b'},{...snapshot,desktopInstance:null},{...snapshot,desktopInstance:'app-b'}]){
     await fs.writeFile(path.join(sr,'continuity.json'),JSON.stringify({schema:1,mode:'ACTIVE',session:snapshot,generation:'g1'}));
@@ -155,6 +155,34 @@ try{
   await fs.writeFile(path.join(sr,'events',`${legacyId}.json`),JSON.stringify({schema:1,id:legacyId,status:'SCHEDULED',target:{threadId:thread,repoPath:repo,accountKey:cfg.accountKey},window:{test:true},dueAt:0,attempts:0}));
   await tick();assert.equal(JSON.parse(await fs.readFile(path.join(sr,'events',`${legacyId}.json`),'utf8')).status,'PAUSED_USER');
   assert.equal((await fs.readFile(path.join(sr,'platform.log'),'utf8')).trim(),'Unschedule');
+  // Actual SR planner: an old paused episode cannot veto a newly authorized origin.
+  const c9rTarget={threadId:thread,repoPath:repo,accountKey:cfg.accountKey};
+  const c9rNow=Date.now(),c9rLedger:any={};
+  const oldC9R=planCycles({rateLimits:{primary:{usedPercent:95,resetsAt:Math.ceil(c9rNow/1000)+100}}},c9rTarget,c9rLedger,[],c9rNow,'old-context')[0];
+  Object.assign(oldC9R,{status:'PAUSED_USER',originTurnId:'prior-origin',continuity:{generation:'prior-generation'}});
+  await fs.writeFile(path.join(sr,'events',oldC9R.id+'.json'),JSON.stringify(oldC9R));
+  await fs.writeFile(path.join(sr,'cycles.json'),JSON.stringify(c9rLedger));
+  await fs.writeFile(path.join(sr,'continuity.json'),JSON.stringify({schema:1,mode:'ACTIVE',session:snapshot,generation:'new-generation-c9r'}));
+  history.prepare('UPDATE thread_turns SET turn_id=?,status=?,error_json=NULL,started_at=2').run('new-active-c9r','inProgress');
+  await tick();await tick();
+  const c9rEvents=await Promise.all((await fs.readdir(path.join(sr,'events'))).map(async name=>JSON.parse(await fs.readFile(path.join(sr,'events',name),'utf8'))));
+  assert.equal(c9rEvents.filter(e=>e.status==='SCHEDULED'&&e.originTurnId==='new-active-c9r'&&e.continuity?.generation==='new-generation-c9r').length,1);
+  assert.equal(c9rEvents.find(e=>e.id===oldC9R.id).status,'PAUSED_USER');
+  assert.equal(c9rEvents.find(e=>e.id===oldC9R.id).originTurnId,'prior-origin');
+  assert.equal(Object.keys(JSON.parse(await fs.readFile(path.join(sr,'cycles.json'),'utf8')).windows).length,1);
+  // Backoff counts unconfirmed attempts of this authorization even after origin expiry.
+  for(let i=0;i<3;i++){
+    const id=digest(['prior-service',i]);
+    await fs.writeFile(path.join(sr,'events',id+'.json'),JSON.stringify({schema:1,id,target:c9rTarget,status:'PAUSED_USER',
+      originTurnId:'prior-service-'+i,interruptedTurnId:'prior-service-'+i,continuity:{generation:'new-generation-c9r'},
+      recoveryCause:'SERVICE_OVERLOAD',sendStartedAt:c9rNow-100000,detectedAt:c9rNow-200000,dueAt:0,window:{serviceFailure:true}}));
+  }
+  history.prepare('UPDATE thread_turns SET turn_id=?,status=?,error_json=?,completed_at=?').run('service-failure-c9r','failed',JSON.stringify({codexErrorInfo:'serverOverloaded'}),Date.now()/1000);
+  await tick();
+  const serviceEventsC9R=await Promise.all((await fs.readdir(path.join(sr,'events'))).map(async name=>JSON.parse(await fs.readFile(path.join(sr,'events',name),'utf8'))));
+  const serviceRecoveryC9R=serviceEventsC9R.filter(e=>e.originTurnId==='service-failure-c9r'&&e.status==='SCHEDULED');
+  assert.equal(serviceRecoveryC9R.length,1);assert.equal(serviceRecoveryC9R[0].recoveryDelayMs,240000);
+  assert.equal(serviceRecoveryC9R[0].window.serviceFailure,true);
   history.close();history=undefined;
   console.log('PASS U6C: boot/app/legacy/pause/turn/close-during-send; actual isolated delivery and explicit resume; no real sends or target edits');
 }finally{

@@ -40,6 +40,8 @@ A guarda compartilhada C9R distingue essa falha de quota de cancelamento. Um cal
 
 Eventos de restauração para a mesma origem não enviam duas continuações: a reserva persistida de outro evento prevalece, inclusive quando incerta. Se já há entrada na fila do chat, `WAITING_QUEUED_INPUT` aguarda seu processamento sem mensagem adicional, ativação ou inferência paga de monitoramento. O diagnóstico distingue espera de conclusão; mensagem já aceita pela plataforma não pode ser revogada por uma API inexistente.
 
+Cada episódio pertence à autorização e ao turno de origem. Uma nova autorização legítima não reutiliza nem rearma episódios pausados; o histórico é preservado e o cache mantém um slot por janela. `ORIGIN_HAS_CAUSAL_RECOVERY` indica que a recuperação do incidente já governa aquela origem; janelas proativas antigas não antecipam sua espera nem enviam outra continuação.
+
 Sobrecarga estruturada `serverOverloaded` também preserva uma solicitação autorizada. SR-001 registra `STRUCTURED_SERVICE_BACKOFF`: uma continuação por incidente, espera inicial30s, progressiva até15min entre tentativas ainda sem sucesso naquela autorização. Não há API de prontidão do serviço presumida: a tentativa retoma trabalho pendente, e somente resposta real correlacionada confirma sucesso. Isso não é o intervalo de polling pago nem prazo total do Worker. Cota esgotada continua exigindo restauração verificável; erro genérico, pausa humana, boot ou Desktop fechado não recebem essa autorização. Recibos de callback recuperado conservam causa/data/contagem, sem crescimento por cópias recursivas de histórico.
 
 ```powershell
@@ -663,17 +665,17 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
 | `src/supervisor/continuity.mjs` | `739301ccb005e09927875cfdd4ca0199099978895ecdbf6abfbf9d39968e682c` |
 | `src/supervisor/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
-| `src/supervisor/core.mts` | `bec3617f334ba3717949940a79319d9a300448b0da04df913aab2ed5fda76ecd` |
-| `src/supervisor/core.mjs` | `97e4c2946119517cfefea3aed0e80ed6b8a27d1a21dc9d450f2f31578afee5fc` |
+| `src/supervisor/core.mts` | `997728c730cd2dbda8ebafce9bef250657ba2ab3a4586b298273a5f938e13fc2` |
+| `src/supervisor/core.mjs` | `a49f5c8f7f08a1ef42fe85a86316ae5b072c99d968eacc3a3192090682a068e9` |
 | `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
 | `src/supervisor/rpc.mjs` | `6745f678c8c2c629c9cc27f42f0a162ad26b7608310a84a7676924d6dbe23fe0` |
 | `src/supervisor/receipts.mts` | `fda754fe4058f2ef35ed513958fe7f46f12a7269593c7815bf4482216dd354e3` |
 | `src/supervisor/receipts.mjs` | `9ae5ed4a69248385ababcafc8c53c0d08963c54e000bbd8b662c5a57621a7955` |
-| `src/supervisor/run.mts` | `701dbfdb05be26aa6e9841a515444b38c5fabb711a19f20f021d87cea7d31f86` |
-| `src/supervisor/run.mjs` | `4abf09e8e35f809274b423cfdb9338de9bb78fdc1e0d0a89f55dd2c40fefcded` |
+| `src/supervisor/run.mts` | `e836270071788a6bb00bbe16742687d876c932ed902db791198c721ced86e737` |
+| `src/supervisor/run.mjs` | `0cdbb471c749816ba7a5d89bac2926f80b23d401e00fa3462846b68b2db82f98` |
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
 | `src/supervisor/install.ps1` | `31f15f1cf8ca0e2606c9c77fff8d685c01d512446d7f013c257b6daf749cdd54` |
-| `src/supervisor/README.md` | `3d0efcbb5bbe212d7ef45da60d7fc9b08bfc6f5a40b5a6cdf5e1895dff7e7cc4` |
+| `src/supervisor/README.md` | `25a5a89785a9fd45a3b64e44c69056077761e01a8dbc226950fec9c77478314d` |
 | `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |

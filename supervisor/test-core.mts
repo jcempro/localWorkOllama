@@ -174,3 +174,20 @@ await advance(serviceEventC9R,serviceIoC9R,serviceEventC9R.nextAttemptAt);assert
 const quotaBlockedServiceC9R=await advance(planServiceFailureC9R(target,serviceTurnC9R,[],now,'generation-a')[0],{...serviceIoC9R,quota:async()=>quota(100)},now+60_000);
 assert.equal(quotaBlockedServiceC9R.status,'WAITING_QUOTA');assert.equal(serviceSendsC9R,1);
 console.log('PASS C9R: sobrecarga estruturada distinta de quota, backoff limitado, incidente unico, bloqueio de erros genericos/interrupcao e sem reenvio');
+
+const scopedLedgerC9R:any={};
+const oldCycleC9R=planCycles(quota(),target,scopedLedgerC9R,[],now,'old-authorization-origin')[0];
+const pausedCycleC9R={...oldCycleC9R,status:'PAUSED_USER'};
+const preservedPausedC9R=JSON.stringify(pausedCycleC9R);
+const newCycleC9R=planCycles(quota(),target,scopedLedgerC9R,[],now,'new-authorization-origin')[0];
+assert.notEqual(newCycleC9R.id,oldCycleC9R.id);assert.equal(newCycleC9R.dueAt,oldCycleC9R.dueAt);
+assert.equal(planCycles(quota(),target,scopedLedgerC9R,[newCycleC9R],now+1000,'new-authorization-origin')[0].id,newCycleC9R.id);
+assert.notEqual(planQuotaFailure(quota(1),target,incident,[pausedCycleC9R],now)[0].id,pausedCycleC9R.id);
+for(let i=0;i<100;i++)planCycles(quota(),target,scopedLedgerC9R,[],now,'fresh-context-'+i);
+assert.equal(Object.keys(scopedLedgerC9R.windows).length,1);
+assert.equal(JSON.stringify(pausedCycleC9R),preservedPausedC9R);
+console.log('PASS C9R: episodio vinculado a autorizacao/origem, pausa antiga preservada e cache limitado a janela');
+const causalPriorityC9R={...dispatchSeedC9R,id:'service-recovery',interruptedTurnId:dispatchSeedC9R.originTurnId,status:'SCHEDULED',detectedAt:now};
+assert.equal(dispatchDecisionC9R({...dispatchSeedC9R,id:'proactive-quota'},[causalPriorityC9R],false).reason,'ORIGIN_HAS_CAUSAL_RECOVERY');
+assert.equal(dispatchDecisionC9R(causalPriorityC9R,[causalPriorityC9R],false).allowed,true);
+assert.equal(dispatchDecisionC9R({...dispatchSeedC9R,id:'other-context',continuity:{generation:'fresh'}},[{...causalPriorityC9R,continuity:{generation:'old'}}],false).allowed,true);

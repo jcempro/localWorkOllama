@@ -20,45 +20,49 @@ export function windows(snapshot     ) {
 
 // Um episodio de escassez tem identidade persistente; resetsAt pode ser refinado
 // pelo servidor e nao pode, por si so, produzir outra mensagem.
-export function planCycles(snapshot     , target     , ledger     , existing       , now        ) {
+export function planCycles(snapshot     , target     , ledger     , existing       , now        , contextKey        ) {
   const result       =[];
   ledger.schema=1;ledger.windows??={};
   for(const w of windows(snapshot)) {
     const key=digest([target.accountKey,target.threadId,target.repoPath,w.bucketId,w.name]);
     let episode=ledger.windows[key];
+    // Mesmo slot de cache, nova identidade de episódio; sem acumular uma chave por turno.
+    if(contextKey!==undefined&&episode?.contextKey!==contextKey)episode=undefined;
     if(w.usedPercent<POLICY_S8R.threshold){if(episode)episode.recoveryObserved=true;continue;}
     if(!Number.isFinite(w.resetsAt)||w.resetsAt<=0)throw new Error('RESET_TIME_UNAVAILABLE');
     if(w.resetsAt*1000+POLICY_S8R.delayMs<now-POLICY_S8R.delayMs)throw new Error('STALE_RESET_TELEMETRY');
     // Migracao conservadora dos ciclos antigos, sem repetir enviados.
     if(!episode){
       const prior=existing.filter(e=>!e.window.test&&e.window.bucketId===w.bucketId&&e.window.name===w.name&&e.target.accountKey===target.accountKey&&e.target.threadId===target.threadId).sort((a,b)=>b.detectedAt-a.detectedAt)[0];
-      if(prior)episode=ledger.windows[key]={eventId:prior.id,resetAt:prior.window.resetsAt,recoveryObserved:false};
+      if(prior)episode=ledger.windows[key]={eventId:prior.id,resetAt:prior.window.resetsAt,recoveryObserved:false,contextKey};
     }
     const priorExpired=episode && now>episode.resetAt*1000+POLICY_S8R.delayMs && w.resetsAt*1000>now;
     const newWindowObserved=episode?.recoveryObserved && Number.isFinite(w.windowDurationMins) &&
       w.resetsAt>episode.resetAt+w.windowDurationMins*30;
     if(!episode||priorExpired||newWindowObserved){
-      const event=detect({rateLimits:{limitId:w.bucketId,[w.name]:w}},target,now)[0];
+      const event=detect({rateLimits:{limitId:w.bucketId,[w.name]:w}},target,now,contextKey)[0];
       // detect conserva a chave da janela para ciclos simultaneos equivalentes.
-      episode=ledger.windows[key]={eventId:event.id,resetAt:w.resetsAt,recoveryObserved:false};
+      episode=ledger.windows[key]={eventId:event.id,resetAt:w.resetsAt,recoveryObserved:false,contextKey};
       result.push(event);
     }else{
       const prior=existing.find(e=>e.id===episode.eventId);
       if(prior&&!prior.sendStartedAt&&prior.status!=='COMPLETED')result.push({...prior,window:w,dueAt:w.resetsAt*1000+POLICY_S8R.delayMs});
-      if(!prior)result.push({...detect({rateLimits:{limitId:w.bucketId,[w.name]:w}},target,now)[0],id:episode.eventId});
+      if(!prior)result.push({...detect({rateLimits:{limitId:w.bucketId,[w.name]:w}},target,now,contextKey)[0],id:episode.eventId});
       episode.resetAt=w.resetsAt;
     }
   }
   return result;
 }
 
-export function detect(snapshot     , target     , now        ) {
+export function detect(snapshot     , target     , now        , contextKey        ) {
   return windows(snapshot).filter(w => w.usedPercent >= POLICY_S8R.threshold).map(w => {
     if (!Number.isFinite(w.resetsAt) || w.resetsAt <= 0) throw new Error('RESET_TIME_UNAVAILABLE');
     const dueAt = w.resetsAt * 1000 + POLICY_S8R.delayMs;
     if (dueAt < now - POLICY_S8R.delayMs) throw new Error('STALE_RESET_TELEMETRY');
     // Janelas do mesmo bucket restauradas no mesmo instante formam um unico ciclo.
-    const id = digest([target.accountKey, target.threadId, target.repoPath, w.bucketId, w.resetsAt]);
+    const identity=[target.accountKey,target.threadId,target.repoPath,w.bucketId,w.resetsAt];
+    if(contextKey!==undefined)identity.push(contextKey);
+    const id = digest(identity);
     return { schema: 1, id, target, window: w, dueAt, detectedAt: now, status: 'SCHEDULED', attempts: 0 };
   });
 }
@@ -74,7 +78,7 @@ export function planQuotaFailure(snapshot     ,target     ,turn     ,existing   
   const dueAt=limited.length?Math.max(...limited.map(w=>w.resetsAt*1000+POLICY_S8R.delayMs)):now;
   // Um envio posterior ao incidente ja cobre a retomada: nao criar outro.
   if(existing.some(e=>e.sendStartedAt>=turn.completedAt*1000))return [];
-  const pending=existing.filter(e=>!e.sendStartedAt&&!['COMPLETED','RESOLVED_EXTERNALLY'].includes(e.status)&&e.dueAt<=dueAt).sort((a,b)=>a.dueAt-b.dueAt)[0];
+  const pending=existing.filter(e=>!e.sendStartedAt&&!['COMPLETED','RESOLVED_EXTERNALLY','PAUSED_USER'].includes(e.status)&&e.dueAt<=dueAt).sort((a,b)=>a.dueAt-b.dueAt)[0];
   if(pending)return [{...pending,interruptedTurnId:turn.id}];
   return [{schema:1,id:digest([target,'usage-limit-failure',turn.id]),target,window:{quotaFailure:true},
     interruptedTurnId:turn.id,incidentCompletedAt:turn.completedAt*1000,dueAt,detectedAt:now,
@@ -120,6 +124,12 @@ export function dispatchDecisionC9R(event    , existing      , queuePending     
     e.target?.threadId===event.target.threadId && e.target?.repoPath===event.target.repoPath &&
     e.target?.accountKey===event.target.accountKey && Number.isFinite(e.sendStartedAt));
   if(claimed)return {allowed:false,status:'RESOLVED_EXTERNALLY',reason:'ORIGIN_DISPATCH_ALREADY_RESERVED'};
+  const causal=existing.filter(e=>e.originTurnId===event.originTurnId&&e.interruptedTurnId===event.originTurnId&&
+    e.continuity?.generation===event.continuity?.generation&&e.target?.threadId===event.target.threadId&&
+    e.target?.repoPath===event.target.repoPath&&e.target?.accountKey===event.target.accountKey&&
+    !['COMPLETED','RESOLVED_EXTERNALLY','PAUSED_USER'].includes(e.status))
+    .sort((a,b)=>(a.detectedAt??0)-(b.detectedAt??0)||String(a.id).localeCompare(String(b.id)))[0];
+  if(causal&&causal.id!==event.id)return {allowed:false,status:'RESOLVED_EXTERNALLY',reason:'ORIGIN_HAS_CAUSAL_RECOVERY'};
   if(queuePending)return {allowed:false,status:'WAITING_QUEUED_INPUT',reason:'EXISTING_INPUT_HAS_PRECEDENCE'};
   return {allowed:true};
 }

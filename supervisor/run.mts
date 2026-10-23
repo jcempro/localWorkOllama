@@ -223,9 +223,12 @@ async function main() {
       const snapshot=await io.quota();
       const origin=latestTurn(config);
       const pending=origin && (origin.status==='inProgress' || origin.status==='in_progress' || causalSuspensionC9R(origin));
-      detected=pending?planCycles(snapshot,target,ledger,existing,now):[];
-      const merged=[...existing.filter(e=>!detected.some(d=>d.id===e.id)),...detected];
-      for(const recovery of pending?[...planQuotaFailure(snapshot,target,origin,merged,now),...planServiceFailureC9R(target,origin,merged,now,control.generation)]:[]){
+      const generationEvents=existing.filter(e=>e.continuity?.generation===control.generation);
+      const authorized=generationEvents.filter(e=>e.status!=='PAUSED_USER');
+      const sameOrigin=authorized.filter(e=>e.originTurnId===origin?.id);
+      detected=pending&&causalSuspensionC9R(origin)!=='SERVICE_OVERLOAD'?planCycles(snapshot,target,ledger,sameOrigin,now,digest([control.generation,origin.id])):[];
+      const merged=[...sameOrigin.filter(e=>!detected.some(d=>d.id===e.id)),...detected];
+      for(const recovery of pending?[...planQuotaFailure(snapshot,target,origin,merged,now),...planServiceFailureC9R(target,origin,[...generationEvents,...detected],now,control.generation)]:[]){
         detected=detected.filter(e=>e.id!==recovery.id);detected.push(recovery);
       }
       detected=detected.filter(e=>!existing.some(p=>p.id===e.id && (p.status==='PAUSED_USER'||p.continuity?.generation!==control.generation)));

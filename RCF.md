@@ -52,6 +52,8 @@ Sem API comprovada de prontidão do serviço, sobrecarga permite uma continuaç�
 
 SR-001 arbitra um envio por conta/destino/origem sob seu mutex, reutilizando os eventos persistidos: reserva iniciada, inclusive incerta, suprime outro evento daquela origem sem alegar conclusão. Entrada já na fila do chat tem precedência e produz espera gratuita; ausência de acesso à fila não concede permissão. Revalidar intenção imediatamente antes do efeito. A fila nativa não oferece transação conjunta com interrupções de UI: revalidação minimiza a janela, mas não autoriza prometer revogação de mensagem já aceita.
 
+Identidade de episódio inclui autorização vigente e origem; o cache conserva somente um slot por janela, substituindo o contexto anterior sem acumular chaves por turno. Evento pausado ou de outra autorização não pode vetar novo trabalho legitimamente autorizado nem ser rearmado por ele. Recuperação causal daquele turno prevalece sobre janelas proativas remanescentes: uma janela antiga não pode antecipar backoff de serviço ou duplicar a continuação. Tentativas de serviço não confirmadas na mesma autorização continuam contando para backoff mesmo quando a origem anterior expirou; nova autorização não herda essa contagem.
+
 A intenção atual do humano prevalece sobre recuperação, fail-safe, quota e callbacks. Inicialização/logon do Windows, Linux ou outro SO NUNCA autoriza abrir monitor/Desktop, ativar conversa ou enviar continuação. Fechar o aplicativo, interromper o turno ou pausar explicitamente invalida a autorização automática anterior; abrir novamente não rearma eventos antigos. Não inferir falha involuntária apenas da ausência de processo. Sem causa verificável, pausar conservadoramente com diagnóstico e preservar dados, resultados e recibos, sem COMPLETED fictício. Serviços silenciosos de observação/recuperação de dados podem operar sem ativar interface/conversa.
 
 Toda retomada DEVE validar sessão do SO, instância aberta do Desktop, destino e turno/escopo originador antes de efeitos e novamente antes do envio/ativação. Eventos legados sem vínculo válido ficam suspensos. Turno explicitamente interrompido ou substituído não pode ser reativado pelo callback. Quota baixa sozinha, conversa já concluída ou estado histórico pendente não autorizam nova solicitação. SR-001 exige pausa/retomada explícitas e detecta apenas trabalho ativo ou falha estruturada de quota dentro da autorização vigente. Recuperação de rede/serviços/Worker e confirmação sem reenvio permanecem disponíveis enquanto esse vínculo for válido. A retomada explícita cria autorização nova, sem repetir envio ambíguo.
@@ -179,17 +181,17 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/supervisor/continuity.mts` | `8863572d25d32a632dc1fde2dd91836edb6c061c81c37ee0891d53ecfd11b258` |
 | `src/supervisor/continuity.mjs` | `739301ccb005e09927875cfdd4ca0199099978895ecdbf6abfbf9d39968e682c` |
 | `src/supervisor/continuity.ps1` | `85f51151ba955a5abcc84ebb8a729fbe32d85a7c562705c4e7fa27826f0bc47c` |
-| `src/supervisor/core.mts` | `bec3617f334ba3717949940a79319d9a300448b0da04df913aab2ed5fda76ecd` |
-| `src/supervisor/core.mjs` | `97e4c2946119517cfefea3aed0e80ed6b8a27d1a21dc9d450f2f31578afee5fc` |
+| `src/supervisor/core.mts` | `997728c730cd2dbda8ebafce9bef250657ba2ab3a4586b298273a5f938e13fc2` |
+| `src/supervisor/core.mjs` | `a49f5c8f7f08a1ef42fe85a86316ae5b072c99d968eacc3a3192090682a068e9` |
 | `src/supervisor/rpc.mts` | `8cc5b9e550bf068a60d7383a9fb46894cc13ec8c2503b8b3601e3049c6b39709` |
 | `src/supervisor/rpc.mjs` | `6745f678c8c2c629c9cc27f42f0a162ad26b7608310a84a7676924d6dbe23fe0` |
 | `src/supervisor/receipts.mts` | `fda754fe4058f2ef35ed513958fe7f46f12a7269593c7815bf4482216dd354e3` |
 | `src/supervisor/receipts.mjs` | `9ae5ed4a69248385ababcafc8c53c0d08963c54e000bbd8b662c5a57621a7955` |
-| `src/supervisor/run.mts` | `701dbfdb05be26aa6e9841a515444b38c5fabb711a19f20f021d87cea7d31f86` |
-| `src/supervisor/run.mjs` | `4abf09e8e35f809274b423cfdb9338de9bb78fdc1e0d0a89f55dd2c40fefcded` |
+| `src/supervisor/run.mts` | `e836270071788a6bb00bbe16742687d876c932ed902db791198c721ced86e737` |
+| `src/supervisor/run.mjs` | `0cdbb471c749816ba7a5d89bac2926f80b23d401e00fa3462846b68b2db82f98` |
 | `src/supervisor/platform.ps1` | `56f059a445107bff10e54463934382040eaa4e0fc944175819c5a7b0db1c51e6` |
 | `src/supervisor/install.ps1` | `31f15f1cf8ca0e2606c9c77fff8d685c01d512446d7f013c257b6daf749cdd54` |
-| `src/supervisor/README.md` | `3d0efcbb5bbe212d7ef45da60d7fc9b08bfc6f5a40b5a6cdf5e1895dff7e7cc4` |
+| `src/supervisor/README.md` | `25a5a89785a9fd45a3b64e44c69056077761e01a8dbc226950fec9c77478314d` |
 | `src/localworker/AGENTS.md` | `323735e87aa96a50cb4c08c92450592e3b0b3a8e2d3da5f48bf4988acab64df9` |
 | `src/localworker/config.json` | `642a741b3fdb62c505dfe31fcb580919b6c577688e3b497929f26b936d96634f` |
 | `src/localworker/package.json` | `27a6750c9ce0bb5d65ff7034a7010c29a07df210b9c769532a18c52ecc39c953` |
