@@ -1,6 +1,6 @@
 # Auditoria incremental — captura de 15/10/2026
 
-Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 64 deles; não substitui o aceite dos outros 3.
+Base privada: `audit-private/2026-10-15-current/inventory.json`, SHA256 `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. Captura: 264 jobs não cancelados; 67 posteriores à captura anterior. Este checkpoint revisa 65 deles; não substitui o aceite dos outros 2.
 
 ## Segmento 01
 
@@ -56,7 +56,7 @@ Limitação observada em três segmentos: inferência local ainda extrapola fato
 
 [Fatos dos67 registros incrementais](audit-facts-2026-10-15.json), gerados pelo modo --facts do renderizador aceito. Capturas originais264/197, diferença67; estados persistidos33 FAILED/34 COMPLETED. Hashes das duas fontes estão no artefato; nenhum task, path, conteúdo de resultado/erro ou payload é publicado. Variantes do coletor para log ilegível são validadas e preservadas como linhas numéricas, sem phase/progresso inventados. Evidências: audit-facts-validation.md e audit-facts-cli-validation.md.
 
-Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os64 aceites/correções semânticos já registrados neste documento nem aceita os3 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
+Os67 registros projetados permanecem NOT_ASSESSED: a projeção não substitui os65 aceites/correções semânticos já registrados neste documento nem aceita os2 restantes. Contagens referem-se às capturas históricas, não ao total atual de jobs. Nenhum teste ou negócio histórico foi reexecutado para gerar o artefato; usou-se somente o gerador determinístico já validado. Novos segmentos devem citar esses campos e seus limites, sem recontar por inferência.
 
 ## Segmento 04 — 19/10/2026
 
@@ -391,3 +391,17 @@ Job343255f1-67fc-4d3f-939c-7e2a04ea81c2: local_result uma vez; COMPLETED, prefix
 Parecer original revisto com correções, sem aceitar a auditoria27 rejeitada. Parágrafos Essa vitória e Os anjos com prefixo espaço permanecem contexto; não são conclusões de6.2 excluídas. No último hunk, contraparte adicionada não consta deste fragmento truncado; removed isolado não comprova exclusão semântica integral do parágrafo. Par completo do hunk5 já aceito no segmento25 mostra troca de delimitador; não refazer essa comparação. Faixas de headers não são posições no evidence.jsonl ou tamanho de seção. Campos whole_file_sizes e fragment_coverage_percent permanecem null, hunk_counts_complete=false para a região de hunks; indisponibilidade do prefixo não significa ausência de mudança.
 
 Origem literal preserva parte-03.txt versionada em1826ada374 e derivada da evidência de0ceda154, sem atribuir commit de todo evidence.jsonl. Base fornecida=não no recibo indica ausência do campo provided_evidence; os comandos leram JSON persistido, embora Leituras=[] se refira à ferramenta read_file. Git determinístico main...origin/main limpo em23/10/2026 08:05:58UTC pertence ao executor desta auditoria; não prova autoria/push/limpeza históricos do blog. QUEUED_TO_CHAT só fila. Recuperação do método concluída para esta unidade com reutilização de D9F testado; não demonstra precisão semântica geral do modelo, aceite editorial global ou restauração do artigo. Acumulado64 revisados/3 pendentes nesta captura.
+
+## Segmento28 — fechamento do comentário e metadados parciais
+
+Auditor6bde41d3-2fd2-4bbf-a614-f8a1df160233: local_result uma vez; COMPLETED por evidência fornecida, sem ferramentas/escrita/commit próprios. Git determinístico main...origin/main limpo em23/10/2026 08:16:06UTC é do auditor. Request/result históricos SHA2560076cca357eaf1e4cd98f963ebb18ec4526d54175367a7258b81b448491d980e e d4549e31a2aa60f637c238b5568fc930180db8a69ae9efe78fa2e0d121bd1334 conferidos contra captura antes da delegação. Complemento e parecer completos foram fornecidos; prefixos calculados por caractere, sem inferência ou leitura viva.
+
+| ID | Revisão fundamentada e limite |
+| --- | --- |
+| 3db8dd11 | Complemento1/3 contém45 linhas removidas: regras visíveis das seções7 pesquisa/verificação e8 critério final, linhas vazias e fechamento de comentário. Sete linhas adicionadas: delimitador --- e campos title,author,date,last_modified_at,description,abstract. Uma linha de contexto: conversão para footnote, normalização ou remoção. Não é linha vazia. |
+
+Aceite parcial com correções: no recorte46, original---> é prefixoGit menos seguido de payload-->, fechamento do comentário removido; não marcador de truncamento, header ou hunk por si só. Não existe no recorte um delimitador --- antes da seção7 como afirmou o auditor; a abertura YAML é uma adição posterior ao fechamento removido. Início cortado/contexto prévio ausente permanece limitação legítima, assim como a impossibilidade de decidir outras exclusões fora do fragmento. Não classificar essa limitação como uma alegação factual refutada.
+
+A ausência de fechamento YAML na parte1/3 impede afirmar bloco completo/parse/build validados. Valores de datas/metadados foram inventariados, sem corrigi-los por inferência. O hash7230f3d3f6ca7ceca8931970d8a303c796c97ac666b812a61313a7fa12ac6533 pertence ao patch original segundo a origem fornecida; não reapresentá-lo como digest comprovado de complemento-cabecalho-01.txt. A origem declara extração direta via Git sem truncamento do delta-integral.patch; não se confunde com o recorte antigo truncado de b212. Normalização declarada CRLF→LF preservada.
+
+Normas AGENTS/agents.local antes do fragmento não são arquivos modificados. A remoção de instruções de um comentário histórico do draft não comprova perda de governança corrente nem autoriza restauro de texto. Nenhuma pesquisa de fontes, autoria, validação editorial global, render ou alteração do artigo foi executada. Resposta excedeu180 palavras; não gerar nova inferência para reformatar. QUEUED_TO_CHAT só fila; Git não prova autoria/push/limpeza históricos. Acumulado65 revisados/2 pendentes nesta captura.
