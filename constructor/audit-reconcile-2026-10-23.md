@@ -44,16 +44,39 @@ Arquivos privados conferidos por hash:
 
 O hash da base permanece `37daad80df90ccc04669f35a56fcd6ad70fdd6368a9b97315121c0bf44fad3f9`. As 189 linhas da projeção continuam `NOT_ASSESSED`. O Git determinístico do coletor em 23/10 às 08:55:52 UTC registra `main...origin/main` limpo; não descreve autoria, push ou limpeza dos repositórios históricos. Nenhum commit pelo Worker era exigido: as saídas privadas são ignoradas, e o registro desta unidade pertence ao supervisor.
 
-## Correlação: candidatos, não vereditos
+## Correlação original: contadores de leitura invalidados na revisão
 
 Foram correlacionados 453 jobs e 63 conversas, com 19 chamadas iniciais falhas. Os diagnósticos dessas chamadas incluem argumentos inválidos, transporte legado e bloqueio da revisão por quota; ainda exigem comparação com correções já documentadas.
 
 | Candidato | Base anterior | Registros novos |
 | --- | ---: | ---: |
-| Mais de uma leitura terminal de resultado | 17 | 1 |
+| Candidato original a leitura repetida (atribuição incorreta; recontar) | 17 | 1 |
 | Callback com `usageLimitExceeded` | 11 | 5 |
 | Evidência de callback não encontrada | 102 | 0 |
 
-O caso novo de leitura repetida é `bd98a7c5-1785-46c9-8267-0048dd9ade26`: duas chamadas e dois resultados terminais, com um candidato a callback. Isso não demonstra a causa ou ilegitimidade da segunda consulta. Os cinco callbacks de quota e o único `WORKER_INFRA_ERROR` novo também são históricos: este último é `6a4534fd`, com perda do runner em 16/10 e alterações parciais preservadas, já mencionado na cadeia de recuperação A3F. Não atribuir a causa física a RAM/Ollama sem prova nem repetir o job.
+A correlação original atribuiu duas consultas a `bd98a7c5-1785-46c9-8267-0048dd9ade26`; a revisão abaixo refuta essa atribuição. Os contadores antigos não devem fundamentar vereditos de duplicação. Os cinco callbacks de quota e o único `WORKER_INFRA_ERROR` novo também são históricos: este último é `6a4534fd`, com perda do runner em 16/10 e alterações parciais preservadas, já mencionado na cadeia de recuperação A3F. Não atribuir a causa física a RAM/Ollama sem prova nem repetir o job.
 
 Próxima unidade delimitada: relacionar os 189 registros às referências literais e provas públicas existentes, sem convertê-las automaticamente em aceite; e coletar apenas os turnos públicos das duas leituras de `bd98a7c5`. Não consultar novamente seu `local_result`, enviar mensagens, rearmar monitores ou executar negócio. A captura atual é o corte desta reconciliação; o coletor seguinte será revisado pelo próprio recibo, sem iniciar uma cadeia recursiva de novas capturas.
+
+## Revisão do recibo 7f22ec36 e correção A7R
+
+`local_result` consultado uma vez; `profiles` e `duplicate_trace` concluídos com exit0, sem inferência. Hashes dos arquivos privados conferidos:
+
+| Arquivo | SHA256 |
+| --- | --- |
+| profiles.json | 5776042cf5594f641a1cc9819c8d9a43ff8af218cba9fbc37155c37d423ee9a2 |
+| duplicate-trace.json | 977bdba85900237d31685aa720ae89e90c0e053eb1043ec2de7a690ec4a880f9 |
+
+São 189 perfis factuais; 51 têm menção em documentos públicos e 90 contêm referências literais em suas tarefas. Todos continuam `NOT_ASSESSED`: menção não demonstra revisão, dependência, correção ou aceite. O Git determinístico do job em 23/10 às 09:12:37 UTC registra `main...origin/main` limpo; nenhum arquivo funcional ou commit era exigido dessa coleta privada.
+
+Os dois turnos públicos retidos, sem truncamento das mensagens examinadas, comprovam consultas distintas: `exec-dda3396b` solicitou e recebeu `bd98a7c5`; `exec-a8d9992d` solicitou e recebeu `bec20b0f`. Os hashes dos dois itens correspondem à captura original. O segundo resultado apenas menciona o job anterior. Não houve segunda consulta comprovada a `bd98a7c5` nesses itens.
+
+**Causa-raiz:** `audit-interactions.mts` encontrava UUIDs em argumentos e resultados e atribuía a cada UUID mencionado o mesmo tipo de chamada e estado terminal. Isso confundia citação histórica com destino operacional, inclusive para servidores homônimos. É defeito de atribuição do auditor interno; não comprova reenvio do Worker ou callback duplicado.
+
+**Correção A7R:** referências textuais permanecem preservadas; contadores usam exclusivamente `localworker/local_result` e `arguments.job_id` válido. Resultado terminal exige chamada concluída sem erro MCP, identidade correspondente na resposta e estado terminal explícito; respostas ausentes, divergentes ou ambíguas não comprovam obtenção. A projeção passa a schema4, com identidades explícitas. Não altera runtime, permissões, instruções instaladas, modelo ou esforço.
+
+A opção adicional `[interactions-congeladas.json]` reatribui somente itens já capturados, confere hash/identidade e preserva o estado histórico dos turnos. Item ausente/divergente interrompe a operação sem publicar saída; saídas preexistentes não são sobrescritas. Isso evita incorporar novos turnos ou repetir tarefas históricas para corrigir os contadores.
+
+Validação: `node --experimental-strip-types --test constructor/audit-result-attribution.test.mts constructor/audit-interactions.test.mts` — seis testes passaram, incluindo SQLite e subprocessos reais isolados: menção histórica, duplicação verdadeira, falha de chamada, resposta divergente, servidor homônimo, exclusão de cancelado, preservação da captura, detecção de item ausente/alterado e recusa de sobrescrita. Alteração executada exclusivamente pelo supervisor, C=8, por afetar evidências usadas em decisões de supervisão; execução mecânica posterior permanece unidade distinta e delimitada.
+
+Pendente: aplicar a reatribuição corrigida aos itens da captura existente e conferir diferenças. As contagens antigas de leitura repetida ficam invalidadas até esse recibo, sem declarar resolvidos os demais trabalhos históricos.
