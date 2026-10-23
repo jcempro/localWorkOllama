@@ -1,5 +1,6 @@
-param([Parameter(Mandatory=$true)][string]$ProjectRoot)
+param([Parameter(Mandatory=$true)][string]$ProjectRoot,[switch]$VerifyOnly,[string]$BeforeConfigBackup)
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'worker-config-invariant.ps1')
 $projectC9R=(Resolve-Path -LiteralPath $ProjectRoot).Path
 $proofRootC9R=Join-Path $projectC9R 'constructor/audit-private'
 $tasksC9R=@(Get-ScheduledTask | Where-Object TaskName -Like 'CodexSupervisorResume-*')
@@ -21,10 +22,18 @@ $env:C9R_WORKER_DIR=$workerC9R
 try{$cliC9R=('import {pathToFileURL} from "node:url";import path from "node:path";const d=await import(pathToFileURL(path.join(process.env.C9R_WORKER_DIR,"delivery.mjs")));console.log(await d.codexCommand());'|& $nodeC9R --input-type=module -|Select-Object -Last 1)}finally{Remove-Item Env:C9R_WORKER_DIR}
 if($LASTEXITCODE -ne 0 -or -not(Test-Path -LiteralPath $cliC9R -PathType Leaf)){throw 'CLI_DISCOVERY_FAILED'}
 $workerConfigBeforeC9R=Get-Content -LiteralPath (Join-Path $workerC9R 'config.json') -Raw
+if($VerifyOnly){
+  if(-not $BeforeConfigBackup){throw 'VERIFY_REQUIRES_ORIGINAL_BACKUP'}
+  $backupC9R=Get-Item -LiteralPath $BeforeConfigBackup
+  if($backupC9R.Directory.FullName -ine [IO.Path]::GetFullPath($workerC9R) -or $backupC9R.Name -notmatch '^config\.json\.backup-\d+$' -or ($backupC9R.Attributes -band [IO.FileAttributes]::ReparsePoint)){throw 'INVALID_WORKER_CONFIG_BACKUP'}
+  $workerConfigBeforeC9R=Get-Content -LiteralPath $backupC9R.FullName -Raw
+}
 $globalConfigC9R=Join-Path $targetsC9R[0].config.codexHome 'config.toml'
 $globalHashC9R=(Get-FileHash -LiteralPath $globalConfigC9R).Hash
-& $psC9R -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $projectC9R 'src/install.ps1') -WorkerHome $workerC9R -CodexHome $targetsC9R[0].config.codexHome -CodexExe $cliC9R -SkipPrerequisites -SkipModel -SkipWatchdog -SkipGlobalRules -WaitForIdle *> (Join-Path $proofRootC9R 'c9r-worker-install.log')
-if($LASTEXITCODE -ne 0){throw 'WORKER_INSTALL_FAILED_SEE_PRIVATE_LOG'}
+if(-not $VerifyOnly){
+  & $psC9R -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $projectC9R 'src/install.ps1') -WorkerHome $workerC9R -CodexHome $targetsC9R[0].config.codexHome -CodexExe $cliC9R -SkipPrerequisites -SkipModel -SkipWatchdog -SkipGlobalRules -WaitForIdle *> (Join-Path $proofRootC9R 'c9r-worker-install.log')
+  if($LASTEXITCODE -ne 0){throw 'WORKER_INSTALL_FAILED_SEE_PRIVATE_LOG'}
+}
 $filesC9R=@('continuity.mts','continuity.mjs','delivery.mjs','watchdog.mjs','job-store.mjs')
 foreach($nameC9R in $filesC9R){
   if((Get-FileHash -LiteralPath (Join-Path $workerC9R $nameC9R)).Hash -ne (Get-FileHash -LiteralPath (Join-Path $projectC9R ('src/localworker/'+$nameC9R))).Hash){throw 'WORKER_HASH_MISMATCH'}
@@ -32,8 +41,10 @@ foreach($nameC9R in $filesC9R){
 $resultC9R=@()
 foreach($targetC9R in $targetsC9R){
   $cfgC9R=$targetC9R.config
-  & $psC9R -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $projectC9R 'src/supervisor/install.ps1') -ThreadId $cfgC9R.threadId -RepoPath $cfgC9R.repoPath -Target $targetC9R.dir -CodexHome $cfgC9R.codexHome -WorkerHome $cfgC9R.workerHome -NodeExe $nodeC9R -CodexExe $cliC9R -OllamaExe $cfgC9R.ollama -ScanMinutes $cfgC9R.scanMinutes *> (Join-Path $proofRootC9R ('c9r-supervisor-'+$cfgC9R.threadId+'.log'))
-  if($LASTEXITCODE -ne 0){throw 'SUPERVISOR_INSTALL_FAILED_SEE_PRIVATE_LOG'}
+  if(-not $VerifyOnly){
+    & $psC9R -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path $projectC9R 'src/supervisor/install.ps1') -ThreadId $cfgC9R.threadId -RepoPath $cfgC9R.repoPath -Target $targetC9R.dir -CodexHome $cfgC9R.codexHome -WorkerHome $cfgC9R.workerHome -NodeExe $nodeC9R -CodexExe $cliC9R -OllamaExe $cfgC9R.ollama -ScanMinutes $cfgC9R.scanMinutes *> (Join-Path $proofRootC9R ('c9r-supervisor-'+$cfgC9R.threadId+'.log'))
+    if($LASTEXITCODE -ne 0){throw 'SUPERVISOR_INSTALL_FAILED_SEE_PRIVATE_LOG'}
+  }
   if((Get-FileHash -LiteralPath (Join-Path $targetC9R.dir 'continuity.json')).Hash -ne $targetC9R.controlHash){throw 'AUTHORIZATION_CHANGED_BY_INSTALL'}
   foreach($nameC9R in @('continuity.mts','continuity.mjs','core.mts','core.mjs','run.mts','run.mjs')){
     if((Get-FileHash -LiteralPath (Join-Path $targetC9R.dir $nameC9R)).Hash -ne (Get-FileHash -LiteralPath (Join-Path $projectC9R ('src/supervisor/'+$nameC9R))).Hash){throw 'SUPERVISOR_HASH_MISMATCH'}
@@ -50,7 +61,7 @@ foreach($targetC9R in $targetsC9R){
   $resultC9R+=@{thread_id=$cfgC9R.threadId;mode=$controlC9R.mode;reason=$controlC9R.reason;control_preserved=$true;hashes_and_manifest_match=$true;boot_logon=$false;wake_or_catchup=$false}
 }
 if((Get-FileHash -LiteralPath $globalConfigC9R).Hash -ne $globalHashC9R){throw 'GLOBAL_CONFIG_CHANGED'}
-if((Get-Content -LiteralPath (Join-Path $workerC9R 'config.json') -Raw) -ne $workerConfigBeforeC9R){throw 'WORKER_CONFIG_CHANGED'}
-$proofC9R=@{timestamp_utc=[DateTime]::UtcNow.ToString('o');files=$filesC9R;installations=$resultC9R;global_config_preserved=$true;worker_config_preserved=$true;real_chat_sends=0;real_inference=$false;resume_executed=$false}
+$settingsC9R=Assert-WorkerConfigC9R -Before $workerConfigBeforeC9R -After (Get-Content -LiteralPath (Join-Path $workerC9R 'config.json') -Raw) -ResolvedCodex $cliC9R
+$proofC9R=@{timestamp_utc=[DateTime]::UtcNow.ToString('o');files=$filesC9R;installations=$resultC9R;global_config_preserved=$true;worker_config_preserved=$settingsC9R.settings_preserved;codex_command_refreshed=$settingsC9R.codex_command_refreshed;verification_only=[bool]$VerifyOnly;real_chat_sends=0;real_inference=$false;resume_executed=$false}
 [IO.File]::WriteAllText((Join-Path $proofRootC9R 'causal-resume-installed-proof.json'),($proofC9R|ConvertTo-Json -Depth 8),(New-Object Text.UTF8Encoding($false)))
 Write-Output 'C9R_INSTALLED_HASHES_VERIFIED_AUTHORIZATION_PRESERVED'
