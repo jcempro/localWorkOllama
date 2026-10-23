@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {randomUUID} from 'node:crypto';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+import {extractDiffFactsD9F} from './diff-facts.mts';
+const partial=extractDiffFactsD9F('diff --git a/a b/b\nsimilarity index 88%\nrename from a\nrename to b\n@@ -1,182 +1,47 @@\n-deleted\n context\n');
+assert.equal(partial.hunks[0].old.count,182);assert.equal(partial.hunks[0].next.count,47);
+assert.deepEqual(partial.hunks[0].observed,{old_lines:2,new_lines:1,removed:1,added:0,context:1});
+assert.equal(partial.hunk_counts_complete,false);assert.equal(partial.whole_file_sizes,null);assert.equal(partial.fragment_coverage_percent,null);
+assert.equal(partial.metadata.find(m=>m.kind==='similarity_index')?.value,88);
+const full=extractDiffFactsD9F('@@ -3,2 +8,2 @@ f\r\n-old\r\n+new\r\n keep\r\n\\ No newline at end of file\r\n');
+assert.equal(full.hunk_counts_complete,true);assert.equal(full.whole_file_sizes,null);
+assert.equal(extractDiffFactsD9F('@@ -0,0 +1 @@\n+new\n').hunks[0].complete,true);
+assert.equal(extractDiffFactsD9F('removed fragment without header').availability,'NO_HUNK_HEADER');
+assert.equal(extractDiffFactsD9F('@@ -1 +1 @@\n--- literal\n+++ literal\n').hunks[0].complete,true);
+for(const text of ['@@@ -1 -1 +1 @@@','GIT binary patch','Binary files a and b differ'])assert.throws(()=>extractDiffFactsD9F(text),/FORMAT_UNSUPPORTED/);
+assert.throws(()=>extractDiffFactsD9F('@@ invalid'),/HEADER_INVALID/);
+assert.throws(()=>extractDiffFactsD9F('@@ -1 +1 @@\n context\n-extra\n'),/COUNT_OVERFLOW/);
+assert.throws(()=>extractDiffFactsD9F('@@ -1 +1 @@\nunprefixed'),/BODY_INVALID/);
+assert.throws(()=>extractDiffFactsD9F('@@ -9007199254740992 +1 @@'),/RANGE_INVALID/);
+assert.throws(()=>extractDiffFactsD9F('@@ -0 +1 @@'),/RANGE_INVALID/);
+assert.throws(()=>extractDiffFactsD9F('similarity index 101%'),/SIMILARITY_INVALID/);
+const root=await fs.realpath(process.cwd()),base=path.join(root,'constructor/audit-private');
+const dir=await fs.mkdtemp(path.join(base,'d9f-'+randomUUID()+'-'));
+try{
+  const file=path.join(dir,'input.json');await fs.writeFile(file,JSON.stringify({fragment:'@@ -1 +1 @@\n-a\n+b\n',origin:'literal source'}));
+  const run=(input:string,field='fragment')=>promisify(execFile)(process.execPath,['--experimental-strip-types','constructor/diff-facts-cli.mts','--root',root,'--input',input,'--field',field,'--origin-field','origin'],{cwd:root,windowsHide:true});
+  const relative=path.relative(root,file),before=await fs.readFile(file);
+  const value=JSON.parse((await run(relative)).stdout);
+  assert.equal(value.origin_literal,'literal source');assert.equal(value.hunks[0].complete,true);
+  assert.deepEqual(await fs.readFile(file),before);
+  await assert.rejects(promisify(execFile)(process.execPath,['--experimental-strip-types','constructor/diff-facts-cli.mts','--root',root,'--input',relative,'--field','fragment','--sha256','0'.repeat(64)],{cwd:root,windowsHide:true}),/INPUT_HASH_MISMATCH/);
+  await assert.rejects(run('../outside.json'),/INPUT_PATH_INVALID/);
+  await assert.rejects(run(file),/INPUT_PATH_INVALID/);
+  await assert.rejects(run(relative,'missing'),/INPUT_OBJECT_INVALID/);
+  await assert.rejects(run(relative,'__proto__'),/FIELD_INVALID/);
+  await fs.link(file,path.join(dir,'alias.json'));
+  await assert.rejects(run(path.relative(root,path.join(dir,'alias.json'))),/INPUT_FILE_INVALID/);
+  console.log('PASS D9F: hunk ranges/counts, partial/complete, metadata, invalid/unsupported, read-only CLI and boundary guards');
+}finally{
+  const actual=await fs.realpath(dir);assert.equal(path.dirname(actual),await fs.realpath(base));assert.ok(path.basename(actual).startsWith('d9f-'));
+  await fs.rm(actual,{recursive:true,force:true});
+}
