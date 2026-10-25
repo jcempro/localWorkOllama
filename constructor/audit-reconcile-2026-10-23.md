@@ -1032,3 +1032,10 @@ N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/med
 84f38d7c recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:13:16.339Z para extração fiel.4c75M20quatrorefs e4e521M18seisrefs/statuscaptured/errornull correspondem aos pedidos. Aceite operacional com limites: sem hashdraft/texto/URLs/código de perfil integrais, não afirmar preservação independente/fidelidade/restrição técnica de rede ou integração. Nenhuma fonte/rede/artigo/código histórico acessado ou executado. Git auditor main limpo12:11:31.600Z distinto dos históricos dev/ahead27/21 parciais. Privados completed-captures-c36b-return.json/evidence.json/proof.json/review.json; não repetir consulta/capturas.
 
 Cobertura393/453 delimitada,60pendentes; tabela138/9sobrepostos/129novos. Prova coverage-reconciliation-2026-10-25.json SHA26ae1e250f244524b40844513b1e2b08f1a29e144e2b4b6823232b84b99f1a1a; anterior preservada porhash. CANCELLED excluídos, exame≠aceitefuncional; corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint; próxima unidade factual pequena.
+
+
+## Reconciliação de exame anterior A3F
+
+4988362b já tinha recebimento único/exame/aceite expresso em três validaçõesA3F com fontes/hashes/linhas conferidos. Reaproveitado integralmente sem novo local_result/inferência/testes/nota histórica. Prova prior-review-4988362b-proof.json; limites do marcador parse_error e da projeção factual preservados.
+
+Cobertura394/453 delimitada,59pendentes; tabela139/9sobrepostos/130novos. Prova coverage-reconciliation-2026-10-25.json SHA69eb84f6a107fffc0f320e8b67099df6a593c931b3bf459ddf621a89d2ab5f61; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional. Nenhum job ativo; buscar prova pública antes de delegar registro já examinado.
