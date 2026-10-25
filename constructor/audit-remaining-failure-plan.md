@@ -470,3 +470,12 @@ C44Q recebido/examinado/Q8S10 e C45R reconciliou exame antigo de7456cd74 sem nov
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands retained_render_repair única vez,15s/networkfalse/repeatablefalse/16000chars/R8V2000. ExtratorC34A reaproveitado com ID/índices de plano e projeção after corrigidos; guardas de fonte/hash/ID/status/2leituras/1edit/paths/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope6cf2b8733d50385537ffcfee25b45272b8a4566c2dd01bb7925c04744a09ce7f. Pedido privado completed-render-c46a-request.json. ReciboQ8S avalia extração determinística, não cognição histórica.
 
 Confirmar chat/cwd e ACTIVE antes de start; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→plano versus after/recibo/limites/Git→I2O/Q8S→cobertura. Nenhuma edição em negócio/fora desta raiz ou replay de implementação.
+
+
+## C47D — recibo de consolidação e diagnóstico históricos
+
+C46A21e0ca36 recebido uma vez/examinado/Q8S10 para extração fiel;7522ec6a correção semântica incompleta apesar de sintaxe0, rejeitada emf807a4f sem replay/negócio vivo. Cobertura406/453 delimitada,47pendentes; CANCELLED excluídos. Próximo ID6d9fc2ac-2ccf-458e-9a60-c29e9d9bb5b6 M36B: consolidar checklist de três análises e diagnosticar blocos de HTML M35 já existente; dois comandos preparados, sem inferência. Extrair pedido/argv/eventos/corpo970chars/Gitparcial. Não repetir scripts, interpretar exit0 do diagnóstico como conformidade ou presumir fonte/HTML/checklist integrais ausentes.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_checklist_diagnostic única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600. ExtratorC41N validado com ID/asserts/schema ajustados; guardas de fontes/hashes/ID/status/expectchanges/ordem dos2comandos/checkpoints0/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope26af1b3c92acbebfb568784228369f20d537d97a6d58631641179ccdf82febcb. Pedido privado completed-diagnostic-c47d-request.json. Juízo/qualidade/risco exclusivamente do supervisor.
+
+Start após identidade/cwd/ACTIVE comprovados; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→execução versus pedido/limites/achados/Git→I2O/Q8S→cobertura. Nota do extrator não é nota histórica nem cognição de command_sequence.
