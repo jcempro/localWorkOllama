@@ -97,6 +97,8 @@ O instalador do supervisor carrega explicitamente `Microsoft.PowerShell.Utility`
 
 A evidência estruturada fornecida ao Worker é apresentada sem uma camada redundante de escapes quando objeto/array JSON pode ser preservado integralmente. Texto comum e JSON com duplicatas ou representações não canônicas mantêm a forma literal anterior. Isso não altera o contrato `provided_evidence`, a origem, os hashes ou a validação de citações; também não garante compreensão correta. Para citações de código, prefira extrair linhas exatas por script e oferecer opções por `enum` R8V, mantendo a revisão semântica do supervisor.
 
+Para fatos como ordem de sobrescrita, índices e condições, use probes seguros no runtime da linguagem, com controles positivos e negativos e vínculo ao trecho examinado. O supervisor pode executar prova trivial; provas extensas podem usar `command_sequence` no Worker, sem inferência. Não execute código histórico desconhecido nem considere uma resposta JSON válida como prova técnica. O aceite permanece limitado ao comportamento efetivamente verificado.
+
 ## Manutenção do próprio Worker
 
 O modo híbrido é exclusivo do próprio produto; outros repositórios conservam seu regime. O supervisor avalia risco e decide: C≤5 usa o mesmo Worker como júnior; 5<C≤7 permite escolha fundamentada entre supervisor exclusivo, júnior ou estagiário; C>7 exige supervisor exclusivo. Scripts/Skills inequivocamente triviais, determinísticos e seguros, com procedência, imutabilidade/integridade e proteção previamente comprovadas, são preferidos em qualquer criticidade; acima de7 são executados pelo supervisor. Nome/hash isolado não comprova segurança. Incerteza material impede delegação até esclarecimento.
@@ -435,6 +437,8 @@ O Worker é executor especializado, não destinatário generalista. Somente dele
 Antes de cada job, avalie objetivo, arquivos/contexto, complexidade, dependências, volume de leitura/alteração e risco de expansão. Estime a ocupação incluindo normas, ferramentas, leituras, histórico e saída; preserve margem segura na janela efetiva (tipicamente até 32K). Possibilidade relevante de extrapolação ou exploração ampla exige decomposição prévia, nunca confiar na compactação para tornar segura uma delegação excessiva. Registre concisamente objetivo, alvos, dependências, limite de escopo, automação disponível, evidência e aceite; incerteza sobre o volume exige uma unidade menor de levantamento delimitado.
 
 ### Automação determinística
+
+Semântica objetiva de operadores, ordem/sobrescrita de propriedades, índices, condições e transições passível de probe seguro é fato mecanicamente verificável. NÃO a trate como ambiguidade semântica para justificar inferência dispensável. Reconheça a expressão/contrato e use o runtime real ou prova determinística própria conferida; não execute código histórico/desconhecido como dado confiável. Aplique o critério econômico abaixo para executar diretamente ou delegar o comando. Preserve controles negativos e limites da prova; modelo, formato válido e citação literal não substituem esse vínculo. Julgamento de risco, requisitos e aceite continua no supervisor.
 
 Identifique scripts, comandos, hooks e Skills comprovadamente disponíveis no alvo; indique-os explicitamente e prefira-os ao trabalho manual equivalente. O supervisor pode executar diretamente operação determinística trivial, objetiva e previsível quando execução e leitura mínima do resultado custarem menos que delegar. Se puder demorar, exigir acompanhamento prolongado, gerar saída volumosa ou ocupar contexto/processamento pago relevante, delegue a execução compatível ao Worker com comando/script, parâmetros, sequência, resultado esperado, critério de conclusão e retorno mínimo exatos. Não permaneça consumindo processamento pago para aguardar. Capacidade/permissão ausente não pode ser presumida; manutenção própria exige a política híbrida adotada, sem a qual o veto permanece.
 
@@ -786,7 +790,7 @@ Configuração padrão: modelo `qwen3-coder-next-32k`; Ollama `http://127.0.0.1:
 | `src/localworker/register-watchdog.ps1` | `0096c03844666cf25ae1bddad89fbf4280cb3b5b9805a0d98ecab9f6e4254d28` |
 | `src/localworker/watchdog-launch.vbs.template` | `72a8461cf986ef5d4f737a4fdb61348a9f212576930b4530c3df6ac9022bd3f3` |
 | `src/install.ps1` | `cfb246b604d170886b788fa294cc1a3841867a648895f40706d3a7f06c311467` |
-| `src/agents.supervisor.md` | `7b4e8b5bcaab2df79de593d40c0592fe9b2ae6411b3098648fc2963d8d74f13e` |
+| `src/agents.supervisor.md` | `2b11f145a273fa60f531db0715253fa179c50a040fc0829f121899e4498c0d83` |
 <!-- LOCALWORKER_GENERATED_END -->
 
 ## Modelo, esforço e limite da UI

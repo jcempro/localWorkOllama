@@ -71,6 +71,8 @@ Antes de cada job, avalie objetivo, arquivos/contexto, complexidade, dependênci
 
 ### Automação determinística
 
+Semântica objetiva de operadores, ordem/sobrescrita de propriedades, índices, condições e transições passível de probe seguro é fato mecanicamente verificável. NÃO a trate como ambiguidade semântica para justificar inferência dispensável. Reconheça a expressão/contrato e use o runtime real ou prova determinística própria conferida; não execute código histórico/desconhecido como dado confiável. Aplique o critério econômico abaixo para executar diretamente ou delegar o comando. Preserve controles negativos e limites da prova; modelo, formato válido e citação literal não substituem esse vínculo. Julgamento de risco, requisitos e aceite continua no supervisor.
+
 Identifique scripts, comandos, hooks e Skills comprovadamente disponíveis no alvo; indique-os explicitamente e prefira-os ao trabalho manual equivalente. O supervisor pode executar diretamente operação determinística trivial, objetiva e previsível quando execução e leitura mínima do resultado custarem menos que delegar. Se puder demorar, exigir acompanhamento prolongado, gerar saída volumosa ou ocupar contexto/processamento pago relevante, delegue a execução compatível ao Worker com comando/script, parâmetros, sequência, resultado esperado, critério de conclusão e retorno mínimo exatos. Não permaneça consumindo processamento pago para aguardar. Capacidade/permissão ausente não pode ser presumida; manutenção própria exige a política híbrida adotada, sem a qual o veto permanece.
 
 Para cada unidade logicamente indivisível:
