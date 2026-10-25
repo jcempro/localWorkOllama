@@ -1166,3 +1166,10 @@ Extrair quatroargv413chars/corpos1351/pedidos/eventos/Gitparciais. Sequência/re
 Callback local_result uma vez→pedidos/recibos/limites/hash/eventos/Gitparciais→I2O/Q8S→cobertura. Paths de plano/script não provam fonte/código/guardaexercida, contagem/hash/diffexit0 não provam fidelidade/preservaçãoautoral ou FTintegral. Nenhum patch/diff/render/validação/rede/biblioteca/fonte/código histórico executado/compilado/importado ou artigo vivo inspecionado. Julgamento de risco/qualidade só supervisor; lacuna específica exige ressalva/segmentação, não replay cego.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C42P
+
+0e7f7738 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:43:42.393Z.59ddM17edits2/notes10 e651fM28edits8/changedtrue/aplicação/diffexit0 relatados. Aceite operacional qualificado: sem plano/código/diff/fontes/recibos integrais, não afirmar preservação autoral/fidelidade/guarda por contagem/hash. Git auditor main limpo12:41:41.144Z versus históricos dev/ahead19/45 parciais. Privados completed-editorial-c42p-return.json/evidence.json/proof.json/review.json; não repetir consulta/mutação.
+
+Cobertura402/453 delimitada,51pendentes; tabela147/9sobrepostos/138novos. Prova coverage-reconciliation-2026-10-25.json SHA2946cbd58123f0c0696acdc20fbd44e8b8842dd297b3ac1bd2d962e72e4346a6; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional, corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint.
