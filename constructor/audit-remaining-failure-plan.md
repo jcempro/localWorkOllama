@@ -530,3 +530,14 @@ Extrair pedido/argv/eventos/recibo/Gitparcial, não executar inventory/git ou le
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_asset_inventory única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600 abaixo16000. ExtratorC41N validado ajustaID/guardas/schema; fontesabd15bcf/F8E35fb663c/IDstatus/hashes/mode/expectchangesfalse/checkpoints0/1comandoordem/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope19b3d417d6b65badf6623d3ec885b625953eec6a2129aedad075e9c9a2420504. Pedido privado completed-inventory-c53a-request.json. Risco/qualidade/aceite sósupervisor.
 
 Confirmarchat/cwd/ACTIVE atuais→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→exame proporcional/I2O/limites/Git→Q8S→cobertura. Não retomar chatblog pausado, repetirexploração/alterarnegócio ou inventar nota histórica.
+
+
+## C54C — catálogo opcional integrado ao contrato histórico
+
+C53A315833db recebido uma vez/examinado/Q8S10 para extração fiel;8157310c inventário5paths/1config/5scripts aceito no recorte, não pipelinevalidado/exaustivo. Cobertura412/453 delimitada,41pendentes; CANCELLED excluídos. Próximo ID8930238a-9d15-4948-a41b-b48b073c71bf FT107/U4D1: DonationsData.assets opcional para wrappersQR/actions existentes; quando presente validar estrutura completa reutilizando validateDonationAssets. Sem refs/demaisícones/dadosfinanceiros/UI nesta unidade. Três alvos TS/JS/teste, sequência patch/build/contract/actions/qr, sem inferência.
+
+Extrair pedido/argv/eventos/corpo766chars/Gitparcial, não executar patch/build/test/importar módulo ou negócio vivo. Orçamento argv2163+224+67+66+61/body766+metadata, margem13000/R8V1600 abaixo16000. Conferir opcionalidade/validaçãoquando presente/reuso/compatibilidade testada e origemindependente das expectativas, sem deduzir contrato completo por markers ou assinatura.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_optional_assets_contract única vez,15s/networkfalse/repeatablefalse. ExtratorC41N validado ajustaID/asserts/schema; fontesabd15bcf/F8E35fb663c/hashes/IDstatus/expectchangestrue/checkpoints0/corpo≤1000/5comandosordem/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope073a91feba75beb4c92782f087bb5d8abc6765637b54d8f6fb1defc1349b55fb. Pedido privado completed-contract-c54c-request.json; risco/qualidade/aceite sósupervisor.
+
+Confirmarchat/cwd/ACTIVE→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→exame proporcional/I2O/limites/Git→Q8S→cobertura. Não repetir exploração/negócio/retomada de outrochat ou inventar nota histórica.
