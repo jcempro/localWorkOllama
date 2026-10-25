@@ -373,3 +373,14 @@ IDs4c75b348-353d-4616-ae0e-50cfb7d21529/M20(1Rs17–19/22ARA, quatroentradas) e4
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_source_captures,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/IDs/status/comandoúnico/offsets/header/bodySHA. ExtratorC32O reusa função validada em duas seleções; sintaxe/preflightSW-HYBRID/R8V válidos. Scope4e9eaccdbb7c3fa7104433e7436c5eba05f52fc9065cbb130ee078e11cbbdcbb; privado completed-captures-c36b-request.json. Nenhuma captura/rede/biblioteca/artigo vivo ou código histórico executado.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedido/recibos/status/hashes versus evidência disponível→I2O/Q8S→cobertura. Manter limite de captura operacional versus verificação/fidelidade/integração editorial.
+
+
+## C37D — teste histórico de contrato
+
+C36B84f38d7c recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:13:16.339Z; revisão75a5b7d publicada. M18/M20capturas operacionais qualificadas, não hashdraft/fonte/fidelidade integrais. Reconciliação adicional4988362b por exame anterior explícito em três validaçõesA3F evita reconsulta/retestes. Cobertura394/453 delimitada,59pendentes; provaSHA69eb84f6a107fffc0f320e8b67099df6a593c931b3bf459ddf621a89d2ab5f61; CANCELLED excluídos.
+
+ID52b94567-c6a4-4bc5-8fee-ceb32a6048c2 U2B1 apóscc874702: create→test, somente scripts/test_donations_contract.ts, criawx/dependências conferidas, dados/módulo preservados. Quatro casos autorizados, demais negativos pendentes e commit supervisor. Busca pública dirigida sem exame anterior localizado. Extrair doisargv1354chars/corpo402/eventos/pedido/Gitparcial; código/valores são evidência histórica, sem executar/compilar/importar/testar negócio ou obter fontes atuais.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_contract_test,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/expect_changes/comandos/offsets/header/bodySHA; extratorC35T validado, só ID/comandos alterados. Sintaxe/preflightSW-HYBRID/R8V válidos. Scope2f205ba12eb2d604cb83dc11edaa9bb434a9cf4661a7ffafb083b473763b6e5c; privado completed-contract-c37d-request.json.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→quatrocasos versus pedido/origemexpectativas/recibo/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir contrato financeiro/licença/FTintegral ou verdade semântica por teste exit0.
