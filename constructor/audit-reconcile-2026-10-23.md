@@ -785,3 +785,10 @@ Job948be20e-6fec-429f-9449-cae6df34eff8 RUNNING/R8V1. Chat/cwd comprovados nesta
 Callback local_result uma vez→conferir argv/eventos/recorte contra fontes→revisão I2O/Q8S→cobertura. Pedido histórico exigia stdout integral e somente inventário, não implementação. Disponibilidade não comprova funcionalidade/procedência/logo. Observar representação literal de regex/argv antes de atribuir comportamento; código histórico só dado, não executar/importar/compilar. Não recapturar corpus, conferir pacotes atuais, repetir inventário ou escrever no blog. Próximo0f654462 tem patchargv4754chars/setecomandos e pode exigir unidade única para caber; ainda não examinado, sem replay.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C27I — inventário histórico delimitado
+
+948be20e recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:16:41.808Z.2f18 inventário read-only executado/exit0, corpo completo, sem implementação requerida. Disponibilidade por metadata/paths não comprova funcionamento/adequação de bibliotecas/logo; rodapé Git parcial não prova autoria/ausência de efeitos herdados. Git auditor main limpo07:14:49.293Z distinto dos históricos.
+
+Cobertura381/453 delimitada,72 pendentes; tabela126/9sobrepostos/117novos. Prova coverage-reconciliation-2026-10-25.json SHAfc4cb0057967b9668ddcdb497fa40deb1d74de5edcc92baea956d646f9dde71a; anterior preservada. CANCELLED excluídos/I2O/sem recaptura ou replay. Nenhum Worker ativo neste checkpoint.
