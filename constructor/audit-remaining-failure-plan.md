@@ -439,3 +439,14 @@ IDs59dd67f7-2781-4a62-8a36-b16a00aab787/M17(segundoparágrafo/notas, literalJo16
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_editorial_m17_m28,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/IDs/status/listascomandos/offsets/header/bodySHA. ExtratorC36B validado, seleção/schema/guardas de listas ajustados; sintaxe/preflightSW-HYBRID/R8V válidos. Scopedf795b5088909a86947cba505e01e74619cc614437647df5a54422f575f29575; privado completed-editorial-c42p-request.json. Nenhum patch/diff/render/validação/rede/fonte/código histórico executado ou artigo vivo inspecionado.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedidos/recibos/limites/hash/eventos/Gitparciais→I2O/Q8S→cobertura. Não inferir preservação autoral/fidelidade/fontes/guarda efetiva ou FTintegral por contagem/hash/diffexit0.
+
+
+## C43I — proposta histórica multi-IAL
+
+C42P0e7f7738 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:43:42.393Z; revisãoautoralmantém aceiteoperacional deM17/M28, sem fidelidade por contagem/hash. Cobertura402/453 delimitada,51pendentes, provaSHA2946cbd58123f0c0696acdc20fbd44e8b8842dd297b3ac1bd2d962e72e4346a6; CANCELLED excluídos.
+
+ID69b4d7a5-c581-4130-8539-23f750cc9011: propostaTS somente de wrapBlockIals/collectBlockIals/printjcemIalBlock, ≤110linhas, sobre provided_evidence3524chars; corpo1632. Collector deve preservar validadores/exclusões, sequênciaparagraphs/linhasIALválidas e mesmo blockIndex; wrapper agrupa/removeIALíndices/endúltima/ASTimutável, printerhardline/nativo. Não implementação/testes/commit. Busca pública dirigida sem exame anterior localizado. Extrair pedido/evidência/resposta/eventos/Gitparcial, não gerar nova proposta, executarTS/AST ou ler negócio vivo.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_ial_multi_proposal,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c e guardaslstat/notlink/nlink1/hash/ID/status/read-only/semcomandos/offsets/header/bodySHA. ExtratorC33N validado, só ID alterado; sintaxe/preflightSW-HYBRID/R8V válidos. Scope0d14a3ba508957fdcf8f8462e15826e5db8781de99d6db2235e62ed4f5397401; privado completed-proposal-c43i-request.json. Risco/semântica/qualidade exclusivos do supervisor.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→proposta versus contrato/evidência/limites/eventos/Gitparcial→I2O/Q8S→cobertura. Não executar/compilar/importar proposta ou inferir AST/API/testes/aplicação efetiva ausentes.
