@@ -767,3 +767,8 @@ Callback local_result uma vez para extrator→conferir literalidade/exame anteri
 b1393fc6 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:11:32.198Z. Três recortes6bde/5aa/602 conferidos na fonte15/10, omissões explícitas. Preservadas correções e limites; nenhum negócio reexecutado. Git auditor main limpo07:10:18.928Z distinto dos alvos.
 
 Cobertura378/453 delimitada,75 pendentes; tabela123/9sobrepostos/114novos. Prova coverage-reconciliation-2026-10-25.json SHA9161a9a29fc6abe623239f237ca1a21296631ac69c4be143b994e70fedfd5560; anterior preservada. Não restam candidatos residuais nos cabeçalhos Auditor da revisão15/10. Próxima seleção usa projeções já capturadas; CANCELLED excluídos, I2O/distinção exame e aceite vigentes. Nenhum Worker ativo neste checkpoint.
+
+
+## Reconciliação adicional — D9F e A3F já examinados
+
+343255f1 e3932e312 reutilizados de exames expressos publicados (subseçãoJob343 da revisão15/10 e audit-facts-validation.md). Sem reconsulta, testes/inferência ou notas históricas inventadas. Cobertura380/453 delimitada,73 pendentes; tabela125/9sobrepostos/116novos. ProvaSHAa06bb7745d255b94f3dcf0d09fc280b699175fedfb07693577a8030fc5d1a198; anterior preservada. Contagem não significa aceite semântico; CANCELLED excluídos.
