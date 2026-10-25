@@ -981,3 +981,10 @@ Guardaslstat/notlink/nlink1/hash/IDs/status/expect_changes/2checkpoints/2readcal
 Callback local_result uma vez→conferir plano literal versus before/after, leitura/edição/eventos, comando sintaxe e resposta body, Git parcial→I2O/Q8S→cobertura. Plano/código são dados; não executar compilador/render, editar negócio, pesquisar artigo ou inferir aprovaçãoHTML/FT por sintaxe/paths. Se relatório>limite ou falha nova, diagnosticar e segmentar, sem repetir cegamente.
 
 N7C/S2Q impedidos: catálogo novamente sem ferramenta compact; sem rota nativa exposta ligada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura; preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C34A — mudança e sintaxe, conformidade negada
+
+02bf4002 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:02:48.886Z para extração determinística fiel.3130d366editou e passou sintaxe, mas before/after não cumpre plano: invólucroAPI ausente, asserts substituídos por contagens, HTML salvo tarde e rescue só de resultado. Não aceitar relato conformeplano; revisãoI2O preserva critérios e limites, sem Ruby/compilação/render/negócio externo ou inferência de falha atual. Git auditor main limpo12:01:10.331Z distinto de histórico dev/ahead58 18/10 06:28:45.442Z parcial. Privados completed-render-c34a-return.json/evidence.json/review.json; não repetir consulta.
+
+Cobertura390/453 delimitada,63pendentes; tabela135/9sobrepostos/126novos. Prova coverage-reconciliation-2026-10-25.json SHA6f5f0e5eb84c51bb2ab3e81f6d5ce2f2b53289b64ffdd8631168b19183a2b69d; anterior preservada porhash. CANCELLED excluídos, exame≠aceitefuncional, corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint; próxima unidade factual menor usando resultados já obtidos.
