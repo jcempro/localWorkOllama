@@ -1272,3 +1272,10 @@ Extrair pedidos/argv/eventos/corpos877+946chars/Gitparcial. RequestJSON5440+5710
 Callback local_result uma vez→exame proporcional de recuperação/patch/testes e I2O/limites/Git→Q8S extrator→cobertura. Não executar/importar código capturado/build/test/install, abrir negócio/acervo/URL ou pesquisar números financeiros atuais. Conferir origem independente das expectativas; saída/hash não são oracle semântico. Não concluirFT/UI/finanças/licença globais nem dar nota histórica inventada/cognição a sequência. Scripts históricos permanecem dados; nenhuma edição externa/replay.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou mudança de modelo/esforço. Checkpoint não é compactação nativa.
+
+
+## Checkpoint C49Q — entrega recusada, artefato integral recuperável
+
+fbfaaa03 recebido uma vez/examinado/Q8S9revision1 em2026-10-25T16:41:20.751Z. WORKER_INCOMPLETE/RESPONSE_CONTRACT: candidato18177>MAX_FINAL_CHARS16000 após comandoexit0; orçamento22000 foi erro de dimensionamento do supervisor. Não infra/modelo, sem repetir execução. D8O preservou command-sequence-result.json integral19856bytes SHA6835f5796afec4b633362873be161e0ad57bf56b6a0ed76649a2a7cb97fcb2b8, cópia privada selada; rascunho recusado truncado não usado como fonte. Rows8578/9242chars, próxima unidade selecionará uma por vez≤13000.
+
+Cobertura permanece408/453,45pendentes;6d61550b/73a0d24b ainda não examinados semanticamente. Prova coverage-reconciliation-2026-10-25.json SHA3307872156a523c1cb9b6b5b91c47be32f5221341e74e4b26e65ae8f5a49fd89; anterior preservada porhash. Git auditor main limpo16:39:17.651Z; nenhum jobativo nestecheckpoint. CANCELLED excluídos, nenhuma nota histórica inventada. Provas privadas completed-symbols-c49q-return.json/proof.json/review.json/command-receipts.json.
