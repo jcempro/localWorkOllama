@@ -49,12 +49,13 @@ else{
  const commandIdK2F=(s:any)=>typeof s==='string'&&/^[a-z0-9][a-z0-9_-]{0,63}$/i.test(s);
  const records=payloadK2F.results.map((r:any)=>{
   assert(UUID_K2F.test(r.id));assert.equal(r.status,'FAILED');assert(r.request.required_command_ids.every(commandIdK2F));
-  const events=r.events,counts={ok:0,error:0,rejected:0,other:0};let readsOk=0,writesOk=0;
+  const events=r.events,counts={ok:0,error:0,rejected:0,other:0};let readsOk=0,writesOk=0,editsOk=0,movesOk=0,deletesOk=0;
   const attempts:any[]=[],pending:any[]=[];
   for(const e of events){const phase=textK2F(e.phase),tool=textK2F(e.tool),outcome=textK2F(e.outcome),diagnostic=textK2F(e.diagnostic);
    if(phase==='tool_result'){
     if(outcome==='ok'||outcome==='error'||outcome==='rejected')counts[outcome]++;else counts.other++;
     if(tool==='read_file'&&outcome==='ok')readsOk++;if(tool==='write_file'&&outcome==='ok')writesOk++;
+    if(tool==='edit_file'&&outcome==='ok')editsOk++;if(tool==='move_file'&&outcome==='ok')movesOk++;if(tool==='delete_file'&&outcome==='ok')deletesOk++;
     if(tool==='run_authorized_command'){const match=typeof diagnostic==='string'?/^comando ([a-z0-9_-]+): falha ([0-9]+);/i.exec(diagnostic):null;
      attempts.push({line:e.line,id:match?.[1]??null,exit_code:match?Number(match[2]):null,outcome:outcome==='ok'||outcome==='error'||outcome==='rejected'?outcome:null});}
    }
@@ -64,10 +65,11 @@ else{
     pending.push({line:e.line,ids,reason_status:status});}
   }
   return {id:r.id,row_sha256:shaK2F(JSON.stringify(r)),required_commands:r.request.required_command_ids,command_attempts:attempts,completion_blocked:pending,
-   tool_outcomes:counts,reads_ok:readsOk,writes_ok:writesOk,repeated_resource_groups:r.repeated_resources.length,steps:r.state_observed.steps,context_compactions:r.state_observed.context_compactions,
+   tool_outcomes:counts,reads_ok:readsOk,writes_ok:writesOk,write_file_ok:writesOk,edit_file_ok:editsOk,move_file_ok:movesOk,delete_file_ok:deletesOk,direct_file_mutations_ok:writesOk+editsOk+movesOk+deletesOk,repeated_resource_groups:r.repeated_resources.length,steps:r.state_observed.steps,context_compactions:r.state_observed.context_compactions,
    error_sha256:r.error_sha256,git_footer_sha256:shaK2F(JSON.stringify(r.git_footer_candidate))};
  });
  const report={capture_sha256:payloadK2F.capture_sha256,retained_origin:retainedOriginK2F,records,detailed_evidence_retained:true,
+  writes_ok_semantics:'write_file_only',direct_file_mutation_tools:['write_file','edit_file','move_file','delete_file'],counts_are_successful_tool_calls:true,authorized_command_effects_not_counted:true,
   resource_repetition_is_not_call_identity:true,accumulated_tokens_are_not_context_occupancy:true,semantic_acceptance:'NOT_ASSESSED',model_inference:false};
  const encoded=JSON.stringify(report);assert(encoded.length<=MAX_COMPACT_CHARS_K2F,'K2F_COMPACT_REPORT_REQUIRES_SMALLER_COHORT');
  assert.equal(encoded.trim().split(/\s+/u).length,1,'K2F_COMPACT_DATA_MUST_HAVE_NO_WHITESPACE_VALUES');

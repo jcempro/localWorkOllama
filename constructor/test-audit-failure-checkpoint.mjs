@@ -35,6 +35,29 @@ try{
  const artifact=saveK2F('retained.json',saved),retained=runK2F(currentK2F,['--retained',...artifact,shaK2F(candidate)]);
  assert.equal(retained.trim().split(/\s+/u).length,2);const reused=JSON.parse(retained.slice('K2F_COMPACT_CHECKPOINT '.length));
  assert.deepEqual(reused.records,report.records);assert.equal(reused.retained_origin.extraction_repeated,false);
+ const effects=structuredClone(fixture);effects.jobs[0].events.push(
+  {line:3,phase:'tool_result',tool:'write_file',outcome:'ok'},
+  {line:4,phase:'tool_result',tool:'edit_file',outcome:'ok'},
+  {line:5,phase:'tool_result',tool:'edit_file',outcome:'ok'},
+  {line:6,phase:'tool_result',tool:'move_file',outcome:'ok'},
+  {line:7,phase:'tool_result',tool:'delete_file',outcome:'ok'},
+  {line:8,phase:'tool_result',tool:'edit_file',outcome:'error'},
+  {line:9,phase:'tool_result',tool:'delete_file',outcome:'rejected'},
+  {line:10,phase:'tool_result',tool:'run_authorized_command',outcome:'ok'});
+ const effectCapture=saveK2F('effects.json',effects),effectDetail=runK2F(currentK2F,[...effectCapture,idK2F]);
+ const effectCompact=runK2F(currentK2F,['--compact',...effectCapture,idK2F]);
+ const effectReport=JSON.parse(effectCompact.slice('K2F_COMPACT_CHECKPOINT '.length)),er=effectReport.records[0];
+ assert.deepEqual([er.writes_ok,er.write_file_ok,er.edit_file_ok,er.move_file_ok,er.delete_file_ok,er.direct_file_mutations_ok],[1,1,2,1,1,5]);
+ assert.deepEqual(er.tool_outcomes,{ok:6,error:2,rejected:1,other:0});
+ assert.equal(effectReport.writes_ok_semantics,'write_file_only');
+ assert.deepEqual(effectReport.direct_file_mutation_tools,['write_file','edit_file','move_file','delete_file']);
+ assert.equal(effectReport.counts_are_successful_tool_calls,true);assert.equal(effectReport.authorized_command_effects_not_counted,true);
+ const effectCandidate='RESULTADO DETERMINÍSTICO\nComando checkpoint_failures; exit_code=0\nstdout:\n'+effectDetail;
+ const effectSaved={job_id:saved.job_id,rejections:[{candidate:effectCandidate,candidate_chars:effectCandidate.length,candidate_sha256:shaK2F(effectCandidate),truncated:false}]};
+ const effectRetained=runK2F(currentK2F,['--retained',...saveK2F('effects-retained.json',effectSaved),shaK2F(effectCandidate)]);
+ const effectReused=JSON.parse(effectRetained.slice('K2F_COMPACT_CHECKPOINT '.length));assert.deepEqual(effectReused.records,effectReport.records);
+ assert.equal(effectReused.retained_origin.extraction_repeated,false);
+ assert.equal(effectCompact.trim().split(/\s+/u).length,2);assert.equal(effectRetained.trim().split(/\s+/u).length,2);
  const longReason=structuredClone(fixture);longReason.jobs[0].events[1].reason='comandos pendentes='+JSON.stringify(['x'.repeat(600)]);
  const longOutput=runK2F(currentK2F,['--compact',...saveK2F('long-reason.json',longReason),idK2F]);
  const longReport=JSON.parse(longOutput.slice('K2F_COMPACT_CHECKPOINT '.length));
@@ -45,7 +68,7 @@ try{
  const truncated=structuredClone(saved);truncated.rejections[0].truncated=true;reject(['--retained',...saveK2F('truncated.json',truncated),shaK2F(candidate)]);
  const cancelled=structuredClone(fixture);cancelled.jobs[0].state.status='CANCELLED';reject(['--compact',...saveK2F('cancelled.json',cancelled),idK2F]);
  reject(['--compact',...capture,idK2F,idK2F]);
- console.log('K2F_REPORT_TEST_OK legacy_byte_identity=true compact_words=2 retained_words=2 no_reextraction=true truncated_reason_explicit=true negative_cases='+negativeCases+' historical_business_executed=false');
+ console.log('K2F_REPORT_TEST_OK mutation_counts_exact=true retained_mutation_counts=true legacy_byte_identity=true compact_words=2 retained_words=2 no_reextraction=true truncated_reason_explicit=true negative_cases='+negativeCases+' historical_business_executed=false');
 }finally{
  const real=fs.realpathSync(dirK2F);assert(real.startsWith(tempRootK2F+path.sep+'k2f-format-'));assert.equal(real,path.resolve(dirK2F));assert(!fs.lstatSync(dirK2F).isSymbolicLink());
  fs.rmSync(dirK2F,{recursive:true});
