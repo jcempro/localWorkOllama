@@ -1056,3 +1056,10 @@ Sequência/requiredcommands retained_contract_test,15s/networkfalse/repeatablefa
 Callback local_result uma vez→quatrocasos versus pedido/origemexpectativas/recibo/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir contrato financeiro/licença/FTintegral ou verdade semântica por exit0; fonteindependente e escopo real dos testes devem ser preservados. Falha nova exige diagnóstico específico/segmentação, sem retry cego. Julgamento de risco/qualidade só supervisor.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C37D — quatrocasos, aceite limitado
+
+5acb544f recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:19:36.598Z.52b94567createwx/test exit0 comprova quatrocasos/baseoriginal/cópiacrypto/null/versão2; sem negativosrestantes/FTintegral ou fonte normativa de versão/motivo específico de Error demonstrados. Código histórico não executado/compilado/importado, dados financeiros não recadastrados/validados universalmente. Git auditor main limpo12:17:33.693Z distinto de histórico dev/ahead21 19/10 00:36:16.359Z parcial/arquivo novo. Privados completed-contract-c37d-return.json/evidence.json/review.json; não repetir consulta/teste.
+
+Cobertura395/453 delimitada,58pendentes; tabela140/9sobrepostos/131novos. Prova coverage-reconciliation-2026-10-25.json SHA071b582bd76577b6b1d507b725381a1a36f9381213f155d22d917e161344d22e; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional; corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint.
