@@ -825,3 +825,10 @@ Job8441da22-5bf5-4735-b97f-239ff4686db5 RUNNING/R8V1. Chat/cwd comprovados nesta
 Callback local_result uma vez→conferir argv/eventos/recortes→revisãoI2O/Q8S→cobertura. PedidoM31 exclui render/tabela/revisão global; M40render não prova preservação autoral/fonte não capturada. Paths de adaptadores/recibos não autenticam conteúdo ausente. Não executar patch/render/diff/importar código, alterar blog, pesquisar fontes ou inventar notas históricas; sem recaptura/replay.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C29E — recibos editoriais delimitados
+
+8441da22 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:23:51.923Z. M40trêsedições/render/diff e M31duasedições/diff aprovados, sem fontes/planos não capturados ou aceite editorial global. Omissões/Gitparciais mantidos. Git auditor main limpo07:22:09.751Z distinto dos históricos; nenhum código histórico executado.
+
+Cobertura384/453 delimitada,69 pendentes; tabela129/9sobrepostos/120novos. Prova coverage-reconciliation-2026-10-25.json SHA21351f130ae40e74576d100565d85d752aa2bb7b39c9ab076f733209ac19e76c; anterior preservada. CANCELLED excluídos/I2O/sem recaptura ou replay. Nenhum Worker ativo neste checkpoint.
