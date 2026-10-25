@@ -384,3 +384,14 @@ ID52b94567-c6a4-4bc5-8fee-ceb32a6048c2 U2B1 apóscc874702: create→test, soment
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_contract_test,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/expect_changes/comandos/offsets/header/bodySHA; extratorC35T validado, só ID/comandos alterados. Sintaxe/preflightSW-HYBRID/R8V válidos. Scope2f205ba12eb2d604cb83dc11edaa9bb434a9cf4661a7ffafb083b473763b6e5c; privado completed-contract-c37d-request.json.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→quatrocasos versus pedido/origemexpectativas/recibo/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir contrato financeiro/licença/FTintegral ou verdade semântica por teste exit0.
+
+
+## C38E — localização EPUB histórica
+
+C37D5acb544f recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:19:36.598Z; quatrocasos do teste operacionais, limites de contrato/origemexpectativas/negativos preservados. Cobertura395/453 delimitada,58pendentes, provaSHA071b582bd76577b6b1d507b725381a1a36f9381213f155d22d917e161344d22e; CANCELLED excluídos.
+
+ID495ec529-1f1e-4e2f-90b1-19fe60aab25d: localizar frase pretendida emtpai5.epub, identidade/contexto sem presumir volume/página. SóEPUB/statuslocated≠cruzamentoconfirmado; biblioteca/draftintocáveis, M14aceito não reaplicar. PDFsucessor3d424 já examinado, não repetir. Busca pública dirigida encontrou apenas menções de reaproveitamento, não exame expresso do EPUB. Extrair body8689chars/1355itenswhitespace+argv343/eventos395/pedido/Gitparcial, sem localizador/fonte/rede/código histórico executado.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_epub_location,15s/networkfalse/repeatablefalse/16000chars/R8V2000, margem contextual medida. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/comandoúnico/offsets/header/bodySHA; extratorC36B validado, seleção/schema/limite ajustados à unidade. Sintaxe/preflightSW-HYBRID/R8V válidos. Scope911b2629b8f638bf74e4caec1f9e0f52f81cb738e71a69ba88c4eb67d470fb15; privado completed-location-c38e-request.json.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedido/JSONretido/identidade/contexto/status/Gitparcial→I2O/Q8S→cobertura. Não converter localização/score/path em fidelidade, versão/página impressa ou cruzamento confirmado.
