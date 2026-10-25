@@ -27,3 +27,5 @@ Saída compacta tem JSON sem whitespace literal, duas unidades com prefixo; teto
 Nova unidade de apresentação usa --retained e R8V100, pacote/candidata preservados. Preflight instalado e nova avaliação/escopo devem acompanhar os novos argv/hashes. Sem inferência, escrita ou efeitos históricos; supervisor mantém risco/qualidade/aceite.
 
 Preflight retido instalado R8V/SW-HYBRID/fronteiras passou; fonteSHA256a0ec26885d4b3ea7f54a9b6a8284b8a887d8c98040382a1d344f5658c3e93eec e scopeSHA2562804481d352d63848cb49ada782efa1797b8024357e17dd4df00bca64599e1f2. Novo pedido privado failure-checkpoint-retained-request.json; nenhum novo job/relato real executado neste checkpoint.
+
+Novo jobe89dcdb8-8f12-4605-86dd-9e72019b438a criado uma vez, RUNNING/response_contract_version1, somente report_retained/--retained. Fonte/testes/plano publicadosbc035c1; pedido/recibo privados failure-checkpoint-retained-request.json/failure-checkpoint-retained-running.json. R8V100 mantido, nenhum resultado/aceite antecipado; aguardar evento sem polling.
