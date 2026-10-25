@@ -13,3 +13,5 @@ Node absoluto descoberto; syntax/fronteiras/hashes/adoção instalada e contrato
 Após RUNNING: handoff/aviso/links/N7C ou impedimento real e encerramento sem polling. No evento: local_result uma vez com permissão de emissão de recibo, exame proporcional e Q8S. Não converter projeção ou COMPLETED em auditoria/FT integral; preservar efeitos parciais e comandos que não executaram.
 
 Preflight instalado R8V/SW-HYBRID/fronteiras passou; fonteSHA2568f1bf4fedbf22d3e3276c87839b03e9ad8f5b087f4e2ddfc0552f65a427e5eef e scopeSHA256d27e709455999b5faf8a32e55c91d94c9c3aac2e4d8258301dbff9be90d5ee8b. IDs exatos conferidos contra captura, sem depender de rascunho do plano. Pedido privado failure-checkpoint-request.json; nenhum job/projeção executado neste checkpoint.
+
+Job3f0a2b88-8d55-4845-8a8e-fe5eef428cc2 criado uma vez, RUNNING/response_contract_version1. Fonte/plano publicados99092e1; pedido/recibo privados failure-checkpoint-request.json/failure-checkpoint-running.json. Nenhuma projeção/aceite antecipados; aguardar evento sem polling.
