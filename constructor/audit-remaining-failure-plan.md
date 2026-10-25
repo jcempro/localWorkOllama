@@ -519,3 +519,14 @@ Fonte é a segunda row9242chars/body946 do mesmo artefato integral C49Q já conc
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_asset_row uma vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600 com margem abaixo16000. ScriptC50S validado ajusta ID/body/ordem/schema; guardas lstat/notlink/nlink1/artifactSHA/schema/1comandoexit0/receiptSHA+chars/2rows/IDúnico/bodySHA+chars. Sintaxe/preflightSW-HYBRID/R8V válidos; scope202b7fa9e96a41d2f42ee797e6d64328fae6112b701542705dc90263d749dd90. Pedido privado completed-asset-c51b-request.json. JulgamentoI2O/risco/licença/financeiro/qualidade sósupervisor.
 
 Confirmarchat/cwd/ACTIVE→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→patch/recibo versus tarefa/fonte das expectativas/limites/Git→Q8S da projeção→cobertura. Não presumir link/valores/attributions atuais, rodar código histórico, dar nota histórica ou editar outra raiz.
+
+
+## C53A — inventário histórico do pipeline de assets
+
+C51B20a33cfa recebido uma vez/examinado/Q8S10 para projeção fiel,73a0d24b instalação pinada/valores preservados aceitos no microescopo; ambasrowsC49Q examinadas sem replay. C52R reconciliou exame/aceite anterior810a1d13 sem nova consulta/teste/nota. Cobertura411/453 delimitada,42pendentes; CANCELLED excluídos. Próximo ID8157310c-ef3d-45ae-a420-03cc74934ff6 FT107/U4A inventário factual do pipeline existente antes de catálogo. Corpo2087chars/argv898, um comandoinspect-assets/checkpoints0/read-only/expectchangesfalse; nenhuma implantação.
+
+Extrair pedido/argv/eventos/recibo/Gitparcial, não executar inventory/git ou ler negócio vivo, nem abrir/rearmar a outra conversa histórica. Comando original usa gitls-files com exclusões_site/.agents e caps40paths/75linhas/5000chars/15config/12scripts; distinguir ausência emrecorte de ausência global, localizar de executar/validar. Fontecanônica de expectativas é tarefa/código capturados, não assumir pipelinefuncional/compatível por nomes.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_asset_inventory única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600 abaixo16000. ExtratorC41N validado ajustaID/guardas/schema; fontesabd15bcf/F8E35fb663c/IDstatus/hashes/mode/expectchangesfalse/checkpoints0/1comandoordem/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope19b3d417d6b65badf6623d3ec885b625953eec6a2129aedad075e9c9a2420504. Pedido privado completed-inventory-c53a-request.json. Risco/qualidade/aceite sósupervisor.
+
+Confirmarchat/cwd/ACTIVE atuais→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→exame proporcional/I2O/limites/Git→Q8S→cobertura. Não retomar chatblog pausado, repetirexploração/alterarnegócio ou inventar nota histórica.
