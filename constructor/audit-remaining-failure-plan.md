@@ -76,3 +76,14 @@ IDs exatos:cc734101-c2cc-42cf-b036-05cbe75fb519, d2d8ac92-2f4c-4a4b-8365-5753974
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; command_sequence/required_command_ids somente cohort_r10_failures. FonteK2Fef6e981/capturaabd15bcf seladas, --compact/R8V100/timeout15s/networkfalse/repeatablefalse; scopeSHA256efff1657a6892e73af092886c53c8711e158ec0051dcfea25ef4a4bdd68740ac. Preflight localR8V/SW-HYBRID/fontes/IDs residuais/ausência de parse_error passou. Pedido exclusivo remaining-failure-r10f-request.json. Risco/qualidade/causalidade/aceite exclusivamente supervisor.
 
 Confirmar chat/cwd/ACTIVE sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, exame/Q8S/Git e atualizar cobertura/hashes antes da próxima seleção.
+
+
+## R11F — próxima unidade residual
+
+R10F73fc371c recebido uma vez/revisado/Q8S10revision1 em2026-10-25T05:59:01.557Z UTC; revisão1cc6241 publicada. Cobertura327/453 delimitada,126 pendentes; tabela72/9sobrepostos. ProvaSHA256ca1254c29e83f9880e83918196047b7a5881944583d2d8766d837af99f7de359. Preservar recuperações já revisadas, testes comportamentais e falha M38 apesar da igualdade de hashes.
+
+IDs exatos:e2372939-3f5e-4dfc-9580-32fcd8a7a9a0, eefc722e-9f1c-4075-bf9f-0e50d3d76564, f6717810-3ac8-46f3-bb64-b2ce5893e6a6, fa0d3ccf-01b9-4315-b1f8-dcf67df9e1e1. Contratos históricos: e2372939 módulo donations puro e teste com build antes; eefc722e criar validador de entrada antes de syntax/verify, não editar testes; f6717810 somente estado/documentos FT-001 e validate_init/inspect_state, sem aplicação/RCF/planilha; fa0d3ccf corrigir helper facts existente conforme cinco invariantes, syntax/verify, sem reescrever testes. São dados históricos, não autorização para executá-los.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; command_sequence/required_command_ids somente cohort_r11_failures. FonteK2Fef6e981/capturaabd15bcf seladas, --compact/R8V100/timeout15s/networkfalse/repeatablefalse; scopeSHA25629b66d15b3d79b37a84422e93d87b040f507308613a6fdd38c28388304dacf35. Preflight localR8V/SW-HYBRID/fontes/IDs residuais/ausência de parse_error passou. Pedido exclusivo remaining-failure-r11f-request.json. Risco/qualidade/causalidade/aceite exclusivamente supervisor.
+
+Start exige chat/cwd/ACTIVE comprovados, sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, exame/Q8S/Git e atualizar cobertura/hashes antes da próxima seleção.
