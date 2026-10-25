@@ -417,3 +417,14 @@ IDs5e713772-69c7-4235-9f47-e157ae29a298/M16(fontesabertura: gl2/mt18/jo16/2sm6/1
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_captures_m16_m22,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c e guardaslstat/notlink/nlink1/hash/IDs/status/comandoúnico/offsets/header/bodySHA. ExtratorC36B validado, só seleções alteradas; sintaxe/preflightSW-HYBRID/R8V válidos. Scopedb5d184f411a3654a2005bf13787b21b1ccbd47dc38bb99977994746002d2a15; privado completed-captures-c40b-request.json. Nenhuma captura/rede/fonte/código histórico executado, compilado ou importado.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedidos/status/refs/hashdraft realmente exposto/eventos/Gitparciais→I2O/Q8S→cobertura. Não inferir preservação/fidelidade/versão/texto integral ou integração porcaptured/contagens, nem inventar falha atual por lacuna histórica.
+
+
+## C41N — extensão histórica de testes negativos
+
+C40B53895df3 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:33:31.179Z; M16/M22aceite operacional com ressalvas de hashdraft/perfil/texto/URLs não expostos. Cobertura399/453 delimitada,54pendentes; provaSHA8a212f9d37703d6a80bd2bc26df289351d8ce435e2d13e33ad5bc5e6330f7837; CANCELLED excluídos.
+
+ID64e0173a-bdd5-4fb5-a63b-dc092effc403 FT107/U2B2: append único de tabela de inválidos por tipo/campo/arrays/IDs/PayPal e imutabilidade, depois test, apenas scripts/test_donations_contract.ts. Baseline52b94567 já examinado/commit4f44abcb30, não repetir; módulo/dados preservados, QR/UI/restoFT pendentes. Busca pública dirigida sem exame anterior localizado. Extrair doisargv2571chars/corpo444/pedido/eventos/Gitparcial; dados históricos não executados/compilados/importados nem teste/módulo vivo reaberto.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_negative_contract_tests,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/expect_changes/comandos/offsets/header/bodySHA. ExtratorC37D validado, só ID/comandos alterados; sintaxe/preflightSW-HYBRID/R8V válidos. Scope1c546f0b86d88eeea01de744fb8c4eabf8c65d3cbd38b129f8334cd71348eade; privado completed-contract-c41n-request.json.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→casos/asserts versus pedido/origemexpectativas/recibo/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir contrato completo/financeiro/UI ou verdade semântica por negativo aprovado.
