@@ -166,3 +166,14 @@ IDs1f2f625e-bc15-4fbc-9b2e-b54699b54212(M41 numeração/estrutura, artigo read-o
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands report_m41_adapter_m33a1. Extrator próprio deC17E com seleção alterada, capturaabd15bcf/F8E35fb663c; lstat/notlink/nlink1/IDs/status/nomes únicos/hash. Limite13000chars/R8V1600palavras/timeout15s/networkfalse/repeatablefalse; sintaxe própria e preflightR8V/SW-HYBRID/cobertura/fontes conferidos. ScopeSHA256830ec23735a6075b8369fc68d4268220cc5324af5c3be877b8427bb121d83dfc. Pedido exclusivo completed-preparation-c18p-request.json.
 
 Start exige chat/cwd/ACTIVE comprovados sem Resume redundante; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, revisãoI2O/Q8S/cobertura proporcional sem código histórico executado ou aceite de capacidade não demonstrada.
+
+
+## C19S — capturas históricas M19 e M25
+
+C18Pc054967b recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:39:15.722Z UTC. M41estrutura25blocos e M33A1prepared/SyntaxOK aceitos somente no escopo observado; sem render/FT integral. Cobertura344/453 delimitada,109 pendentes; tabela89/9sobrepostos, provaSHA256624250dfc529d3a017088c31671422e6c7875eaa3a9c2ac051ad2bd40dca5efe.
+
+IDs2909cd39-fb9d-4a8d-9ca3-fdcba92a4ee5(M19captura de fontes ARA/cache, sem artigo) e301babcc-e831-49df-8f26-9a2d8eac200b(M25oito capítulos/Ez14NVI, draft preservado). Extrair argv/eventos/recortes F8E retidos, sem executar scripts ou acessar rede/biblioteca. Não repetir capturas ou inferir qualidade/verdade/FT integrais pelo status.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands source_capture_m19_m25. Extrator próprioC18P com seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600palavras/timeout15s/networkfalse/repeatablefalse. Sintaxe própria e preflightR8V/SW-HYBRID/cobertura/fontes passaram. ScopeSHA256b4aac7e32e05b0fca4d70973b072b6c9571d3eb122c06762ac3e4db32a0cd6d4. Pedido exclusivo completed-capture-c19s-request.json.
+
+Start exige chat/cwd/ACTIVE comprovados sem Resume redundante; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, revisãoI2O/Q8S/cobertura; recorte ausente/truncado mantém limitação, não simula fonte ou conteúdo.
