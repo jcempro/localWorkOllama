@@ -160,6 +160,8 @@ Faça **uma única validação final, direcionada e proporcional ao risco**, pri
 
 NÃO repita exploração, leitura massiva, implementação, testes ou análise sem **motivo concreto**.
 
+Aceite com fonte independente — I2O: antes de aceitar fidelidade a dados/contratos, confira origem canônica das expectativas e vínculo com os requisitos críticos. É PROIBIDO considerar suficiente um teste que apenas repete valores da mesma implementação; se a tarefa exige derivá-los da fonte, não recadastre-os no teste. Fixture literal é legítima com origem/invariante independente verificável. Ausência de versão/campo obrigatório, teste circular ou diagnóstico com diferenças exige ressalva/correção proporcional; exit0, hash ou estabilidade não substituem cumprimento. Normas aplicáveis devem ser lidas antes de efeitos; required_read_paths não comprova essa ordem no runtime atual e leitura tardia não convalida efeitos. Não repetir exploração/testes confiáveis sem evidência concreta nem alegar verificador automático de verdade semântica.
+
 Para trabalho mecânico/determinístico ou sustentado por testes confiáveis, aceite evidência verificável do worker. Se testes pertinentes passaram e não houver sinal concreto de erro, **NÃO acrescente verificações por precaução genérica**.
 
 Reabra investigação somente mediante **evidência específica**.
