@@ -1458,3 +1458,12 @@ N7C: nenhuma rota nativa comprovada exposta ao supervisor nem medição barata a
 ## Checkpoint C60P
 
 Resultado4ce34793 recebido uma vez, examinado e Q8S10 revision1 registrado. M21 aceito operacionalmente: aplicação/diff exit0, quatro edições relatadas; fidelidade/preservação/citações sem antes-depois permanecem não comprovadas. Git histórico dev/ahead29 separado de main limpo do auditor. Cobertura419/453,34 pendentes; CANCELLED excluídos. Provas privadas completed-editorial-c60p-*.json; cobertura SHA256 78a28cf5393cc2db696a95f8b9938bfbb502fbca41f48748190b5bdc783c2578. Nenhum replay ou código histórico executado.
+
+
+## Handoff C61R
+
+Job baa6065b-324f-4f93-900b-15b70aee58f3 RUNNING/R8V1; plano f9d94af publicado. Chat01a0f301-afa6-7d61-8949-1d35b712f5ca/cwdC:/auto-local confirmados ativos no Desktop; continuidade ACTIVE/EXPLICIT_RESUME sem rearme. Cobertura419/453,34 pendentes; CANCELLED excluídos. C60P4ce34793 recebido uma vez, examinado e Q8S10 revision1; M21 aceito operacionalmente, fidelidade editorial/bíblica não comprovada sem antes-depois. Revisão a84c797 publicada.
+
+C61R projeta somente99907184-b2f1-4a6f-b9a1-19f9dffb195e: pedido/argv/eventos/corpo5034/Git parcial. C5/júnior/read-only, comando próprio único, sem inferência ou execução de código histórico. Checkpoint FT105 não equivale a validação/implementação; causa física antiga4cb8cc24 segue desconhecida, sem repetir forense. Pedido/recibo/links privados completed-recovery-c61r-request/start.json. Próximo callback: local_result uma vez→revisão proporcional/I2O/Git→Q8S→cobertura, preservando predecessor já examinado.
+
+N7C: catálogo sem rota nativa de compactação ligada à conversa viva; sem medição barata autoritativa de ocupação. Informar impedimento após aviso/links, encerrar sem polling. Não injetar slash/fila, operar UI proibida, reabrir Desktop ou compactar cópia. S2Q externo permanece não comprovado; uso manual do composer não valida outra rota.
