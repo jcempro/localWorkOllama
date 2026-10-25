@@ -11,3 +11,5 @@ Dependência bloqueante de intenção humana: instalação preservou rootPAUSED/
 Preflight instalado R8V/SW-HYBRID/E4J passou. ScopeSHA256e30ab8f3a16f35398e55c1bfba40e236d8c0ef72dcff8461e279002db503f4a4. Pedido privado plugin-hooks-request.json; nenhum job criado e nenhuma autorização modificada.
 
 Autorização humana explícita recebida: Resume somente desta conversa executado pelo platform.ps1 instalado e confirmado ACTIVE/EXPLICIT_RESUME, com novo generation e controle da outra conversa preservado. Prova privada h8l-resume-proof.json2026-10-25T00:34:49.647Z UTC; não abriu Desktop. Pedido reconciliado, preflight passou, novo scopeSHA25612341355b908e95aa8c034ab1af232e18309309bf8ffde0c390b7fcfbcc29723. Nenhum job criado neste checkpoint.
+
+Job7eb52248-730a-459f-be50-e930326ff274 criado uma vez, recibo RUNNING/response_contract_version1, sob Resume humano confirmado. Pedido/recibo privados plugin-hooks-request.json/plugin-hooks-running.json. Aguardar evento, sem polling; nenhuma conclusão/eficácia semântica antecipada.
