@@ -541,3 +541,14 @@ Extrair pedido/argv/eventos/corpo766chars/Gitparcial, não executar patch/build/
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_optional_assets_contract única vez,15s/networkfalse/repeatablefalse. ExtratorC41N validado ajustaID/asserts/schema; fontesabd15bcf/F8E35fb663c/hashes/IDstatus/expectchangestrue/checkpoints0/corpo≤1000/5comandosordem/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope073a91feba75beb4c92782f087bb5d8abc6765637b54d8f6fb1defc1349b55fb. Pedido privado completed-contract-c54c-request.json; risco/qualidade/aceite sósupervisor.
 
 Confirmarchat/cwd/ACTIVE→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→exame proporcional/I2O/limites/Git→Q8S→cobertura. Não repetir exploração/negócio/retomada de outrochat ou inventar nota histórica.
+
+
+## C55E — aquisição histórica de candidatos pinados
+
+C54Ce32a43a6 recebido uma vez/examinado/Q8S10 para extração fiel;8930238a catálogoopcional/reuso/compatibilidade testada aceitos no microescopo, sem esquemacompleto/finanças/UIglobais. Cobertura413/453 delimitada,40pendentes; CANCELLED excluídos. Próximo ID8b040730-c165-496e-9d33-93db48a62814 FT107/U4E1 aquisição6candidatos/ecash,bittorrent,bittorrent-new,binance-coin,bnb,tron no commit previamente obtido;404ausência, demaisfalhasinterrompem/relatórioincremental. Apenas tmp, não implementação/publicação; expectchangesfalse é coerente com pedido. Escolha/visão de PNG posterior é responsabilidade do supervisor, não nome/HTTP/Worker.
+
+Extrair pedido/argv/eventos/corpo2443chars/Gitparcial, não fetch/GET/importar/executar/script, abrir PNG/URL/negócio vivo ou escolher token/rede. Código/recibo poderão comprovar aquisição/proveniência delimitada, não identidade/licença/fidelidadevisual por si. Não repetir discovery/descargas nem transformar ausência404 em inexistência global.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_candidate_capture única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600 abaixo16000. Orçamento argv2366/body2443+metadata. ExtratorC41N validado ajustaID/guardas/schema; fontesabd15bcf/F8E35fb663c/hashes/IDstatus/modewrite/expectchangesfalse/checkpoints0/corpo≤3000/1comandoordem/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scoped0e638a85e6f4a9d8edc5033888c26e67c972e9f8629f9cc3c6c8a17d607a55f. Pedido privado completed-candidates-c55e-request.json. Risco/qualidade/aceite exclusivos do supervisor.
+
+Confirmarchat/cwd/ACTIVE→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→exame proporcional/I2O/limites/Git→Q8S→cobertura. Não ediçãoexterna/retomada de outrochat/nota histórica inventada.
