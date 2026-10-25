@@ -1,0 +1,13 @@
+# FT-AUDIT-MUTATION-COUNTS-M8D
+
+C4Fc422 recebido uma vez, examinado/Q8S9revision1 em2026-10-25T05:15:44.883Z UTC; revisão9080217 publicada, tabela46/453 não CANCELLED. Lacuna concreta: writes_ok é somente write_file;006 contém também sete edit_file ok. Não alterar registros/retornos antigos nem inventar ausência de efeitos.
+
+Unidade interna do construtor, não distribuível/instalável: acrescentar métricas write_file_ok/edit_file_ok/move_file_ok/delete_file_ok/direct_file_mutations_ok e definição explícita da contagem como chamadas bem-sucedidas. Preservar writes_ok=write_file e modo detalhado default byte-idêntico; comandos autorizados podem produzir efeitos não contados, sem inferir número de arquivos/linhas. Modo retido usa somente projeção anterior, sem reextração.
+
+Dois alvos exatos: audit-failure-checkpoint.mts e test-audit-failure-checkpoint.mjs em constructor. Pré/post hashes: constructor/audit-failure-checkpoint.mts a0ec26885d4b3ea7f54a9b6a8284b8a887d8c98040382a1d344f5658c3e93eec→ef6e981ae3a0ffa0bfee03b101596c364be3869c3b58769abdb8f6d65a893a11; constructor/test-audit-failure-checkpoint.mjs 7cdfe3ef3db4b690c838fb4d5e9bb93e79942506c15162da5a6ea60f38b3d1ba→331e07def47a521d2151d98968ebd76f4c7d5ba892b9b39c7cab123c62208e1b. Patch preparado literal, nenhuma fonte histórica executada. Testes próprios existentes preservam baseline4980dcf/default, R8V/duas unidades/teto8000, negativas e desconhecido truncado; nova fixture diferencia escrita/edições/move/delete bem-sucedidos de erro/recusa e comando com efeitos opacos, tanto novo como retido.
+
+C5/júnior, write/expect_changestrue/commit_policysupervisor; required_change_paths os dois alvos, requiredcommands/sequence patch_counts→test_counts. Patch valida raiz/realpath/nlink/precondições de todos antes de efeitos, reconhece conteúdo já aplicado, verifica pós-hashes; teste isolado posterior. Timeout15/30s pontuais. ScopeSHA256a85174437bdbaf2b87180b1202f028a053f4fb8e400906f9b93a6a638d9e984f. R8V100 comporta recibos curtos de patch+teste; não modifica limites do produto ou contratos históricos. Pedido privado mutation-counts-request.json.
+
+Antes de start confirmar chat/cwd/ACTIVE; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. No callback resultado uma vez, rever diff/testes/Git/Q8S, commit/push imediato da unidade funcional, sem testes extras genéricos. Depois continuar auditoria, incluindo pendência0636parse_error.
+
+Preflight sintático de ambos conteúdos propostos e do argv patch passou sem executar testes/extração. Literais da nova fixture reutilizam escape LF/regex do teste conhecido, sem dupla codificação. R8V100 preservado. Nenhum efeito do patch nesta preparação.
