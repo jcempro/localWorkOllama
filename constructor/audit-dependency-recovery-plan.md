@@ -15,3 +15,5 @@ Node absoluto descoberto; conferir syntax check/fronteiras/SHA e adoção instal
 Após RUNNING, preservar handoff/aviso/links e cumprir N7C ou informar impedimento real; encerrar sem polling. No callback, local_result uma vez e revisão proporcional/Q8S. A ponte de local_result também escreve recibo: conceder permissão canônica de escrita fora do sandbox antes da chamada, evitando o EPERM anterior; não repetir resultado se já recebido. Importação legada por hashes somente nas condições oficiais, nunca credencial fabricada. Preservar modelo/esforço, intenção humana e resultados parciais.
 
 Preflight instalado R8V/SW-HYBRID/fronteiras passou. FonteSHA256824fc2d662fa8d749f29fd68e766d1ee634cb18094babc3925fe7e9e98ed8bd9; scopeSHA25608d539143254dbf36e15d7711728723abc45513fa33e7b0805b96b25f15e4180. Pedido privado dependency-recovery-request.json, nenhum job/trace executado neste checkpoint.
+
+Jobc0805afd-612d-4514-998e-e2af92eaf334 criado uma vez, recibo RUNNING/response_contract_version1. Fonte/plano publicados7449a85; pedido/recibo privados dependency-recovery-request.json/dependency-recovery-running.json. Aguardar evento; nenhum resultado/aceite antecipado.
