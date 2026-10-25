@@ -17,3 +17,13 @@ Após RUNNING, preservar handoff/aviso/links e cumprir N7C ou informar impedimen
 Preflight instalado R8V/SW-HYBRID/fronteiras passou. FonteSHA256824fc2d662fa8d749f29fd68e766d1ee634cb18094babc3925fe7e9e98ed8bd9; scopeSHA25608d539143254dbf36e15d7711728723abc45513fa33e7b0805b96b25f15e4180. Pedido privado dependency-recovery-request.json, nenhum job/trace executado neste checkpoint.
 
 Jobc0805afd-612d-4514-998e-e2af92eaf334 criado uma vez, recibo RUNNING/response_contract_version1. Fonte/plano publicados7449a85; pedido/recibo privados dependency-recovery-request.json/dependency-recovery-running.json. Aguardar evento; nenhum resultado/aceite antecipado.
+
+## Correção após c0805afd
+
+Resultado uma vez FAILED/WORKER_INCOMPLETE; a guarda genérica de split encontra dois contextos legítimos, não ocorrência única. Falha do instrumento fornecido pelo supervisor, não do modelo/infra. Gitmainlimpo2026-10-25T01:12:40.817Z; Q8S8revision1 após exame. Retorno/revisão privados dependency-recovery-return-c0805afd.json/dependency-recovery-review-c0805afd.json, nenhum aceite histórico novo. Preservar job/pacote/pedido antigos.
+
+Reconhecer o split somente no contexto da listagem maxBuffer1048576, mantendo unicidade e demais guardas. Erro de reconhecimento deve informar hash/comprimento/contagem/até4offsets; não revelar fonte histórica. Acrescentados dois checkpoints públicos mínimos, sem raciocínio privado. Bootstrap corrigido deve importar os mesmos bytes próprios selados com sufixo sourceURL=localworker-audit-D6V.mjs; isso preserva diagnóstico linha/coluna sem Base64 inteiro no stderr. Não altera fonte/pacote histórico nem normaliza citação.
+
+Pré-probe corretivo: dois usos genéricos e um contextual em cada script, Node nativo confirma stack nomeado sem dataURL e controle negativo com dataURL. Syntax check passou; trace inteiro não executado no supervisor. Prova privada dependency-recognition-preflight.json. Mudança de escopo/argv/hashes deve ser reavaliada pelo supervisor e novo job pequeno criado; nunca replay idêntico.
+
+Preflight corretivo instalado R8V/SW-HYBRID/fronteiras passou; fonteSHA256afbec7ffb529eff5b7fe6b04f6c627698a7192a9e484696e62fe2c33efcf9bec e scopeSHA256a5dbd6cf92b555dbfa32468caf88c5e9701f659250ae2e528fb7d8257f7cfd09. Novo pedido privado dependency-recovery-corrected-request.json; nenhum novo job/trace executado neste checkpoint.

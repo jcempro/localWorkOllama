@@ -11,10 +11,14 @@ assert.deepEqual(p.jobs.map((j:any)=>j.id),['734295de-5ac4-41a9-bb30-81c68c72c87
 const [failed,recovered,vendored]=p.jobs;
 const argsD6V=(j:any,id:string)=>{const c=j.commands.find((c:any)=>c.id===id);assert(c);assert.equal(shaD6V(JSON.stringify(c.args)),c.args_sha256);return c.args;};
 const sourceD6V=(j:any,id:string)=>{const a=argsD6V(j,id);assert.equal(a[0],'-e');assert.equal(a.length,2);return a[1] as string;};
-const onceD6V=(s:string,t:string)=>{const n=s.indexOf(t);assert(n>=0&&s.indexOf(t,n+1)<0,'D6V_UNKNOWN_OR_REPEATED_FRAGMENT');return n;};
+const onceD6V=(s:string,t:string)=>{
+ const offsets:number[]=[];for(let i=s.indexOf(t);i>=0;i=s.indexOf(t,i+1))offsets.push(i);
+ assert.equal(offsets.length,1,'D6V_FRAGMENT '+JSON.stringify({sha256:shaD6V(t),length:t.length,count:offsets.length,offsets:offsets.slice(0,4)}));
+ return offsets[0];
+};
 const original=sourceD6V(failed,'acquire'),corrected=sourceD6V(recovered,'complete-acquisition'),vendor=sourceD6V(vendored,'vendor');
 for(const s of [original,corrected]){
- for(const t of ["redirect:'error'",'AbortSignal.timeout(20000)','if(b.length>2097152)',"if(sri!==meta.dist.integrity)throw Error('integrity')",String.raw`.split(/\r?\n/)`])onceD6V(s,t);
+ for(const t of ["redirect:'error'",'AbortSignal.timeout(20000)','if(b.length>2097152)',"if(sri!==meta.dist.integrity)throw Error('integrity')",String.raw`maxBuffer:1048576}).split(/\r?\n/)`])onceD6V(s,t);
 }
 onceD6V(original,"if(!license)throw Error('license absent '+name)");
 onceD6V(corrected,"if(!fs.existsSync(path.join(root,'qrcode-generator/package.tgz')))throw Error('checkpoint absent')");
@@ -24,6 +28,7 @@ const licenseUrl='https://raw.githubusercontent.com/kazuhikoarase/qrcode-generat
 onceD6V(corrected,"if(u.hostname!=='registry.npmjs.org'&&url!=='"+licenseUrl+"')throw Error('host/path')");
 onceD6V(corrected,"licenseSource='"+licenseUrl+"';licenseBytes=await get(licenseSource)");
 onceD6V(corrected,"includes('Copyright (c) 2009 Kazuhiko Arase')");onceD6V(corrected,"includes('MIT License')");
+console.log('D6V_CHECKPOINT source_definitions=verified historical_execution=false');
 const reports=recovered.body.split('\n').filter((s:string)=>s.startsWith('{"name":')).map((s:string)=>JSON.parse(s));
 assert.equal(reports.length,2);const [qr,decoder]=reports;
 assert.equal(qr.name,'qrcode-generator');assert.equal(qr.version,'2.0.4');assert.equal(qr.reusedArchive,true);assert.equal(qr.licenseSource,licenseUrl);
@@ -40,6 +45,7 @@ onceD6V(vendor,targets);onceD6V(vendor,"assert.equal(crypto.createHash('sha256')
 onceD6V(vendor,"fs.writeFileSync(dest+'/'+out,b,{flag:'wx'})");onceD6V(vendor,"licenseSource:meta.licenseSource");onceD6V(vendor,'notice_ref: mit');
 const smoke=argsD6V(vendored,'smoke');assert.equal(smoke[0],'--input-type=module');assert.equal(smoke[1],'-e');
 onceD6V(smoke[2],"assert.equal(result?.data,'FT107')");assert.deepEqual(argsD6V(vendored,'attributions'),['scripts/test_attributions.rb']);
+console.log('D6V_CHECKPOINT pinning_definition=verified matched_digests=5 historical_execution=false');
 const wanted=[['error'],['ok'],['ok','ok','ok']];
 const receipts=p.jobs.map((j:any,i:number)=>{
  assert.equal(j.prompt_tokens,0);assert.equal(j.output_tokens,0);assert.equal(j.status,i===0?'FAILED':'COMPLETED');
