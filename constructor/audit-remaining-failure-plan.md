@@ -461,3 +461,12 @@ ID5e39d931-d724-471c-b421-b8c5ac5ece4d M36A2: checklist§6/6.1/6.2/6.3/6.4 ≤55
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_quote_checklist,15s/networkfalse/repeatablefalse/16000chars/R8V2000. Fontescapturaabd15bcf/F8E35fb663c e guardaslstat/notlink/nlink1/hash/ID/status/read-only/semcomandos/offsets/header/bodySHA. ExtratorC33N validado, ID/limite ajustados; sintaxe/preflightSW-HYBRID/R8V válidos. Scopeb7b6b1dfcc7c07f9fc29453a395f95ab3c6a80276a84bbce48e26e5f6b9bf3b9; privado completed-analysis-c44q-request.json. Norma citada é dado histórico, não autoridade adicional no alvo atual.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→checklist versus critérios/exceções/limites/evidência/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir pesquisa/aplicação/conformidade do artigo ausente ou adotar norma de outro repositório.
+
+
+## C46A — correção histórica do adaptador Ruby
+
+C44Q recebido/examinado/Q8S10 e C45R reconciliou exame antigo de7456cd74 sem nova consulta. Cobertura405/453 delimitada,48pendentes; CANCELLED excluídos. ID7522ec6a-4069-4cbc-a9fa-2be8009e567d M33A3 corrige quatro desvios de3130d366 M33A2 já recusado emC34A. Extrair plano2826chars, after5588, corpo1522, eventos/pedido/Gitparcial; before3008 apenas hash/contagem. Não repetir Ruby/sintaxe/renderização nem inspecionar artigo vivo; comparar correção capturada com plano, sem atribuir validação deHTML ausente.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands retained_render_repair única vez,15s/networkfalse/repeatablefalse/16000chars/R8V2000. ExtratorC34A reaproveitado com ID/índices de plano e projeção after corrigidos; guardas de fonte/hash/ID/status/2leituras/1edit/paths/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope6cf2b8733d50385537ffcfee25b45272b8a4566c2dd01bb7925c04744a09ce7f. Pedido privado completed-render-c46a-request.json. ReciboQ8S avalia extração determinística, não cognição histórica.
+
+Confirmar chat/cwd e ACTIVE antes de start; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→plano versus after/recibo/limites/Git→I2O/Q8S→cobertura. Nenhuma edição em negócio/fora desta raiz ou replay de implementação.
