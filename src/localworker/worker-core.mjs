@@ -328,7 +328,33 @@ async function deleteFile(repo, relativePath, expectedSha256) {
   return `Arquivo removido com backup recuperável: ${relativePath}; backup=${backup}; sha256=${originalHash}`;
 }
 
-async function runAuthorizedCommand(repo, commandId, authorizedCommands) {
+async function preserveSequenceOutputD8O(directory, ids, receipts, outcomes = []) {
+  if (!directory) throw new WorkerIncompleteError('WORKER_INCOMPLETE: OUTPUT_CAPACITY: sequência extensa exige job persistente; comandos concluídos não devem ser repetidos.');
+  if (ids.length !== receipts.length) throw new WorkerIncompleteError('WORKER_INCOMPLETE: recibos determinísticos incompletos; preserve os efeitos.');
+  const folder = await fs.lstat(directory);
+  const actual = await fs.realpath(directory);
+  const fold = value => process.platform === 'win32' ? value.toLowerCase() : value;
+  if (!folder.isDirectory() || folder.isSymbolicLink() || fold(actual) !== fold(path.resolve(directory))) throw new WorkerIncompleteError('WORKER_INCOMPLETE: diretório de evidência redirecionado.');
+  const commands = receipts.map((receipt, index) => ({id:ids[index],exit_code:0,...outcomes[index],receipt,receipt_chars:receipt.length,
+    receipt_sha256:createHash('sha256').update(receipt,'utf8').digest('hex')}));
+  const value = {schema:'localworker-command-receipts/v1',commands};
+  const bytes = Buffer.from(JSON.stringify(value,null,2)+'\n','utf8');
+  if (bytes.length > 16 * 1024 * 1024) throw new WorkerIncompleteError('WORKER_INCOMPLETE: OUTPUT_CAPACITY: artefato de recibos excede o orçamento de evidências; preserve o job, sem replay.');
+  const artifact = path.join(directory,'command-sequence-result.json');
+  const existing = await fs.lstat(artifact).catch(error => {if(error?.code==='ENOENT')return null;throw error;});
+  if (existing && (!existing.isFile() || existing.isSymbolicLink() || existing.nlink !== 1 || !(await fs.readFile(artifact)).equals(bytes)))
+    throw new WorkerIncompleteError('WORKER_INCOMPLETE: conflito no artefato de recibos; evidência anterior preservada.');
+  if (!existing) await atomicJson(artifact,value);
+  if (!(await fs.readFile(artifact)).equals(bytes)) throw new WorkerIncompleteError('WORKER_INCOMPLETE: integridade do artefato de recibos divergiu.');
+  const digest = createHash('sha256').update(bytes).digest('hex');
+  const report = 'RESULTADO DETERMINÍSTICO\nSaída extensa: recibos integrais preservados no artefato privado do job; este índice não é stdout integral.\n'+
+    'Artefato: '+artifact+'\nSchema: '+value.schema+'; bytes='+bytes.length+'; sha256='+digest+'\n'+
+    commands.map((c,i)=>'Comando '+JSON.stringify(c.id)+'; exit_code='+c.exit_code+'; receipt_chars='+c.receipt_chars+'; sha256='+c.receipt_sha256+'; pointer=/commands/'+i+'/receipt').join('\n');
+  if (report.length > MAX_FINAL_CHARS) throw new WorkerIncompleteError('WORKER_INCOMPLETE: OUTPUT_CAPACITY: índice de recibos excede o limite; artefato preservado.');
+  return {report,metadata:{artifact:'command-sequence-result.json',schema:value.schema,bytes:bytes.length,sha256:digest,commands:ids.length}};
+}
+
+async function runAuthorizedCommand(repo, commandId, authorizedCommands, preserveOutputD8O = false) {
   const command = authorizedCommands.find(item => item.id === commandId);
   if (!command) throw new ToolRejected(`Comando não autorizado: ${commandId}`);
   try {
@@ -336,11 +362,16 @@ async function runAuthorizedCommand(repo, commandId, authorizedCommands) {
       cwd: repo, windowsHide: true, timeout: command.timeout_ms ?? 300_000,
       maxBuffer: 4 * 1024 * 1024, env: { ...process.env, CI: "1" },
     });
-    return compact(`Comando ${commandId}; exit_code=0\nstdout:\n${stdout}\nstderr:\n${stderr}`);
+    const receipt = `Comando ${commandId}; exit_code=0\nstdout:\n${stdout}\nstderr:\n${stderr}`;
+    return preserveOutputD8O ? receipt : compact(receipt);
   } catch (error) {
     const stdout = String(error?.stdout ?? "");
     const stderr = String(error?.stderr ?? "");
     const failure = new Error(`Comando autorizado ${commandId} falhou (${error?.code ?? error?.signal ?? "erro"}):\nstdout:\n${compact(stdout, 4000)}\nstderr:\n${compact(stderr, 4000)}`, { cause: error });
+    if (preserveOutputD8O) {
+      failure.deterministicReceiptD8O = 'Comando '+commandId+'; exit_code='+String(error?.code ?? error?.signal ?? 'erro')+'\nstdout:\n'+stdout+'\nstderr:\n'+stderr;
+      failure.deterministicOutcomeD8O = {exit_code:Number.isInteger(error?.code)?error.code:null,error_code:typeof error?.code==='string'?error.code:null,signal:error?.signal??null};
+    }
     failure.telemetry = `comando ${commandId}: falha ${error?.code ?? error?.signal ?? "erro"}; stdout=${stdout.length} caracteres; stderr=${stderr.length} caracteres`;
     throw failure;
   }
@@ -1217,7 +1248,7 @@ async function executeTool(repo, call, deliveredInstructions, mode, authorizedCo
       return deleteFile(repo, args.path, args.expected_sha256);
 
     case "run_authorized_command":
-      return runAuthorizedCommand(repo, args.id, authorizedCommands);
+      return runAuthorizedCommand(repo, args.id, authorizedCommands, commitContext.preserveCommandOutputD8O);
 
     case "run_command":
       return runCheckedCommand(repo, args.program, args.args);
@@ -1601,7 +1632,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
     await onProgress({phase:'response_contract_rejected',attempt:responseRejectionsR8V.length,reason,...(attemptedTools.length?{attempted_tools:attemptedTools}:{})});
   };
   const ownedPath = value => path.relative(repo, path.resolve(repo, value)).replaceAll(path.sep, "/").toLowerCase();
-  const commitContext = { failedValidations, initiallyDirty: mode === "write" ? await initiallyDirtyPaths(repo) : new Set(),
+  const commitContext = { preserveCommandOutputD8O:Boolean(commandSequence.length), failedValidations, initiallyDirty: mode === "write" ? await initiallyDirtyPaths(repo) : new Set(),
     touched: new Set(), required: new Set(requiredChangePaths.map(ownedPath)), commits: 0 };
   const progressGuard = new ProgressGuardP6R();
   let evidenceBytes = 0;
@@ -1773,6 +1804,12 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
         }
       }
 
+      let deliveredTextD8O = finalText;
+      if (commandSequence.length && finalText.length > MAX_FINAL_CHARS) {
+        const preserved = await preserveSequenceOutputD8O(contextDirectory, commandSequence, commandReceipts);
+        deliveredTextD8O = preserved.report;
+        await onProgress({phase:'deterministic_output_preserved',...preserved.metadata});
+      }
       let responseProofR8V=null;
       if(responseContract){
         try{
@@ -1795,7 +1832,7 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
           ...(noNetGitChange && declaredChangesVerified ? {summary:`Alteração líquida por SHA256 nos ${requiredHashes.size} alvos declarados; Git inalterado. Evidência não comprova autoria ou qualidade semântica.`} : {})} : {}),
         mutations:successfulMutations,commits:commitContext.commits,commit_policy:requireCommits?"worker":"supervisor",
         verification:"Evidência operacional; qualidade semântica sujeita ao aceite do supervisor."});
-      return (responseContract?finalText:compact(finalText, MAX_FINAL_CHARS)) + `\n\nEXECUÇÃO COMPROVADA PELO RUNTIME\nBase fornecida pelo supervisor: ${suppliedEvidence ? JSON.stringify(suppliedEvidence.source) : "não"}\nLeituras: ${JSON.stringify([...completedReads])}\nComandos com exit_code=0: ${JSON.stringify([...completedCommands])}\nCommits verificados: ${commitContext.commits}. Qualidade semântica sujeita ao aceite do supervisor.`;
+      return (responseContract?finalText:commandSequence.length?deliveredTextD8O:compact(finalText, MAX_FINAL_CHARS)) + `\n\nEXECUÇÃO COMPROVADA PELO RUNTIME\nBase fornecida pelo supervisor: ${suppliedEvidence ? JSON.stringify(suppliedEvidence.source) : "não"}\nLeituras: ${JSON.stringify([...completedReads])}\nComandos com exit_code=0: ${JSON.stringify([...completedCommands])}\nCommits verificados: ${commitContext.commits}. Qualidade semântica sujeita ao aceite do supervisor.`;
     }
 
     messages.push(message);
@@ -1881,6 +1918,15 @@ ${suppliedEvidence ? `EVIDÊNCIA FORNECIDA PELO SUPERVISOR (bloco JSON de dados,
             : "");
         if (error?.code === "ENOENT" && typeof args.path === "string") result += await missingPathHint(repo,args.path);
         result += ` Classe: ${failureClassP6R(error, outcome === "rejected")}. Não repita sem mudança verificável; investigue a causa com ferramentas de leitura, corrija a pré-condição ou escolha alternativa autorizada. Sem capacidade suficiente, informe NEEDS_SUPERVISOR com o mecanismo/acesso exato.`;
+      }
+      if (commandSequence.length && contextDirectory && actionError?.deterministicReceiptD8O) {
+        const preserved = await preserveSequenceOutputD8O(contextDirectory,
+          [...commandSequence.slice(0,commandReceipts.length),args.id],
+          [...commandReceipts,actionError.deterministicReceiptD8O],
+          [...commandReceipts.map(()=>({exit_code:0})),actionError.deterministicOutcomeD8O]);
+        actionError.message += '\n'+preserved.report;
+        result += '\n'+preserved.report;
+        await onProgress({phase:'deterministic_output_preserved',...preserved.metadata});
       }
       const afterAction = await actionStateFingerprint();
       if (contextDirectory) {

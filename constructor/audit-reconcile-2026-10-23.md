@@ -872,3 +872,8 @@ N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/med
 440890c9 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T11:12:37.696Z; registro anterior bloqueado por limite de uso do aprovador não executou. Extração correta;40c17result original truncado no meio, um marcador de comando ausente/JSON inválido apesar dos seis exit0. Não aceitar stdout integral, não reparar JSON ou repetir buscas.
 
 Cobertura387/453 delimitada,66 pendentes; tabela132/9sobrepostos/123novos. ProvaSHAf533a2eda4293e01dc020dc8e2711443b7aedec0b2ae30ffe8765792bb9eefcb; anterior preservada. Nova correção causal D8O necessária no runtime:24K por comando/16K final removem conteúdo de sequência. C8/exclusivo, supervisor sem Worker; nenhum job ativo, CANCELLED excluídos/I2O preservados.
+
+
+## D8O — correção funcional de saída determinística
+
+Fonte funcional concluída e dez testes reais aprovados, sem Ollama/negócio externo. command_sequence preserva recibos extensos e primeira falha em artefato privado por job, índice limitado com hashes/pointers; saídas pequenas/R8V/guardas/ordem/privilégios preservados. Evidência e plano em deterministic-output-preservation-plan.md/validation.md. Instalação e probe instalado pendentes neste commit. Auditoria387/453,66pendentes; não apagar ou convalidar o retorno histórico cortado.
