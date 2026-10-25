@@ -1421,3 +1421,10 @@ Alvo7e0788e0-97d0-46c0-ac37-3ce8b63682e7: correção da infraestrutura createPlu
 Orçamento conferido antes de qualquer job: limite conservador14845chars, extrator15000 mais framing abaixo do teto nativo16000, sem mudar guarda do runtime. Rascunho preparado13000 preservado privadamente, sem execução/falha/replay. Guardas, métricas e preflights no plano/pedido; privados completed-factory-c58f-request.json/running.json/start-output.txt/preflight-13000.json.
 
 Callback local_result uma vez→API/closure/delegação/fábrica≤100linhas versus testes/trace/I2O/ordem de leituras/limites/Git→Q8S→cobertura. Não estender infraestrutura a associaçãoIAL/editor, repetir diagnóstico/testes, editar outra raiz, retomar outro chat ou inventar nota histórica. N7C/S2Q impedidos: nenhuma ferramenta nativa ligada ao contexto vivo/medição autoritativa barata. Aviso/links e encerramento sem polling; não slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou troca de modelo/esforço.
+
+
+## Checkpoint C58F
+
+07894dbe recebido uma vez, examinado e Q8S10revision1 em2026-10-25T17:24:01.410Z pela extração fiel.7e0788e0 fábrica38linhas/89palavras, smoke4controles/JS/2ciclos e typecheck finais aprovados; aceite apenas de delegação nativa, não contrato integral. any e builders sem uso contradizem tipos estruturais/closure declarados. Quatro falhas de comandos, três efeitos e dois sucessos finais; normas lidas antes de efeitos. Sem inferir causas não projetadas ou editar negócio histórico. Git auditor main limpo17:21:08.940Z versus histórico dev/ahead6 parcial. Provas privadas completed-factory-c58f-return.json/evidence.json/proof.json/review.json.
+
+Cobertura417/453 delimitada,36pendentes; tabela162/9sobrepostos/153novos. Prova coverage-reconciliation-2026-10-25.json SHAd1f29abad3f2d700899b82a69e080cd9bec8a5851e0113127ebc79ee83022a96; anterior preservada porhash. CANCELLED excluídos; exame não equivale a aceite global. Nenhum job ativo neste checkpoint.
