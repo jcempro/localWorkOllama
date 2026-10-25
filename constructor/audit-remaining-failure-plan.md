@@ -309,3 +309,14 @@ ID40c17ac8-7b5c-4442-aacc-6a2d0c406f85, M30: seiscomandos de três trechos falta
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands egw_m30_retained_evidence. Extrator próprioC30S com uma seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria/fontes/cobertura/preflight SW-HYBRID/R8V conferidos; campos1963argv+3985recorte+1196eventos com margem. ScopeSHA62eb7e04d0063c3750f7c2d6dc0a3e01d432bd91721b627a094ce810fe9e4486; pedido exclusivo completed-sources-c31s-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisãoI2O/Q8S→cobertura e correção proporcional somente se sustentada.
+
+
+## C32P — proposta histórica de helper
+
+D8O probe persistente bfaadeb9 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T11:42:14.292Z; três recibos completos conferidos contra oracle independente, índice explícito e artefato87401 bytes. Validação8e831e1 publicada. Não integra453: cobertura387/453 delimitada,66pendentes, CANCELLED excluídos; não convalidar histórico truncado.
+
+ID42202fa2-b9c4-4c01-81ea-6e0d6e7dbdd1: proposta collectBlockIals a partir de provided_evidence, após falha3658c4fb por leitura omitida. Contrato histórico read-only/sem ferramentas, blocoTypeScript<=40linhas e limite, não implementação/testes. Busca pública dirigida sem exame anterior localizado. Extrair fonte fornecida/pedido/resposta completa antes do rodapé/eventos já capturados; código é dado, sem executar/compilar/importar ou inspecionar negócio. Aceite semântico e risco no supervisor, sem presumir AST/páginas/fontes ausentes.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_helper_proposal. Extrator próprio, capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/hash/ID/status/tipo/bodySHA,13000chars/R8V1600/15s/networkfalse/repeatablefalse. Corpo2819+evidência767+pedido/eventos/rodapé recortado com margem; sintaxe própria e preflight SW-HYBRID/R8V conferidos. Scope552086a1dcf58b4ea6d2d8e8eca632d6f376555ddc4c62acce1ef84f0ab36c9c. Pedido exclusivo completed-proposal-c32p-request.json.
+
+Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisãoI2O/Q8S→cobertura; proposta não comprova implementação/validação.
