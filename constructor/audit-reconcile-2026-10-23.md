@@ -688,3 +688,10 @@ Cobertura359/453 delimitada,94 pendentes; tabela104/9sobrepostos/95novos. Prova 
 Job37aa35b9-32fd-42fa-9383-28dd582936e2 RUNNING/R8V1. Chat/cwd comprovados nesta interação e ACTIVE/EXPLICIT_RESUME conferido sem rearmar outras conversas. C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c22r_excerpts. IDsa0f95ed9/f76c4cb8/aceedc24/d27e267c, cabeçalhos183/196/209/220 da revisão15/10, fonteSHA249166b2245019b13ae5861aedc28fdeb734ff5cd6cf761ca23999abdf22be78. Plano4dadcf5 publicado; extrator próprio sem inferência/rede/código histórico/consulta antiga,2200chars/seção/13000total/R8V1600/15s. Scope59c07023675302857a8a6c707133a309db47e1e27b8d2153ebcc4bbdfdf0130e. Pedido/recibo exclusivos prior-review-c22r-request.json/prior-review-c22r-running.json.
 
 Callback local_result uma vez para extrator→conferir literalidade/exame anterior/I2O→Q8S→cobertura só com exame inequívoco. Não reconsultar resultados antigos, inventar notas históricas ou executar negócio. N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C22R — exames e correção anterior de omissão
+
+37aa35b9 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:00:13.658Z. Quatro seções integraisa0f95/f76c/aceed/d27e conferidas na revisão15/10. Falhas históricas, causa física desconhecida, parecer parcial e omissão já corrigida preservados; sem reanálise/execução histórica. Git auditor main limpo06:59:07.387Z distinto dos alvos.
+
+Cobertura363/453 delimitada,90 pendentes; tabela108/9sobrepostos/99novos. Prova coverage-reconciliation-2026-10-25.json SHA7c3170a92a8e902fc74faa5ff276d82025dbb2a56780d6b2293df0a616fb4d58; anterior preservada. CANCELLED excluídos, I2O e distinção exame/aceite vigentes. Nenhum Worker ativo neste checkpoint.
