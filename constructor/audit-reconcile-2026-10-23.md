@@ -731,3 +731,14 @@ Callback local_result uma vez para extrator→conferir literalidade/exame anteri
 18602485 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:05:50.699Z. Recortesb432/e83/dcaf/9af conferidos na fonte15/10 com lacunas explícitas. Parecerb432 permanece rejeitado; inclusão registra exame, não aprovação. Causas indeterminadas, limite40 explícito deste caso, efeitos e recuperações delimitadas mantidos. Git auditor main limpo07:04:30.495Z distinto dos alvos; nenhum negócio reexecutado.
 
 Cobertura371/453 delimitada,82 pendentes; tabela116/9sobrepostos/107novos. Prova coverage-reconciliation-2026-10-25.json SHA9256c9958cc72774a6c8fa9e730aa3dec90f08c7480caedcd505536ecfe31032; anterior preservada. CANCELLED excluídos, I2O e distinção exame/aceite vigentes. Nenhum Worker ativo neste checkpoint.
+
+
+## Handoff vigente — C25R
+
+C24R18602485 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:05:50.699Z; revisão0a14e45 publicada. Recortesb432/e83/dcaf/9af conferidos na fonte15/10 com omissões explícitas; b432 permanece rejeitado, inclusão registra exame sem aceite. Sem recontar0a92 ou alvos de subseções. Preservar limite40 explícito de006, efeitos, causas indeterminadas e recuperações delimitadas já revistas. Git auditor main limpo2026-10-25T07:04:30.495Z distinto dos alvos. Retorno/revisão privados prior-review-return-18602485.json/prior-review-review-18602485.json.
+
+Cobertura371/453 delimitada,82 pendentes; tabela116/9sobrepostos/107novos. Prova coverage-reconciliation-2026-10-25.json SHA9256c9958cc72774a6c8fa9e730aa3dec90f08c7480caedcd505536ecfe31032; anteriores preservadas. Restam7 candidatos narrativos; menção simples não basta. Manter fatia453/CANCELLED excluídos/I2O/distinção exame e aceite.
+
+Job505c7f64-2a0d-4a43-8e16-8ec979680039 RUNNING/R8V1. Chat/cwd comprovados nesta interação e ACTIVE/EXPLICIT_RESUME conferido sem rearmar outras conversas. C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c25r_excerpts. IDs36e4b3ef/eb329794/5ee393c9/f6eb4d87, cabeçalhos339/351/363/375 da revisão15/10, fonteSHA249166b2245019b13ae5861aedc28fdeb734ff5cd6cf761ca23999abdf22be78. Plano b0e67c5 publicado; extrator próprio sem inferência/rede/código histórico/consulta antiga,2200chars/seção/13000total/R8V1600/15s. Scope0f05a49f8f103d54b98a4a43cd3649bf0dfaf516d5fdcd347b30a34be2015ae8. Pedido/recibo exclusivos prior-review-c25r-request.json/prior-review-c25r-running.json.
+
+Callback local_result uma vez para extrator→conferir literalidade/exame anterior/I2O→Q8S→cobertura só com exame inequívoco. Sem reconsulta antiga, notas históricas inventadas ou execução de negócio. N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
