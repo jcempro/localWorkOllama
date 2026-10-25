@@ -177,3 +177,14 @@ IDs2909cd39-fb9d-4a8d-9ca3-fdcba92a4ee5(M19captura de fontes ARA/cache, sem arti
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands source_capture_m19_m25. Extrator próprioC18P com seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600palavras/timeout15s/networkfalse/repeatablefalse. Sintaxe própria e preflightR8V/SW-HYBRID/cobertura/fontes passaram. ScopeSHA256b4aac7e32e05b0fca4d70973b072b6c9571d3eb122c06762ac3e4db32a0cd6d4. Pedido exclusivo completed-capture-c19s-request.json.
 
 Start exige chat/cwd/ACTIVE comprovados sem Resume redundante; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, revisãoI2O/Q8S/cobertura; recorte ausente/truncado mantém limitação, não simula fonte ou conteúdo.
+
+
+## C20R — quatro revisões já publicadas
+
+C19S787c258e recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:42:48.039Z UTC; revisão7a085de publicada. M19/25 capturas observadas11/8, versãoNVI/hashdraft/URLs não comprovados pelo resumo. Cinco exames anteriores18403/4c898/277/d1ce/1dee reconciliados por provas publicadas, sem reconsultar/reinferir. Cobertura351/453 delimitada,102 pendentes; tabela96/9sobrepostos, provaSHA2568578d6ac395fc2632a88b89e7c7e364fc20ce904fbc93bbc7dea5313881641b6.
+
+IDs6d229ecf-1f6a-4405-a3a5-8f61a88f7ff8, 9c725391-020c-4917-aa70-fa6978dce173, 73cf965d-8f6c-47f8-a29d-ddc13f9c7f78, 70d246a7-42c3-40dc-894c-1baf70c04007: extração de seções já publicadas em audit-review-2026-10-15.md, fonteSHA249166b2245019b13ae5861aedc28fdeb734ff5cd6cf761ca23999abdf22be78. Somente trechos literais com offsets/hash/omissões; nenhuma nova avaliação ou consulta dos jobs. Cabeçalho de recebimento/exame será conferido pelo supervisor, sem transferir nota ou aceite.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands prior_review_four_excerpts. Extrator próprio fs/assert/crypto, lstat/notlink/nlink1/hash/seletores únicos; até2200chars por seção/13000total/R8V1600palavras/timeout15s/networkfalse/repeatablefalse. Sintaxe própria e preflightR8V/SW-HYBRID/fontes/cobertura passaram. ScopeSHA256677be3de2294b27b5e463f0dfe9735a7846e87d3867a0da4de0223db811a2cb5. Pedido exclusivo prior-review-c20r-request.json.
+
+Start exige chat/cwd/ACTIVE comprovados sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez para este extrator, revisão/Q8S; incorporar IDs só com exame prévio inequívoco, sem ampliar aceites históricos ou recapturar jobs.
