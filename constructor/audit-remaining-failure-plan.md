@@ -574,3 +574,16 @@ Extrair pedido, argv, eventos, corpo583chars e Gitparcial. Não executar/importa
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor. Sequência/requiredcommands retained_root_multi_ial única vez,15s/networkfalse/repeatablefalse. ExtratorC41N validado ajusta ID, guardas e schema; fontesabd15bcf/F8E35fb663c, hashes/ID/status/expectchangestrue/checkpoints0/corpo≤1000/3comandos em ordem/offsets/header/bodySHA. Sintaxe e preflights SW-HYBRID/R8V válidos; scopefccc68cd5a4dd336626a0343acac5de74a55c37ffb210745d77b796f5e700c4c. Pedido privado completed-ial-c57m-request.json. Risco, qualidade e aceite exclusivos do supervisor.
 
 Confirmar chat/cwd/ACTIVE; start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisão proporcional/I2O/limites/Git→Q8S→cobertura. Sem replay, edição externa, retomada de outro chat ou nota histórica inventada.
+
+
+## C58F — recuperação histórica da infraestrutura da fábrica Markdown
+
+C57M759787fa recebido uma vez, examinado e Q8S10 pela extração fiel.7b52f749 aceito no patch/projeções de raiz testadas, com limites de DOM/aninhamento/editor/TTS. Cobertura416/453,37pendentes; CANCELLED excluídos. Próximo ID7e0788e0-97d0-46c0-ac37-3ce8b63682e7, correção material de faa4d815: infraestrutura createPlugin(markdownPlugin,builders), herança/delegação nativa e tipos locais sem imports, até100linhas. Associação IAL e integração ficam para unidades posteriores.
+
+Extrair tarefa/argv/eventos/trace público e fábrica final do último write_file1418chars.7checkpoints com2write/1edit; efeitos anteriores somente hashes/tamanhos, sem raciocínio privado ou leituras integrais de normas de outro repositório. Comandos factory_api_smoke/factory_typecheck, argv1616+168, corpo1178. Comparar assinatura, closure, delegação e testes/eficiência/limites; não executar/importar/compilar código histórico, ativar editor ou ler negócio vivo.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_factory_repair única vez,15s/networkfalse/repeatablefalse/15000chars/R8V1600 abaixo16000. ExtratorC41N ajustado para trace seletivo/fábrica final; guardas fontesabd15bcf/F8E35fb663c/hashes/IDstatus/expectchangestrue/7checkpoints/3efeitos/últimowritepath+1418chars/corpo≤1500/offsets/header/bodySHA. Sintaxe e preflights SW-HYBRID/R8V válidos; scopea9bfcf215a4a6df3c17425e8affbe429ac9b29db4f9327671406f478b2203ab9. Pedido privado completed-factory-c58f-request.json. Risco/qualidade/aceite exclusivos do supervisor.
+
+Confirmar chat/cwd/ACTIVE; start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisão proporcional/I2O/ordem de leitura/limites/Git→Q8S→cobertura. Não repetir exploração ou testes já aproveitáveis, editar outra raiz, retomar outro chat ou inventar nota histórica.
+
+Dimensionamento antes de qualquer job: limite conservador14845chars (request4525, trace1008, efeitos≤900, fábrica1457, eventos2717, corpo≤2356, Git882 e demais chaves≤1000). Ajustado o extrator preparado para15000, com enquadramento do comando abaixo do teto nativo16000, sem alterar a guarda do runtime. Rascunho anterior13000 preservado privadamente; não houve execução/falha/replay. O orçamento inclui somente dados públicos e a fábrica final, sem conteúdo privado.
