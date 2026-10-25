@@ -98,3 +98,14 @@ IDs82795fa9-fdee-4eb5-b87d-9c884549b838 e e7dec2f0-8f26-42bd-98cb-8b84b282c219. 
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands somente literal_recovery_sources. Comando próprio fs/assert/crypto, capturaabd15bcf, lstat/notlink/nlink1, IDs/status/nomes únicos, hashes dos argv, limite9000chars antes de saída. R8V1600palavras/timeout15s/networkfalse/repeatablefalse. ScopeSHA25615ae2c4c47b74c013bf4b723c2dd0b2a689778623954f66a3d737b3db700bf74. Preflight R8V/SW-HYBRID/cobertura/fontes passou. Pedido exclusivo completed-recovery-c12r-request.json; supervisor conserva semântica/risco/qualidade/aceite.
 
 Confirmar chat/cwd/ACTIVE sem Resume redundante antes de start. Callback: local_result uma vez, conferir literalidade e comportamento dos patches sem executá-los; Q8S após exame. Preservar recuperação parcial e limites de testes, não aprovação global. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling.
+
+
+## C13R — processos e base canvas
+
+C12R08a19d1d recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:07:10.928Z UTC; revisãode1edec publicada. Cobertura333/453 delimitada,120 pendentes; tabela78/9sobrepostos, provaSHA256a222eb3d611e0bc0d8bacb050e2f9fb4ba21d03cc9143514cdce811c9d1e44b1. Recuperações827/e7 aceitas somente nos microescopos observados.
+
+IDs b32072fd-6e84-4461-b838-9f85c5579afc e d4c8e0fd-dbe8-4867-81ee-94d5256a120e: teste FT105 de processo e base canvas QR. Extrair exatamente patch/test e create/render-test como dados, mais eventos/resultado F8E já retido. Nenhum código histórico executado/importado/compilado; fonte/hash/testes serão revisados pelo supervisor.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands somente literal_process_canvas_sources. Extrator próprio fs/assert/crypto; capturaabd15bcf e F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos, saída limitada13000chars/R8V1600palavras/timeout15s/sem rede/repetição. Sintaxe apenas do extrator próprio conferida. ScopeSHA2561d1d29ee96336c52f9b6c1ed50f26d7bffeaf704bc4045a2bf795ee0bdfce365. PreflightR8V/SW-HYBRID/fontes/cobertura passou; pedido exclusivo completed-recovery-c13r-request.json. Preflight anterior recusou max_words2400 antes de criar arquivo/job/efeito; corrigido para limite suportado1600 sem relaxar guarda.
+
+Confirmar chat/cwd/ACTIVE sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, revisão/Q8S/cobertura; não atribuir cognição à sequência ou aceitar símbolo/UI/FT integrais por teste de base.
