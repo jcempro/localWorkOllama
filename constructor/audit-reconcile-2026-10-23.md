@@ -845,3 +845,10 @@ Jobdb18799f-03c8-4493-a58e-558ffde1fac0 RUNNING/R8V1. Chat/cwd comprovados nesta
 Callback local_result uma vez→conferir argv/eventos/recortes→revisãoI2O/Q8S→cobertura. Located não é confirmação cruzada, página física não é impressa automaticamente; não converter status de localizador em validação integral da fonte/citação. Não executar localizadores, abrir EPUB/PDF/biblioteca, pesquisar fontes, editarblog ou inventar nota histórica. Não recapturar/repetir buscas já obtidas.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C30S — localizações delimitadas
+
+db18799f recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:27:16.057Z.30b5/3d424comandos/argv/eventos/recortes conferidos; JSONs retidos parseados para suprir metadados omitidos, sem biblioteca ou buscas novas. Located não é confirmed cruzado/página impressa/fidelidade integral. Git auditor main limpo07:25:44.307Z distinto dos históricos.
+
+Cobertura386/453 delimitada,67 pendentes; tabela131/9sobrepostos/122novos. Prova coverage-reconciliation-2026-10-25.json SHAccf93795017ba91924e3d7fbc2b9aeaa4cc59560ffa72918eb8b247098d25216; anterior preservada. CANCELLED excluídos/I2O/sem recaptura ou replay. Nenhum Worker ativo neste checkpoint.
