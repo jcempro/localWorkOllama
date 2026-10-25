@@ -552,3 +552,14 @@ Extrair pedido/argv/eventos/corpo2443chars/Gitparcial, não fetch/GET/importar/e
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_candidate_capture única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600 abaixo16000. Orçamento argv2366/body2443+metadata. ExtratorC41N validado ajustaID/guardas/schema; fontesabd15bcf/F8E35fb663c/hashes/IDstatus/modewrite/expectchangesfalse/checkpoints0/corpo≤3000/1comandoordem/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scoped0e638a85e6f4a9d8edc5033888c26e67c972e9f8629f9cc3c6c8a17d607a55f. Pedido privado completed-candidates-c55e-request.json. Risco/qualidade/aceite exclusivos do supervisor.
 
 Confirmarchat/cwd/ACTIVE→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→exame proporcional/I2O/limites/Git→Q8S→cobertura. Não ediçãoexterna/retomada de outrochat/nota histórica inventada.
+
+
+## C56B — instalação inicial de catálogo Bitcoin/Tether
+
+C55Ee641cd8a recebido uma vez/examinado/Q8S10 para extração fiel;8b040730 seis candidatos200/PNG128alpha/hashes aceitos como aquisição, não identidade/licença/visual/publicação. Cobertura414/453 delimitada,39pendentes; CANCELLED excluídos. Próximo ID8f3f3f3d-6166-4bf9-935d-98c468997c35 FT107/U4C2 catálogo inicial2ícones Bitcoin/Tether, setealvos:JSON/YML/gitattributes/doisPNG/LICENSE/teste. Sequência install/catalog-test/financial-test/attributions, sem rede/inferência; sem métodosalterados/refs/UI/FTglobal.
+
+Extrair pedido/argv/eventos/corpo716chars/Gitparcial, não executarinstall/test/importar/abrir PNG/licença/URL/negócio vivo. Conferir patch/pins/proveniência/preservação/teste/origemI2O, distinguindo inspeção anterior relatada de prova visual/jurídica atual. Orçamento argv4644+65+63+32/body716+metadata, margem13000/R8V1600 abaixo16000.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_initial_icon_catalog única vez,15s/networkfalse/repeatablefalse. ExtratorC41N validado ajustaID/guardas/schema; fontesabd15bcf/F8E35fb663c/hashes/IDstatus/expectchangestrue/checkpoints0/corpo≤1000/4comandosordem/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope8a7bf7c4765295070b3d84c05b0e6e6078e9af6780d002ffd5a129aa0a9c2bb2. Pedido privado completed-icons-c56b-request.json; risco/qualidade/aceite sósupervisor.
+
+Confirmarchat/cwd/ACTIVE→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→exame proporcional/I2O/limites/Git→Q8S→cobertura. Não repetir exploração/negócio/retomadaoutrochat ou inventar nota histórica.
