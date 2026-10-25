@@ -479,3 +479,12 @@ C46A21e0ca36 recebido uma vez/examinado/Q8S10 para extração fiel;7522ec6a corr
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_checklist_diagnostic única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600. ExtratorC41N validado com ID/asserts/schema ajustados; guardas de fontes/hashes/ID/status/expectchanges/ordem dos2comandos/checkpoints0/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope26af1b3c92acbebfb568784228369f20d537d97a6d58631641179ccdf82febcb. Pedido privado completed-diagnostic-c47d-request.json. Juízo/qualidade/risco exclusivamente do supervisor.
 
 Start após identidade/cwd/ACTIVE comprovados; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→execução versus pedido/limites/achados/Git→I2O/Q8S→cobertura. Nota do extrator não é nota histórica nem cognição de command_sequence.
+
+
+## C48U — recibo de localização histórica EPUB
+
+C47D429f2380 recebido uma vez/examinado/Q8S10 para extração fiel;6d9fc2ac M36B comprova operação/diagnóstico44blocos com três listasvazias, sem convalidar editorialmente checklist/HTML. Cobertura407/453 delimitada,46pendentes; CANCELLED excluídos. Próximo ID71a96c3c-26f1-48c7-b0f0-8e30589cc331 M39A: wrapper de localização no EPUB de Patriarcas e Profetas, sem rede/alterar acervo ou artigo; relatório único. Pedido explícito located não é confirmed e não interpretar motivação. Extrair corpo379chars/pedido/argv/eventos/Gitparcial; sem executar wrapper, pesquisa ou acervo vivo.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_epub_location_receipt uma vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600. ExtratorC47D reaproveitado com ID/lista/schema, guardas fontes/hash/ID/status/expectchanges/1comando/ordem/checkpoints0/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope9df921794298d94dc7eee7ba8372b72ef754efb28d340611f1651cdd0d6e0ef4. Pedido privado completed-location-c48u-request.json; risco/qualidade/aceite exclusivos do supervisor. Fonte/script/relatório integrais ausentes não autorizam alegar fidelidade/confirmed.
+
+Confirmar chat/cwd/ACTIVE antes de start; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→recibo versus pedido/limites/Git→I2O/Q8S→cobertura. Nenhum replay, nota histórica inventada ou edição externa.
