@@ -133,3 +133,14 @@ C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/req
 Confirmar chat/cwd/ACTIVE sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, conferir fontes/eventos e teste como dados, Q8S/cobertura só após exame; não concluir FT107 por esse microescopo.
 
 Pré-envioC15D: se o teste contiver literalmente key/payload/address/url financeiro longo capturado, texto inteiro é retido (null+withheld_financial_literals), mantendo hash/flag; não publicar valor nem alterar silenciosamente citação. Continuidade da revisão exige usar prova privada/seleção segura se esse limite disparar.
+
+
+## C16E — recibos editoriais delimitados
+
+C15D2d925441 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:23:13.992Z UTC; revisão6d06b4c publicada. Teste circular/versão ausente/leitura tardia impedem aceite histórico integral, apesar de exit0; preservar a30/6db/e7. GovernançaI2O corrigida pelo supervisor exclusivoC8, contratoecce6b5/norma8f5e010, GlobalRulesOnly instalado06:27:04.730Z UTC e prova7b19488: fonte globalc2bfc3ab, prefixo/sufixo/configs/dois controles preservados. Efeito normativo, não verificador semântico automático.
+
+Cobertura338/453 delimitada,115 pendentes; tabela83/9sobrepostos, provaSHA2565a514d5a6254e82c4b62a609fef900045c0aba17adffa7a8bc00825ba54bd2fd. IDs0c6b0b54-af28-4f69-931d-9ed3f958692d e0f300aec-9190-4b04-acd7-e65ea3e75f96: M19(aplicar/diff) e M37B(preparar/comparar). Extrair argv exatos/eventos/resultados F8E retidos, sem executar negócio, emitir julgamento editorial/teológico, buscar biblioteca ou presumir conteúdo dos adaptadores apontados.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands somente editorial_receipt_evidence. Extrator próprio reutilizado deC14D com seletor alterado; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash, limite13000chars/R8V1600palavras/timeout15s/sem rede/repetição. Sintaxe do extrator e preflightR8V/SW-HYBRID/cobertura/fontes passaram. ScopeSHA256892b69fc591d4fefded6e75bb427febcdf3bcf2d002569b0427cdede94655c76. Pedido exclusivo completed-editorial-c16e-request.json.
+
+Confirmar chat/cwd/ACTIVE sem Resume redundante antes de start. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, revisão proporcional/I2O/Q8S e cobertura; recorte ou path não comprova conteúdo ausente, fonte/citação/FT integrais.
