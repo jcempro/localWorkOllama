@@ -772,3 +772,16 @@ Cobertura378/453 delimitada,75 pendentes; tabela123/9sobrepostos/114novos. Prova
 ## Reconciliação adicional — D9F e A3F já examinados
 
 343255f1 e3932e312 reutilizados de exames expressos publicados (subseçãoJob343 da revisão15/10 e audit-facts-validation.md). Sem reconsulta, testes/inferência ou notas históricas inventadas. Cobertura380/453 delimitada,73 pendentes; tabela125/9sobrepostos/116novos. ProvaSHAa06bb7745d255b94f3dcf0d09fc280b699175fedfb07693577a8030fc5d1a198; anterior preservada. Contagem não significa aceite semântico; CANCELLED excluídos.
+
+
+## Handoff vigente — C27I
+
+C26Rb1393fc6 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:11:32.198Z; revisão d68746f publicada. Três recortes6bde/5aa/602 conferidos na fonte15/10, omissões explícitas, correções/limites preservados. Git auditor main limpo2026-10-25T07:10:18.928Z distinto dos alvos. Retorno/revisão privados prior-review-return-b1393fc6.json/prior-review-review-b1393fc6.json. Candidatos narrativos15/10 reconciliados;343255f1/3932e312 tinham exame expresso em subseçãoJob343/audit-facts-validation e foram incorporados sem reconsulta/testes na unidade65377a6.
+
+Cobertura380/453 delimitada,73 pendentes; tabela125/9sobrepostos/116novos. Prova coverage-reconciliation-2026-10-25.json SHAa06bb7745d255b94f3dcf0d09fc280b699175fedfb07693577a8030fc5d1a198; anteriores preservadas. Manter fatia453/CANCELLED excluídos/I2O/distinção exame e aceite. Antes de auditar remanescente, busca pública dirigida evita repetir exame já publicado; não aceitar simples menções.
+
+Job948be20e-6fec-429f-9449-cae6df34eff8 RUNNING/R8V1. Chat/cwd comprovados nesta interação e ACTIVE/EXPLICIT_RESUME conferido sem rearmar outras conversas. C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands qr_capacity_inventory_evidence. ID2f18bcc1-2cb8-4031-b70f-fbb20f5cb3ee, FT107/U3A inventário de dependências QR/decoder/raster/logo. Plano13bd2e2 publicado; extrator próprioC19S com seleção única, capturaabd15bcf/F8E35fb663c, sem inferência/rede/execução histórica/inspeção viva,13000chars/R8V1600/15s. Scope83ad1b9899a55f086a7daf24d9317415a76a67085c89b5e65cb7a3004ec1b5e8. Pedido/recibo exclusivos completed-inventory-c27i-request.json/completed-inventory-c27i-running.json.
+
+Callback local_result uma vez→conferir argv/eventos/recorte contra fontes→revisão I2O/Q8S→cobertura. Pedido histórico exigia stdout integral e somente inventário, não implementação. Disponibilidade não comprova funcionalidade/procedência/logo. Observar representação literal de regex/argv antes de atribuir comportamento; código histórico só dado, não executar/importar/compilar. Não recapturar corpus, conferir pacotes atuais, repetir inventário ou escrever no blog. Próximo0f654462 tem patchargv4754chars/setecomandos e pode exigir unidade única para caber; ainda não examinado, sem replay.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
