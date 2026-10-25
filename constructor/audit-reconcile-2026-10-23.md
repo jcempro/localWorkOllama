@@ -1394,3 +1394,12 @@ Callback local_result uma vez→patch/pins/proveniência/preservação/teste/ori
 85d87dfd recebido uma vez/examinado/Q8S10revision1 em2026-10-25T17:08:05.345Z para extração fiel.8f3f3f3d instalação2pins/licençabyteigual/JSON/YML/gitattributes/teste,4exit0; aceite integração delimitada/métodos preservados, não identidadevisual/validaçãojurídica/financeiraglobal/refs/UI/FT. Git auditor main limpo17:06:16.806Z versus histórico dev/ahead33 parcial. Provas privadas completed-icons-c56b-return.json/evidence.json/proof.json/review.json; sem replay.
 
 Cobertura415/453 delimitada,38pendentes; tabela160/9sobrepostos/151novos. Prova coverage-reconciliation-2026-10-25.json SHAb805b5af8e62ea6ff8dc16d42030dd1edc8f424ee6fbcb49c04eef28390527e2; anterior preservada porhash. CANCELLED excluídos/exame não equivale a aceite global. Nenhumjobativo nestecheckpoint.
+
+
+## Handoff C57M
+
+Job759787fa-ecad-43c3-901d-2e3597aa58a1 RUNNING/R8V1; planoeb7d184 publicado. Chat01a0f301-afa6-7d61-8949-1d35b712f5ca/cwdC:/auto-local confirmados ativos pelo Desktop; ACTIVE/EXPLICIT_RESUME preservado sem rearme. Cobertura415/453,38pendentes; CANCELLED excluídos. C56B85d87dfd recebido uma vez, examinado e Q8S10 pela extração; catálogo8f3f3f3d aceito no microescopo de instalação/pins, sem identidade visual/licença/finanças/FT globais.
+
+Alvo7b52f749-711e-4e52-b038-f828f3027087: agrupamento/impressão de múltiplos IALs em scripts/prettier-kramdown-ial.ts, sequência multi_print_patch/root_multi_dom/types. Aceite original somente na raiz, sem aninhamento/integração/ativação de plugin/editor. Extrair pedido/argv/eventos/corpo583/Gitparcial, não executar/importar/compilar código histórico ou AST/DOM/testes, nem ler negócio vivo. C5/júnior/read-only/expect_changesfalse/commit_policysupervisor, retained_root_multi_ial uma vez/15s/networkfalse/repeatablefalse/13000chars/R8V1600; scopefccc68cd5a4dd336626a0343acac5de74a55c37ffb210745d77b796f5e700c4c. Guardas e preflights no plano/pedido; privados completed-ial-c57m-request.json/running.json/start-output.txt.
+
+Callback local_result uma vez→delta/testes versus contrato/fonteI2O/preservação/limites/Git→Q8S→cobertura. Não generalizar raiz para aninhamento/integração, usar markers como prova semântica suficiente, repetir comandos, editar outra raiz, retomar outro chat ou inventar nota histórica. N7C/S2Q impedidos: nenhuma ferramenta nativa ligada ao contexto vivo ou medição autoritativa barata. Aviso/links e encerramento sem polling; não slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou troca de modelo/esforço.
