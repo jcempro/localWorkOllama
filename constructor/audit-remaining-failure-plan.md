@@ -243,3 +243,14 @@ IDs36e4b3ef-0cfa-41b4-b0b4-43076413b163, eb329794-68ab-41a2-ad12-01be292d4db2, 5
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c25r_excerpts. Extrator próprio fs/assert/crypto, fonte selada/lstat/notlink/nlink1/cabeçalhos únicos,2200chars/seção/13000total/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos. ScopeSHA0f05a49f8f103d54b98a4a43cd3649bf0dfaf516d5fdcd347b30a34be2015ae8; pedido exclusivo prior-review-c25r-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez para extrator, revisão/Q8S e cobertura somente com exame anterior inequívoco; cobertura não é aceite global.
+
+
+## C26R — últimos três candidatos narrativos15/10
+
+C25R505c7f64 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:08:39.552Z; revisão9565e1a publicada. Cobertura375/453 delimitada,78 pendentes; provaSHAa9c8138861ab01d59bfded2faf132b534fe15439e18b85a5fdf256b770f3b9c3. Parecerf6eb permanece rejeitado; contagem é exame sem aprovação. Limites de pares/diff, I2O e CANCELLED excluídos preservados.
+
+IDs6bde41d3-2fd2-4bbf-a614-f8a1df160233, 5aa2ad05-8948-4b35-ab97-ad34e5732b9f, 6027f41c-3d01-47cc-aa87-ffd2cb0bd3d3. Fonte audit-review-2026-10-15.md SHA249166b2245019b13ae5861aedc28fdeb734ff5cd6cf761ca23999abdf22be78, cabeçalhos397/411/425. Extrair somente seções literais/offsets/hash/omissões de exames anteriores; nenhum novo parecer/consulta antiga/execução de negócio/nota histórica. Extrator aceita lista variável; redução de quatro para três não altera código/limites.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c26r_excerpts. Extrator próprio fs/assert/crypto, fonte selada/lstat/notlink/nlink1/cabeçalhos únicos,2200chars/seção/13000total/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos. ScopeSHA1fb69573db46a737e4c09ac48499746d99db9514dd0af9aad64d58a005291eb4; pedido exclusivo prior-review-c26r-request.json.
+
+Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez para extrator, revisão/Q8S e cobertura somente com exame anterior inequívoco; cobertura não é aceite global.
