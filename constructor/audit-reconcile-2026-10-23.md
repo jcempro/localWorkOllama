@@ -469,3 +469,10 @@ Plano1c0b530 publicado. ScopeSHA256a85174437bdbaf2b87180b1202f028a053f4fb8e40090
 No callback: local_result uma vez com recibo, rever diff/efeitos/fixturecompat/defaultbyteidêntico/novas contagens e modo retido. Q8S após exame; se passar, commit/push imediato SOMENTE unidade funcional dois arquivos e prova necessária, preservando alterações herdadas. Não repetir patch de sucesso. Em falha teste preservar ambos e corrigir hipótese concreta sem ampliar escopo. Pedidos antigos de auditoria fixam SHA antigo; novas delegações posteriores devem adotar fonte realmente revisada, sem desativar guarda de integridade.
 
 Depois continuar auditoria histórica, incluindo0636b4d3 pendente por parse_error, sem reexecutar negócio ou inventar notas. Sem polling. N7C/S2Q sem ferramenta nativa acessível/medição autoritativa barata: aviso/links, impedimento explícito e encerrar. Não injetar slash/fila, tocar SQLite/rollout, compactar cópia, automatizar Desktop proibido ou reabrir app. Modelo/esforço/callback integral/intenção humana preservados.
+
+
+## Cobertura consolidada — prevalece sobre contadores locais
+
+Em25/10 foram vinculados mecanicamente os197 registros do relatório original(88operacionais+109fixtures),67 da revisão15/10 e48 da tabela23/10. União anterior264 confere exatamente com captura-base37daad80; nove IDs da tabela recente sobrepõem a base,39 são novos. Cobertura delimitada total303/453 não CANCELLED,150 remanescentes; não equivale à conclusão/aceite de303 jobs. Contadores48/453 anteriores referiam-se somente à tabela recente e não devem orientar seleção isoladamente. Prova privada coverage-reconciliation-2026-10-25.json com hashes/IDs.
+
+Preservar C11 já comprovada em audit-causes.md/audit-interactions-report.md: reinício inesperado do Windows41/6008 explica runner ausente0636; flush/quarentena/índice corrigidos e continuidade9e62c36b registrados. Causa física de reboot/efeitos perdidos não comprovados, callback ambíguo não se reenvia. Verificação recente NUL é complementar; não exige reinstalação, novo patch de persistência ou reauditoria de toda base. Próxima unidade somente IDs do conjunto remanescente150.
