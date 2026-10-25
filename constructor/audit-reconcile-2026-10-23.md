@@ -1467,3 +1467,8 @@ Job baa6065b-324f-4f93-900b-15b70aee58f3 RUNNING/R8V1; plano f9d94af publicado. 
 C61R projeta somente99907184-b2f1-4a6f-b9a1-19f9dffb195e: pedido/argv/eventos/corpo5034/Git parcial. C5/júnior/read-only, comando próprio único, sem inferência ou execução de código histórico. Checkpoint FT105 não equivale a validação/implementação; causa física antiga4cb8cc24 segue desconhecida, sem repetir forense. Pedido/recibo/links privados completed-recovery-c61r-request/start.json. Próximo callback: local_result uma vez→revisão proporcional/I2O/Git→Q8S→cobertura, preservando predecessor já examinado.
 
 N7C: catálogo sem rota nativa de compactação ligada à conversa viva; sem medição barata autoritativa de ocupação. Informar impedimento após aviso/links, encerrar sem polling. Não injetar slash/fila, operar UI proibida, reabrir Desktop ou compactar cópia. S2Q externo permanece não comprovado; uso manual do composer não valida outra rota.
+
+
+## Checkpoint C61R
+
+Resultadobaa6065b recebido uma vez, examinado e Q8S10 revision1 registrado. Extração de dois arquivos FT105 aceita; código/console.log de teste não é teste executado. Runner predecessor permanece com causa física desconhecida, sem forense/replay. Git histórico dev/ahead2 distinto de main limpo do auditor. Cobertura420/453,33 pendentes; CANCELLED excluídos. Provas privadas completed-recovery-c61r-*.json; cobertura SHA256 333e9a63de9e13421d79cc263dd6076ce938fe7f4833510ab0d08e0b51f4d9d3.
