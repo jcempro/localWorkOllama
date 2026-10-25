@@ -1218,3 +1218,10 @@ Extrair plano/after/recibo/eventos/Gitparcial; before apenas hash/contagem. Sequ
 Callback: local_result uma vez, comparar plano versus after e recibo, preservar limites de sintaxe versusHTML/preservação, conferir Gitdeterminístico por tempo/alvo; I2O/Q8S comrecibo exclusivo do extrator, atualizar cobertura. Não repetir M33A2/M33A3, fabricar nota histórica ou alterar outra raiz. Registro anterior não executado por quota de aprovação já encerrado emC44Q, sem replay dehandoffobsoleto.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo e medição atual autoritativa barata. Emitir aviso/links e diagnóstico; encerrar sem polling, slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou alteração de modelo/esforço. Checkpoint não é compactação nativa.
+
+
+## Checkpoint C46A
+
+21e0ca36 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:29:29.796Z para extração fiel.7522ec6a M33A3corrigiu invólucro/parte dos asserts, mas manteve conversão/normalização fora do rescue, não persiste HTML diagnóstico e tem asserts incompletos. Rejeitar completude, sem negar edição/sintaxe0, executar Ruby ou editar outra raiz. Fonte plano/after capturados; Git auditor main limpo16:27:27.505Z versus histórico dev/ahead59 parcial. Provas privadas completed-render-c46a-return.json/evidence.json/proof.json/review.json, não repetir local_result.
+
+Cobertura406/453 delimitada,47pendentes; tabela151/9sobrepostos/142novos. Prova coverage-reconciliation-2026-10-25.json SHA46a4e6a57dc7a967f252853f9f3fa1a6d021f1afe95f4880ce4fd041a278dcbe; snapshot anterior preservado porhash. CANCELLED excluídos; exame não equivale a aceite. Nenhum job ativo neste checkpoint.
