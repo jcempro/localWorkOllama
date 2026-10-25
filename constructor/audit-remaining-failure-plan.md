@@ -618,3 +618,14 @@ Extrair pedido, argv, eventos, corpo5034chars e Git parcial. Código TS históri
 ExtratorC60P adaptado: fontes abd15bcf/F8E35fb663c/hashes/ID/status/expectchangesfalse/checkpoints0/comandoextract/corpo≤6000/offsets/header/SHA. Orçamento≤12000chars (corpo escapado≤7000, pedido/argv≤1700, eventos/Git≤1600, demais≤1500), limite13000/R8V1600 e teto nativo16000. Sequência/requiredcommands retained_recovery_ft105 única vez,15s/networkfalse/repeatablefalse. Sintaxe/SW-HYBRID/R8V válidos; scope 9672f7741d3577c1f6658a3b90c6064bbbddfd3be67b4f0e2c84b5ed5f99dd46. Pedido privado completed-recovery-c61r-request.json.
 
 Confirmar identidade/cwd/ACTIVE; start único/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback: resultado uma vez→revisão proporcional/I2O/Git→Q8S→cobertura. Preservar exames anteriores sem replay, diagnósticos novos especulativos ou nota histórica inventada.
+
+
+## C62S — segunda estratégia FT105 histórica
+
+C61Rbaa6065b recebido uma vez, examinado e Q8S10 pela extração: dois arquivos preservados, sem teste executado ou correção de runner. Cobertura420/453,33 pendentes; CANCELLED excluídos. Próximo fb8a8e93-9182-4f03-ae1f-4befb73f392d: patch preparado do teste da segunda estratégia após primeira unidade, types/test obrigatórios. Aceite histórico exige primeiro exhausted/erro preservado, segundo completed/candidato1, dois runs ordenados/um read/initial intacto. Não confundir com esgotamento/bloqueio posteriores ou gate FT105 global.
+
+Extrair pedido, três argv, eventos, corpo532chars e Git parcial. Sem executar/importar/compilar TS ou testes capturados, editar outra raiz ou código atual. C5/júnior/read-only/expect_changes=false/commit_policy=supervisor; risco/aceite exclusivos do supervisor. Fonte abd15bcf/F8E35fb663c/hashes/ID/status/expectchangestrue/checkpoints0/ordem patch→types→test/corpo≤1000/offsets/header/SHA. Extrator C61R adaptado e sintaxe/preflights SW-HYBRID/R8V válidos; scope 7cb91a5ea61c7962f28cbc1a4ad0d64a70053f596d773b29438bc3b1419811fb.
+
+Orçamento conservador≤9000chars (request4750/eventos689/Git877/corpo escapado1064/demais≤1600), limite13000/R8V1600 e teto16000. Agrupamento preliminar com fd51d644 excederia16262; segmentado antes de criar job, sem repetição. Pedido privado completed-strategy-c62s-request.json. Sequência/requiredcommands retained_second_strategy única vez,15s/networkfalse/repeatablefalse.
+
+Confirmar identidade/cwd/ACTIVE; start único/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez→revisão proporcional/I2O/Git→Q8S→cobertura. Resultado de teste deve estar no recibo, não apenas no fonte.
