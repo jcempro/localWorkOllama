@@ -939,3 +939,10 @@ Nova unidade37ba8b4e-2521-426f-baa2-6386e3d9e9fe confirmada RUNNING/R8V1. Plano/
 Callback local_result uma vez→conferir pedido/provided_evidence/body completo/eventos/rodapé parcial→revisãoI2O/Q8S→cobertura. Avaliar collectBlockIals contra condições expressas (root.children/tableouheading+paragraphIAL/linhaúnica/coluna1/offset/gapLFouCRLF/exclusões/sem mutar), sem código histórico executado/compilado/importado ou negócio vivo. Proposta não significa edição/teste/FT concluída. Falha nova exige causa específica e reconciliar, sem retry cego. D8O validado8e831e1 preservado, não reexecutar probes nem consulta de bfaadeb9.
 
 N7C/S2Q impedidos: nenhuma ferramenta nativa ligada ao contexto vivo nem medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura; preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C32O — proposta histórica não aceita
+
+37ba8b4e recebido uma vez/examinado/Q8S10revision1 em2026-10-25T11:50:42.247Z: extrator correto e corpo2819chars/hash preservado.42202fa2propostahelper rejeitada para aplicação por estruturaIAL não comprovada/guardas de coluna/linha/offset/exclusões ausentes; não implica implementação/teste ou defeito atual no repositório de negócio. Nenhum código histórico executado, compilado, importado ou normalizado. Git auditor main limpo11:48:50.550Z distinto de histórico dev/ahead10 em18/10 17:01:38.043Z, parcial.08350404falho anterior preservado/Q8S9 sem reconsulta.
+
+Cobertura388/453 delimitada,65pendentes; tabela133/9sobrepostos/124novos. Prova coverage-reconciliation-2026-10-25.json SHA15b79bde7dc26e19eda13d647524582c72c9b9d534fe1be9ff684718872314ef; anterior preservada porhash. CANCELLED excluídos, exame≠aceitefuncional, sem nota histórica inventada. Nenhum Worker ativo neste checkpoint; próxima unidade menor do corpus congelado usando projeções já obtidas.
