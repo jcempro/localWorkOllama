@@ -1236,3 +1236,10 @@ Extrair pedido/argv/eventos/corpo970chars/Gitparcial; não executar scripts capt
 Callback local_result uma vez→execução versus pedido/recibo/achados/limites/Git→I2O/Q8S→cobertura. Código zero do diagnóstico significa relatório produzido, não conformidade do HTML/checklist; scripts/plano/artefatos integrais ausentes não podem ser presumidos. Nota do extrator não é cognição/nota histórica. Não duplicar C44Q/M36A2 nem adotar normas de outra raiz.
 
 N7C/S2Q permanecem impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura/modelo/esforço. Checkpoint não é compactação nativa.
+
+
+## Checkpoint C47D
+
+429f2380 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:33:04.855Z para extração fiel.6d9fc2ac M36B consolidou/diagnosticou com dois exit0,44blocos/listasalertasvazias; aceitar operação delimitada com conformidade editorial pendente, sem equiparar hashes relatados à prova independente. Não replay/negócio vivo/inferência. Git auditor main limpo16:31:49.046Z versus histórico dev/ahead68 parcial. Provas privadas completed-diagnostic-c47d-return.json/evidence.json/proof.json/review.json.
+
+Cobertura407/453 delimitada,46pendentes; tabela152/9sobrepostos/143novos. Prova coverage-reconciliation-2026-10-25.json SHA7d91894d211299ca004cd415596d47eedff0352dc661e1513e434c4d1c2ef150; snapshot anterior preservado porhash. CANCELLED excluídos/exame não equivale a aceite. Nenhum job ativo neste checkpoint.
