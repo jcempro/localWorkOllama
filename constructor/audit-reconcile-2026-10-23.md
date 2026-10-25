@@ -1292,3 +1292,10 @@ Sequência/requiredcommands retained_symbol_row única vez,15s/networkfalse/repe
 Callback local_result uma vez→código capturado/recibo versus pedido/limites/I2O/Git→Q8S da projeção→cobertura;73a0d24b ainda não examinado. Não executar/importar/build/test/install, abrir negócio/acervo/URL ou obter finanças atuais. Risco/qualidade sósupervisor; sem nota histórica inventada/cognição de sequência, replay ou edição externa.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou mudança de modelo/esforço. Checkpoint não é compactação nativa.
+
+
+## Checkpoint C50S
+
+267eb953 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:45:42.721Z para projeção fiel do recibo C49Q selado.6d61550b create/build/test0, seletor finito/fiveQRreservedcenters byteexact por decoder separado; aceite delimitado, não proteção geométrica independente/finanças/logo/UI/FTintegrais. Recuperação de entrega sem reextração/replay, segunda row73a0d24b ainda pendente. Git auditor main limpo16:44:15.313Z versus histórico dev/ahead29 parcial com três alvos novos. Provas privadas completed-symbol-c50s-return.json/evidence.json/proof.json/review.json.
+
+Cobertura409/453 delimitada,44pendentes; tabela154/9sobrepostos/145novos. Prova coverage-reconciliation-2026-10-25.json SHA207ec0eab2c790ec3012a4e988bc1d6cf83849b2f0c0f042997618fa29c1b5f4; anterior preservada porhash. CANCELLED excluídos/exame não equivale a aceite global. Nenhum jobativo nestecheckpoint.
