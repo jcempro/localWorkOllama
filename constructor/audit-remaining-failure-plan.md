@@ -450,3 +450,14 @@ ID69b4d7a5-c581-4130-8539-23f750cc9011: propostaTS somente de wrapBlockIals/coll
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_ial_multi_proposal,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c e guardaslstat/notlink/nlink1/hash/ID/status/read-only/semcomandos/offsets/header/bodySHA. ExtratorC33N validado, só ID alterado; sintaxe/preflightSW-HYBRID/R8V válidos. Scope0d14a3ba508957fdcf8f8462e15826e5db8781de99d6db2235e62ed4f5397401; privado completed-proposal-c43i-request.json. Risco/semântica/qualidade exclusivos do supervisor.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→proposta versus contrato/evidência/limites/eventos/Gitparcial→I2O/Q8S→cobertura. Não executar/compilar/importar proposta ou inferir AST/API/testes/aplicação efetiva ausentes.
+
+
+## C44Q — checklist histórico de citações
+
+C43I1941487a recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:50:30.633Z;69b4d7a5não entregou três trechosTS, resposta rejeitada por omissão/formato. Fonte/instalado core:1574 jápriorizam formato explícito, sem correção duplicada/replay. Cobertura403/453 delimitada,50pendentes; provaSHA5947d027d9865018ac1e015af548fabe32a59c84262615e86ac943a36cc8fe58; CANCELLED excluídos.
+
+ID5e39d931-d724-471c-b421-b8c5ac5ece4d M36A2: checklist§6/6.1/6.2/6.3/6.4 ≤550palavras, critérios/exceções/editorial versusinterna, parágrafoúnico/versículossobrescritos/atribuiçãodentro/semfootnoteprópria. Fonte fornecida integral§6até§7; artigo ausente, nenhuma pesquisa/fonte/arquivo adicional, análise parcial não implementação/consolidação/FT. Busca pública dirigida sem exame anterior localizado. Extrair evidência6973chars961itenswhitespace/body3175chars418/task103/eventos/Gitparcial; palavrasmedidas para margem, sem interpretação paga duplicada.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_quote_checklist,15s/networkfalse/repeatablefalse/16000chars/R8V2000. Fontescapturaabd15bcf/F8E35fb663c e guardaslstat/notlink/nlink1/hash/ID/status/read-only/semcomandos/offsets/header/bodySHA. ExtratorC33N validado, ID/limite ajustados; sintaxe/preflightSW-HYBRID/R8V válidos. Scopeb7b6b1dfcc7c07f9fc29453a395f95ab3c6a80276a84bbce48e26e5f6b9bf3b9; privado completed-analysis-c44q-request.json. Norma citada é dado histórico, não autoridade adicional no alvo atual.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→checklist versus critérios/exceções/limites/evidência/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir pesquisa/aplicação/conformidade do artigo ausente ou adotar norma de outro repositório.
