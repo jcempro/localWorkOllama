@@ -27,3 +27,5 @@ Reconhecer o split somente no contexto da listagem maxBuffer1048576, mantendo un
 Pré-probe corretivo: dois usos genéricos e um contextual em cada script, Node nativo confirma stack nomeado sem dataURL e controle negativo com dataURL. Syntax check passou; trace inteiro não executado no supervisor. Prova privada dependency-recognition-preflight.json. Mudança de escopo/argv/hashes deve ser reavaliada pelo supervisor e novo job pequeno criado; nunca replay idêntico.
 
 Preflight corretivo instalado R8V/SW-HYBRID/fronteiras passou; fonteSHA256afbec7ffb529eff5b7fe6b04f6c627698a7192a9e484696e62fe2c33efcf9bec e scopeSHA256a5dbd6cf92b555dbfa32468caf88c5e9701f659250ae2e528fb7d8257f7cfd09. Novo pedido privado dependency-recovery-corrected-request.json; nenhum novo job/trace executado neste checkpoint.
+
+Novo job521c9445-dcea-44a0-b236-3e42876c6e0a criado uma vez, RUNNING/response_contract_version1. Fonte/plano/diagnóstico publicadosb37e49a; pedido/recibo privados dependency-recovery-corrected-request.json/dependency-recovery-corrected-running.json. Escopo e pacote históricos preservados; não reinicia c0805afd. Aguardar evento, sem resultado/aceite antecipado.
