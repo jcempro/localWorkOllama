@@ -42,7 +42,7 @@ $globalHashC9R=(Get-FileHash -LiteralPath $globalConfigC9R).Hash
 if(-not $VerifyOnly -and -not $SkipWorkerInstall){
   Invoke-NativeInstallerC9R -Program $psC9R -ArgumentList @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',(Join-Path $projectC9R 'src/install.ps1'),'-WorkerHome',$workerC9R,'-CodexHome',$targetsC9R[0].config.codexHome,'-CodexExe',$cliC9R,'-SkipPrerequisites','-SkipModel','-SkipWatchdog','-SkipGlobalRules','-WaitForIdle') -LogPath (Join-Path $proofRootC9R 'c9r-worker-install.log')
 }
-$filesC9R=@('continuity.mts','continuity.mjs','delivery.mts','delivery.mjs','watchdog.mjs','job-store.mjs','job-control.mjs','server.mts','server.mjs','worker-core.mjs','response-contract.mts','response-contract.mjs','delegation-policy.mts','delegation-policy.mjs','supervisor-review.mts','supervisor-review.mjs','monitor.mjs','monitor-page.mjs','mcp-call.mjs','AGENTS.md')
+$filesC9R=@('continuity.mts','continuity.mjs','delivery.mts','delivery.mjs','watchdog.mjs','job-store.mjs','job-control.mjs','server.mts','server.mjs','worker-core.mts','worker-core.mjs','evidence-rendering.mts','evidence-rendering.mjs','response-contract.mts','response-contract.mjs','delegation-policy.mts','delegation-policy.mjs','supervisor-review.mts','supervisor-review.mjs','monitor.mjs','monitor-page.mjs','mcp-call.mjs','AGENTS.md')
 foreach($nameC9R in $filesC9R){
   if((Get-FileHash -LiteralPath (Join-Path $workerC9R $nameC9R)).Hash -ne (Get-FileHash -LiteralPath (Join-Path $projectC9R ('src/localworker/'+$nameC9R))).Hash){throw 'WORKER_HASH_MISMATCH'}
 }

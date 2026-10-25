@@ -11,7 +11,7 @@ const START_A3C = '<!-- LOCALWORKER_GENERATED_START -->';
 const END_A3C = '<!-- LOCALWORKER_GENERATED_END -->';
 const RUNTIME_A3C = [
   'AGENTS.md', 'config.json', 'package.json', 'package-lock.json',
-  'server.mts','server.mjs', 'response-contract.mts', 'response-contract.mjs', 'supervisor-review.mts', 'supervisor-review.mjs', 'delegation-policy.mts', 'delegation-policy.mjs', 'continuity.mts', 'continuity.mjs', 'continuity.ps1', 'thread-check.mjs', 'job-store.mjs', 'job-control.mjs', 'context-manager.mjs','progress-guard.mjs', 'worker-core.mjs',
+  'server.mts','server.mjs', 'response-contract.mts', 'response-contract.mjs', 'supervisor-review.mts', 'supervisor-review.mjs', 'delegation-policy.mts', 'delegation-policy.mjs', 'continuity.mts', 'continuity.mjs', 'continuity.ps1', 'thread-check.mjs', 'job-store.mjs', 'job-control.mjs', 'context-manager.mjs','progress-guard.mjs', 'worker-core.mts','worker-core.mjs','evidence-rendering.mts','evidence-rendering.mjs',
   'worker-runner.mjs', 'delivery.mts','delivery.mjs', 'watchdog.mjs', 'monitor.mjs', 'monitor-page.mjs', 'mcp-config.mjs', 'mcp-call.mjs', 'notify.ps1',
   'install.ps1', 'update-installed.ps1', 'register-watchdog.ps1', 'watchdog-launch.vbs.template',
 ];
@@ -84,6 +84,10 @@ const serverSourceS6D=await fs.readFile(path.join(ROOT_A3C,'localworker/server.m
 await putOrCompare('localworker/server.mjs',Buffer.from(stripTypeScriptTypes(serverSourceS6D,{mode:'strip'}).replace(/[ \t]+$/gm,'')));
 const deliverySourceT3P=await fs.readFile(path.join(ROOT_A3C,'localworker/delivery.mts'),'utf8');
 await putOrCompare('localworker/delivery.mjs',Buffer.from(stripTypeScriptTypes(deliverySourceT3P,{mode:'strip'}).replace(/[ \t]+$/gm,'')));
+for(const nameE4J of ['worker-core','evidence-rendering']) {
+  const sourceE4J=await fs.readFile(path.join(ROOT_A3C,`localworker/${nameE4J}.mts`),'utf8');
+  await putOrCompare(`localworker/${nameE4J}.mjs`,Buffer.from(stripTypeScriptTypes(sourceE4J,{mode:'strip'}).replace(/[ \t]+$/gm,'')));
+}
 const responseSourceR8V=await fs.readFile(path.join(ROOT_A3C,'localworker/response-contract.mts'),'utf8');
 await putOrCompare('localworker/response-contract.mjs',Buffer.from(stripTypeScriptTypes(responseSourceR8V,{mode:'strip'}).replace(/[ \t]+$/gm,'')));
 const reviewSourceQ8S=await fs.readFile(path.join(ROOT_A3C,'localworker/supervisor-review.mts'),'utf8');
