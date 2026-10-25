@@ -144,3 +144,14 @@ Cobertura338/453 delimitada,115 pendentes; tabela83/9sobrepostos, provaSHA2565a5
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands somente editorial_receipt_evidence. Extrator próprio reutilizado deC14D com seletor alterado; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash, limite13000chars/R8V1600palavras/timeout15s/sem rede/repetição. Sintaxe do extrator e preflightR8V/SW-HYBRID/cobertura/fontes passaram. ScopeSHA256892b69fc591d4fefded6e75bb427febcdf3bcf2d002569b0427cdede94655c76. Pedido exclusivo completed-editorial-c16e-request.json.
 
 Confirmar chat/cwd/ACTIVE sem Resume redundante antes de start. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, revisão proporcional/I2O/Q8S e cobertura; recorte ou path não comprova conteúdo ausente, fonte/citação/FT integrais.
+
+
+## C17E — M24 e M35
+
+C16Ec872348c recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:31:23.379Z UTC; revisãoa2e1d59 publicada. M19 informou duas edições; M37B60ocorrências/52IDs e URL não comparada, sem aceite integral. I2O instalado e preservado. Cobertura340/453 delimitada,113 pendentes; tabela85/9sobrepostos, provaSHA256c5a5f2c3bc7327e0dadaeb8fc6741316dc3e0804c21498abbc984250e448b743.
+
+IDs1204107d-8fef-42b7-b3ae-d20345592916(M24 aplicar/diff, segundo parágrafo e sete notas) e12961553-6dbf-4c73-aec7-cc16a2fcbce4(M35 marcação/render/diff, sem repetirM34). Extrair argv exatos/eventos/recortes F8E já retidos, sem executar edição/renderização histórica ou emitir juízo editorial/teológico. Fonte de adaptador apontado não é presumida disponível nem comprovada pelo path.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands somente editorial_m24_m35_evidence. Extrator próprio reutilizado deC16E com seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash, limite13000chars/R8V1600palavras/timeout15s/sem rede/repetição. Sintaxe própria e preflightR8V/SW-HYBRID/fontes/cobertura passaram. ScopeSHA2563736de2018a273f382b07daa4d42689951ec8550ea00d2147905600e77a54540. Pedido exclusivo completed-editorial-c17e-request.json.
+
+Confirmar chat/cwd/ACTIVE sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, revisão/I2O/Q8S/cobertura sem transferir recibos/render parcial a aceite de conteúdo/FT integral.
