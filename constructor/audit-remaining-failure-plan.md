@@ -109,3 +109,14 @@ IDs b32072fd-6e84-4461-b838-9f85c5579afc e d4c8e0fd-dbe8-4867-81ee-94d5256a120e:
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands somente literal_process_canvas_sources. Extrator próprio fs/assert/crypto; capturaabd15bcf e F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos, saída limitada13000chars/R8V1600palavras/timeout15s/sem rede/repetição. Sintaxe apenas do extrator próprio conferida. ScopeSHA2561d1d29ee96336c52f9b6c1ed50f26d7bffeaf704bc4045a2bf795ee0bdfce365. PreflightR8V/SW-HYBRID/fontes/cobertura passou; pedido exclusivo completed-recovery-c13r-request.json. Preflight anterior recusou max_words2400 antes de criar arquivo/job/efeito; corrigido para limite suportado1600 sem relaxar guarda.
 
 Confirmar chat/cwd/ACTIVE sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, revisão/Q8S/cobertura; não atribuir cognição à sequência ou aceitar símbolo/UI/FT integrais por teste de base.
+
+
+## C14D — diagnóstico de variantes aninhadas
+
+C13Ra416e50a recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:11:20.578Z UTC; revisãoc56ae59 publicada. Processos/basecanvas aceitos somente no microescopo, sem reexecutar. Reconciliaçãoa4cc234 reaproveita revisão narrativa rejeitada de0a92 sem nova consulta nem alterar aceite. Cobertura336/453 delimitada,117 pendentes; tabela81/9sobrepostos, provaSHA25688fa5c4d8ced9a64c1d8b5e725007aa7dbb19ad7a84090d5ffe15c04a98978f4.
+
+ID06317938-5f69-460b-9323-261c16e7a75d: diagnóstico determinístico14variantes após parse preliminar corrigido. Extrair argumento nested_valid_syntax literalmente e eventos/resultados F8E retidos; sem executar/importar/compilar código histórico ou repetir matriz raiz. Recorte pode estar truncado; declarar limite e não inferir suporte pela ausência de targets.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands somente literal_nested_diagnostic. Extrator próprio conferido/reutilizado deC13R, só seletor alterado. Capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos e argvSHA; limite13000chars/R8V1600palavras/timeout15s/sem rede/repetição. Sintaxe apenas do extrator próprio conferida; scopeSHA2562df9f442e61823c64133bb402c500836a7e660f6ad52180d4879575653143752. PreflightR8V/SW-HYBRID/cobertura/fontes passou. Pedido exclusivo completed-diagnostic-c14d-request.json.
+
+Confirmar chat/cwd/ACTIVE sem Resume redundante antes de start. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, revisar literalidade/semântica como dados, Q8S e cobertura; fonte/recorte não comprovam DOM completo, suporte ou FT concluída.
