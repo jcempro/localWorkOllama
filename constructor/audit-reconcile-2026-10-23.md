@@ -1410,3 +1410,14 @@ Callback local_result uma vez→delta/testes versus contrato/fonteI2O/preservaç
 759787fa recebido uma vez, examinado e Q8S10revision1 em2026-10-25T17:13:33.806Z pela extração fiel.7b52f749 patch de3âncoras,25pares/5controles/3ciclos e types0: aceite de raiz/projeções com referênciaKramdown independente, não DOM completo/aninhamento/editor/TTS global. Igualdade potencialmente vacuosa e cobertura parcial explicitadas sem inventar perda real. Git auditor main limpo17:11:01.073Z versus histórico dev/ahead15 parcial. Provas privadas completed-ial-c57m-return.json/evidence.json/proof.json/review.json; sem replay.
 
 Cobertura416/453 delimitada,37pendentes; tabela161/9sobrepostos/152novos. Prova coverage-reconciliation-2026-10-25.json SHA1c6c7a42e6a909cca8858c426099caa06d3e10f3225651f98f7f53b02a7a7a09; anterior preservada porhash. CANCELLED excluídos; exame não equivale a aceite global. Nenhum job ativo neste checkpoint.
+
+
+## Handoff C58F
+
+Job07894dbe-8321-4875-a591-ecc5300c559b RUNNING/R8V1; plano2e33938 publicado. Chat01a0f301-afa6-7d61-8949-1d35b712f5ca/cwdC:/auto-local confirmados ativos pelo Desktop; ACTIVE/EXPLICIT_RESUME sem rearme. Cobertura416/453,37pendentes; CANCELLED excluídos. C57M759787fa recebido uma vez, examinado e Q8S10 pela extração; patch7b52f749 aceito apenas nas projeções de raiz, sem aninhamento/editor/TTS global.
+
+Alvo7e0788e0-97d0-46c0-ac37-3ce8b63682e7: correção da infraestrutura createPlugin apósfaa4d815, não associaçãoIAL. Projetar tarefa, argv, eventos, trace público e último write_file1418chars; efeitos anteriores apenas hashes/tamanhos.7checkpoints/2write1edit, corpo1178. Não revelar raciocínio privado, transportar normas históricas, executar/importar/compilar fábrica/AST/testes ou ler negócio vivo. C5/júnior/read-only/expect_changesfalse/commit_policysupervisor, retained_factory_repair uma vez/15s/networkfalse/repeatablefalse/R8V1600; scopea9bfcf215a4a6df3c17425e8affbe429ac9b29db4f9327671406f478b2203ab9.
+
+Orçamento conferido antes de qualquer job: limite conservador14845chars, extrator15000 mais framing abaixo do teto nativo16000, sem mudar guarda do runtime. Rascunho preparado13000 preservado privadamente, sem execução/falha/replay. Guardas, métricas e preflights no plano/pedido; privados completed-factory-c58f-request.json/running.json/start-output.txt/preflight-13000.json.
+
+Callback local_result uma vez→API/closure/delegação/fábrica≤100linhas versus testes/trace/I2O/ordem de leituras/limites/Git→Q8S→cobertura. Não estender infraestrutura a associaçãoIAL/editor, repetir diagnóstico/testes, editar outra raiz, retomar outro chat ou inventar nota histórica. N7C/S2Q impedidos: nenhuma ferramenta nativa ligada ao contexto vivo/medição autoritativa barata. Aviso/links e encerramento sem polling; não slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou troca de modelo/esforço.
