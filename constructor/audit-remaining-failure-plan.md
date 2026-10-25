@@ -155,3 +155,14 @@ IDs1204107d-8fef-42b7-b3ae-d20345592916(M24 aplicar/diff, segundo parágrafo e s
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands somente editorial_m24_m35_evidence. Extrator próprio reutilizado deC16E com seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash, limite13000chars/R8V1600palavras/timeout15s/sem rede/repetição. Sintaxe própria e preflightR8V/SW-HYBRID/fontes/cobertura passaram. ScopeSHA2563736de2018a273f382b07daa4d42689951ec8550ea00d2147905600e77a54540. Pedido exclusivo completed-editorial-c17e-request.json.
 
 Confirmar chat/cwd/ACTIVE sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, revisão/I2O/Q8S/cobertura sem transferir recibos/render parcial a aceite de conteúdo/FT integral.
+
+
+## C18P — relatório M41 e preparação M33A1
+
+C17E0286852d recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:36:06.215Z UTC. M24 informou2edições; M35renderobservado passado/159IDs únicos/zerorefsquebradas, sem aceite autoral/global ou cancelamento de falhaSTposterior. Cobertura342/453 delimitada,111 pendentes; tabela87/9sobrepostos, provaSHA256df4753ed0b9d9660488c3e53ca80084d9d0f96df6687ac91714aba3d9347d71a.
+
+IDs1f2f625e-bc15-4fbc-9b2e-b54699b54212(M41 numeração/estrutura, artigo read-only/relatório único) e22cc5691-02c5-4089-86c3-22a23314e45f(M33A1 patch/syntax do adaptador, sem render/artigo). Extrair argv/eventos/recortes F8E como dados, sem executar scripts ou repetir renderização. Preparação/syntax não são render aprovado; relatório estrutural não é FT integral.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands report_m41_adapter_m33a1. Extrator próprio deC17E com seleção alterada, capturaabd15bcf/F8E35fb663c; lstat/notlink/nlink1/IDs/status/nomes únicos/hash. Limite13000chars/R8V1600palavras/timeout15s/networkfalse/repeatablefalse; sintaxe própria e preflightR8V/SW-HYBRID/cobertura/fontes conferidos. ScopeSHA256830ec23735a6075b8369fc68d4268220cc5324af5c3be877b8427bb121d83dfc. Pedido exclusivo completed-preparation-c18p-request.json.
+
+Start exige chat/cwd/ACTIVE comprovados sem Resume redundante; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, revisãoI2O/Q8S/cobertura proporcional sem código histórico executado ou aceite de capacidade não demonstrada.
