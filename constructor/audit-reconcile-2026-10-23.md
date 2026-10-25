@@ -1279,3 +1279,16 @@ N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/
 fbfaaa03 recebido uma vez/examinado/Q8S9revision1 em2026-10-25T16:41:20.751Z. WORKER_INCOMPLETE/RESPONSE_CONTRACT: candidato18177>MAX_FINAL_CHARS16000 após comandoexit0; orçamento22000 foi erro de dimensionamento do supervisor. Não infra/modelo, sem repetir execução. D8O preservou command-sequence-result.json integral19856bytes SHA6835f5796afec4b633362873be161e0ad57bf56b6a0ed76649a2a7cb97fcb2b8, cópia privada selada; rascunho recusado truncado não usado como fonte. Rows8578/9242chars, próxima unidade selecionará uma por vez≤13000.
 
 Cobertura permanece408/453,45pendentes;6d61550b/73a0d24b ainda não examinados semanticamente. Prova coverage-reconciliation-2026-10-25.json SHA3307872156a523c1cb9b6b5b91c47be32f5221341e74e4b26e65ae8f5a49fd89; anterior preservada porhash. Git auditor main limpo16:39:17.651Z; nenhum jobativo nestecheckpoint. CANCELLED excluídos, nenhuma nota histórica inventada. Provas privadas completed-symbols-c49q-return.json/proof.json/review.json/command-receipts.json.
+
+
+## Handoff C50S — unidade corretiva sem replay
+
+Job267eb953-d2d6-4b16-aaee-0f0568f8909a confirmado RUNNING/R8V1, plano7c1e64f publicado. Chat01a0f301-afa6-7d61-8949-1d35b712f5ca/cwdC:/auto-local comprovados pelo Desktop; ACTIVE/EXPLICIT_RESUME preservado, sem rearme. C5/júnior/read-only/expect_changesfalse/commit_policysupervisor. Cobertura408/453,45pendentes; CANCELLED excluídos. C49Qfbfaaa03 já recebido uma vez/examinado/Q8S9 por falha final18177>16000 após comandoexit0; não consultar/rodar novamente.
+
+Mudança material: projetar somente row6d61550b-2df2-46e0-b47e-c76fdb07297c8578chars/body877 a partir da cópia integral selada completed-symbols-c49q-command-receipts.json19856bytes SHA6835f5796afec4b633362873be161e0ad57bf56b6a0ed76649a2a7cb97fcb2b8. D8O preservou saída; rascunho recusado truncado não é fonte. Segunda row73a0d24b9242chars segue preservada/pendente para unidade separada. Não reextrair corpus nem repetir códigos históricos.
+
+Sequência/requiredcommands retained_symbol_row única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600; scopeee0ff399c2a0ea380e1f2394a583dd0f4c7c715fd2a696bcf7d7c9e77c5db6fe. Limite novo abaixo16000 com margem de framing. Guardas lstat/notlink/nlink1/artifactSHA/schema/1comandoexit0/receiptSHA+chars/2rows/IDúnico/bodySHA+chars/ordemcreate-build-test; sintaxe/delimitadores/preflights válidos. Privados completed-symbol-c50s-request.json/running.json/start-output.txt.
+
+Callback local_result uma vez→código capturado/recibo versus pedido/limites/I2O/Git→Q8S da projeção→cobertura;73a0d24b ainda não examinado. Não executar/importar/build/test/install, abrir negócio/acervo/URL ou obter finanças atuais. Risco/qualidade sósupervisor; sem nota histórica inventada/cognição de sequência, replay ou edição externa.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou mudança de modelo/esforço. Checkpoint não é compactação nativa.
