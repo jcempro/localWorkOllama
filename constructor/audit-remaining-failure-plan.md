@@ -32,3 +32,14 @@ Quatro FAILED exatos do residual:
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor, command_sequence/required_command_ids somente cohort_next_failures. FonteK2Fef6e981/capturaabd15bcf fixas, --compact/R8V100/timeout15s/networkfalse/repeatablefalse. ScopeSHA256c1a274f7402b73d1b139e26b5d7a7d739ae266b59f464767b78aae0a709f799d. Preflight localR8V/SW-HYBRID/fonte/captura/IDs residuais e ausência de parse_error passou. Nenhuma tarefa histórica executada; risco/qualidade/causalidade/aceite exclusivamente supervisor. Pedido privado remaining-failure-r6f-request.json exclusivo desta unidade.
 
 Confirmar chat/cwd/ACTIVE sem Resume redundante antes de start. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, exame proporcional/Q8S/Git e atualizar cobertura/hashes antes de selecionar próximos IDs.
+
+
+## R7F — próxima unidade residual
+
+R6F7585bd32 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T05:38:01.838Z UTC. Cobertura311/453 delimitada/142 remanescentes; tabela56/9sobrepostos. ProvaSHA256e9384710d6115b72e55f1f2ec0323857dd136f5e14dce1d6e23173cf8c8df939, fontes conferidas; preservar diagnóstico de runner perdido6a sem culpa física inventada e referências posteriores ainda não examinadas.
+
+IDs exatos:77407022-b5bd-40ee-a778-d7c3ac67123b(integrar --facts no renderizador, default intacto, patch/syntax/verify);7d35cb27-203d-4c32-9980-a1b3d03cfebf(catálogo/resolver assets puro, build/test, não dados financeiros);86f6d823-e1f4-4dd7-8ffd-b2ca937fa1e9(IAL raiz/code/thematicBreak/múltiplas IAL, root_multi_dom/types, sem aninhamento ou parser/hook alterado);9b080038-4f03-4334-9e99-8d3e996a2818(teste reduzido do primeiro processo falho de5836, types/test depois de escrever). São dados históricos, não autorização para reexecutá-los.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor, command_sequence/required_command_ids somente cohort_r7_failures. FonteK2Fef6e981/capturaabd15bcf fixas, --compact/R8V100/timeout15s/networkfalse/repeatablefalse. ScopeSHA256086aabd63ed34f5987e711e268b2c795168c8009b83d47362087f9e63698e4ef. Preflight localR8V/SW-HYBRID/fontes/IDs residuais/ausência de parse_error passou. Pedido exclusivo remaining-failure-r7f-request.json; risco/qualidade/causalidade/aceite no supervisor.
+
+Start exige chat/cwd/ACTIVE confirmados sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, revisão/Q8S/Git e cobertura/hashes atualizados; não duplicar corpus antigo nem inferir aceite de referências posteriores.
