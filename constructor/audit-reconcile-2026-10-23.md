@@ -724,3 +724,10 @@ Cobertura367/453 delimitada,86 pendentes; tabela112/9sobrepostos/103novos. Prova
 Job18602485-bfec-4e49-a78a-613ed1495adb RUNNING/R8V1. Chat/cwd comprovados nesta interação e ACTIVE/EXPLICIT_RESUME conferido sem rearmar outras conversas. C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c24r_excerpts. IDsb432b20b/e83a9a13/dcaf458a/9af93b6f, cabeçalhos279/301/313/327 da revisão15/10, fonteSHA249166b2245019b13ae5861aedc28fdeb734ff5cd6cf761ca23999abdf22be78. Plano6ddc44b publicado; extrator próprio sem inferência/rede/código histórico/consulta antiga,2200chars/seção/13000total/R8V1600/15s. Scope8515e12012bc7c9e1929ba6674748c9e808676d9479e2dd675192fd3f582e5ab. Pedido/recibo exclusivos prior-review-c24r-request.json/prior-review-c24r-running.json.
 
 Callback local_result uma vez para extrator→conferir literalidade/exame anterior/I2O→Q8S→cobertura só com exame inequívoco. Sem reconsulta antiga, notas históricas inventadas ou execução de negócio. N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C24R — rejeição não é aceite
+
+18602485 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:05:50.699Z. Recortesb432/e83/dcaf/9af conferidos na fonte15/10 com lacunas explícitas. Parecerb432 permanece rejeitado; inclusão registra exame, não aprovação. Causas indeterminadas, limite40 explícito deste caso, efeitos e recuperações delimitadas mantidos. Git auditor main limpo07:04:30.495Z distinto dos alvos; nenhum negócio reexecutado.
+
+Cobertura371/453 delimitada,82 pendentes; tabela116/9sobrepostos/107novos. Prova coverage-reconciliation-2026-10-25.json SHA9256c9958cc72774a6c8fa9e730aa3dec90f08c7480caedcd505536ecfe31032; anterior preservada. CANCELLED excluídos, I2O e distinção exame/aceite vigentes. Nenhum Worker ativo neste checkpoint.
