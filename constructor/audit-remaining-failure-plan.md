@@ -428,3 +428,14 @@ ID64e0173a-bdd5-4fb5-a63b-dc092effc403 FT107/U2B2: append único de tabela de in
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_negative_contract_tests,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/expect_changes/comandos/offsets/header/bodySHA. ExtratorC37D validado, só ID/comandos alterados; sintaxe/preflightSW-HYBRID/R8V válidos. Scope1c546f0b86d88eeea01de744fb8c4eabf8c65d3cbd38b129f8334cd71348eade; privado completed-contract-c41n-request.json.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→casos/asserts versus pedido/origemexpectativas/recibo/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir contrato completo/financeiro/UI ou verdade semântica por negativo aprovado.
+
+
+## C42P — aplicações editoriais M17/M28
+
+C41Naed9754f recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:38:35.685Z; matriz72negativos/baseline/imutabilidade exercitada com limites de oracle/causeError/contratointegral. Cobertura400/453 delimitada,53pendentes, provaSHAc4fc6660c8e35e2f5d314a8ba1b4d6e38bc460f9221eaddd9742c40b34d61278; CANCELLED excluídos.
+
+IDs59dd67f7-2781-4a62-8a36-b16a00aab787/M17(segundoparágrafo/notas, literalJo16/fontesUzá/At2/maiúsculas; preservar NUNCA/NÃO/força/exceçãoresponsabilidade, sem declarar fontes provam tudo) e651f249d-3336-4092-90c6-735fab5b28fc/M28(oitoediçõesmecânicas, preservar analogia/acusação/distinções/força/ridículo, sem novo disclaimer). Mesmo fluxo aplicação preparada→diff_check, somente carta, sem replay/outroalvo; resto/tabelas/Ap18/validaçãoglobal pendentes. Busca pública dirigida sem exame anterior localizado. Extrair quatroargv413chars/corpos1351/pedidos/eventos/Gitparciais; código/planos/fontes não são comprovados por path.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_editorial_m17_m28,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/IDs/status/listascomandos/offsets/header/bodySHA. ExtratorC36B validado, seleção/schema/guardas de listas ajustados; sintaxe/preflightSW-HYBRID/R8V válidos. Scopedf795b5088909a86947cba505e01e74619cc614437647df5a54422f575f29575; privado completed-editorial-c42p-request.json. Nenhum patch/diff/render/validação/rede/fonte/código histórico executado ou artigo vivo inspecionado.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedidos/recibos/limites/hash/eventos/Gitparciais→I2O/Q8S→cobertura. Não inferir preservação autoral/fidelidade/fontes/guarda efetiva ou FTintegral por contagem/hash/diffexit0.
