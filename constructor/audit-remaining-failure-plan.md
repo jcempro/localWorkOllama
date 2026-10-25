@@ -298,3 +298,14 @@ IDs30b5c619-5a40-4aec-b2e3-347057cfa879(M23EPUB/PDFmesmaobra) e3d424354-8f29-4d1
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands egw_location_retained_evidence. Extrator próprioC29E com duas seleções alteradas; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria/fontes/cobertura/preflight SW-HYBRID/R8V conferidos; campos1035argv+7929recortes+947eventos com margem. ScopeSHA2c73f1d8769f3524a85e7b62427cefc64cc8a113a3b4c683a95976fa6cc94b13; pedido exclusivo completed-sources-c30s-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisãoI2O/Q8S→cobertura e correção proporcional somente se sustentada.
+
+
+## C31S — localização histórica M30
+
+C30Sdb18799f recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:27:16.057Z.30b5/3d424localizados nos limites relatados, sem confirmação cruzada/pageimpressa presumidas. Cobertura386/453 delimitada,67 pendentes; provaSHAccf93795017ba91924e3d7fbc2b9aeaa4cc59560ffa72918eb8b247098d25216.
+
+ID40c17ac8-7b5c-4442-aacc-6a2d0c406f85, M30: seiscomandos de três trechos faltantes mesmaobra/EPUB/PDF, buscas antigas classeprofessa/decretogeral explicitamente reaproveitadas. Integração/parêntese/validação global fora. Busca pública dirigida sem exame anterior localizado. Extrair argv/eventos/recorteF8E já obtido; sem executar localizadores/abrirbiblioteca/pesquisar/editarartigo. Preservar status literal, paginação e limites de confirmação.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands egw_m30_retained_evidence. Extrator próprioC30S com uma seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria/fontes/cobertura/preflight SW-HYBRID/R8V conferidos; campos1963argv+3985recorte+1196eventos com margem. ScopeSHA62eb7e04d0063c3750f7c2d6dc0a3e01d432bd91721b627a094ce810fe9e4486; pedido exclusivo completed-sources-c31s-request.json.
+
+Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisãoI2O/Q8S→cobertura e correção proporcional somente se sustentada.
