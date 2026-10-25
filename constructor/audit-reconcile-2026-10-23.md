@@ -1254,3 +1254,10 @@ Extrair pedido/argv/eventos/corpo379chars/Gitparcial; não executar wrapper/cód
 Callback local_result uma vez→recibo versus pedido/limites/Git→I2O/Q8S→cobertura. located não equivale a confirmed; fonte/script/relatório integrais ausentes não provam literalidade/fidelidade/contexto completo. Nota do extrator não é cognição/nota histórica. Não replay/edição externa/adotar norma de outro alvo.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou mudança de modelo/esforço. Checkpoint não é compactação nativa.
+
+
+## Checkpoint C48U
+
+1ca73fdb recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:36:37.551Z para extração fiel.71a96c3c M39A captured/located/process0/preservedtrue: aceitar operação qualificada, sem converter flag em prova independente ou located em confirmed. Não pesquisa/acervo vivo/replay/inferência. Git auditor main limpo16:35:10.315Z versus histórico dev/ahead73 parcial. Provas privadas completed-location-c48u-return.json/evidence.json/proof.json/review.json.
+
+Cobertura408/453 delimitada,45pendentes; tabela153/9sobrepostos/144novos. Prova coverage-reconciliation-2026-10-25.json SHAcd5ee5be0fd8dda878563bb44b0e9004987e0af48ee1cc576d8b8be66f2074b8; anterior preservada porhash. CANCELLED excluídos/exame não equivale a aceite. Nenhum job ativo neste checkpoint.
