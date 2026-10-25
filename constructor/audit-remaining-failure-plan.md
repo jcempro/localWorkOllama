@@ -87,3 +87,14 @@ IDs exatos:e2372939-3f5e-4dfc-9580-32fcd8a7a9a0, eefc722e-9f1c-4075-bf9f-0e50d3d
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; command_sequence/required_command_ids somente cohort_r11_failures. FonteK2Fef6e981/capturaabd15bcf seladas, --compact/R8V100/timeout15s/networkfalse/repeatablefalse; scopeSHA25629b66d15b3d79b37a84422e93d87b040f507308613a6fdd38c28388304dacf35. Preflight localR8V/SW-HYBRID/fontes/IDs residuais/ausência de parse_error passou. Pedido exclusivo remaining-failure-r11f-request.json. Risco/qualidade/causalidade/aceite exclusivamente supervisor.
 
 Start exige chat/cwd/ACTIVE comprovados, sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, exame/Q8S/Git e atualizar cobertura/hashes antes da próxima seleção.
+
+
+## C12R — fontes literais de duas recuperações
+
+R11F43559b46 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:02:22.756Z UTC; revisão0e23056 publicada. Cobertura331/453 delimitada,122 pendentes:121 COMPLETED e um RUNNING capturado, nenhum FAILED residual. ProvaSHA25637617fb13f557dad0d3568a3c7aa0a109ab51323e7ce41970e154ebd9237a604. Não converter estados em aceite ou recapturar a fatia.
+
+IDs82795fa9-fdee-4eb5-b87d-9c884549b838 e e7dec2f0-8f26-42bd-98cb-8b84b282c219. Evidência F8E já lida: coletor patch/17casos/types exit0 e extração patch/test exit0. Próxima lacuna é conteúdo: extrair argumentos exatos collector_review_patch/sequence_collector/patch-extraction da captura, como dados. NÃO repetir resultado, código ou teste histórico.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands somente literal_recovery_sources. Comando próprio fs/assert/crypto, capturaabd15bcf, lstat/notlink/nlink1, IDs/status/nomes únicos, hashes dos argv, limite9000chars antes de saída. R8V1600palavras/timeout15s/networkfalse/repeatablefalse. ScopeSHA25615ae2c4c47b74c013bf4b723c2dd0b2a689778623954f66a3d737b3db700bf74. Preflight R8V/SW-HYBRID/cobertura/fontes passou. Pedido exclusivo completed-recovery-c12r-request.json; supervisor conserva semântica/risco/qualidade/aceite.
+
+Confirmar chat/cwd/ACTIVE sem Resume redundante antes de start. Callback: local_result uma vez, conferir literalidade e comportamento dos patches sem executá-los; Q8S após exame. Preservar recuperação parcial e limites de testes, não aprovação global. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling.
