@@ -1299,3 +1299,16 @@ N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/
 267eb953 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:45:42.721Z para projeção fiel do recibo C49Q selado.6d61550b create/build/test0, seletor finito/fiveQRreservedcenters byteexact por decoder separado; aceite delimitado, não proteção geométrica independente/finanças/logo/UI/FTintegrais. Recuperação de entrega sem reextração/replay, segunda row73a0d24b ainda pendente. Git auditor main limpo16:44:15.313Z versus histórico dev/ahead29 parcial com três alvos novos. Provas privadas completed-symbol-c50s-return.json/evidence.json/proof.json/review.json.
 
 Cobertura409/453 delimitada,44pendentes; tabela154/9sobrepostos/145novos. Prova coverage-reconciliation-2026-10-25.json SHA207ec0eab2c790ec3012a4e988bc1d6cf83849b2f0c0f042997618fa29c1b5f4; anterior preservada porhash. CANCELLED excluídos/exame não equivale a aceite global. Nenhum jobativo nestecheckpoint.
+
+
+## Handoff C51B — segunda row preservada
+
+Job20a33cfa-ce07-433b-8bbf-060968edc25a confirmado RUNNING/R8V1, planoc4941ce publicado. Chat01a0f301-afa6-7d61-8949-1d35b712f5ca/cwdC:/auto-local comprovados pelo Desktop; ACTIVE/EXPLICIT_RESUME preservado, sem rearme. C5/júnior/read-only/expect_changesfalse/commit_policysupervisor. Cobertura409/453,44pendentes; CANCELLED excluídos. C50S267eb953 já recebido uma vez/examinado/Q8S10, primeira row6d61550b aceita no microescopo seletor/testes byteexact; sem cobertura financeira/geométrica independente/UIglobal.
+
+Próxima row73a0d24b-3db2-4ee9-a42b-6f01f80a6e28 U4F1 íconeBTT/dados/atribuição, install/contract/assets/financial/attributions.9242chars/body946, fonte integral C49Q jáextraída completed-symbols-c49q-command-receipts.json19856bytes SHA6835f5796afec4b633362873be161e0ad57bf56b6a0ed76649a2a7cb97fcb2b8. Não reextrair corpus ou repetir comandos; C49Qfbfaaa03 falha finalcapacidade já recebida/examinada/Q8S9. Rascunho recusado truncado não é fonte.
+
+Sequência/requiredcommands retained_asset_row única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600 com margem abaixo16000; scope202b7fa9e96a41d2f42ee797e6d64328fae6112b701542705dc90263d749dd90. ScriptC50S validado ajusta ID/body/ordem/schema, guardas lstat/notlink/nlink1/artifactSHA/schema/1comandoexit0/receiptSHA+chars/2rows/IDúnico/bodySHA+chars. Sintaxe/preflights válidos. Privados completed-asset-c51b-request.json/running.json/start-output.txt.
+
+Callback local_result uma vez→patch/recibo versus tarefa/origemcanônica/I2O/limites/Git→Q8S da projeção→cobertura. Não executar/install/test/importar código capturado, abrir negócio/acervo/URLs ou obter dados financeiros atuais; nenhuma atribuição/licença/fonte presumida. Sem nota histórica inventada/cognição de sequência, replay ou edição externa. Risco/aceite/qualidade sósupervisor.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou mudança de modelo/esforço. Checkpoint não é compactação nativa.
