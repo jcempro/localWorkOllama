@@ -865,3 +865,10 @@ Job440890c9-8841-448b-acbf-cc8dd1b1380b RUNNING/R8V1. Chat/cwd comprovados nesta
 Callback local_result uma vez→conferir argv/eventos/recortes→revisãoI2O/Q8S→cobertura. Se recorte omitir status/metadados necessários, parse dirigido dos JSONs já capturados sem código histórico/biblioteca. Located não é confirmação cruzada, página física não é automaticamente impressa; não converter status em fidelidade integral. Não executar localizadores, pesquisar/abrirfontes, editarblog, recapturar ou inventar nota histórica.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C31S — evidência incompleta, causa atual localizada
+
+440890c9 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T11:12:37.696Z; registro anterior bloqueado por limite de uso do aprovador não executou. Extração correta;40c17result original truncado no meio, um marcador de comando ausente/JSON inválido apesar dos seis exit0. Não aceitar stdout integral, não reparar JSON ou repetir buscas.
+
+Cobertura387/453 delimitada,66 pendentes; tabela132/9sobrepostos/123novos. ProvaSHAf533a2eda4293e01dc020dc8e2711443b7aedec0b2ae30ffe8765792bb9eefcb; anterior preservada. Nova correção causal D8O necessária no runtime:24K por comando/16K final removem conteúdo de sequência. C8/exclusivo, supervisor sem Worker; nenhum job ativo, CANCELLED excluídos/I2O preservados.
