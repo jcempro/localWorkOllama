@@ -1025,3 +1025,10 @@ Sequência/requiredcommands retained_source_captures,15s/networkfalse/repeatable
 Callback local_result uma vez→pedidos/recibos/status/hashes/eventos e Gitparcial→I2O/Q8S→cobertura. Captura operacional não autentica texto/URLs/paginação/conteúdo integral de relatórios ausentes nem prova integração editorial. Não inferir defeito atual por captura histórica/reenviar rede ou editarartigo; falta de prova exige ressalva específica. Julgamento de risco/qualidade só supervisor.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C36B — captura operacional qualificada
+
+84f38d7c recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:13:16.339Z para extração fiel.4c75M20quatrorefs e4e521M18seisrefs/statuscaptured/errornull correspondem aos pedidos. Aceite operacional com limites: sem hashdraft/texto/URLs/código de perfil integrais, não afirmar preservação independente/fidelidade/restrição técnica de rede ou integração. Nenhuma fonte/rede/artigo/código histórico acessado ou executado. Git auditor main limpo12:11:31.600Z distinto dos históricos dev/ahead27/21 parciais. Privados completed-captures-c36b-return.json/evidence.json/proof.json/review.json; não repetir consulta/capturas.
+
+Cobertura393/453 delimitada,60pendentes; tabela138/9sobrepostos/129novos. Prova coverage-reconciliation-2026-10-25.json SHA26ae1e250f244524b40844513b1e2b08f1a29e144e2b4b6823232b84b99f1a1a; anterior preservada porhash. CANCELLED excluídos, exame≠aceitefuncional; corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint; próxima unidade factual pequena.
