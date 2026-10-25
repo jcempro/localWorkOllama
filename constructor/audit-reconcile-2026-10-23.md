@@ -1243,3 +1243,14 @@ N7C/S2Q permanecem impedidos por ausência de ferramenta nativa vinculada ao con
 429f2380 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:33:04.855Z para extração fiel.6d9fc2ac M36B consolidou/diagnosticou com dois exit0,44blocos/listasalertasvazias; aceitar operação delimitada com conformidade editorial pendente, sem equiparar hashes relatados à prova independente. Não replay/negócio vivo/inferência. Git auditor main limpo16:31:49.046Z versus histórico dev/ahead68 parcial. Provas privadas completed-diagnostic-c47d-return.json/evidence.json/proof.json/review.json.
 
 Cobertura407/453 delimitada,46pendentes; tabela152/9sobrepostos/143novos. Prova coverage-reconciliation-2026-10-25.json SHA7d91894d211299ca004cd415596d47eedff0352dc661e1513e434c4d1c2ef150; snapshot anterior preservado porhash. CANCELLED excluídos/exame não equivale a aceite. Nenhum job ativo neste checkpoint.
+
+
+## Handoff C48U
+
+Job1ca73fdb-728f-4c86-8102-de698910e0b5 confirmado RUNNING/R8V1, planob62c2f3 publicado. Chat01a0f301-afa6-7d61-8949-1d35b712f5ca/cwdC:/auto-local comprovados pelo Desktop; ACTIVE/EXPLICIT_RESUME preservado, sem rearme. C5/júnior/read-only/expect_changesfalse/commit_policysupervisor. Cobertura407/453 delimitada,46pendentes; CANCELLED excluídos. IDhistórico71a96c3c-26f1-48c7-b0f0-8e30589cc331 M39A localização de Uzá no EPUB de Patriarcas e Profetas, sem interpretar motivação.
+
+Extrair pedido/argv/eventos/corpo379chars/Gitparcial; não executar wrapper/código capturado, pesquisa, acervo ou artigo vivo. Sequência/requiredcommands retained_epub_location_receipt uma vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600; scope9df921794298d94dc7eee7ba8372b72ef754efb28d340611f1651cdd0d6e0ef4. Guardas fonte/hash/ID/status/expectchanges/1comando/ordem/checkpoints0/offsets/header/bodySHA; sintaxe/preflights válidos. Privados completed-location-c48u-request.json/running.json/start-output.txt.
+
+Callback local_result uma vez→recibo versus pedido/limites/Git→I2O/Q8S→cobertura. located não equivale a confirmed; fonte/script/relatório integrais ausentes não provam literalidade/fidelidade/contexto completo. Nota do extrator não é cognição/nota histórica. Não replay/edição externa/adotar norma de outro alvo.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou mudança de modelo/esforço. Checkpoint não é compactação nativa.
