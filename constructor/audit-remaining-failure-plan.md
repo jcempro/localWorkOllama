@@ -406,3 +406,14 @@ ID4d115338-49db-44e7-aeca-a761b6545d7e M32: aplicar/validarestrutura/diff de set
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_editorial_m32,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/expect_changes/comandos/offsets/header/bodySHA. ExtratorC35T validado, só ID/comandos/schema alterados, sintaxe/preflightSW-HYBRID/R8V válidos. Scope9f65741ef68ea7a234e1b2d7667998bbb972dc8fb877a1713ee76f4f8d2744d3; privado completed-editorial-c39m-request.json. Nenhuma mutação/validação/render/código histórico executado ou artigo vivo inspecionado.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedido/recibos/hashes/status/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir fidelidade editorial/preservação integral por contagem/hash ou HTML por lexicalpassed.
+
+
+## C40B — recibos de capturas M16/M22
+
+C39M7ef94164 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:28:36.002Z; revisão44ce176 publicada. M32aplicação/lexicalpassed/hashigual operacionais, sem fidelidade/editorial/HTML comprovados. Cobertura397/453 delimitada,56pendentes, provaSHAfb08929268122ab1370bdbf9993f642a80819cc04981b121a52cffbf055f3f3e; CANCELLED excluídos.
+
+IDs5e713772-69c7-4235-9f47-e157ae29a298/M16(fontesabertura: gl2/mt18/jo16/2sm6/1cr13/1cr15/1tm5ARA) e625fb547-b6e1-45c5-b2e7-d7c7517772af/M22(dezcapítulos do perfil). Mesmo mecanismo captura/cache/URLsfechadas; sórelatórios pending→captured, drafthashpreservado, sem integração/artigo/replay. M16declara M15concluída não reaplicar; M22anterior foi recusada antesjob por teto timeout, ajuste300s não é falha cognitiva. Busca pública dirigida sem exame anterior localizado. Extrair doisargv178chars/corpos1986/pedidos/eventos/Gitparciais, sem presumir código/perfil/texto por paths.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_captures_m16_m22,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c e guardaslstat/notlink/nlink1/hash/IDs/status/comandoúnico/offsets/header/bodySHA. ExtratorC36B validado, só seleções alteradas; sintaxe/preflightSW-HYBRID/R8V válidos. Scopedb5d184f411a3654a2005bf13787b21b1ccbd47dc38bb99977994746002d2a15; privado completed-captures-c40b-request.json. Nenhuma captura/rede/fonte/código histórico executado, compilado ou importado.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedidos/status/refs/hashdraft realmente exposto/eventos/Gitparciais→I2O/Q8S→cobertura. Não inferir preservação/fidelidade/versão/texto integral ou integração porcaptured/contagens, nem inventar falha atual por lacuna histórica.
