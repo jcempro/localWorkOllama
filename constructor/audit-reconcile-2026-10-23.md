@@ -1010,3 +1010,18 @@ N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/med
 7bb60e43 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:07:27.974Z.48c68da4patch/types/test e novo caso timed_out→blocked aprovados; asserts/contadoresestado e três casos anteriores reportados. Aceite limitado ao teste, não core/FT/produção/morte física. Reads0 é callback, não filesystem. Git auditor main limpo12:05:56.855Z distinto de histórico dev/ahead6 17/10 18:11:40.867Z parcial. Privados completed-timeout-c35t-return.json/evidence.json/review.json; não repetir consulta ou teste.
 
 Cobertura391/453 delimitada,62pendentes; tabela136/9sobrepostos/127novos. Prova coverage-reconciliation-2026-10-25.json SHA57242bd705f8bcf27a5bbe177cc97a935c5c6e3cdc2c97ad7149460b28d63082; anterior preservada porhash. CANCELLED excluídos, exame≠aceitefuncional, corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint; próxima unidade factual menor.
+
+
+## Handoff vigente — C36B
+
+7bb60e43 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:07:27.974Z; revisãof69096b publicada.48c68da4novo teste timed_out→blocked/1run/0callbackreads/0alternativas/estado preservado e três casos prévios reportados, patch/types/test exit0. Aceite do microescopo, não morte física/core/FT; reads0 não é ausência de filesystem. Git auditor main limpo12:05:56.855Z distinto de histórico dev/ahead6 17/10 18:11:40.867Z parcial. Privados completed-timeout-c35t-return.json/evidence.json/review.json; não repetir local_result ou testes.
+
+Cobertura391/453 delimitada,62pendentes; tabela136/9sobrepostos/127novos. Prova coverage-reconciliation-2026-10-25.json SHA57242bd705f8bcf27a5bbe177cc97a935c5c6e3cdc2c97ad7149460b28d63082; anterior preservada porhash. CANCELLED excluídos, exame≠aceitefuncional, corpus congelado/projeções obtidas preservados.
+
+Job84f38d7c-51e9-43b4-a65b-70d74586b194 confirmado RUNNING/R8V1: C36B C5/júnior/read-only/expect_changesfalse/commit_policysupervisor, planoeba0480 publicado. IDs4c75b348-353d-4616-ae0e-50cfb7d21529/M20(1Rs17–19/22ARA,quatroentradas) e4e521d5d-2823-4df6-be95-0c5bfbab9095/M18(Gl6/1Co11/2Co13/Lm3/Sl139/Jo10ARA). Fluxo captura preparada/cache/URLsfechadas, relatórios pending→captured/drafthashpreservado/sem integraçãoartigo ou replayM16M17/FTintegral. Worker somente extrai doisargv184chars/corpos1431/pedidos/eventos/Gitparciais; não captura/rede/biblioteca/código histórico executado/compilado/importado ou raciocínio privado.
+
+Sequência/requiredcommands retained_source_captures,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/IDs/status/comandoúnico/offsets/header/bodySHA. ExtratorC32O validado reaproveitado em duas seleções; sintaxe/preflightSW-HYBRID/R8V válidos. Scope4e9eaccdbb7c3fa7104433e7436c5eba05f52fc9065cbb130ee078e11cbbdcbb. Privados completed-captures-c36b-request.json/running.json/start-output.txt. Chat/cwd e ACTIVE/EXPLICIT_RESUME comprovados nesta interação, sem rearmar demaisconversas.
+
+Callback local_result uma vez→pedidos/recibos/status/hashes/eventos e Gitparcial→I2O/Q8S→cobertura. Captura operacional não autentica texto/URLs/paginação/conteúdo integral de relatórios ausentes nem prova integração editorial. Não inferir defeito atual por captura histórica/reenviar rede ou editarartigo; falta de prova exige ressalva específica. Julgamento de risco/qualidade só supervisor.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
