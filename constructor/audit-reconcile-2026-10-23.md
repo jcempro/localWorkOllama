@@ -1261,3 +1261,14 @@ N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/
 1ca73fdb recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:36:37.551Z para extração fiel.71a96c3c M39A captured/located/process0/preservedtrue: aceitar operação qualificada, sem converter flag em prova independente ou located em confirmed. Não pesquisa/acervo vivo/replay/inferência. Git auditor main limpo16:35:10.315Z versus histórico dev/ahead73 parcial. Provas privadas completed-location-c48u-return.json/evidence.json/proof.json/review.json.
 
 Cobertura408/453 delimitada,45pendentes; tabela153/9sobrepostos/144novos. Prova coverage-reconciliation-2026-10-25.json SHAcd5ee5be0fd8dda878563bb44b0e9004987e0af48ee1cc576d8b8be66f2074b8; anterior preservada porhash. CANCELLED excluídos/exame não equivale a aceite. Nenhum job ativo neste checkpoint.
+
+
+## Handoff C49Q
+
+Jobfbfaaa03-41f5-4113-be3a-1b3d00ef0c1e confirmado RUNNING/R8V1, planob8f15f0 publicado. Chat01a0f301-afa6-7d61-8949-1d35b712f5ca/cwdC:/auto-local comprovados pelo Desktop; ACTIVE/EXPLICIT_RESUME preservado, sem rearme. C5/júnior/read-only/expect_changesfalse/commit_policysupervisor. Cobertura408/453 delimitada,45pendentes; CANCELLED excluídos. IDs6d61550b-2df2-46e0-b47e-c76fdb07297c U3F2(create/build/test) e73a0d24b-3db2-4ee9-a42b-6f01f80a6e28 U4F1(install/contract/assets/financial/attributions), ambos FT107 símbolos/ícones.
+
+Extrair pedidos/argv/eventos/corpos877+946chars/Gitparcial. RequestJSON5440+5710/425itenswhitespace+eventos1699/Git1759, margem22000/R8V2000. Sequência/requiredcommands retained_symbol_assets_pair uma vez,15s/networkfalse/repeatablefalse; scope8216ebfc5eab2e1b74fa6e212b54f8c34cb094b1364cf154fe721ae2f4285ae2. Guardas fonte/hash/ID/status/expectchanges/checkpoints0/corpo≤1000/ordemcomandos/offsets/header/bodySHA. Sintaxe/preflights válidos. Privados completed-symbols-c49q-request.json/running.json/start-output.txt.
+
+Callback local_result uma vez→exame proporcional de recuperação/patch/testes e I2O/limites/Git→Q8S extrator→cobertura. Não executar/importar código capturado/build/test/install, abrir negócio/acervo/URL ou pesquisar números financeiros atuais. Conferir origem independente das expectativas; saída/hash não são oracle semântico. Não concluirFT/UI/finanças/licença globais nem dar nota histórica inventada/cognição a sequência. Scripts históricos permanecem dados; nenhuma edição externa/replay.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou mudança de modelo/esforço. Checkpoint não é compactação nativa.
