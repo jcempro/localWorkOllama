@@ -1100,3 +1100,10 @@ Extrair trêsargv306chars/corpo1121/eventos/pedido/Gitparcial. Sequência/requir
 Callback local_result uma vez→pedido/recibos/hashes/status/eventos/Gitparcial→I2O/Q8S→cobertura. Path não comprova fonte/código do adaptador nem fidelidade; contagem/hash não provam preservação/editorial, lexicalpassed não provaHTML. Não aplicar mutação/validar/renderizar artigo ou executar/compilar/importar código histórico, biblioteca/rede/negócio vivo. Lacuna específica exige ressalva, não replay ou invenção de defeito atual. Julgamento de risco/qualidade só supervisor.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C39M
+
+7ef94164 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:28:36.002Z.4d115338aplicação7edits e lexicalpassed/hashigual confirmados nos recibos; ausência do plano/código/diff integrais limita fidelidade/guardas. HTML/global explicitamente fora; LF→CRLF aviso não é falha. Git auditor main limpo12:26:49.398Z distinto de histórico dev/ahead53 parcial. Privados completed-editorial-c39m-return.json/evidence.json/proof.json/review.json; não repetir consulta/mutação.
+
+Cobertura397/453 delimitada,56pendentes; tabela142/9sobrepostos/133novos. Prova coverage-reconciliation-2026-10-25.json SHAfb08929268122ab1370bdbf9993f642a80819cc04981b121a52cffbf055f3f3e; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional, corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint.
