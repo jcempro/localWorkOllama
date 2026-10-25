@@ -1078,3 +1078,10 @@ Extrair body8689chars/1355itenswhitespace+argv343/eventos395/pedido/Gitparcial. 
 Callback local_result uma vez→pedido/JSONretido/identidade/contexto/status/Gitparcial→I2O/Q8S→cobertura. Parsear somente JSON já retornado quando necessário, preservando literal; nenhum localizador/biblioteca/fonte/rede/código histórico executado/compilado/importado. Não converter localização/score/path em fidelidade/versão/página impressa ou cruzamento confirmado; texto de fonte ausente exige limite, não pesquisa/replay ou invenção. Julgamento de risco/qualidade só supervisor.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C38E — EPUB localizado, confirmação limitada
+
+f890d2e6 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:24:20.385Z.495ec529EPUBtpai5/duasocorrências/contextos preservados/umarquivo/normalized-exact/score1/located/warnings[], crossCheckfalse. Aceite de localização, sem página23/edição/autenticidade/byteigual/cruzamento ou exclusividade global porlimit2. Contextos distintos não mesclados; PDFsucessor3d424 já examinado não repetido. Git auditor main limpo12:22:27.743Z versus histórico dev/ahead10 18/10 00:34:25.639Z parcial. Privados completed-location-c38e-return.json/evidence.json/proof.json/review.json; não repetir consulta/pesquisa.
+
+Cobertura396/453 delimitada,57pendentes; tabela141/9sobrepostos/132novos. Prova coverage-reconciliation-2026-10-25.json SHAfebe53b55b40b1f5464ed69fd12ee8721891b2ecf7c861abcecaf663e7257ff1; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional; corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint.
