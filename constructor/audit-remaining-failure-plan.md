@@ -508,3 +508,14 @@ Mudança material: fonte passa a completed-symbols-c49q-command-receipts.json se
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_symbol_row única vez,15s/networkfalse/repeatablefalse. Guardas lstat/notlink/nlink1/artifactSHA/schema/1comandoexit0/receiptSHA+chars/2rows/IDúnico/bodySHA+chars/ordemcreate-build-test. Sintaxe/preflightSW-HYBRID/R8V válidos; scopeee0ff399c2a0ea380e1f2394a583dd0f4c7c715fd2a696bcf7d7c9e77c5db6fe. Pedido privado completed-symbol-c50s-request.json. Script novo somente de projeção JSON; nuncaeval/import/compile dado histórico.
 
 Confirmarchat/cwd/ACTIVE; RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→código capturado/recibo versus requisitos/I2O/limites/Git→Q8S da projeção→cobertura.73a0d24b ainda não examinado. Sem nova inferência/código/histórico repetido, sem nota histórica inventada ou edição externa.
+
+
+## C51B — segunda row preservada, sem nova extração
+
+C50S267eb953 recebido uma vez/examinado/Q8S10 para projeção fiel;6d61550b U3F2 selector/create-build-test e cincoQrscentrobranco byteexact aceitos no microescopo, sem proteção geométrica independente/finanças/logo/UI/FTglobais. Cobertura409/453 delimitada,44pendentes; CANCELLED excluídos. Próximo ID73a0d24b-3db2-4ee9-a42b-6f01f80a6e28 U4F1 instalação íconeBTT/dados/atribuição, sequência install/contract/assets/financial/attributions.
+
+Fonte é a segunda row9242chars/body946 do mesmo artefato integral C49Q já concluído e selado, completed-symbols-c49q-command-receipts.json19856bytes SHA6835f5796afec4b633362873be161e0ad57bf56b6a0ed76649a2a7cb97fcb2b8. Não reextrair corpus ou repetir instalação/testes/consulta deURL/negócio; não usar rascunho recusado truncado. C49Q falhou só no fechamento18177>16000 e já está examinado/Q8S9.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_asset_row uma vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600 com margem abaixo16000. ScriptC50S validado ajusta ID/body/ordem/schema; guardas lstat/notlink/nlink1/artifactSHA/schema/1comandoexit0/receiptSHA+chars/2rows/IDúnico/bodySHA+chars. Sintaxe/preflightSW-HYBRID/R8V válidos; scope202b7fa9e96a41d2f42ee797e6d64328fae6112b701542705dc90263d749dd90. Pedido privado completed-asset-c51b-request.json. JulgamentoI2O/risco/licença/financeiro/qualidade sósupervisor.
+
+Confirmarchat/cwd/ACTIVE→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→patch/recibo versus tarefa/fonte das expectativas/limites/Git→Q8S da projeção→cobertura. Não presumir link/valores/attributions atuais, rodar código histórico, dar nota histórica ou editar outra raiz.
