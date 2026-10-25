@@ -670,3 +670,10 @@ C20R55a937ea recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:54:14.384Z
 Job42b91657-df93-4a74-aebf-a2cb3119f514 RUNNING/R8V1. Chat/cwd comprovados nesta interação e ACTIVE/EXPLICIT_RESUME conferido sem rearmar outras conversas. C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_next_four_excerpts. IDsd3413300/eb04e73d/47844a0d/ee5a5fe6, cabeçalhos133/146/159/171 de audit-review-2026-10-15.md, fonteSHA249166b2245019b13ae5861aedc28fdeb734ff5cd6cf761ca23999abdf22be78. Plano c7526e9 publicado; extrator próprio sem inferência/rede/código histórico/consulta de resultados antigos,2200chars/seção/13000total/R8V1600/15s. Scopecba618db3908fed9bc4065023fcfaeca046c3442e9f337de8955e725ce0a02eb. Pedido/recibo exclusivos prior-review-c21r-request.json/prior-review-c21r-running.json.
 
 Callback local_result uma vez para extrator→conferir literalidade/exame anterior/I2O→Q8S→cobertura. Sem aceitar jobs globalmente ou inventar notas históricas. Manter CANCELLED excluídos, resultados parciais e correções instaladas. N7C/S2Q seguem impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C21R — quatro exames integrais preservados
+
+42b91657 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:57:33.308Z. Trechos integrais d3413300/eb04e73d/47844a0d/ee5a5fe6 conferidos na revisão15/10, sem reanálise histórica. Mantidas ressalvas sobre causalidade de timeout, efeitos por comandos, gate falho e recuperação posterior já comprovada. Git auditor main limpo06:56:19.741Z distinto dos alvos.
+
+Cobertura359/453 delimitada,94 pendentes; tabela104/9sobrepostos/95novos. Prova coverage-reconciliation-2026-10-25.json SHAac968a8f46573b8dcb4c19a8d03b02d9d5ed80c8308c6960d5efc3dec1f8d384; anterior preservada. CANCELLED excluídos, I2O e distinção exame/aceite vigentes. Nenhum Worker ativo neste checkpoint.
