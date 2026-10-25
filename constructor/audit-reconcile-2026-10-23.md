@@ -1122,3 +1122,10 @@ Extrair doisargv178chars/corpos1986/pedidos/eventos/Gitparciais. Sequência/requ
 Callback local_result uma vez→pedidos/status/refs/hashdraft realmente exposto/eventos/Gitparciais→I2O/Q8S→cobertura. Captured/contagens/path não provam preservação/fidelidade/texto/URLs/código/versão integrais ou integração; lacuna exige ressalva, não inferência de falha atual. Nenhuma captura/rede/biblioteca/artigo vivo/código histórico executado/compilado/importado. Julgamento de risco/qualidade só supervisor.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C40B
+
+53895df3 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:33:31.179Z. M16sete refs solicitadas/M22dezentradas únicas/captured/errorsnull conferidos. Sem hashdraft antes/depois, texto/URLs/script/perfil integrais não afirmar preservação/fidelidade/listaM22independente; aceiteoperacionalqualificado. TimeoutM22de300s é do comando, recusa anterior antesjob informada não é falha cognitiva. Git auditor main limpo12:31:26.975Z versus históricos dev/ahead14/33 parciais. Privados completed-captures-c40b-return.json/evidence.json/proof.json/review.json; não repetir consulta/captura.
+
+Cobertura399/453 delimitada,54pendentes; tabela144/9sobrepostos/135novos. Prova coverage-reconciliation-2026-10-25.json SHA8a212f9d37703d6a80bd2bc26df289351d8ce435e2d13e33ad5bc5e6330f7837; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional; corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint.
