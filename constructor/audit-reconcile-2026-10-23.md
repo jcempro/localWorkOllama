@@ -1225,3 +1225,14 @@ N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo e m
 21e0ca36 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:29:29.796Z para extração fiel.7522ec6a M33A3corrigiu invólucro/parte dos asserts, mas manteve conversão/normalização fora do rescue, não persiste HTML diagnóstico e tem asserts incompletos. Rejeitar completude, sem negar edição/sintaxe0, executar Ruby ou editar outra raiz. Fonte plano/after capturados; Git auditor main limpo16:27:27.505Z versus histórico dev/ahead59 parcial. Provas privadas completed-render-c46a-return.json/evidence.json/proof.json/review.json, não repetir local_result.
 
 Cobertura406/453 delimitada,47pendentes; tabela151/9sobrepostos/142novos. Prova coverage-reconciliation-2026-10-25.json SHA46a4e6a57dc7a967f252853f9f3fa1a6d021f1afe95f4880ce4fd041a278dcbe; snapshot anterior preservado porhash. CANCELLED excluídos; exame não equivale a aceite. Nenhum job ativo neste checkpoint.
+
+
+## Handoff C47D
+
+Job429f2380-992e-4e5f-88a8-d028e11a46eb confirmado RUNNING/R8V1, planob7bd5b2 publicado. Chat01a0f301-afa6-7d61-8949-1d35b712f5ca/cwdC:/auto-local comprovados pelo Desktop; ACTIVE/EXPLICIT_RESUME preservado, sem rearme. C5/júnior/read-only/expect_changesfalse/commit_policysupervisor. Cobertura406/453 delimitada,47pendentes; CANCELLED excluídos. IDhistórico6d9fc2ac-2ccf-458e-9a60-c29e9d9bb5b6 M36B consolidação de checklist/diagnóstico do HTML M35 existente.
+
+Extrair pedido/argv/eventos/corpo970chars/Gitparcial; não executar scripts capturados, consolidar/renderizar/diagnosticar de novo ou inspecionar negócio vivo. Sequência/requiredcommands retained_checklist_diagnostic única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600; scope26af1b3c92acbebfb568784228369f20d537d97a6d58631641179ccdf82febcb. Guardas de fonte/hash/ID/status/expectchanges/2comandos na ordem/checkpoints0/offsets/header/bodySHA; sintaxe/preflights válidos. Privados completed-diagnostic-c47d-request.json/running.json/start-output.txt.
+
+Callback local_result uma vez→execução versus pedido/recibo/achados/limites/Git→I2O/Q8S→cobertura. Código zero do diagnóstico significa relatório produzido, não conformidade do HTML/checklist; scripts/plano/artefatos integrais ausentes não podem ser presumidos. Nota do extrator não é cognição/nota histórica. Não duplicar C44Q/M36A2 nem adotar normas de outra raiz.
+
+N7C/S2Q permanecem impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura/modelo/esforço. Checkpoint não é compactação nativa.
