@@ -1319,3 +1319,10 @@ N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/
 20a33cfa recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:49:20.745Z para projeção fiel.73a0d24b install/contract/assets/financial/attributions0, patchpinado/proveniência e comparação de methods preservam microescopo. Aceite da integração, sem oracle financeiro/licença atual/UIglobais. Ambas rowsC49Q agora examinadas, sem reextração/replay. Git auditor main limpo16:47:55.299Z versus histórico dev/ahead37 parcial. Provas privadas completed-asset-c51b-return.json/evidence.json/proof.json/review.json.
 
 Cobertura410/453 delimitada,43pendentes; tabela155/9sobrepostos/146novos. Prova coverage-reconciliation-2026-10-25.json SHAc834ee4c33145bdb72c81d465461d8686975a8050ea5289a08e1f709d087263b; anterior preservada porhash. CANCELLED excluídos/exame não equivale a aceite global. Nenhum jobativo nestecheckpoint.
+
+
+## Checkpoint C52R
+
+810a1d13 reconciliado pelo exame/aceite explícito jápublicado em audit-input-validation-validation.md, sem local_result/inferência/teste repetido. Módulo/teste A3F autônomos com87casosnegativos e pós-condição confirmados, não helper/parser/auditoria globais.4988362bextensão94 járeconciliada, nenhuma contagemduplicada/nota histórica inventada. Prova privada completed-reconcile-c52r-proof.json.
+
+Cobertura411/453 delimitada,42pendentes; tabela156/9sobrepostos/147novos. Prova coverage-reconciliation-2026-10-25.json SHA468221c32fecdef25879f159ae893a7d95914596c6dc9dea8b939ecaacf1fd1a; anterior preservada porhash. CANCELLED excluídos, nenhumjobativo nestecheckpoint.
