@@ -1195,3 +1195,10 @@ N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/med
 1941487a recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:50:30.633Z para extração fiel.69b4d7a5não entregouTS pedido, sórelatório/placeholder; entrega rejeitada, sem inventar truncamento/infra ou proposta aplicada. Fonte/instalado atuais core:1574 jápriorizam formato explícito; nenhuma correção duplicada/teste/replay. Git auditor main limpo12:46:57.862Z versus histórico dev/ahead14 parcial. Privados completed-proposal-c43i-return.json/evidence.json/proof.json/review.json; não repetir consulta/gerarproposta/TS/AST.
 
 Cobertura403/453 delimitada,50pendentes; tabela148/9sobrepostos/139novos. Prova coverage-reconciliation-2026-10-25.json SHA5947d027d9865018ac1e015af548fabe32a59c84262615e86ac943a36cc8fe58; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional; corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint.
+
+
+## Checkpoint C44Q — retomada após limite do aprovador
+
+HandoffC44Q anterior não executado por falha de quota na revisão automática de aprovação; não foi decisão de insegurança nem escrita/commit parcial. Pedido/reciboRUNNING preservados e jobconcluiu sem replay. Agora a12adb89 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T16:18:13.638Z.5e39d931checklist§6núcleo pedido preservado/379itenswhitespace≤550, aceito como síntese parcial com ressalvas de formatos/exceções omitidos; não artigo/consolidação/FT. Git auditor main limpo12:53:34.193Z versus histórico dev/ahead65 parcial. Privados completed-analysis-c44q-return.json/evidence.json/proof.json/review.json; não repetir consulta/pesquisa ou adotar norma alheia.
+
+Cobertura404/453 delimitada,49pendentes; tabela149/9sobrepostos/140novos. Prova coverage-reconciliation-2026-10-25.json SHA5ba8d41c3317516e2c885bb92e7e145368c9e903d3482f1bd8dd94a4467309a4; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional; corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint.
