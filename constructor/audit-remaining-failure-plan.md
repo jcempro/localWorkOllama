@@ -287,3 +287,14 @@ IDs30490740-5b2a-4e95-88be-2bf4f11aca99(M40 aplicar/render/diff, atribuição fa
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands editorial_m40_m31_evidence. Extrator próprioC28A com duas seleções alteradas; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria/fontes/cobertura/preflight SW-HYBRID/R8V conferidos; campos556argv+6049recortes+1258eventos com margem. ScopeSHA9122cc7957be855c851aabd2b4b0b505756f7ae002c614d00fed72b2369e8fc4; pedido exclusivo completed-editorial-c29e-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisãoI2O/Q8S→cobertura e correção proporcional somente se sustentada.
+
+
+## C30S — localizações históricas EGW
+
+C29E8441da22 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:23:51.923Z. M40aplicação/render/diff e M31aplicação/diff aprovados no microescopo, fontes/fidelidade integral não comprovadas. Cobertura384/453 delimitada,69 pendentes; provaSHA21351f130ae40e74576d100565d85d752aa2bb7b39c9ab076f733209ac19e76c.
+
+IDs30b5c619-5a40-4aec-b2e3-347057cfa879(M23EPUB/PDFmesmaobra) e3d424354-8f29-4d1a-af60-375bf9e10dc9(PDFtpai5, EPUB anterior reaproveitado). Busca pública dirigida sem exame anterior localizado. Extrair argv/eventos/recortesF8E já obtidos, sem executar localizadores/abrirbiblioteca/pesquisar/editarartigo. Located não é confirmed cruzado, página física não é automaticamente impressa, status operacional não prova fonte integral.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands egw_location_retained_evidence. Extrator próprioC29E com duas seleções alteradas; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria/fontes/cobertura/preflight SW-HYBRID/R8V conferidos; campos1035argv+7929recortes+947eventos com margem. ScopeSHA2c73f1d8769f3524a85e7b62427cefc64cc8a113a3b4c683a95976fa6cc94b13; pedido exclusivo completed-sources-c30s-request.json.
+
+Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisãoI2O/Q8S→cobertura e correção proporcional somente se sustentada.
