@@ -1039,3 +1039,20 @@ Cobertura393/453 delimitada,60pendentes; tabela138/9sobrepostos/129novos. Prova 
 4988362b já tinha recebimento único/exame/aceite expresso em três validaçõesA3F com fontes/hashes/linhas conferidos. Reaproveitado integralmente sem novo local_result/inferência/testes/nota histórica. Prova prior-review-4988362b-proof.json; limites do marcador parse_error e da projeção factual preservados.
 
 Cobertura394/453 delimitada,59pendentes; tabela139/9sobrepostos/130novos. Prova coverage-reconciliation-2026-10-25.json SHA69eb84f6a107fffc0f320e8b67099df6a593c931b3bf459ddf621a89d2ab5f61; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional. Nenhum job ativo; buscar prova pública antes de delegar registro já examinado.
+
+
+## Handoff vigente — C37D
+
+84f38d7c recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:13:16.339Z; revisão75a5b7d publicada.4c75M20quatrorefs/4e521M18seisrefs/statuscaptured/errornull correspondem aos pedidos. Aceite operacional qualificado: hashdraft/texto/URLs/código do perfil integrais não constam do recibo, sem afirmar fidelidade/preservação independente/integração. Git auditor main limpo12:11:31.600Z versus históricos dev/ahead27/21 parciais. Privados completed-captures-c36b-return.json/evidence.json/proof.json/review.json; não repetir local_result/capturas.
+
+4988362b reconciliado por exame anterior explícito em audit-facts-validation.md linha5/SHAa2cd5b4542db89902612729d619965bcdeedbfe87fd4b1928f79ed2c0570651c, audit-input-validation-validation.md linha5/SHAadc80456f04b3cb3011374b6e5d4ddb01b3e8b9c6b76466c7e37f2d91f8ebb1b e audit-facts-cli-validation.md linha3/SHA0162ff8441bfd7ec096b116c36ad6bfe520a5263e3ab5c54c46afead09ec061f. Sem reconsulta/inferência/teste/nota histórica, prova prior-review-4988362b-proof.json; reconciliaçãodcb83ac publicada. Variante exata parse_error/log_parse_error_lines/94negativos/CLI264/197/67 e limites preservados.
+
+Cobertura394/453 delimitada,59pendentes; tabela139/9sobrepostos/130novos. Prova coverage-reconciliation-2026-10-25.json SHA69eb84f6a107fffc0f320e8b67099df6a593c931b3bf459ddf621a89d2ab5f61; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional; corpus congelado/projeções obtidas preservados. Sempre buscar exame público anterior antes de nova extração.
+
+Job5acb544f-23a2-4216-8f4a-12427afe39f2 confirmado RUNNING/R8V1: C37D C5/júnior/read-only/expect_changesfalse/commit_policysupervisor, planofaa86f2 publicado. IDhistórico52b94567-c6a4-4bc5-8fee-ceb32a6048c2 FT107/U2B1 apóscc874702: create→test, cria somente scripts/test_donations_contract.ts porwx, dependências conferidas, dados/módulo preservados. Quatro casos autorizados; demais negativos pendentes/commit supervisor/nãoFTintegral. Doisargv1354chars/corpo402/eventos/pedido/Gitparcial são dados, sem executar/compilar/importar módulo/testes/código histórico ou inspecionar negócio.
+
+Sequência/requiredcommands retained_contract_test,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, extratorC35T validado reaproveitado com ID/comandos alterados, guardaslstat/notlink/nlink1/hash/ID/status/expect_changes/comandos/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos. Scope2f205ba12eb2d604cb83dc11edaa9bb434a9cf4661a7ffafb083b473763b6e5c. Privados completed-contract-c37d-request.json/running.json/start-output.txt. Chat/cwd e ACTIVE/EXPLICIT_RESUME comprovados nesta interação, sem rearmar demaisconversas.
+
+Callback local_result uma vez→quatrocasos versus pedido/origemexpectativas/recibo/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir contrato financeiro/licença/FTintegral ou verdade semântica por exit0; fonteindependente e escopo real dos testes devem ser preservados. Falha nova exige diagnóstico específico/segmentação, sem retry cego. Julgamento de risco/qualidade só supervisor.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
