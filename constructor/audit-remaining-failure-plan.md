@@ -221,3 +221,14 @@ IDs47d485d0-6849-424a-998e-dbf511c026ce, 4b7daa79-9622-45aa-9328-623f3689ea10, 7
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c23r_excerpts. Extrator próprio fs/assert/crypto, fonte selada/lstat/notlink/nlink1/cabeçalhos únicos,2200chars/seção/13000total/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos. ScopeSHA9c9e03611f401c776876877b5fad3aa62db00c111b21666a1308fa741addc7d0; pedido exclusivo prior-review-c23r-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez para extrator, revisão/Q8S e cobertura somente com exame anterior inequívoco; cobertura não é aceite global.
+
+
+## C24R — quatro exames narrativos seguintes
+
+C23Rea418d01 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:02:59.898Z. Cobertura367/453 delimitada,86 pendentes; provaSHA9a05450b170509fe68af9db107927d4d91436329bab28898eb3df04c7be54fa4. Preservar semântica de campos, execução/aprovação, autoria e demais limites históricos/I2O/CANCELLED excluídos.
+
+IDsb432b20b-659f-4f17-b898-859d828990bc, e83a9a13-5edf-4474-8606-5a430fcce80c, dcaf458a-f429-4299-96ec-15fcac6145a2, 9af93b6f-39d8-4122-a311-9bd0d6f88892. Fonte audit-review-2026-10-15.md SHA249166b2245019b13ae5861aedc28fdeb734ff5cd6cf761ca23999abdf22be78, cabeçalhos279/301/313/327. Extrair somente seções literais/offsets/hash/omissões de exames anteriores, sem novo parecer/consulta antiga/execução de negócio/nota histórica.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c24r_excerpts. Extrator próprio fs/assert/crypto, fonte selada/lstat/notlink/nlink1/cabeçalhos únicos,2200chars/seção/13000total/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos. ScopeSHA8515e12012bc7c9e1929ba6674748c9e808676d9479e2dd675192fd3f582e5ab; pedido exclusivo prior-review-c24r-request.json.
+
+Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez para extrator, revisão/Q8S e cobertura somente com exame anterior inequívoco; cobertura não é aceite global.
