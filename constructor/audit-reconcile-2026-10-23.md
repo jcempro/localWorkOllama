@@ -792,3 +792,16 @@ N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/med
 948be20e recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:16:41.808Z.2f18 inventário read-only executado/exit0, corpo completo, sem implementação requerida. Disponibilidade por metadata/paths não comprova funcionamento/adequação de bibliotecas/logo; rodapé Git parcial não prova autoria/ausência de efeitos herdados. Git auditor main limpo07:14:49.293Z distinto dos históricos.
 
 Cobertura381/453 delimitada,72 pendentes; tabela126/9sobrepostos/117novos. Prova coverage-reconciliation-2026-10-25.json SHAfc4cb0057967b9668ddcdb497fa40deb1d74de5edcc92baea956d646f9dde71a; anterior preservada. CANCELLED excluídos/I2O/sem recaptura ou replay. Nenhum Worker ativo neste checkpoint.
+
+
+## Handoff vigente — C28A
+
+C27I948be20e recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:16:41.808Z; revisão b334dbe publicada.2f18inventárioexit0/bodyintegral, metadata/paths observados; não comprova import/uso funcional, logo adequado ou ausência global de alternativas. Rodapé histórico dev/ahead23 19/10 00:39:00.038Z parcial, distinto do Git auditor main limpo2026-10-25T07:14:49.293Z. Task/argv/eventos/recortes conferidos; código/escapes capturados não normalizados. Retorno/revisão privados completed-inventory-return-948be20e.json/completed-inventory-review-948be20e.json.
+
+Cobertura381/453 delimitada,72 pendentes; tabela126/9sobrepostos/117novos. Prova coverage-reconciliation-2026-10-25.json SHAfc4cb0057967b9668ddcdb497fa40deb1d74de5edcc92baea956d646f9dde71a; anteriores preservadas. Candidatos narrativos15/10 e343/393 reconciliados, sem reconsulta/testes. Manter fatia453/CANCELLED excluídos/I2O/distinção exame e aceite; busca pública dirigida antes de nova análise evita duplicar exame já publicado.
+
+Job820b8c76-7f48-4307-863b-be5cf889cf9a RUNNING/R8V1. Chat/cwd comprovados nesta interação e ACTIVE/EXPLICIT_RESUME conferido sem rearmar outras conversas. C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands asset_reference_link_evidence. ID0f654462-ca5a-43fa-ba20-92f52cc0533f FT107/U4D2, ligação IDsBTC/USDT e catálogo, guarda unitária usadaQR/cópia/contrato completo resolve refs; financeiro preservado, não concluirFT/UI/íconesrestantes. Plano979c8df publicado; extrator próprioC27I seleção única, capturaabd15bcf/F8E35fb663c, sem inferência/rede/execução histórica,13000chars/R8V1600/15s. Scope904b95ba18ba629d5ee8e810bf1582282a68a139e42b4ec60499ace0cd25f98f. Pedido/recibo exclusivos completed-assets-c28a-request.json/completed-assets-c28a-running.json.
+
+Callback local_result uma vez→conferir patchargv/setecomandos/eventos/recortes→revisãoI2O/Q8S→cobertura. Código histórico só dado, não executar/importar/compilar. Pedido histórico completo foi lido no preflight; não avaliar somente exit0 ou valores recopiados como fonte independente. Preservar originais/escapes; campos históricos não comprovam conteúdo atual/autoria/push/FT integral. Sem recaptura, replay de testes/patch, escrita no blog ou notas históricas inventadas.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
