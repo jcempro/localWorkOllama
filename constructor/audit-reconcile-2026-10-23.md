@@ -1144,3 +1144,10 @@ Extrair doisargv2571chars/corpo444/pedido/eventos/Gitparcial. Sequência/require
 Callback local_result uma vez→casos/asserts versus pedido/origemexpectativas/recibo/eventos/Gitparcial→I2O/Q8S→cobertura. Código histórico é dado, não executar/compilar/importar/append/test/módulo vivo ou negócio. Não inferir contrato completo/financeiro/UI ou verdade semântica por negativo aprovado; preservar limites das expectativas e baselinejáexaminado. Julgamento de risco/qualidade só supervisor; lacuna específica exige ressalva/segmentação, não replay cego.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C41N
+
+aed9754f recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:38:35.685Z.64e0173aappend/test e72negativos/baseline/imutabilidade dasfixtures exercitados, contagemestática coincide. Aceite dos casos, não oraclecompleto/causaError/finanças/QR/UI/FT; limiares/campos/URLs sem fonte canônica no recorte. Git auditor main limpo12:36:25.451Z versus histórico dev/ahead22 parcial. Privados completed-contract-c41n-return.json/evidence.json/proof.json/review.json; não repetir consulta/append/test/baseline.
+
+Cobertura400/453 delimitada,53pendentes; tabela145/9sobrepostos/136novos. Prova coverage-reconciliation-2026-10-25.json SHAc4fc6660c8e35e2f5d314a8ba1b4d6e38bc460f9221eaddd9742c40b34d61278; anterior preservada porhash. CANCELLED excluídos/exame≠aceitefuncional; corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint.
