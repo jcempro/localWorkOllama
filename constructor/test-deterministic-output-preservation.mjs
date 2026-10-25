@@ -15,14 +15,22 @@ const jobs=[];let events=[];
 const digest=x=>createHash('sha256').update(x).digest('hex');
 const command=(id,code)=>({id,program:process.execPath,args:['-e',code],mode:'read-only',timeout_ms:10000,network:false,repeatable:false});
 async function setup(){const id=randomUUID(),dir=jobDir(id);jobs.push(dir);process.env.LOCAL_WORKER_JOB_ID=id;await fs.mkdir(dir,{recursive:true});events=[];return dir;}
-async function run(commands,contract={}){return runLocalAnalysis(fixture,'Fixture determinística read-only D8O.','read-only',e=>events.push(e),commands,false,[],false,0,1,{command_sequence:commands.map(c=>c.id),required_command_ids:commands.map(c=>c.id),...contract});}
+const {scopeHashS4W,validateSupervisionS4W}=await import(new URL('delegation-policy.mjs',new URL('file:///'+runtime.replaceAll('\\','/')+'/')));
+async function run(commands,contract={}){
+ // Avaliação explícita do supervisor para esta fixture; o core permanece C8/exclusivo.
+ const task='Fixture determinística read-only D8O.';
+ const request={repoPath:fixture,task,mode:'read-only',authorized_commands:commands,expect_changes:false,required_change_paths:[],commit_policy:'supervisor',command_sequence:commands.map(c=>c.id),required_command_ids:commands.map(c=>c.id),...contract};
+ request.maintenance_supervision={version:1,criticality:5,regime:'junior',uncertainty_resolved:true,scope_paths:['constructor/test-deterministic-output-preservation.mts'],rationale:'Probe sintético restrito: comandos exatos só emitem fixtures, sem fonte/configuração/negócio/rede. Temporários e recibos pertencem ao harness, sem inferência. Alteração do core permanece C8 exclusiva do supervisor.',evidence:'Código do probe previamente examinado pelo supervisor; comandos Node exatos de console/stdout/stderr/exit, orçamento finito. Raiz de fixture e UUIDs próprios validados antes da limpeza; nenhum chat/callback ou manutenção real executados.'};
+ request.maintenance_supervision.scope_sha256=scopeHashS4W(request);validateSupervisionS4W(request,true);
+ return runLocalAnalysis(fixture,task,'read-only',e=>events.push(e),commands,false,[],false,0,1,request);
+}
 function noCompletion(){assert.equal(events.some(e=>e.phase==='completion_verified'),false);}
 const results=[];
 try{
  let dir=await setup();
  const small=await run([command('small','console.log(JSON.stringify({quote:"á😀",n:1}))')]);
  assert.equal(small.split('\n\nEXECUÇÃO COMPROVADA')[0],'RESULTADO DETERMINÍSTICO\nComando small; exit_code=0\nstdout:\n{"quote":"á😀","n":1}\n\nstderr:');
- await assert.rejects(fs.stat(path.join(dir,'command-sequence-result.json')),e=>e.code==='ENOENT');results.push('SMALL_UNCHANGED');
+ await assert.rejects(fs.stat(path.join(dir,'command-sequence-result.json')),e=>e.code==='ENOENT');results.push('SMALL_UNCHANGED');if(installed)assert(events.some(e=>e.phase==='supervision_verified'&&e.regime==='junior'));
  dir=await setup();const ids=['first','middle','last'];
  const large=await run(ids.map(id=>command(id,'console.log(JSON.stringify({id:'+JSON.stringify(id)+',payload:"á😀".repeat(2200)}))')));
  const bytes=await fs.readFile(path.join(dir,'command-sequence-result.json')),doc=JSON.parse(bytes);

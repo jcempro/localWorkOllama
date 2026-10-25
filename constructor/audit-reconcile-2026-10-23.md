@@ -877,3 +877,8 @@ Cobertura387/453 delimitada,66 pendentes; tabela132/9sobrepostos/123novos. Prova
 ## D8O — correção funcional de saída determinística
 
 Fonte funcional concluída e dez testes reais aprovados, sem Ollama/negócio externo. command_sequence preserva recibos extensos e primeira falha em artefato privado por job, índice limitado com hashes/pointers; saídas pequenas/R8V/guardas/ordem/privilégios preservados. Evidência e plano em deterministic-output-preservation-plan.md/validation.md. Instalação e probe instalado pendentes neste commit. Auditoria387/453,66pendentes; não apagar ou convalidar o retorno histórico cortado.
+
+
+## D8O — instalado e validado
+
+Runtime760eed1 instalado oficialmente, SHA3eab1bd35c9d65b09cbcf5602aaded704dd9d200a8e16e499ce552c3075abe7c, dez cenários reais também passaram na instalação com guarda/hashes. Modelo/contexto/limites/híbrido e controles Desktop/continuidade preservados. Falhas de preparo do probe foram corrigidas no harness, não na guarda. Evidência histórica bruta40c17 indisponível no path canônico; não convalidar retorno cortado ou repetir buscas. Auditoria387/453,66pendentes; próxima unidade deve retomar corpus congelado.

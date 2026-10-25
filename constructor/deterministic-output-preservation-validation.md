@@ -13,3 +13,14 @@ Teste constructor/test-deterministic-output-preservation.mts e derivado.mjs cham
 Primeira tentativa do teste de hardlink sofreu EPERM do sandbox antes de exercer a guarda; execução aprovada fora do sandbox passou, com fixtures/limpeza confinadas a paths conhecidos. Não foi relaxada a guarda. R8V continua validando candidato original: saída extensa pode ser recusada, sem replay e com artefato preservado. Sem persistência, conflito/link/diretório inválido ou orçamento excedido, não há falso COMPLETED.
 
 Prova privada:d8o-source-validation.json. Instalação/probe instalado ainda pendentes neste commit funcional. Evidência histórica truncada não foi reescrita nem buscas reexecutadas. Auditoria permanece387/453 examinados,66pendentes; CANCELLED excluídos.
+
+
+## Instalação e integração concluídas
+
+Unidade funcional760eed1 versionada e enviada; atualização oficial update-installed.ps1 aplicada em2026-10-25T11:26:33.263Z, com backups/guarda de job ativo/validação dos módulos. Runtime instaladoSHA3eab1bd35c9d65b09cbcf5602aaded704dd9d200a8e16e499ce552c3075abe7c igual ao derivado fonte. Preferências de modelo/contexto/limites/híbrido/caminhos preservadas; hashes do config.toml do Desktop e controles de continuidade das duas conversas inalterados. Nenhum app reaberto/chat rearmado/modelo trocado. Prova:d8o-install-proof.json.
+
+O primeiro probe instalado foi bloqueado pela guarda por ausência de contrato, antes do comando: não é teste aprovado. Correção material somente no harness, com avaliação explícita C5 para o microescopo de comandos sintéticos de saída/read-only, hash e validação SW-HYBRID; a alteração do core permanece C8/exclusiva. Não foi desabilitada guarda ou transferido julgamento ao Worker. O harness verifica supervision_verified na instalação. Uma edição preliminar do harness falhou sua pré-condição sem gravar; o artefato antigo permaneceu recusado. Edição corrigida passou sintaxe e então o probe instalado completo passou os dez cenários, sem inferência/Workerjob/callback/negócio.
+
+A prova instalada d8o-installed-validation.json confirma os mesmos dez casos, incluindo idempotência, falha parcial e hardlink. Fonte e instalado foram exercitados por runLocalAnalysis real; não é simulação de resultado nem validação de comportamento do Desktop. Testes usam UUIDs/fixtures próprios e limpam somente paths resolvidos dessas fixtures.
+
+Limitação histórica: evidence.jsonl de40c17 tem hash/tamanho registrados na captura, mas não existe mais no path canônico capturado da instalação (ENOENT). Não houve varredura ampla, reconstrução de JSON, replay ou invenção de status dos recibos omitidos. A correção nova não convalida a integralidade daquele result.md antigo. Auditoria387/453,66pendentes permanece separada da conclusãoD8O.
