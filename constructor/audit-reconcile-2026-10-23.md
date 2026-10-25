@@ -1481,3 +1481,8 @@ Job 74fdb034-dfd4-405f-9908-7a58298855e4 RUNNING/R8V1; plano32f05f0 publicado. C
 C62S projeta somente fb8a8e93-9182-4f03-ae1f-4befb73f392d: pedido/argv patch-types-test/eventos/corpo532/Git parcial. C5/júnior/read-only/comando próprio único, sem inferência ou execução de TS/teste histórico. Conferir sequência da segunda estratégia/erros/estado e fonte da prova; não antecipar bloqueio/esgotamento/gateglobal. Unidade posterior fd51d644 foi separada antes do start por orçamento. Pedido/recibo/links privados completed-strategy-c62s-request/start.json. Callback: resultado uma vez→revisão proporcional/I2O/Git→Q8S→cobertura; não repetir testes/exploração aproveitáveis.
 
 N7C: nenhum mecanismo nativo exposto ligado à conversa viva, nem percentual barato autoritativo. Após aviso/links, informar impedimento e encerrar sem polling. Não injetar slash/fila, reabrir app, operar UI proibida ou compactar cópia. S2Q externo permanece não comprovado; uso manual do composer não prova outra rota.
+
+
+## Checkpoint C62S
+
+Resultado74fdb034 recebido uma vez, examinado e Q8S10 revision1 registrado. Teste incremental da segunda estratégia aceito com stdout real, fonte de sucesso vinculada ao checkpointC61R e limites de base/dependências. Não core/retry automático ou conclusãoFT105. Git histórico dev/ahead4 distinto de main limpo do auditor. Cobertura421/453,32 pendentes; CANCELLED excluídos. Provas privadas completed-strategy-c62s-*.json; cobertura SHA256 47adcc53024352fc9dc8bf2c6256493d4248497e4ec10d4f407a6fdf7fac3411. Sem replay de testes históricos.
