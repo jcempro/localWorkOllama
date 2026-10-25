@@ -362,3 +362,14 @@ ID48c68da4-6f5a-4470-bb25-d0c6e2f68889 FT105unidade4 após4244c101d7: patch→ty
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_timeout_test,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/expect_changes/comandos/offsets/header/bodySHA. ExtratorC32O reaproveitado; sintaxe/preflightSW-HYBRID/R8V válidos. Scope698b17017e85cbc073ecf56f8a0d4666826eb3711a62620530d12ea37f46267c; privado completed-timeout-c35t-request.json.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→patch/testes versus pedido/eventos/body/Gitparcial→I2O/Q8S→cobertura. Distinguir timeout/kill solicitado/término físico e resultados reais/expectativas circulares; sem nota histórica fabricada.
+
+
+## C36B — recibos históricos de capturas M18/M20
+
+C35T7bb60e43 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:07:27.974Z; aceite delimitado do novo teste, sem provar término físico. Cobertura391/453 delimitada,62pendentes, provaSHA57242bd705f8bcf27a5bbe177cc97a935c5c6e3cdc2c97ad7149460b28d63082; CANCELLED excluídos.
+
+IDs4c75b348-353d-4616-ae0e-50cfb7d21529/M20(1Rs17–19/22ARA, quatroentradas) e4e521d5d-2823-4df6-be95-0c5bfbab9095/M18(Gl6/1Co11/2Co13/Lm3/Sl139/Jo10ARA). Mesmo fluxo captura preparada/cache/URLsfechadas, somente relatórios pending→captured, drafthashpreservado, sem integrarartigo/interpretar/repetirM16M17/fecharFT. Busca pública dirigida sem exame anterior localizado. Extrair doisargv184chars/corpos1431/pedidos/eventos/Gitparciais. Recibo de captura não autentica conteúdo da fonte/URLs/rapport integral ausentes.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_source_captures,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/IDs/status/comandoúnico/offsets/header/bodySHA. ExtratorC32O reusa função validada em duas seleções; sintaxe/preflightSW-HYBRID/R8V válidos. Scope4e9eaccdbb7c3fa7104433e7436c5eba05f52fc9065cbb130ee078e11cbbdcbb; privado completed-captures-c36b-request.json. Nenhuma captura/rede/biblioteca/artigo vivo ou código histórico executado.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedido/recibos/status/hashes versus evidência disponível→I2O/Q8S→cobertura. Manter limite de captura operacional versus verificação/fidelidade/integração editorial.
