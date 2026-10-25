@@ -199,3 +199,14 @@ IDsd3413300-88ca-494a-a993-4cb632d8a343, eb04e73d-e3d1-4c50-a92a-668f6c3f88f4, 4
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_next_four_excerpts. Extrator próprio fs/assert/crypto, fonte selada/lstat/notlink/nlink1/cabeçalhos únicos,2200chars/seção/13000total/R8V1600/15s/sem rede/repetição. Sintaxe própria, cobertura/fontes e preflight SW-HYBRID/R8V conferidos. ScopeSHAcba618db3908fed9bc4065023fcfaeca046c3442e9f337de8955e725ce0a02eb; pedido exclusivo prior-review-c21r-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez para extrator, revisão/Q8S e reconciliação somente com exame anterior inequívoco; cobertura não é aceite global.
+
+
+## C22R — quatro exames narrativos seguintes
+
+C21R42b91657 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:57:33.308Z. Cobertura359/453 delimitada,94 pendentes; provaSHAac968a8f46573b8dcb4c19a8d03b02d9d5ed80c8308c6960d5efc3dec1f8d384. Ressalvas históricas e CANCELLED excluídos preservados.
+
+IDsa0f95ed9-f473-460d-a702-0f5ec6168210, f76c4cb8-873c-4491-b2bb-5b9a1c1a8681, aceedc24-1103-4913-9796-65b5ff04400f, d27e267c-05f4-4d12-b8ea-c235374b0f40. Fonte audit-review-2026-10-15.md SHA249166b2245019b13ae5861aedc28fdeb734ff5cd6cf761ca23999abdf22be78, cabeçalhos183/196/209/220. Extrair somente seções literais/offsets/hash/omissões de exames anteriores, sem novo parecer/consulta antiga/execução de negócio/nota histórica.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c22r_excerpts. Extrator próprio fs/assert/crypto, fonte selada/lstat/notlink/nlink1/cabeçalhos únicos,2200chars/seção/13000total/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos. ScopeSHA59c07023675302857a8a6c707133a309db47e1e27b8d2153ebcc4bbdfdf0130e; pedido exclusivo prior-review-c22r-request.json.
+
+Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez para extrator, revisão/Q8S e cobertura somente com exame anterior inequívoco; cobertura não é aceite global.
