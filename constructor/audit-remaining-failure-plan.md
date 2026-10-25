@@ -351,3 +351,14 @@ ID3130d366-c215-4c10-861c-43e37fef1b34 M33A2: editar somente renderizar-M33.rb c
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_render_adapter,15s/networkfalse/repeatablefalse. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/offsets/header/tamanho/bodySHA, estrutura2checkpoints/2readcalls/1edit/pathalvo conferida. Apenas dados capturados; nenhum Ruby/argv histórico executado/compilado/importado. Margem16000chars/R8V2000; sintaxe do extrator próprio/preflightSW-HYBRID/R8V válidos. Preparo inicial falhou na sintaxe do gerador antes de gravar pedido/criarjob; corrigido reaproveitando extrator validado, sem tentativa Worker ou alteração de guarda. Scopee47bc160c72452efec177485f5158f686691dc3ff38467d106eafa2291d3dec6; pedido exclusivo completed-render-c34a-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados, sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→plano versus alteração/eventos/sintaxe/Gitparcial→I2O/Q8S→cobertura. Não inferir HTML/FT/editorial por sintaxe/path; falha nova exige diagnóstico específico.
+
+
+## C35T — teste histórico de timeout
+
+C34A02bf4002 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:02:48.886Z; revisão957ba64 publicada.3130d366 mudou adaptador/passou sintaxe mas não cumpriu plano; não corrigir negócio externo ou inferir defeito atual. Cobertura390/453 delimitada,63pendentes, provaSHA6f5f0e5eb84c51bb2ab3e81f6d5ce2f2b53289b64ffdd8631168b19183a2b69d; CANCELLED excluídos.
+
+ID48c68da4-6f5a-4470-bb25-d0c6e2f68889 FT105unidade4 após4244c101d7: patch→types→test, só scripts/test_verified_process_alternatives.ts muda. Aceite histórico pede timed_out/rejeição/resultblocked/0leituras/0alternativas/estado preservado/casos anteriores, sem afirmar término físico no timeout(core só solicita kill), sem produção/estado/FTintegral. Busca pública dirigida sem exame localizado. Extrair argv2365chars/corpo604/eventos/pedido/Gitparcial; dados históricos nunca executados/compilados/importados ou usados para novo teste.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_timeout_test,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/expect_changes/comandos/offsets/header/bodySHA. ExtratorC32O reaproveitado; sintaxe/preflightSW-HYBRID/R8V válidos. Scope698b17017e85cbc073ecf56f8a0d4666826eb3711a62620530d12ea37f46267c; privado completed-timeout-c35t-request.json.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→patch/testes versus pedido/eventos/body/Gitparcial→I2O/Q8S→cobertura. Distinguir timeout/kill solicitado/término físico e resultados reais/expectativas circulares; sem nota histórica fabricada.
