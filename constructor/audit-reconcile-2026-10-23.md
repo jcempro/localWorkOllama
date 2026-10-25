@@ -1003,3 +1003,10 @@ Sequência/requiredcommands retained_timeout_test; capturaabd15bcf/F8E35fb663c, 
 Callback local_result uma vez→conferir patch/types/test versus pedido/eventos/body e Gitparcial→I2O/Q8S→cobertura. Código/argv históricos são dados, não executar/compilar/importar/retestar processos ou inspecionar produção. Julgamento de risco/qualidade só supervisor; distinguir timeout/kill solicitado/término físico e expectativas versus prova independente. Falha nova exige diagnóstico específico/segmentação, sem retry cego.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata; aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C35T — teste aceito no microescopo
+
+7bb60e43 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:07:27.974Z.48c68da4patch/types/test e novo caso timed_out→blocked aprovados; asserts/contadoresestado e três casos anteriores reportados. Aceite limitado ao teste, não core/FT/produção/morte física. Reads0 é callback, não filesystem. Git auditor main limpo12:05:56.855Z distinto de histórico dev/ahead6 17/10 18:11:40.867Z parcial. Privados completed-timeout-c35t-return.json/evidence.json/review.json; não repetir consulta ou teste.
+
+Cobertura391/453 delimitada,62pendentes; tabela136/9sobrepostos/127novos. Prova coverage-reconciliation-2026-10-25.json SHA57242bd705f8bcf27a5bbe177cc97a935c5c6e3cdc2c97ad7149460b28d63082; anterior preservada porhash. CANCELLED excluídos, exame≠aceitefuncional, corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint; próxima unidade factual menor.
