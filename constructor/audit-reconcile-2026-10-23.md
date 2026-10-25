@@ -742,3 +742,10 @@ Cobertura371/453 delimitada,82 pendentes; tabela116/9sobrepostos/107novos. Prova
 Job505c7f64-2a0d-4a43-8e16-8ec979680039 RUNNING/R8V1. Chat/cwd comprovados nesta interação e ACTIVE/EXPLICIT_RESUME conferido sem rearmar outras conversas. C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c25r_excerpts. IDs36e4b3ef/eb329794/5ee393c9/f6eb4d87, cabeçalhos339/351/363/375 da revisão15/10, fonteSHA249166b2245019b13ae5861aedc28fdeb734ff5cd6cf761ca23999abdf22be78. Plano b0e67c5 publicado; extrator próprio sem inferência/rede/código histórico/consulta antiga,2200chars/seção/13000total/R8V1600/15s. Scope0f05a49f8f103d54b98a4a43cd3649bf0dfaf516d5fdcd347b30a34be2015ae8. Pedido/recibo exclusivos prior-review-c25r-request.json/prior-review-c25r-running.json.
 
 Callback local_result uma vez para extrator→conferir literalidade/exame anterior/I2O→Q8S→cobertura só com exame inequívoco. Sem reconsulta antiga, notas históricas inventadas ou execução de negócio. N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C25R — pares não são aceite editorial
+
+505c7f64 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:08:39.552Z. Recortes36e4/eb329/5ee/f6eb conferidos na fonte15/10; três lacunas explícitas. Parecerf6eb permanece rejeitado; contagem é exame sem aprovação. Pares literais, representação de escapes e fragmentos preservam limites de contexto/fonte/render e recuperação D9F já realizada. Git auditor main limpo07:07:26.247Z distinto dos alvos; nenhum negócio reexecutado.
+
+Cobertura375/453 delimitada,78 pendentes; tabela120/9sobrepostos/111novos. Prova coverage-reconciliation-2026-10-25.json SHAa9c8138861ab01d59bfded2faf132b534fe15439e18b85a5fdf256b770f3b9c3; anterior preservada. CANCELLED excluídos, I2O e distinção exame/aceite vigentes. Nenhum Worker ativo neste checkpoint.
