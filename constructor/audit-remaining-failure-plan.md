@@ -254,3 +254,14 @@ IDs6bde41d3-2fd2-4bbf-a614-f8a1df160233, 5aa2ad05-8948-4b35-ab97-ad34e5732b9f, 6
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands prior_review_c26r_excerpts. Extrator próprio fs/assert/crypto, fonte selada/lstat/notlink/nlink1/cabeçalhos únicos,2200chars/seção/13000total/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos. ScopeSHA1fb69573db46a737e4c09ac48499746d99db9514dd0af9aad64d58a005291eb4; pedido exclusivo prior-review-c26r-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez para extrator, revisão/Q8S e cobertura somente com exame anterior inequívoco; cobertura não é aceite global.
+
+
+## C27I — inventário histórico QR/decoder/raster/logo
+
+C26Rb1393fc6 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:11:32.198Z; revisão d68746f publicada. Candidatos narrativos15/10 reconciliados, mais343255f1/3932e312 reaproveitados de exames publicados na unidade65377a6. Cobertura380/453 delimitada,73 pendentes; provaSHAa06bb7745d255b94f3dcf0d09fc280b699175fedfb07693577a8030fc5d1a198.
+
+ID2f18bcc1-2cb8-4031-b70f-fbb20f5cb3ee: FT107/U3A, inventário delimitado de dependências/QR/decoder/raster/logo, nenhuma implementação. Extrair argv/eventos/recorteF8E já obtidos, sem executar inventário histórico ou descobrir ambiente atual/instalar/consultar rede. Disponibilidade relatada não equivale a capacidade funcional, procedência validada ou aceite de logo.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands qr_capacity_inventory_evidence. Extrator próprioC19S com uma seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash/limite13000chars/R8V1600palavras/timeout15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos. ScopeSHA83ad1b9899a55f086a7daf24d9317415a76a67085c89b5e65cb7a3004ec1b5e8; pedido exclusivo completed-inventory-c27i-request.json.
+
+Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisão I2O/Q8S→cobertura, preservando limitações e código histórico como dado.
