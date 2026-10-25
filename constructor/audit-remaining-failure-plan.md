@@ -395,3 +395,14 @@ ID495ec529-1f1e-4e2f-90b1-19fe60aab25d: localizar frase pretendida emtpai5.epub,
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_epub_location,15s/networkfalse/repeatablefalse/16000chars/R8V2000, margem contextual medida. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/comandoúnico/offsets/header/bodySHA; extratorC36B validado, seleção/schema/limite ajustados à unidade. Sintaxe/preflightSW-HYBRID/R8V válidos. Scope911b2629b8f638bf74e4caec1f9e0f52f81cb738e71a69ba88c4eb67d470fb15; privado completed-location-c38e-request.json.
 
 Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedido/JSONretido/identidade/contexto/status/Gitparcial→I2O/Q8S→cobertura. Não converter localização/score/path em fidelidade, versão/página impressa ou cruzamento confirmado.
+
+
+## C39M — sequência editorial histórica M32
+
+C38Ef890d2e6 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T12:24:20.385Z; EPUB localizado com identidade/contexto relatados, sem edição/página23/cruzamento comprovados. Cobertura396/453 delimitada,57pendentes; provaSHAfebe53b55b40b1f5464ed69fd12ee8721891b2ecf7c861abcecaf663e7257ff1; CANCELLED excluídos.
+
+ID4d115338-49db-44e7-aeca-a761b6545d7e M32: aplicar/validarestrutura/diff de sete correções mecânicas na carta e relatóriolexical. Pedido exige ap1217reconhecível/conteúdo intacto, referências migradas/reativadas e trêsórfãs removidas, hash/âncoras/reciboausente; sem teologia/outroalvo/replay. Exit0/lexicalpassed/alteração material não provam HTML ou revisão global, explicitamente posteriores. Busca pública dirigida sem exame anterior localizado. Extrair trêsargv306chars/corpo1121/eventos/pedido/Gitparcial; fonte/código do adaptador não são presumidos por path.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_editorial_m32,15s/networkfalse/repeatablefalse/13000chars/R8V1600. Fontescapturaabd15bcf/F8E35fb663c, guardaslstat/notlink/nlink1/hash/ID/status/expect_changes/comandos/offsets/header/bodySHA. ExtratorC35T validado, só ID/comandos/schema alterados, sintaxe/preflightSW-HYBRID/R8V válidos. Scope9f65741ef68ea7a234e1b2d7667998bbb972dc8fb877a1713ee76f4f8d2744d3; privado completed-editorial-c39m-request.json. Nenhuma mutação/validação/render/código histórico executado ou artigo vivo inspecionado.
+
+Start com chat/cwd e ACTIVE comprovados. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→pedido/recibos/hashes/status/eventos/Gitparcial→I2O/Q8S→cobertura. Não inferir fidelidade editorial/preservação integral por contagem/hash ou HTML por lexicalpassed.
