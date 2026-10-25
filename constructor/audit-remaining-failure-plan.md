@@ -607,3 +607,14 @@ C59D ea6407f8 recebido uma vez, examinado e Q8S10 pela projeção. Diagnóstico 
 C5/júnior/read-only/expect_changes=false/commit_policy=supervisor. Extrator C42P reduzido a uma seleção; fontes seladas abd15bcf/F8E35fb663c, hashes/ID/status/expectchangestrue/checkpoints0/ordem aplicar_m21→diff_check/corpo≤1000/offsets/header/SHA. Orçamento conservador≤8000chars: argv218/corpo escapado≤1400/pedido≤1500/eventos≤700/Git≤1000/demais≤1500, abaixo13000 e teto16000; R8V1600. Sem inferência nem ampliação. Sintaxe/preflights SW-HYBRID/R8V válidos; scope 5e1aee9e1bc605f849da9132dbcdfe8ffa1d539700d5c15743797ddd62df41d1. Pedido privado completed-editorial-c60p-request.json.
 
 Confirmar identidade/cwd/ACTIVE antes de start único. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Retorno único→revisão proporcional/I2O/Git→Q8S→cobertura. Risco/qualidade/aceite exclusivos do supervisor; resultados parciais e limites anteriores preservados.
+
+
+## C61R — checkpoint histórico FT105 sem repetir falha de runner
+
+C60P4ce34793 recebido uma vez, examinado e Q8S10 pela extração; aplicação M21 aceita operacionalmente, fidelidade editorial/bíblica não comprovada sem antes-depois. Cobertura419/453,34 pendentes; CANCELLED excluídos. Próximo99907184-b2f1-4a6f-b9a1-19f9dffb195e: retomada humana com extração determinística de verified-process.ts e test_verified_process_integration.ts, após runner4cb8cc24 desaparecer antes de leituras recuperáveis. O predecessor já foi examinado: causa física desconhecida; não repetir forense nem atribuir hardware/crash.
+
+Extrair pedido, argv, eventos, corpo5034chars e Git parcial. Código TS histórico é dado: não executar, importar, compilar ou testar, não alterar processo/ambiente nem rearmar callbacks. Conferir atendimento da extração e limites do checkpoint, sem transformar captura em implementação/validação FT105. C5/júnior/read-only/expect_changes=false/commit_policy=supervisor; risco/aceite exclusivos do supervisor.
+
+ExtratorC60P adaptado: fontes abd15bcf/F8E35fb663c/hashes/ID/status/expectchangesfalse/checkpoints0/comandoextract/corpo≤6000/offsets/header/SHA. Orçamento≤12000chars (corpo escapado≤7000, pedido/argv≤1700, eventos/Git≤1600, demais≤1500), limite13000/R8V1600 e teto nativo16000. Sequência/requiredcommands retained_recovery_ft105 única vez,15s/networkfalse/repeatablefalse. Sintaxe/SW-HYBRID/R8V válidos; scope 9672f7741d3577c1f6658a3b90c6064bbbddfd3be67b4f0e2c84b5ed5f99dd46. Pedido privado completed-recovery-c61r-request.json.
+
+Confirmar identidade/cwd/ACTIVE; start único/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback: resultado uma vez→revisão proporcional/I2O/Git→Q8S→cobertura. Preservar exames anteriores sem replay, diagnósticos novos especulativos ou nota histórica inventada.
