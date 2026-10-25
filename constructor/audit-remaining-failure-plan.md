@@ -265,3 +265,14 @@ ID2f18bcc1-2cb8-4031-b70f-fbb20f5cb3ee: FT107/U3A, inventário delimitado de dep
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor, sequência/requiredcommands qr_capacity_inventory_evidence. Extrator próprioC19S com uma seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash/limite13000chars/R8V1600palavras/timeout15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos. ScopeSHA83ad1b9899a55f086a7daf24d9317415a76a67085c89b5e65cb7a3004ec1b5e8; pedido exclusivo completed-inventory-c27i-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisão I2O/Q8S→cobertura, preservando limitações e código histórico como dado.
+
+
+## C28A — ligação histórica de referências de assets
+
+C27I948be20e recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:16:41.808Z.2f18 inventário operacional aceito nos limites de metadata/paths; sem prova de funcionalidade/logo/licenças. Cobertura381/453 delimitada,72 pendentes; provaSHAfc4cb0057967b9668ddcdb497fa40deb1d74de5edcc92baea956d646f9dde71a.
+
+ID0f654462-ca5a-43fa-ba20-92f52cc0533f, FT107/U4D2: ligação BTC/USDT aos IDs de catálogo, guarda unitária e resolução pelo contrato completo; financeiro preservado, helpersQR/cópia usam guarda unitária, testes semcatálogo semrefs. Pedido histórico não concluiFT/íconesrestantes/UI. Extrair somente patchargv e recibos patch/build/contract/actions/qr/financial/assets, como dados, sem patch/testes/import/inspeção viva. Revisão I2O deve conferir implementação/testes contra pedido, sem presumir independência das expectativas.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands asset_reference_link_evidence. Extrator próprioC27I com uma seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos; estimativa de campos7356argv+2483resultado+1301eventos com margem. ScopeSHA904b95ba18ba629d5ee8e810bf1582282a68a139e42b4ec60499ace0cd25f98f; pedido exclusivo completed-assets-c28a-request.json.
+
+Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisãoI2O/Q8S→cobertura e correção proporcional apenas se sustentada.
