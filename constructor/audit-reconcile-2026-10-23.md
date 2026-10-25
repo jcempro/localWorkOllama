@@ -805,3 +805,10 @@ Job820b8c76-7f48-4307-863b-be5cf889cf9a RUNNING/R8V1. Chat/cwd comprovados nesta
 Callback local_result uma vez→conferir patchargv/setecomandos/eventos/recortes→revisãoI2O/Q8S→cobertura. Código histórico só dado, não executar/importar/compilar. Pedido histórico completo foi lido no preflight; não avaliar somente exit0 ou valores recopiados como fonte independente. Preservar originais/escapes; campos históricos não comprovam conteúdo atual/autoria/push/FT integral. Sem recaptura, replay de testes/patch, escrita no blog ou notas históricas inventadas.
 
 N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C28A — ligação de assets delimitada
+
+820b8c76 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:20:27.312Z.0f654patch/setecomandos e corpo completo conferidos, aceitos no microescopo da ligação solicitada, sem aprovar FT/UI ou origem financeira/asset universal. I2O aplicado ao pedido, snapshots e limites de suítes; nenhum código histórico executado. Git auditor main limpo07:18:49.179Z distinto do histórico.
+
+Cobertura382/453 delimitada,71 pendentes; tabela127/9sobrepostos/118novos. Prova coverage-reconciliation-2026-10-25.json SHA7537a96ee3aba83d6c30cda7499997237f3e51e5a52cc851af2c3b502a619eac; anterior preservada. CANCELLED excluídos/sem recaptura ou replay. Nenhum Worker ativo neste checkpoint.
