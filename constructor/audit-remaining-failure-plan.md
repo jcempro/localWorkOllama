@@ -54,3 +54,14 @@ Quatro IDs residuais:9fbe33d2-c279-4b4c-ad80-fbd42ea3da81(IAL root table/heading
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; command_sequence/required_command_ids somente cohort_r8_failures. FonteK2Fef6e981/capturaabd15bcf seladas, --compact/R8V100/timeout15s/networkfalse/repeatablefalse. ScopeSHA256e050783f2c68391e9774b7514bc346f11e4c344105ba66e98c1b095683c574a0; preflight localR8V/SW-HYBRID/fontes/IDs residuais/ausência de parse_error passou. Pedido exclusivo remaining-failure-r8f-request.json. Risco/qualidade/causalidade/aceite no supervisor.
 
 Confirmar chat/cwd/ACTIVE sem Resume redundante antes de start. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, exame/Q8S/Git e atualizar cobertura/hashes antes de selecionar próximos.
+
+
+## R9F — próxima unidade residual
+
+R8Faac2c6f5 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T05:48:38.735Z UTC. Cobertura319/453 delimitada/134 pendentes, tabela64/9sobrepostos; provaSHA256a7a0e6e9415c96a00ea0a1b0d4856f70e840552fe3cf341169da80d7501dcdbc, fontes conferidas. Preservar diagnóstico de violação de methods e correção6db, sem repetir patches ou considerar typecheck como aprovação DOM.
+
+IDs exatos:a66c9ab9-137a-44b1-9219-5dd89c695022(adaptador Ruby existente, somente edição/sintaxe_m33a, não renderizar);a8fdb25b-e24a-494a-859e-1def3b692128(patch/test determinísticos de dados/teste após a30, preservar valores);b749223d-996b-4e69-8b07-46c3f26dd936(criar facts puro, integrar CLI default preservado e teste, syntax/test após criação);b7d348a6-e601-4eb4-850d-aa1272aa9d00(consulta fonte EGW, JSON integral e diagnósticos em retorno não zero, não confirmar por localização). Contratos históricos não autorizam execução nesta auditoria.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; command_sequence/required_command_ids somente cohort_r9_failures. FonteK2Fef6e981/capturaabd15bcf seladas, --compact/R8V100/timeout15s/networkfalse/repeatablefalse; scopeSHA256d21052366ecb173f747bc1d481b9523a901eca54d49edea378db5a3539e0a188. Preflight localR8V/SW-HYBRID/fontes/IDs residuais/ausência de parse_error passou. Pedido exclusivo remaining-failure-r9f-request.json; risco/qualidade/causalidade/aceite no supervisor.
+
+Confirmar chat/cwd/ACTIVE sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, exame/Q8S/Git e cobertura/hashes atualizados.
