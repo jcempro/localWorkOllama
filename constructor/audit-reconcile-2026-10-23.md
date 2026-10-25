@@ -832,3 +832,16 @@ N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/med
 8441da22 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:23:51.923Z. M40trêsedições/render/diff e M31duasedições/diff aprovados, sem fontes/planos não capturados ou aceite editorial global. Omissões/Gitparciais mantidos. Git auditor main limpo07:22:09.751Z distinto dos históricos; nenhum código histórico executado.
 
 Cobertura384/453 delimitada,69 pendentes; tabela129/9sobrepostos/120novos. Prova coverage-reconciliation-2026-10-25.json SHA21351f130ae40e74576d100565d85d752aa2bb7b39c9ab076f733209ac19e76c; anterior preservada. CANCELLED excluídos/I2O/sem recaptura ou replay. Nenhum Worker ativo neste checkpoint.
+
+
+## Handoff vigente — C30S
+
+C29E8441da22 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:23:51.923Z; revisão84c552d publicada. M40aplicar/render/diff exit0,3edições/afterf35d26c8, render mesmohash/passed/warnings[]/160notas/200calls/0refsquebradas informadas. M31aplicar/diffexit0,2edições/afterb7cfd386, render explicitamente fora. Paths/recibos não provam fidelidade autoral/fontes não capturadas/FT integral; omissões mantidas. Git auditor main limpo2026-10-25T07:22:09.751Z distinto deM40dev/ahead75 18/10 07:40:23.754Z eM31dev/ahead51 18/10 01:45:26.798Z. Retorno/revisão privados completed-editorial-return-8441da22.json/completed-editorial-review-8441da22.json.
+
+Cobertura384/453 delimitada,69 pendentes; tabela129/9sobrepostos/120novos. Prova coverage-reconciliation-2026-10-25.json SHA21351f130ae40e74576d100565d85d752aa2bb7b39c9ab076f733209ac19e76c; anteriores preservadas. Manter corpus congelado453/CANCELLED excluídos/I2O/distinção exame e aceite. Busca pública dirigida sem exame30b5/3d424 localizado; não repetir outros exames já publicados.
+
+Jobdb18799f-03c8-4493-a58e-558ffde1fac0 RUNNING/R8V1. Chat/cwd comprovados nesta interação e ACTIVE/EXPLICIT_RESUME conferido sem rearmar outras conversas. C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands egw_location_retained_evidence. IDs30b5c619-5a40-4aec-b2e3-347057cfa879(M23EPUB/PDFmesmaobra, elias_epub/elias_pdf) e3d424354-8f29-4d1a-af60-375bf9e10dc9(PDFtpai5, egw_caminho_pdf, sem repetirEPUB anterior495ec529 jápreservado27ad3fb36d). Planodce5f83 publicado; extrator próprioC29E duas seleções, capturaabd15bcf/F8E35fb663c, sem inferência/rede/código histórico,13000chars/R8V1600/15s. Scope2c73f1d8769f3524a85e7b62427cefc64cc8a113a3b4c683a95976fa6cc94b13. Pedido/recibo exclusivos completed-sources-c30s-request.json/completed-sources-c30s-running.json.
+
+Callback local_result uma vez→conferir argv/eventos/recortes→revisãoI2O/Q8S→cobertura. Located não é confirmação cruzada, página física não é impressa automaticamente; não converter status de localizador em validação integral da fonte/citação. Não executar localizadores, abrir EPUB/PDF/biblioteca, pesquisar fontes, editarblog ou inventar nota histórica. Não recapturar/repetir buscas já obtidas.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa ligada ao contexto vivo/medição autoritativa barata: aviso/links, diagnóstico explícito e encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura. Preservar modelo/esforço/callback integral/intenção humana.
