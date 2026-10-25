@@ -120,3 +120,16 @@ ID06317938-5f69-460b-9323-261c16e7a75d: diagnóstico determinístico14variantes 
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands somente literal_nested_diagnostic. Extrator próprio conferido/reutilizado deC13R, só seletor alterado. Capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos e argvSHA; limite13000chars/R8V1600palavras/timeout15s/sem rede/repetição. Sintaxe apenas do extrator próprio conferida; scopeSHA2562df9f442e61823c64133bb402c500836a7e660f6ad52180d4879575653143752. PreflightR8V/SW-HYBRID/cobertura/fontes passou. Pedido exclusivo completed-diagnostic-c14d-request.json.
 
 Confirmar chat/cwd/ACTIVE sem Resume redundante antes de start. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, revisar literalidade/semântica como dados, Q8S e cobertura; fonte/recorte não comprovam DOM completo, suporte ou FT concluída.
+
+
+## C15D — criação inicial de dados e teste
+
+C14D5b486a02 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T06:16:45.949Z UTC; revisãoa2a8b9f publicada. Diagnóstico14casos/cinco diferenças não prova preservação DOM; matriz retida foi lida como JSON sem reexecução. Cobertura337/453 delimitada,116 pendentes; tabela82/9sobrepostos, provaSHA256983936ec547dbdd12bbd6b04acf88ae7475a1ecde8dfedd7d83f63bf954b8bae.
+
+ID0242a0b5-2d4e-4d05-9476-616a80476ad6: criação inicial de _data/donations.json e teste TypeScript. Extrair teste literal dos argumentos públicos write_file, estrutura/tipos/hashes dos dados e presença literal dos campos na saída capturada source; valores financeiros não saem no relatório. Juntar eventos/resultados F8E retidos. Chamada de escrita não prova sucesso; presença literal não valida verdade/associação financeira. Código histórico não executado/importado/compilado.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands somente donation_creation_evidence. Extrator próprio fs/assert/crypto/JSON.parse apenas dados, fronteiras/hash/IDs/status/nomes únicos; capturaabd15bcf/F8E35fb663c, limite13000chars/R8V1600palavras/timeout15s/sem rede/repetição. Sintaxe do extrator próprio conferida; scopeSHA25670ab2b0a0cc38d441ced1d2fc17b2501187fd99e65921f539ef79bd8989b6d6c. PreflightR8V/SW-HYBRID/fontes/cobertura passou; pedido exclusivo completed-creation-c15d-request.json. Não modificar alvo externo/financeiro ou publicar valores.
+
+Confirmar chat/cwd/ACTIVE sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez, conferir fontes/eventos e teste como dados, Q8S/cobertura só após exame; não concluir FT107 por esse microescopo.
+
+Pré-envioC15D: se o teste contiver literalmente key/payload/address/url financeiro longo capturado, texto inteiro é retido (null+withheld_financial_literals), mantendo hash/flag; não publicar valor nem alterar silenciosamente citação. Continuidade da revisão exige usar prova privada/seleção segura se esse limite disparar.
