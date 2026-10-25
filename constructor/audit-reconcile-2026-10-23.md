@@ -959,3 +959,10 @@ Job0284c849-36e0-4243-80cc-9d7f50d671e4 confirmado RUNNING/R8V1: C33N C5/júnior
 Callback local_result uma vez→conferir pedido/evidência/body integral/eventos/rodapé parcial→revisãoI2O/Q8S→cobertura. Supervisor compara §§7–8 com checklist: obrigatórias versus opcionais/condicionais/literalidade/fonte/paginação/preservação e limite do artigo ausente. Worker só extrai dados, não interpreta norma/risco/qualidade. Sem código histórico executado/compilado/importado, fonte/artigo vivo aberto ou pesquisa repetida. Se insuficiente, manter limitação e segmentar por causa específica, sem retry cego.
 
 N7C/S2Q impedidos: sem ferramenta nativa ligada ao contexto vivo ou medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura; preservar modelo/esforço/callback integral/intenção humana.
+
+
+## Checkpoint C33N — interpretação normativa parcial
+
+0284c849 recebido uma vez/examinado/Q8S10revision1 em2026-10-25T11:55:38.673Z para extração determinística íntegra.33c81e2fchecklist parcialmente útil, não integralmente aceito: misturou vantagem para scripts com reutilizabilidade paraSkill, omitiu preferência local condicional e converteu limitações EPUB/web em vetos absolutos. RevisãoI2O registra condições corretas sem alterar norma/pesquisar/validarartigo. Git auditor main limpo11:53:54.282Z versus histórico dev/ahead66 18/10 07:14:22.996Z parcial. Métrica420whitespace não vira gateR8V retroativo nem nota histórica.
+
+Cobertura389/453 delimitada,64pendentes; tabela134/9sobrepostos/125novos. Prova coverage-reconciliation-2026-10-25.json SHAf07aa1fa4ea106555dbf899065c310e8d8055d1c6180be30e7004374711e9de3; anterior preservada porhash. CANCELLED excluídos, exame≠aceitefuncional, corpus congelado/projeções preservados. Nenhum job ativo neste checkpoint; próxima unidade será factual delimitada.
