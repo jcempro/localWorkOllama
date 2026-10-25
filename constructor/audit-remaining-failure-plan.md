@@ -563,3 +563,14 @@ Extrair pedido/argv/eventos/corpo716chars/Gitparcial, não executarinstall/test/
 C5/júnior/read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands retained_initial_icon_catalog única vez,15s/networkfalse/repeatablefalse. ExtratorC41N validado ajustaID/guardas/schema; fontesabd15bcf/F8E35fb663c/hashes/IDstatus/expectchangestrue/checkpoints0/corpo≤1000/4comandosordem/offsets/header/bodySHA. Sintaxe/preflightSW-HYBRID/R8V válidos; scope8a7bf7c4765295070b3d84c05b0e6e6078e9af6780d002ffd5a129aa0a9c2bb2. Pedido privado completed-icons-c56b-request.json; risco/qualidade/aceite sósupervisor.
 
 Confirmarchat/cwd/ACTIVE→start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→exame proporcional/I2O/limites/Git→Q8S→cobertura. Não repetir exploração/negócio/retomadaoutrochat ou inventar nota histórica.
+
+
+## C57M — agrupamento e impressão histórica de múltiplos IALs na raiz
+
+C56B85d87dfd recebido uma vez, examinado e Q8S10 pela extração fiel.8f3f3f3d aceito no microescopo de catálogo inicial e cópias pinadas, com limites visuais, jurídicos e financeiros preservados. Cobertura415/453,38pendentes; CANCELLED excluídos. Próximo ID7b52f749-711e-4e52-b038-f828f3027087: patch material de agrupamento/impressão em scripts/prettier-kramdown-ial.ts, seguido de root_multi_dom e types. Aceite histórico restrito à raiz, sem integração, aninhamento ou ativação de plugin/editor.
+
+Extrair pedido, argv, eventos, corpo583chars e Gitparcial. Não executar/importar/compilar código histórico, AST/DOM/testes, ativar plugin/editor ou ler negócio vivo. Conferir delta, fonte das expectativas e vínculo dos testes à preservação semântica; resultado de raiz não cobre aninhamento nem integração. Orçamento argv1470+4562+168/body583 e metadados, limite13000/R8V1600 com margem abaixo16000.
+
+C5/júnior/read-only/expect_changesfalse/commit_policysupervisor. Sequência/requiredcommands retained_root_multi_ial única vez,15s/networkfalse/repeatablefalse. ExtratorC41N validado ajusta ID, guardas e schema; fontesabd15bcf/F8E35fb663c, hashes/ID/status/expectchangestrue/checkpoints0/corpo≤1000/3comandos em ordem/offsets/header/bodySHA. Sintaxe e preflights SW-HYBRID/R8V válidos; scopefccc68cd5a4dd336626a0343acac5de74a55c37ffb210745d77b796f5e700c4c. Pedido privado completed-ial-c57m-request.json. Risco, qualidade e aceite exclusivos do supervisor.
+
+Confirmar chat/cwd/ACTIVE; start/RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisão proporcional/I2O/limites/Git→Q8S→cobertura. Sem replay, edição externa, retomada de outro chat ou nota histórica inventada.
