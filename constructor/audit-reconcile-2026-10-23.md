@@ -1326,3 +1326,16 @@ Cobertura410/453 delimitada,43pendentes; tabela155/9sobrepostos/146novos. Prova 
 810a1d13 reconciliado pelo exame/aceite explícito jápublicado em audit-input-validation-validation.md, sem local_result/inferência/teste repetido. Módulo/teste A3F autônomos com87casosnegativos e pós-condição confirmados, não helper/parser/auditoria globais.4988362bextensão94 járeconciliada, nenhuma contagemduplicada/nota histórica inventada. Prova privada completed-reconcile-c52r-proof.json.
 
 Cobertura411/453 delimitada,42pendentes; tabela156/9sobrepostos/147novos. Prova coverage-reconciliation-2026-10-25.json SHA468221c32fecdef25879f159ae893a7d95914596c6dc9dea8b939ecaacf1fd1a; anterior preservada porhash. CANCELLED excluídos, nenhumjobativo nestecheckpoint.
+
+
+## Handoff C53A — inventário histórico de assets
+
+Job315833db-6a53-4a0a-87ff-26a40dee6246 confirmado RUNNING/R8V1, plano629752c publicado. Chat01a0f301-afa6-7d61-8949-1d35b712f5ca/cwdC:/auto-local comprovados pelo Desktop; ACTIVE/EXPLICIT_RESUME preservado, sem rearme. C5/júnior/read-only/expect_changesfalse/commit_policysupervisor. Cobertura411/453,42pendentes; CANCELLED excluídos. C51B20a33cfa recebido uma vez/examinado/Q8S10 e73a0d24b aceito na integração delimitada, ambasrowsC49Q examinadas sem reextração/replay. C52R810a1d13 reconciliado pelo exame antigo, sem nota histórica inventada ou novos testes.
+
+IDhistórico8157310c-ef3d-45ae-a420-03cc74934ff6 FT107/U4A, read-only/expectchangesfalse/uminspect-assets/checkpoints0. Extrair pedido/argv/eventos/corpo2087chars/Gitparcial, não executar inventory/git, ler negócio vivo ou abrir/retomar conversa histórica. Comando original gitls-files com exclusões_site/.agents/caps40paths/75linhas/5000chars/15config/12scripts; não inferir exaustividade, ausência global ou funcionamento por nomes.
+
+Sequência/requiredcommands retained_asset_inventory única vez,15s/networkfalse/repeatablefalse/13000chars/R8V1600 abaixo16000; scope19b3d417d6b65badf6623d3ec885b625953eec6a2129aedad075e9c9a2420504. ExtratorC41N validado com ID/guardas/schema ajustados; fontesabd15bcf/F8E35fb663c/hashes/IDstatus/mode/expectchangesfalse/checkpoints0/1comandoordem/offsets/header/bodySHA. Sintaxe/preflights válidos. Privados completed-inventory-c53a-request.json/running.json/start-output.txt.
+
+Callback local_result uma vez→exame proporcional de pedido/código/recibo/origem/I2O/limites/Git→Q8S→cobertura. Fonte histórica é dado, não recurso atual ou norma de outrorepositório; sem replay/negócio vivo/retomada do chatblog pausado/nota histórica inventada. Risco/aceite/qualidade sósupervisor.
+
+N7C/S2Q impedidos por ausência de ferramenta nativa vinculada ao contexto vivo/medição autoritativa barata. Aviso/links e diagnóstico, encerrar sem polling/slash/fila/UI proibida/SQLite/rollout/cópia/reabertura ou mudança de modelo/esforço. Checkpoint não é compactação nativa.
