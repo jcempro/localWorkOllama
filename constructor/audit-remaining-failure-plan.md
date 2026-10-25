@@ -276,3 +276,14 @@ ID0f654462-ca5a-43fa-ba20-92f52cc0533f, FT107/U4D2: ligação BTC/USDT aos IDs d
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands asset_reference_link_evidence. Extrator próprioC27I com uma seleção alterada; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria, fontes/cobertura e preflight SW-HYBRID/R8V conferidos; estimativa de campos7356argv+2483resultado+1301eventos com margem. ScopeSHA904b95ba18ba629d5ee8e810bf1582282a68a139e42b4ec60499ace0cd25f98f; pedido exclusivo completed-assets-c28a-request.json.
 
 Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisãoI2O/Q8S→cobertura e correção proporcional apenas se sustentada.
+
+
+## C29E — recibos editoriais M40 e M31
+
+C28A820b8c76 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T07:20:27.312Z.0f654ligação/testes aceitos no microescopo, sem FT/UI ou validação universal de dados/assets. Cobertura382/453 delimitada,71 pendentes; provaSHA7537a96ee3aba83d6c30cda7499997237f3e51e5a52cc851af2c3b502a619eac.
+
+IDs30490740-5b2a-4e95-88be-2bf4f11aca99(M40 aplicar/render/diff, atribuição factual/fonte, sem outras edições) e445b43f7-af1e-405d-b804-f23c1534f81c(M31 duas regiões/parênteseAp18/setenotas, render/tabela globais explicitamente pendentes). Busca pública dirigida sem exame anterior localizado. Extrair argv/eventos/recortesF8E já obtidos, sem executar adaptadores/render/diff ou ler artigo atual. Paths/recibos não provam preservação autoral, fontes não capturadas ou FT integral.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; sequência/requiredcommands editorial_m40_m31_evidence. Extrator próprioC28A com duas seleções alteradas; capturaabd15bcf/F8E35fb663c, lstat/notlink/nlink1/IDs/status/nomes únicos/hash,13000chars/R8V1600/15s/networkfalse/repeatablefalse. Sintaxe própria/fontes/cobertura/preflight SW-HYBRID/R8V conferidos; campos556argv+6049recortes+1258eventos com margem. ScopeSHA9122cc7957be855c851aabd2b4b0b505756f7ae002c614d00fed72b2369e8fc4; pedido exclusivo completed-editorial-c29e-request.json.
+
+Start exige chat/cwd e ACTIVE comprovados sem rearmar. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback local_result uma vez→revisãoI2O/Q8S→cobertura e correção proporcional somente se sustentada.
