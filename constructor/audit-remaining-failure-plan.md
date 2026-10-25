@@ -43,3 +43,14 @@ IDs exatos:77407022-b5bd-40ee-a778-d7c3ac67123b(integrar --facts no renderizador
 C5/júnior read-only/expect_changesfalse/commit_policysupervisor, command_sequence/required_command_ids somente cohort_r7_failures. FonteK2Fef6e981/capturaabd15bcf fixas, --compact/R8V100/timeout15s/networkfalse/repeatablefalse. ScopeSHA256086aabd63ed34f5987e711e268b2c795168c8009b83d47362087f9e63698e4ef. Preflight localR8V/SW-HYBRID/fontes/IDs residuais/ausência de parse_error passou. Pedido exclusivo remaining-failure-r7f-request.json; risco/qualidade/causalidade/aceite no supervisor.
 
 Start exige chat/cwd/ACTIVE confirmados sem Resume redundante. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, revisão/Q8S/Git e cobertura/hashes atualizados; não duplicar corpus antigo nem inferir aceite de referências posteriores.
+
+
+## R8F — próxima unidade residual
+
+R7F151ba478 recebido uma vez/revisado/Q8S10revision1 em2026-10-25T05:43:09.552Z UTC. Cobertura315/453 delimitada/138 pendentes, tabela60/9sobrepostos; provaSHA256cd481ced56e7b45ff23f537fb705539d991b69041df64a1ddb18607c47d62080, fontes conferidas. Preservar correção4988362b do marcador parse_error e cadeia7d35→1e22→6e9 já examinada; nenhuma repetição de patches/testes.
+
+Quatro IDs residuais:9fbe33d2-c279-4b4c-ad80-fbd42ea3da81(IAL root table/heading, preservar fábrica/hooks/literal/offsets/default, ial_table_heading/ial_typecheck);a30ed9fd-f64f-4a14-819a-7d749ea19158(somente schemaVersion no JSON, methods preservados; teste deriva valores da TODO canônica, source/test);a46b6c8a-a7de-4e90-b4d6-91d34e66898d(step numérico no helper existente, âncoras literais e syntax/numeric, sem ampliar correções);a4fed5bb-184c-4e10-bbad-661768767266(criar módulo QR para área de símbolo, versões crescentes até40, build/test, sem mudar encoder/payload/máscara/dados). São contratos históricos, não autorização para executá-los.
+
+C5/júnior read-only/expect_changesfalse/commit_policysupervisor; command_sequence/required_command_ids somente cohort_r8_failures. FonteK2Fef6e981/capturaabd15bcf seladas, --compact/R8V100/timeout15s/networkfalse/repeatablefalse. ScopeSHA256e050783f2c68391e9774b7514bc346f11e4c344105ba66e98c1b095683c574a0; preflight localR8V/SW-HYBRID/fontes/IDs residuais/ausência de parse_error passou. Pedido exclusivo remaining-failure-r8f-request.json. Risco/qualidade/causalidade/aceite no supervisor.
+
+Confirmar chat/cwd/ACTIVE sem Resume redundante antes de start. RUNNING→handoff→aviso/links→N7C ou impedimento→encerrar sem polling. Callback resultado uma vez, exame/Q8S/Git e atualizar cobertura/hashes antes de selecionar próximos.
